@@ -6,14 +6,16 @@ Node to shortcut is selected based on degree
 Receives a directed graph
 """
 import math, networkx as nx
+from graphinfo import *
+
 def contract(G):	
 	H = G.copy()
 	nx.set_edge_attributes(G, 'shortcut', 0)		#original edges are not shortcuts
 	for i in xrange(1,G.number_of_nodes()+1):		#set ranks 1,2,...,n
-		degs = H.degree()									#obtain the degrees
+		degs = H.degree()							#obtain the degrees
 		v = min(degs, key=degs.get)					#v is node with smallest degree
 		for u in H.predecessors(v):				
-			for w in H.successors(v):					#if P(u,w)=uvw and (u,w) is not an edge, then add shortcut
+			for w in H.successors(v):				#if P(u,w)=uvw and (u,w) is not an edge, then add shortcut
 				if u!=w and not H.has_edge(u,w) and v in nx.shortest_path(H,u,w,weight='dist'):	
 					H.add_edge(u,w)
 					G.add_edge(u,w)
@@ -29,8 +31,8 @@ The hubs are three-tuples: N(v),I(v),D(v)
 N(v)=#items in hub, I(v)=array with id's in hub, D(v) = array with distances
 D(v)[k] = dist(v,I(v)[k]) for k=0,...,N(v)-1
 I(v) is sorted in increasing order
-Assumes the nodes are labeled 0,1,...,n-1
 Each three-tuple can be reversed (1) or not reversed (0)
+Assumes the nodes have unique ID attribute 0,1,...,n-1
 """
 from array import array
 
@@ -43,10 +45,10 @@ def createlabels(G):
 	D[0] = D[1] = {}
 	n = nx.number_of_nodes(G)
 	N = {}	
-	N[0] = array('i',(0,)*n)			#array of n integers, sizes of forward hubs
-	N[1] = array('i',(0,)*n)			#sizes of reversed hubs
-	epsilon = 0.01							#to control floating point error when prunning
-	for v in xrange(0,n):		
+	N[0] = {}							#NO LONGER ARRAY, sizes of forward hubs
+	N[1] = {}							#sizes of reversed hubs
+	epsilon = 0.01						#to control floating point error when prunning
+	for v in G.nodes():		
 		for reverse in range(0,2):		#for reverse=0,1			
 			#CH search to identify potential nodes in hub		
 			hub = {}
@@ -60,12 +62,14 @@ def createlabels(G):
 			N[reverse][v] = len(hub)
 			I[reverse][v] = (array('i',(0,)*N[reverse][v]))
 			D[reverse][v] = (array('f',(0,)*N[reverse][v]))
-			#create label in increasing id	
+			#Obtain dictionary with ids, but only of those nodes in the hub	
+			temp = {k: nx.get_node_attributes(G,'ID')[k] for k in hub.keys()}
+			#create label in increasing ID
 			for i in xrange(0,N[reverse][v]):
-				key = min(hub.keys())								#get smallest key/id
-				I[reverse][v][i] = key				
-				D[reverse][v][i] = hub[key]						#get distance to key			
-				hub.pop(key,None)										#remove key from dict
+				k = min(temp, key = temp.get)						#get key with smallest ID
+				I[reverse][v][i] = temp[k]				
+				D[reverse][v][i] = hub[k]							#get distance to key			
+				temp.pop(k,None)									#remove key from dict
 	return(I,D,N)
 
 """
@@ -81,16 +85,15 @@ def lengthquery(If,Df,Ib,Db):
 	j = 0
 	Nf = len(If)
 	Nb = len(Ib)
-	while i<Nf and i<Nb:
+	while i<Nf and j<Nb:
 		if If[i]==Ib[j]:
 			d = min(d,Df[i]+Db[j])
 			i = i+1
 			j = j+1
-			continue
-		if If[i]<Ib[j]:
+		elif If[i]<Ib[j]:
 			i = i+1
-			continue
-		j = j+1
+		else:
+			j = j+1
 	return d
 				 
 
@@ -155,43 +158,15 @@ def CHsearch(G, s, reverse):
 Runs a length query from s to t using CH
 """
 def CHquery(G,s,t):
-	Df,_ = CHsearch2(G,s,0)		#forward search from s
-	Db,_ = CHsearch2(G,t,1)		#backward search from t
+	Df,_ = CHsearch(G,s,0)		#forward search from s
+	Db,_ = CHsearch(G,t,1)		#backward search from t
 	dist = float("inf")
 	for u in Df.keys():
 		if u in Db and Df[u]+Db[u]<dist:
 			dist = Df[u]+Db[u]
 	return dist
 
-"""
-Returns the distance of an edge dist(v,w)
-If reverse=1, returns dist(w,v)
-"""
-def dist(G,v,w,reverse):
-	if reverse == 1: 			#do reverse
-		return G[w][v]['dist']
-	else:
-		return G[v][w]['dist']	#do not reverse 
 
-"""
-If reverse=1, returns predecessors of v
-Otherwise, returns successors of v
-"""
-def neighbours(G,v,reverse):
-	if reverse == 1:
-		return G.predecessors(v)
-	else:
-		return G.successors(v)
-
-"""
-If reverse=1, returns predecessors shortest path length from w to v
-Otherwise, returns shortest path length from v to w
-"""
-def SPlength(G,v,w,reverse):
-	if reverse == 1:
-		return nx.shortest_path_length(G,w,v,weight='dist')
-	else:
-		return nx.shortest_path_length(G,v,w,weight='dist')
 
 
 

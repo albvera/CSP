@@ -12,3 +12,16 @@ def plot(G):
 	plt.show() 
 
 #Plot with shortcut edges
+
+#Plot histogram of list
+from collections import Counter
+import numpy as np
+def plotlist(l):
+	labels, values = zip(*Counter(l).items())
+
+	indexes = np.arange(len(labels))
+	width = 1
+
+	plt.bar(indexes, values, width)
+	plt.xticks(indexes + width * 0.5, labels)
+	plt.show()

@@ -1,7 +1,9 @@
-#Creates Delaunay triangulation from a set of (x,y) points
-#Example: points = [(0,0),(0,1),(2,2),(3,4),(4,3)] 
-#Returns an undirected graph represented with networkx library
-
+"""
+Creates Delaunay triangulation from a set of (x,y) points
+Example: points = [(0,0),(0,1),(2,2),(3,4),(4,3)] 
+Returns an undirected graph represented with networkx library
+Creates ID attribute
+"""
 import math, scipy.spatial, networkx as nx
 
 def delauney(points):
@@ -27,6 +29,7 @@ def delauney(points):
 	#add positions (x,y) as attributes
 	for n in xrange(len(points)):
 		graph.node[n]['XY'] = points[n]
+		graph.node[n]['ID'] = n
 
 	# calculate Euclidian length of edges and write it as edges attribute
 	edges = graph.edges()
@@ -41,10 +44,11 @@ def delauney(points):
 	
 	return graph;
 
-#Creates a random graph by sampling n uniform points in [0,1]x[0,1]
-#Saves in a file named 'name' using pickle, it is easily read by networkx
-#Example: randomdelauney(20,"example")
-
+"""
+Creates a random graph by sampling n uniform points in [0,1]x[0,1]
+Saves in a file named 'name' using pickle, it is easily read by networkx
+Example: randomdelauney(20,"example")
+"""
 import random 
 from datetime import datetime
 
