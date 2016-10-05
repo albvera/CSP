@@ -16,6 +16,7 @@ def plot(G):
 Colors edges depending on an attribute
 Attribute takes values: value1, value2, value3(optional)
 The colors are: green, blue, red
+Example: plotcolor(G,'shortcut',0,1). If shortcut=0, the edge is plotted green
 """
 def plotcolor(G,attribute,value1,value2,value3=None):
 	#Create dictionary of positions

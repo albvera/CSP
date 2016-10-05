@@ -5,25 +5,8 @@ from hublabels import *; from costs import *; from graphinfo import *
 from plots import *; from CH import *; from delauney import *
 
 if __name__ == '__main__':
-	G2 = nx.read_gpickle("Data100")
-	"""
-	#--------- Begin adding extra edges to G2 -----------------
-	nx.set_edge_attributes(G2, 'new', 0)
-	v1 = closest(G2,0.14,0.8)
-	v2 = closest(G2,0.5,0.14)
-	v3 = closest(G2,0.75,0.76)
-	new_nodes = [v1,v2,v3]
-	for u in new_nodes:
-		for v in new_nodes:
-			if u!=v:
-				x1, y1 = G2.node[u]['XY']
-				x2, y2 = G2.node[v]['XY']
-				dist = math.sqrt( pow( (x2 - x1), 2 ) + pow( (y2 - y1), 2 ) )/4
-				G2.add_edge(u,v)
-				G2.edge[u][v]['dist'] = round(dist,2)
-				G2.edge[u][v]['new'] = 1
-	#--------- End adding extra edges to G2 -----------------	
-	"""	
+	G2 = nx.read_gpickle("DataHierar100")
+	n = nx.number_of_nodes(G2)
 		
 	start_time = time.time()
 	"""
@@ -31,30 +14,49 @@ if __name__ == '__main__':
 	contractSPC(G)
 	I,D,N = createlabels(G)
 	"""
-
 	
-	randcost(G2,30)
-	G = augment(G2,5)
-	
+	randcost(G2,70)
+	B = 6
+	G = augment(G2,B)
 	contractSPC(G)
-	sources = [(u,B) for u in G.nodes()]
-	targets = [(u,-1) for u in G.nodes()]
-	I,D,N = createlabels(G)
+	sources = list(itertools.product(range(0,n),range(0,B+1)))	#nodes with budget >=0 
+	targets = [(u,-1) for u in range(0,n)]						#sink nodes
+	I,D,N = createlabels(G,sources=sources,targets=targets)
 	
+	#I,D,N = read_labels("Labels_n100_B5_c30")
+	time_pre = 	time.time() - start_time
 	
-	#pairs = [(0,7),(4,20),(5,30),(70,90),(14,37),(55,31),(97,48),(77,49),(19,66),(27,33)]	
-	pairs = [((5,0),(4,-1)),((9,2),(19,-1)),((77,5),(32,-1)),((59,3),(8,-1)),((73,0),(57,-1)),((90,2),(11,-1))]	#for augmented graph
-	print "Hub label queries:"
+	pairs = []
+	random.seed(datetime.now())
+	for k in xrange(0,1000):	#Generate random source-destinations pairs
+		pairs.append(((random.randint(0,n-1),random.randint(0,B)),(random.randint(0,n-1),-1)))		#for augmented graph
+		#pairs.append((random.randint(0,n-1),random.randint(0,n-1)))								#for non-augmented graph
+
+	#print "Hub label queries:"
+	start_time = time.time()
 	for (u,v) in pairs:
-		print HLquery(I[0][u],D[0][u],I[1][v],D[1][v]) - SPlength(G,u,v,0)
+		#print HLquery(I[0][u],D[0][u],I[1][v],D[1][v]) - SPlength(G,u,v,0)
+		HLquery(I[0][u],D[0][u],I[1][v],D[1][v])
+	time_hl = time.time() - start_time
 	
-	print "CH queries:"
+	#print "CH queries:"
+	start_time = time.time()	
 	for (u,v) in pairs:
-		print CHquery(G,u,v) - SPlength(G,u,v,0)
+		#print CHquery(G,u,v) - SPlength(G,u,v,0)
+		SPlength(G,u,v,0)
 	
+	time_dij = time.time() - start_time
 	
-	print 'Elapsed time: {}'.format(time.time() - start_time)
+	print 'Preprocessing time: {} [s]'.format(time_pre)
+	print 'Max forward hub size: {}'.format(max(N[0].values()))
+	print 'Average forward hub size: {}'.format(sum(N[0].values())/len(N[0].values()))
+	print 'Max backard hub size: {}'.format(max(N[1].values()))
+	print 'Average backward hub size: {}'.format(sum(N[1].values())/len(N[1].values()))
+	print 'HL query time: {} [ms]'.format(time_hl)
+	print 'Dijkstra query time: {} [ms]'.format(time_dij)
+
+	write_labels(I,D,N,"Labels_n100_B6_c70")
 	
-	plotlist(N[0].values())		
-	
+	#plotlist(N[0].values())		
+				
 	#plotcolor(G3,'level',1,2)

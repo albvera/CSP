@@ -10,8 +10,8 @@ D(v)[k] = dist(v,I(v)[k]) for k=0,...,N(v)-1
 I(v) is sorted in increasing order
 Each three-tuple can be reversed (1) or not reversed (0)
 Assumes the nodes have unique ID attribute 0,1,...,n-1
-If targets is specified, only computes backward hubs for targets
-If sources is specified, only computes forward hubs for sources
+If a list of targets is specified, only computes backward hubs for targets
+If a list of sources is specified, only computes forward hubs for sources
 """
 from array import array
 
@@ -24,14 +24,14 @@ def createlabels(G,sources = None, targets = None):
 	D[0] = D[1] = {}
 	n = nx.number_of_nodes(G)
 	N = {}	
-	N[0] = {}							#NO LONGER ARRAY, sizes of forward hubs
+	N[0] = {}							#sizes of forward hubs
 	N[1] = {}							#sizes of reversed hubs
-	objectives = {}					#only works if sources or targets are specified
+	objectives = {}						#does something only if sources or targets are specified
 	objectives[0] = sources
 	objectives[1] = targets
 	for v in G.nodes():		
 		for reverse in range(0,2):		#for reverse=0,1		
-			if objectives[0]!= None and v not in objectives[0]:
+			if objectives[reverse]!= None and v not in objectives[reverse]:
 				continue						#v is not an objective (source or target)
 			#CH search to identify potential nodes in hub		
 			hub = {}
@@ -52,7 +52,7 @@ def createlabels(G,sources = None, targets = None):
 				k = min(temp, key = temp.get)						#get key with smallest ID
 				I[reverse][v][i] = temp[k]				
 				D[reverse][v][i] = hub[k]							#get distance to key			
-				temp.pop(k,None)										#remove key from dict
+				temp.pop(k,None)									#remove key from dict
 	return(I,D,N)
 
 """
@@ -78,6 +78,19 @@ def HLquery(If,Df,Ib,Db):
 		else:
 			j = j+1
 	return d
-				 
 
+"""
+Save labels already constructed
+"""
+import pickle
+def write_labels(I,D,N,name):
+	with open(name, "wb") as f:
+		pickle.dump({'IDs':I, 'Dist':D, 'Size': N}, f)
 
+"""
+Read labels from file and return I,D
+"""
+def read_labels(name):
+	with open(name, "rb") as f:
+		dic = pickle.load(f)
+	return dic['IDs'], dic['Dist'], dic['Size']

@@ -106,10 +106,11 @@ def contractSPC(G):
 
 """
 Shortcuts node v and returns edges that must be added to the graph
-Doesn't work if there is just one node in the graph
 """
 def shortcut(H,v):
-	sucs = H.edges(v,'dist')					#succesors of v. it's a triplet (v,w,dist(v,w))
+	sucs = H.edges(v,'dist')					#Succesors of v. It's a triplet (v,w,dist(v,w))
+	if not sucs:									#v has no successors 
+		return []
 	sucs = zip(*sucs)								#Now sucs[1] has succesors of v, succs[2] has distances
 	maxvw = max(sucs[2])							#max edge length outgoing from v 
 	new_edges = []
