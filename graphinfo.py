@@ -30,3 +30,17 @@ def SPlength(G,v,w,reverse):
 		return nx.shortest_path_length(G,w,v,weight='dist')
 	else:
 		return nx.shortest_path_length(G,v,w,weight='dist')
+
+"""
+Returns closest node to coordinate (x,y)
+"""
+def closest(G,x,y):
+	min_dist = float("inf")
+	node = None
+	for v in G.nodes():
+		x1, y1 = G.node[v]['XY']
+		if pow(x1-x,2)+pow(y1-y,2)<min_dist:
+			min_dist = pow(x1-x,2)+pow(y1-y,2)
+			node = v
+	return node
+			

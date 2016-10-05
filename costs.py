@@ -22,15 +22,15 @@ A unique ID is created by: (0,B) ->1, (1,B) ->2,..., (n-1,B)->n-1, (0,B-1)->n an
 """
 
 from graphinfo import *
-import itertools
+import itertools, math
 def augment(G,B):
 	H = nx.DiGraph()
 	n = G.number_of_nodes()
-	nodes = list(itertools.product(range(0,n),range(0,B+1)))
+	nodes = list(itertools.product(range(0,n),range(-1,B+1)))
 	H.add_nodes_from(nodes)
 	#create the edges
 	i = 0
-	b = B	
+	b = B
 	while b>=0:
 		for u in xrange(0,n):
 			H.node[(u,b)]['ID'] = i
@@ -39,6 +39,13 @@ def augment(G,B):
 					b2 = b-G[u][v]['cost']
 					H.add_edge((u,b),(v,b2))
 					H[(u,b)][(v,b2)]['dist'] = G[u][v]['dist']
+			d = math.log(2-b/B)					#d decreasing in b and less than 1
+			H.add_edge((u,b),(u,-1),dist=round(d,3))	
 			i = i+1
 		b = b-1
+	
+	#Now assing ID for sink nodes
+	for u in xrange(0,n):
+		H.node[(u,-1)]['ID'] = i
+		i = i+1
 	return H

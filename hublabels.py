@@ -1,82 +1,6 @@
-"""
-Constructs contraction hierarchie graph by shortcutting online
-Creates 'rank' attribute on nodes
-Creates'shortcut' attribute on edges, takes value 0 or 1  
-Node to shortcut is selected based on degree
-Receives a directed graph
-"""
-import math, networkx as nx
+import networkx as nx
 from graphinfo import *
-
-def contract(G):	
-	H = G.copy()
-	nx.set_edge_attributes(G, 'shortcut', 0)		#original edges are not shortcuts
-	epsilon = 0.01											#to control floating point error when prunning
-	n = G.number_of_nodes()
-	for i in xrange(1,n):								#set ranks 1,2,...,n-1
-		degs = H.degree()									#obtain the degrees
-		v = min(degs, key=degs.get)					#v is node with smallest degree
-		sucs = H.edges(v,'dist')						#succesors of v. it's a triplet (v,w,dist(v,w))
-		sucs = zip(*sucs)									#Now sucs[1] has succesors of v, succs[2] has distances
-		maxvw = max(sucs[2])								#max edge length outgoing from v 
-		for u in H.predecessors(v):				
-			_,path=nx.single_source_dijkstra(H, u, None, maxvw + H[u][v]['dist']+epsilon, weight='dist')	
-			for w in sucs[1]:				#if P(u,w)=uvw and (u,w) is not an edge, then add shortcut
-				if u!=w and not H.has_edge(u,w) and v in path[w]:	
-					H.add_edge(u,w)
-					G.add_edge(u,w)
-					G[u][w]['shortcut'] = 1
-					G[u][w]['dist'] = H[u][w]['dist'] = H[u][v]['dist']+H[v][w]['dist']
-		H.remove_node(v)	
-		G.node[v]['rank'] = i
-	#There is just one node remaining in H
-	v = H.nodes()[0]
-	G.node[v]['rank'] = n
-
-"""
-Constructs contraction hierarchie
-Selects node to contract using a score(v) = #edges added if v were shortcut - #edges removed if v were shortcut (=degreee)
-"""
-def contractscore(G):	
-	H = G.copy()
-	nx.set_edge_attributes(G, 'shortcut', 0)		#original edges are not shortcuts
-	epsilon = 0.01											#to control floating point error when prunning
-	n = G.number_of_nodes()
-	for i in xrange(1,n):								#set ranks 1,2,...,n-1
-		min_score = float("inf")		
-		min_node = None									#node with minimum score
-		min_edges = []										#edges added by min_node
-		degs = H.degree()
-		#Compute node with lowest score
-		for v in H.nodes():
-			added = []										#edges added if v were shurtcut
-			sucs = H.edges(v,'dist')					#succesors of v. it's a triplet (v,w,dist(v,w))
-			sucs = zip(*sucs)								#Now sucs[1] has succesors of v, succs[2] has distances
-			maxvw = max(sucs[2])							#max edge length outgoing from v 
-			for u in H.predecessors(v):				
-				#Compute shortest paths from u
-				_,path=nx.single_source_dijkstra(H, u, None, maxvw + H[u][v]['dist']+epsilon, weight='dist')	
-				for w in sucs[1]:				#if P(u,w)=uvw and (u,w) is not an edge, then add shortcut
-					if u!=w and not H.has_edge(u,w) and v in path[w]:	
-						added.append((u,w))
-			if min_score > len(added)-degs[v]:		#v has the lowest score
-				min_node = v
-				min_edges = list(added)					#copy edges
-				min_score = len(added)-degs[v]
-
-		#Now min_node will be contracted
-		for (u,w) in min_edges:
-			H.add_edge(u,w)
-			G.add_edge(u,w)
-			G[u][w]['shortcut'] = 1
-			G[u][w]['dist'] = H[u][w]['dist'] = H[u][min_node]['dist']+H[min_node][w]['dist']
-		H.remove_node(min_node)	
-		G.node[min_node]['rank'] = i
-	#There is just one node remaining in H
-	v = H.nodes()[0]
-	G.node[v]['rank'] = n
-
-
+from CH import *
 
 """
 Creates hub labels based on hierarchies
@@ -86,10 +10,12 @@ D(v)[k] = dist(v,I(v)[k]) for k=0,...,N(v)-1
 I(v) is sorted in increasing order
 Each three-tuple can be reversed (1) or not reversed (0)
 Assumes the nodes have unique ID attribute 0,1,...,n-1
+If targets is specified, only computes backward hubs for targets
+If sources is specified, only computes forward hubs for sources
 """
 from array import array
 
-def createlabels(G):
+def createlabels(G,sources = None, targets = None):
 	#I[0] is an dictionary for forward, I[0][v] is an array of ints with the id's of nodes in hubforward(v)
 	I = {}	
 	I[0] = I[1] = {}
@@ -100,15 +26,19 @@ def createlabels(G):
 	N = {}	
 	N[0] = {}							#NO LONGER ARRAY, sizes of forward hubs
 	N[1] = {}							#sizes of reversed hubs
-	epsilon = 0.01						#to control floating point error when prunning
+	objectives = {}					#only works if sources or targets are specified
+	objectives[0] = sources
+	objectives[1] = targets
 	for v in G.nodes():		
-		for reverse in range(0,2):		#for reverse=0,1			
+		for reverse in range(0,2):		#for reverse=0,1		
+			if objectives[0]!= None and v not in objectives[0]:
+				continue						#v is not an objective (source or target)
 			#CH search to identify potential nodes in hub		
 			hub = {}
 			Dist,_ = CHsearch(G,v,reverse)
 			#prune nodes in hub; only add nodes with correct
 			for w in Dist:				
-				if Dist[w] <= SPlength(G,v,w,reverse) + epsilon :		
+				if Dist[w] <= SPlength(G,v,w,reverse):		
 					hub[w] = Dist[w]
 		
 			#Now create hub labels		
@@ -132,7 +62,7 @@ Nf, Nb are integers
 Df, Db are arrays of floats 
 If, Ib are arrays of id's
 """
-def lengthquery(If,Df,Ib,Db):
+def HLquery(If,Df,Ib,Db):
 	d = float("inf")	
 	i = 0
 	j = 0
@@ -150,55 +80,4 @@ def lengthquery(If,Df,Ib,Db):
 	return d
 				 
 
-"""
-Runs a CH search, visiting all nodes with higher rank
-The output is a pair (D,P) where D[v] is the distance from start to v and P[v] is the predecessor of v along the shortest path from s to v.
-One can specify cutoff (only paths of length <= cutoff are returned) and target.
-"""
-from collections import deque
-from heapq import heappush, heappop
-from itertools import count
 
-def CHsearch(G, source, reverse, target=None, cutoff=None):
-	if source == target:
-		return ({source: 0}, {source: [source]})
-	push = heappush
-	pop = heappop
-	D = {}  								# dictionary of final distances
-	paths = {source: [source]}  	# dictionary of paths
-	seen = {source: 0}
-	c = count()
-	fringe = []  						# use heapq with (distance,label) tuples
-	push(fringe, (0, next(c), source))
-	while fringe:
-		(d, _, v) = pop(fringe)
-		if v in D:
-			continue  					# already searched this node.
-		D[v] = d
-		if v == target:
-			break
-		N = neighbours(G,v,reverse)
-		for w in N:
-			if G.node[w]['rank']<G.node[v]['rank']:
-				continue	
-			vw_dist = D[v] + dist(G,v,w,reverse)
-			if cutoff is not None:
-				if vw_dist > cutoff:
-					continue
-			if w not in seen or vw_dist < seen[w]:
-				seen[w] = vw_dist
-				push(fringe, (vw_dist, next(c), w))
-				paths[w] = paths[v] + [w]
-	return (D, paths)
-
-"""
-Runs a length query from s to t using CH
-"""
-def CHquery(G,s,t):
-	Df,_ = CHsearch(G,s,0)		#forward search from s
-	Db,_ = CHsearch(G,t,1)		#backward search from t
-	dist = float("inf")
-	for u in Df.keys():
-		if u in Db and Df[u]+Db[u]<dist:
-			dist = Df[u]+Db[u]
-	return dist
