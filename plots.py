@@ -22,11 +22,14 @@ def plotcolor(G,attribute,value1,value2,value3=None):
 	#Create dictionary of positions
 	points = []
 	colors = []
+	widths = []
 	for (u,v) in G.edges():
 		if G[u][v][attribute] == value1:
 			colors.append('g')
+			widths.append(3)
 		elif G[u][v][attribute] == value2:
 			colors.append('b')
+			widths.append(1)
 		elif G[u][v][attribute] == value3:
 			colors.append('r')
 		else:
@@ -34,7 +37,7 @@ def plotcolor(G,attribute,value1,value2,value3=None):
 	for n in xrange(G.number_of_nodes()):
 		points.append(G.node[n]['XY'])
 	pos = dict(zip(range(len(points)), points)) 
-	nx.draw(G, pos,edges=G.edges(),edge_color=colors) 
+	nx.draw(G, pos,edges=G.edges(),edge_color=colors,width=widths) 
 	plt.show() 
 
 

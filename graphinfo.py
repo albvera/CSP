@@ -26,11 +26,13 @@ If reverse=1, returns predecessors shortest path length from w to v
 Otherwise, returns shortest path length from v to w
 """
 def SPlength(G,v,w,reverse):
-	if reverse == 1:
-		return nx.shortest_path_length(G,w,v,weight='dist')
-	else:
-		return nx.shortest_path_length(G,v,w,weight='dist')
-
+	try:
+		if reverse == 1:
+			return nx.shortest_path_length(G,w,v,weight='dist')
+		else:
+			return nx.shortest_path_length(G,v,w,weight='dist')
+	except:
+		return float("inf")	#Nodes are not reachable
 """
 Returns closest node to coordinate (x,y)
 """
