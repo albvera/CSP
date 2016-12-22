@@ -21,7 +21,7 @@ The nodes are (u,b), u=0,...,n-1 and b=0,...,B
 A unique ID is created by: (0,B) ->1, (1,B) ->2,..., (n-1,B)->n-1, (0,B-1)->n and so on 
 """
 
-from graphinfo import *
+from graph_info import *
 import itertools, math
 def augment(G,B):
 	H = nx.DiGraph()

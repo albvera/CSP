@@ -1,6 +1,6 @@
 import networkx as nx
-from graphinfo import *
-from CH import *
+from graph_info import *
+from ch import *
 
 """
 Creates hub labels based on hierarchies
@@ -15,13 +15,15 @@ If a list of sources is specified, only computes forward hubs for sources
 """
 from array import array
 
-def createlabels(G,sources = None, targets = None):
+def create_labels(G,Paths,sources = None, targets = None):
 	#I[0] is an dictionary for forward, I[0][v] is an array of ints with the id's of nodes in hubforward(v)
 	I = {}	
-	I[0] = I[1] = {}
+	I[0] = {}
+	I[1] = {}
 	#D[0] is an dictionary for forward, D[0][v] is an array of floats with distances from node to hub			
 	D = {}		
-	D[0] = D[1] = {}
+	D[0] = {}
+	D[1] = {}
 	n = nx.number_of_nodes(G)
 	N = {}	
 	N[0] = {}							#sizes of forward hubs
@@ -30,29 +32,30 @@ def createlabels(G,sources = None, targets = None):
 	objectives[0] = sources
 	objectives[1] = targets
 	for v in G.nodes():		
-		for reverse in range(0,2):		#for reverse=0,1		
+		for reverse in range(0,2):							#for reverse=0,1	
 			if objectives[reverse]!= None and v not in objectives[reverse]:
-				continue						#v is not an objective (source or target)
+				continue									#v is not an objective (source or target)
 			#CH search to identify potential nodes in hub		
 			hub = {}
-			Dist,_ = CHsearch(G,v,reverse)
-			#prune nodes in hub; only add nodes with correct
-			for w in Dist:				
-				if Dist[w] <= SPlength(G,v,w,reverse):		
-					hub[w] = Dist[w]
+			Dist,_ = ch_search(G,v,reverse)
+			#prune nodes in hub; only add nodes with correct distance
+			for w in Dist.keys():
+				l = path_length(v,w,Paths,G,reverse)		
+				if Dist[w] <= l:		
+					hub[w] = Dist[w]	
 		
 			#Now create hub labels		
 			N[reverse][v] = len(hub)
-			I[reverse][v] = (array('i',(0,)*N[reverse][v]))
-			D[reverse][v] = (array('f',(0,)*N[reverse][v]))
+			I[reverse][v] = []
+			D[reverse][v] = []
 			#Obtain dictionary with ids, but only of those nodes in the hub	
-			temp = {k: nx.get_node_attributes(G,'ID')[k] for k in hub.keys()}
+			temp = {k: G.node[k]['ID'] for k in hub.keys()}
 			#create label in increasing ID
-			for i in xrange(0,N[reverse][v]):
-				k = min(temp, key = temp.get)						#get key with smallest ID
-				I[reverse][v][i] = temp[k]				
-				D[reverse][v][i] = hub[k]							#get distance to key			
-				temp.pop(k,None)									#remove key from dict
+			while temp:
+				w = min(temp, key = temp.get)					#get node with smallest ID
+				I[reverse][v].append(temp[w])				
+				D[reverse][v].append(hub[w])					#get distance to key			
+				temp.pop(w,None)								#remove key from dict
 	return(I,D,N)
 
 """
@@ -62,7 +65,7 @@ Nf, Nb are integers
 Df, Db are arrays of floats 
 If, Ib are arrays of id's
 """
-def HLquery(If,Df,Ib,Db):
+def hl_query(If,Df,Ib,Db):
 	d = float("inf")	
 	i = 0
 	j = 0
@@ -78,6 +81,30 @@ def HLquery(If,Df,Ib,Db):
 		else:
 			j = j+1
 	return d
+
+"""
+Compute path length from v to w if reverse = 0 or from w to v if reverse=1
+"""
+def path_length(v,w,Paths,G,reverse):
+	path = []
+	if reverse == 0:
+		if w not in Paths[v]:				# w not reached by v
+			return float("inf")
+		path = Paths[v][w]
+	else:
+		if v not in Paths[w]:
+			return float("inf")
+		path = Paths[w][v] 
+
+	if len(path) == 1:
+		return 0
+	l = 0
+	i = 0
+	while i<len(path)-1:
+		l = l + G[path[i]][path[i+1]]['dist']
+		i = i+1
+	return l
+	
 
 """
 Save labels already constructed

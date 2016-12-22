@@ -4,12 +4,8 @@ Simple plot when attribute '
 Assumes that nodes have coordinates as an attribute 'XY'	
 """
 def plot(G):
-	#Create dictionary of positions
-	points = []
-	for n in xrange(G.number_of_nodes()):
-		points.append(G.node[n]['XY'])
-	pos = dict(zip(range(len(points)), points)) 
-	nx.draw(G, pos) 
+	pos = nx.get_node_attributes(G,'XY')	#get dictionary of positions
+	nx.draw(G, pos, node_size=0.3) 
 	plt.show() 
 
 """"
