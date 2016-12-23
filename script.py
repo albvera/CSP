@@ -17,7 +17,7 @@ if __name__ == '__main__':
 	randcost(G2,m)
 	G = augment(G2,B)
 	"""
-	G = nx.read_gpickle("DataDirected100")
+	G = nx.read_gpickle("DataSF")
 	start_time = time.time()
 
 	Paths = contract_spc(G)
@@ -30,7 +30,7 @@ if __name__ == '__main__':
 	print 'Label construction time: {} secs'.format(tt)
 	
 	pairs = []
-	for k in xrange(0,50):	#Generate random source-destinations pairs
+	for k in xrange(0,100):	#Generate random source-destinations pairs
 		pairs.append((choice(G.nodes()),choice(G.nodes())))
 
 	for (u,v) in pairs:
