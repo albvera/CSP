@@ -64,9 +64,10 @@ def contract_score(G):
 Uses shortest path covers to contract
 Adds nodes greedily to a cover C and then contract in reverse order
 Returns all the shortest paths
+If rank=True, then returns the cover when the rank is computed and skips the contraction
 """
-from collections import Counter
-def contract_spc(G):
+from collections import defaultdict
+def contract_spc(G,rank=None):
 	nx.set_edge_attributes(G, 'shortcut', 0)		# original edges are not shortcuts
 	C = []											# list of nodes in the cover
 	n = G.number_of_nodes()
@@ -75,13 +76,15 @@ def contract_spc(G):
 	L = {}											# nodes at each level
 	Ch = {}											# Ch[v] is a dict of children in the three
 	Paths = {}										# Paths[v] dict of paths in the tree
+	print 'Computing paths for cover'
 	for v in H:										# compute all shortest paths
 		P[v],Paths[v],Ch[v],L[v] = dijkstra_levels(G,v,0)
 	
+	print 'Computing SPC'
 	i = n		
 	last = None										# last node added to C									
 	while i >=2:									# compute rankings
-		total_hits = Counter(dict.fromkeys(H,0))
+		total_hits = dict.fromkeys(H,0)
 		for v in H:									# process paths starting at v
 			# remove children of last node added to C
 			if last in P[v]:						
@@ -90,34 +93,41 @@ def contract_spc(G):
 				remove_children_of(last,Ch[v],P[v])
 
 			# count the hits and remove descendants of last
-			h = Counter(dict.fromkeys(H,0))			# hits of each node in this tree
+			h = defaultdict(int)					# hits of each node in this tree
+			h[v] = 1
 			l = len(L[v]) - 1						
-			while l>=0:								# traverse tree bottom-up
+			while l>=1:								# traverse tree bottom-up
 				j = 0
-				while j<len(L[v][l]):				# nodes in level l
+				len_L = len(L[v][l])
+				while j<len_L:						# nodes in level l
 					u = L[v][l][j]
 					if u not in P[v]:
 						L[v][l].remove(u)			# u is descendant of last, remove it
+						len_L = len_L-1
 						continue
 					pu = P[v][u]					# parent of u		
 					h[u] = h[u] + 1					# count the (v,u)-path
 					h[pu] = h[pu] + h[u]
 					j = j+1
 				l = l-1
-			total_hits = total_hits+h
+			for u in h.keys():
+				total_hits[u] = total_hits[u]+h[u]
 		
-		v = total_hits.most_common(1)[0][0]
-		G.node[v]['rank'] = i			
-		i = i-1
-		last = v		
-		H.remove(v)
-		C.append(v)	
+		last = max(total_hits, key = total_hits.get)
+		G.node[last]['rank'] = i			
+		i = i-1	
+		H.remove(last)
+		C.append(last)	
 	#When the loop ends there is just one node remaining in H
 	v = H[0]
 	G.node[v]['rank'] = 1
 	C.append(v)
-
+	
+	if rank:
+		return C
+	
 	#Now we contract in the reverse order of C
+	print 'Contracting'
 	i = n-1
 	H = G.copy()
 	while i >=1:									# node C[0] is not contracted
@@ -132,6 +142,45 @@ def contract_spc(G):
 		i = i-1
 	
 	return Paths
+
+"""
+Uses a rank specified by a permutation C of the original nodes to contract an augmented graph
+"""
+def contract_augmented(G,C,B):
+	nx.set_edge_attributes(G, 'shortcut', 0)		# original edges are not shortcuts
+	nx.set_node_attributes(G, 'rank', 0)			# rank of sink nodes
+	nn = len(C)										# number of original nodes
+	H = G.copy()
+	rank = 1
+	print 'Contracting augmented graph'
+	for i in xrange(nn-1,-1,-1):
+		for b in xrange(B,-1,-1) :				
+			v = (C[i],b)							# v is to be contracted
+			G.node[v]['rank'] = rank
+			rank += 1
+			sucs = neighbours(H,v,0)				# successors of v
+			if not sucs:							# v has no successors
+				H.remove_node(v)
+				continue
+			pred = neighbours(H,v,1)				# predecessors of v
+			if not pred:							# v has no predecessors
+				H.remove_node(v)
+				continue
+			max_vw = 0								# max dist(v,w)
+			for w in G[v].keys():					# search in adjacency list
+				if G[v][w]['dist'] > max_vw:
+					max_vw = G[v][w]['dist']
+			
+			for u in pred:
+				_,Paths = dijkstra_levels(H,u,0,omit_levels=True,cutoff=G[u][v]['dist']+max_vw)
+				for w in sucs:
+					if u == w or v not in Paths[w]:
+						continue	
+					H.add_edge(u,w)
+					G.add_edge(u,w)
+					G[u][w]['shortcut'] = 1
+					G[u][w]['dist'] = H[u][w]['dist'] = H[u][v]['dist']+H[v][w]['dist']
+			H.remove_node(v)
 	
 """
 Shortcuts node v and returns edges that must be added to the graph
@@ -206,8 +255,9 @@ def ch_query(G,s,t):
 """
 Runs Dijkstra from the source
 Returns list of parents, paths, children and the level of each node (#hops away from source)
+If omit_levels=True, level and children computation is ignored
 """
-def dijkstra_levels(G, source, reverse):
+def dijkstra_levels(G, source, reverse, omit_levels=None, cutoff=None):
 	push = heappush
 	pop = heappop
 	D = {}  								# dictionary of final distances
@@ -224,25 +274,33 @@ def dijkstra_levels(G, source, reverse):
 		if v in D:
 			continue  						# already searched this node.
 		D[v] = d
-		
-		hv = h[v]							# settle the level of v
-		if hv in levels:
-			levels[hv].append(v)
-		else:
-			levels[hv] = [v] 		
+		if not omit_levels:
+			hv = h[v]							# settle the level of v
+			if hv in levels:
+				levels[hv].append(v)
+			else:
+				levels[hv] = [v] 		
 
 		N = neighbours(G,v,reverse)
 		for w in N:	
 			vw_dist = D[v] + dist(G,v,w,reverse)
+			if cutoff is not None and vw_dist > cutoff:
+				continue
 			if w not in seen or vw_dist < seen[w]:
 				seen[w] = vw_dist
 				push(fringe, (vw_dist, next(c), w))
 				p[w] = v
-				h[w] = hv + 1
 				paths[w] = paths[v] + [w]
+				if not omit_levels:
+					h[w] = hv + 1
+	
+	if omit_levels:
+		return D,paths	
+	
 	child = {}
 	l = 1
-	while l<len(levels):					# traverse tree top-bottom to determine children
+	len_lev = len(levels)
+	while l<len_lev:						# traverse tree top-bottom to determine children
 		for u in levels[l]:
 			pu = p[u]
 			if pu in child:					# if the node already has children

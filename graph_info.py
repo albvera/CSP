@@ -12,6 +12,7 @@ def dist(G,v,w,reverse):
 """
 If reverse=1, returns predecessors of v
 Otherwise, returns successors of v
+Requires global variable is_direced
 """
 def neighbours(G,v,reverse):
 	if not nx.is_directed(G):

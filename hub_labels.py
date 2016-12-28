@@ -8,55 +8,86 @@ The hubs are three-tuples: N(v),I(v),D(v)
 N(v)=#items in hub, I(v)=array with id's in hub, D(v) = array with distances
 D(v)[k] = dist(v,I(v)[k]) for k=0,...,N(v)-1
 I(v) is sorted in increasing order
-Each three-tuple can be reversed (1) or not reversed (0)
+Each three-tuple can be backward (reverse=1) or forward (reversed=0)
 Assumes the nodes have unique ID attribute 0,1,...,n-1
-If a list of targets is specified, only computes backward hubs for targets
-If a list of sources is specified, only computes forward hubs for sources
+List of targets (backward hubs) and sources (forward hubs) can be specified
+If prune=True, the hubs are prunned using Dijkstra, otherwise they are not prunned
 """
 from array import array
 
-def create_labels(G,Paths,sources = None, targets = None):
-	#I[0] is an dictionary for forward, I[0][v] is an array of ints with the id's of nodes in hubforward(v)
+def create_labels(G,Id_map,sources = None, targets = None, prune = None):
+	#I[0] is an dictionary for forward, I[0][v] is an array with the id's of nodes in hubforward(v)
 	I = {}	
 	I[0] = {}
 	I[1] = {}
-	#D[0] is an dictionary for forward, D[0][v] is an array of floats with distances from node to hub			
+	#D[0] is an dictionary for forward, D[0][v] is an array of distances from node to hub			
 	D = {}		
 	D[0] = {}
 	D[1] = {}
-	n = nx.number_of_nodes(G)
 	N = {}	
-	N[0] = {}							#sizes of forward hubs
-	N[1] = {}							#sizes of reversed hubs
-	objectives = {}						#does something only if sources or targets are specified
+	N[0] = {}												# sizes of forward hubs
+	N[1] = {}												# sizes of reversed hubs
+	objectives = {}											# used to work with sources or targets
 	objectives[0] = sources
 	objectives[1] = targets
+	
+	print 'Creating labels'
 	for v in G.nodes():		
-		for reverse in range(0,2):							#for reverse=0,1	
+		for reverse in range(0,2):								
 			if objectives[reverse]!= None and v not in objectives[reverse]:
-				continue									#v is not an objective (source or target)
-			#CH search to identify potential nodes in hub		
-			hub = {}
-			Dist,_ = ch_search(G,v,reverse)
-			#prune nodes in hub; only add nodes with correct distance
-			for w in Dist.keys():
-				l = path_length(v,w,Paths,G,reverse)		
-				if Dist[w] <= l:		
-					hub[w] = Dist[w]	
-		
-			#Now create hub labels		
+				continue									# v is not an objective (source or target)		
+			# get the candidate for hub			
+			hub,_ = ch_search(G,v,reverse)
+			
+			if prune:  
+				max_dist = 0								# cutoff = max dist from v to a node in the hub
+				hub_keys = hub.keys()
+				for w in hub_keys:					
+					if hub[w] > max_dist:
+						max_dist = hub[w]
+				real_dists,_ = dijkstra_levels(G,v,reverse,omit_levels=True,cutoff=max_dist)
+				
+				for w in hub_keys:
+					if hub[w] > real_dists[w]:       
+						hub.pop(w,None)
+			
+			# create label by storing in increasing ID 
 			N[reverse][v] = len(hub)
-			I[reverse][v] = []
+			I[reverse][v] = sorted({G.node[k]['ID'] for k in hub.keys()})
 			D[reverse][v] = []
-			#Obtain dictionary with ids, but only of those nodes in the hub	
-			temp = {k: G.node[k]['ID'] for k in hub.keys()}
-			#create label in increasing ID
-			while temp:
-				w = min(temp, key = temp.get)					#get node with smallest ID
-				I[reverse][v].append(temp[w])				
-				D[reverse][v].append(hub[w])					#get distance to key			
-				temp.pop(w,None)								#remove key from dict
+			for j in xrange(0,N[reverse][v]):			
+				w = Id_map[I[reverse][v][j]]
+				D[reverse][v].append(hub[w])					# get distance to key			
 	return(I,D,N)
+
+"""
+Remove nodes in label with wron distance label
+Uses hub label queries to prune the hubs
+Id_map[Id] returns the node with that ID
+"""
+def prune_labels(I,D,N,Id_map):
+	tol = 0.0001												# for floating point error
+	for reverse in range(0,2):
+		print 'Prunning hubs reverse={}'.format(reverse)
+		for v in I[reverse].keys():								# prune the hub of node v
+			j = 0
+			while j<N[reverse][v]:
+				dist = 0
+				w = Id_map[I[reverse][v][j]]					# j-th node in the hub
+				if reverse == 0 and v!=w:						# if w not a sink-node, compute SP (v,b-x)->(w,-1)
+					if w[1]==-1:								
+						w = (w[0],0)							# so the substraction -w[1] works also in this case
+					dist = hl_query(I[0][(v[0],v[1]-w[1])],D[0][(v[0],v[1]-w[1])],I[1][(w[0],-1)],D[1][(w[0],-1)])
+				if reverse == 1 and v!=w:						# dist wv and (v,b) is a sink node
+					dist = hl_query(I[0][w],D[0][w],I[1][v],D[1][v])
+				if dist<D[reverse][v][j]:
+					del I[reverse][v][j]
+					del D[reverse][v][j]
+					N[reverse][v]-=1
+				else:
+					j = j+1
+		
+
 
 """
 Runs a query using hub labels
@@ -81,30 +112,6 @@ def hl_query(If,Df,Ib,Db):
 		else:
 			j = j+1
 	return d
-
-"""
-Compute path length from v to w if reverse = 0 or from w to v if reverse=1
-"""
-def path_length(v,w,Paths,G,reverse):
-	path = []
-	if reverse == 0:
-		if w not in Paths[v]:				# w not reached by v
-			return float("inf")
-		path = Paths[v][w]
-	else:
-		if v not in Paths[w]:
-			return float("inf")
-		path = Paths[w][v] 
-
-	if len(path) == 1:
-		return 0
-	l = 0
-	i = 0
-	while i<len(path)-1:
-		l = l + G[path[i]][path[i+1]]['dist']
-		i = i+1
-	return l
-	
 
 """
 Save labels already constructed
