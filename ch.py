@@ -80,10 +80,9 @@ def contract_spc(G,rank=None):
 	for v in H:										# compute all shortest paths
 		P[v],Paths[v],Ch[v],L[v] = dijkstra_levels(G,v,0)
 	
-	print 'Computing SPC'
-	i = n		
+	print 'Computing SPC'	
 	last = None										# last node added to C									
-	while i >=2:									# compute rankings
+	for i in xrange(n,1,-1):						# i = n,n-1,...,2
 		total_hits = dict.fromkeys(H,0)
 		for v in H:									# process paths starting at v
 			# remove children of last node added to C
@@ -94,9 +93,8 @@ def contract_spc(G,rank=None):
 
 			# count the hits and remove descendants of last
 			h = defaultdict(int)					# hits of each node in this tree
-			h[v] = 1
-			l = len(L[v]) - 1						
-			while l>=1:								# traverse tree bottom-up
+			h[v] = 1					
+			for l in xrange(len(L[v])-1,0,-1):		# traverse tree bottom-up
 				j = 0
 				len_L = len(L[v][l])
 				while j<len_L:						# nodes in level l
@@ -109,13 +107,11 @@ def contract_spc(G,rank=None):
 					h[u] = h[u] + 1					# count the (v,u)-path
 					h[pu] = h[pu] + h[u]
 					j = j+1
-				l = l-1
 			for u in h.keys():
 				total_hits[u] = total_hits[u]+h[u]
 		
 		last = max(total_hits, key = total_hits.get)
 		G.node[last]['rank'] = i			
-		i = i-1	
 		H.remove(last)
 		C.append(last)	
 	#When the loop ends there is just one node remaining in H
@@ -128,9 +124,8 @@ def contract_spc(G,rank=None):
 	
 	#Now we contract in the reverse order of C
 	print 'Contracting'
-	i = n-1
 	H = G.copy()
-	while i >=1:									# node C[0] is not contracted
+	for i in xrange(n-1,0,-1):						# node C[0] is not contracted
 		v = C[i] 									# v is to be contracted
 		new_edges = shortcut(H,v,Paths)
 		for (u,w) in new_edges:				
@@ -139,7 +134,6 @@ def contract_spc(G,rank=None):
 			G[u][w]['shortcut'] = 1
 			G[u][w]['dist'] = H[u][w]['dist'] = H[u][v]['dist']+H[v][w]['dist']
 		H.remove_node(v)	
-		i = i-1
 	
 	return Paths
 
@@ -154,8 +148,10 @@ def contract_augmented(G,C,B):
 	rank = 1
 	print 'Contracting augmented graph'
 	for i in xrange(nn-1,-1,-1):
-		for b in xrange(B,-1,-1) :				
+		for b in xrange(B,-1,-1):				
 			v = (C[i],b)							# v is to be contracted
+			if not G.has_node(v):					# when the augmented graph is prunned some nodes disappear 
+				continue
 			G.node[v]['rank'] = rank
 			rank += 1
 			sucs = neighbours(H,v,0)				# successors of v
@@ -166,6 +162,7 @@ def contract_augmented(G,C,B):
 			if not pred:							# v has no predecessors
 				H.remove_node(v)
 				continue
+
 			max_vw = 0								# max dist(v,w)
 			for w in G[v].keys():					# search in adjacency list
 				if G[v][w]['dist'] > max_vw:
@@ -275,7 +272,7 @@ def dijkstra_levels(G, source, reverse, omit_levels=None, cutoff=None):
 			continue  						# already searched this node.
 		D[v] = d
 		if not omit_levels:
-			hv = h[v]							# settle the level of v
+			hv = h[v]						# settle the level of v
 			if hv in levels:
 				levels[hv].append(v)
 			else:
@@ -298,16 +295,14 @@ def dijkstra_levels(G, source, reverse, omit_levels=None, cutoff=None):
 		return D,paths	
 	
 	child = {}
-	l = 1
-	len_lev = len(levels)
-	while l<len_lev:						# traverse tree top-bottom to determine children
+	for l in xrange(1,len(levels)):			# traverse tree top-bottom to determine children
 		for u in levels[l]:
 			pu = p[u]
 			if pu in child:					# if the node already has children
 				child[pu].append(u)
 			else:
 				child[pu] = [u]
-		l = l+1
+
 	return (p,paths,child,levels)
 
 """

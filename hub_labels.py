@@ -86,8 +86,25 @@ def prune_labels(I,D,N,Id_map):
 					N[reverse][v]-=1
 				else:
 					j = j+1
-		
 
+def prune_labels_prunned(I,D,N,Id_map):							# for floating point error
+	for reverse in range(0,2):
+		print 'Prunning hubs reverse={}'.format(reverse)
+		for v in I[reverse].keys():								# prune the hub of node v
+			j = 0
+			while j<N[reverse][v]:
+				dist = 0
+				w = Id_map[I[reverse][v][j]]					# j-th node in the hub
+				if reverse == 0 and v!=w:						# if (w,x) not a sink-node, compute SP (v,b-x)->(w,0)
+					dist = hl_query_prunned(I,D,v[0],w[0],v[1]-w[1])
+				if reverse == 1 and v!=w:						# dist wv and (v,b) is a sink node
+					dist = hl_query_prunned(I,D,w[0],v[0],w[1])
+				if dist<D[reverse][v][j]:
+					del I[reverse][v][j]
+					del D[reverse][v][j]
+					N[reverse][v]-=1
+				else:
+					j = j+1
 
 """
 Runs a query using hub labels
@@ -112,6 +129,20 @@ def hl_query(If,Df,Ib,Db):
 		else:
 			j = j+1
 	return d
+
+"""
+Receives hubs for prunned augmented graph, source, target and budget
+"""
+def hl_query_prunned(I,D,s,t,b):
+	#TODO: linear in b, change to bisection to run in log
+	dist = float("inf")
+	for x in range(b,-1,-1):
+		if (s,x) not in I[0]:
+			continue
+		d = hl_query(I[0][(s,x)],D[0][(s,x)],I[1][(t,0)],D[1][(t,0)])
+		if d<dist:
+			dist = d
+	return dist	
 
 """
 Save labels already constructed

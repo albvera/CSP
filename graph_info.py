@@ -26,7 +26,7 @@ def neighbours(G,v,reverse):
 If reverse=1, returns predecessors shortest path length from w to v
 Otherwise, returns shortest path length from v to w
 """
-def SPlength(G,v,w,reverse):
+def sp_length(G,v,w,reverse):
 	try:
 		if reverse == 1:
 			return nx.shortest_path_length(G,w,v,weight='dist')

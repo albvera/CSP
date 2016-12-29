@@ -50,3 +50,48 @@ def augment(G,B):
 		H.node[(u,-1)]['ID'] = i
 		i = i+1
 	return H
+
+"""
+Receives original graph G and augmented graph GB
+"""
+def prune_augmented(G,GB,B):
+	print 'Prunning augmented graph'
+	H = nx.DiGraph()
+	
+	for s in G.nodes():
+		for b in xrange(0,B+1):
+			paths=nx.single_source_dijkstra_path(GB,(s,b),weight='dist')
+			for t in G.nodes():
+				if (t,-1) not in paths or t == s:
+					continue
+				len_p = len(paths[(t,-1)])				
+				if paths[(t,-1)][len_p-2][1]!=0:				# path didn't consume all the budget
+					continue
+				l = 0
+				while l<=len_p-3:								# last node in the path is sink, don't count it
+					(u,x) = paths[(t,-1)][l]
+					(v,y) = paths[(t,-1)][l+1] 
+					H.add_edge((u,x),(v,y),dist=G[u][v]['dist'])
+					l = l+1
+
+	# assing ID
+	i = 0
+	for u in H.nodes():
+		H.node[u]['ID'] = i
+		i = i+1
+
+	return H
+
+"""
+Receives prunned augmented graph G, source, target and budget
+"""
+def query_prunned(G,s,t,b):
+	dist = float("inf")
+	for x in range(b,-1,-1):
+		if (s,x) not in G.nodes():
+			continue
+		length,path = nx.single_source_dijkstra(G,(s,x),target=(t,0),weight='dist')
+		if (t,0) not in length or length[(t,0)]>dist:
+			continue
+		dist = length[(t,0)]
+	return dist	
