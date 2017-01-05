@@ -9,6 +9,12 @@ def dist(G,v,w,reverse):
 	else:
 		return G[v][w]['dist']	#do not reverse 
 
+def dist_forward(G,v,w):
+	return G[v][w]['dist']
+
+def dist_backward(G,v,w):
+	return G[w][v]['dist']
+
 """
 If reverse=1, returns predecessors of v
 Otherwise, returns successors of v

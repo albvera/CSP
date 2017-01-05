@@ -217,6 +217,11 @@ def ch_search(G, source, reverse, target=None, cutoff=None):
 	c = count()
 	fringe = []  							# use heapq with (distance,label) tuples
 	push(fringe, (0, next(c), source))
+	if reverse == 0:
+		dist = dist_forward
+	else:
+		dist = dist_backward
+
 	while fringe:
 		(d, _, v) = pop(fringe)				# min distance and node
 		if v in D:
@@ -228,7 +233,7 @@ def ch_search(G, source, reverse, target=None, cutoff=None):
 		for w in N:
 			if G.node[w]['rank']<G.node[v]['rank']:
 				continue	
-			vw_dist = D[v] + dist(G,v,w,reverse)
+			vw_dist = D[v] + dist(G,v,w)
 			if cutoff is not None and vw_dist > cutoff:
 				continue
 			if w not in seen or vw_dist < seen[w]:
@@ -266,6 +271,11 @@ def dijkstra_levels(G, source, reverse, omit_levels=None, cutoff=None):
 	c = count()
 	fringe = []  							# use heapq with (distance,label) tuples
 	push(fringe, (0, next(c), source))
+	#TODO:implement a function here to call dist and neighbours
+	if reverse == 0:
+		dist = dist_forward
+	else:
+		dist = dist_backward
 	while fringe:
 		(d, _, v) = pop(fringe)				# min distance and node
 		if v in D:
@@ -280,7 +290,7 @@ def dijkstra_levels(G, source, reverse, omit_levels=None, cutoff=None):
 
 		N = neighbours(G,v,reverse)
 		for w in N:	
-			vw_dist = D[v] + dist(G,v,w,reverse)
+			vw_dist = D[v] + dist(G,v,w)
 			if cutoff is not None and vw_dist > cutoff:
 				continue
 			if w not in seen or vw_dist < seen[w]:

@@ -18,15 +18,17 @@ Returns expanded digraph
 Receives a graph or digraph and budget B
 Assumes a label 'cost' on edges and nodes of G are 0,1,2,...,n-1
 The nodes are (u,b), u=0,...,n-1 and b=0,...,B
+If omit_sink=True, it doesn't add the sink nodes (u,-1)
 A unique ID is created by: (0,B) ->1, (1,B) ->2,..., (n-1,B)->n-1, (0,B-1)->n and so on 
 """
-
 from graph_info import *
 import itertools, math
-def augment(G,B):
+def augment(G,B,omit_sink=None):
 	print 'Augmenting graph'
 	H = nx.DiGraph()
-	nodes = list(itertools.product(G.nodes(),range(-1,B+1)))
+	nodes = list(itertools.product(G.nodes(),range(0,B+1)))
+	if not omit_sink:
+		nodes = nodes + [(u,-1) for u in G.nodes()]
 	H.add_nodes_from(nodes)
 	#create the edges
 	i = 0
@@ -40,10 +42,14 @@ def augment(G,B):
 					b2 = b-G[u][v]['cost']
 					H.add_edge((u,b),(v,b2))
 					H[(u,b)][(v,b2)]['dist'] = G[u][v]['dist']
-			d = float(round(math.log(2-b/B),4))					# d decreasing in b and less than 1
-			H.add_edge((u,b),(u,-1),dist=d)	
+			if not omit_sink:			
+				d = float(round(math.log(2-b/B),4))				# d decreasing in b and less than 1
+				H.add_edge((u,b),(u,-1),dist=d)	
 			i = i+1
 		b = b-1
+
+	if omit_sink:	
+		return H
 	
 	#Now assing ID for sink nodes
 	for u in G.nodes():
@@ -54,26 +60,35 @@ def augment(G,B):
 """
 Receives original graph G and augmented graph GB
 """
-def prune_augmented(G,GB,B):
+from sets import Set
+def prune_augmented(G,B):
 	print 'Prunning augmented graph'
 	H = nx.DiGraph()
-	
+	GB = augment(G,B,omit_sink=True)
+	edges = Set()											# keep track of added edges as 4-tuples
 	for s in G.nodes():
-		for b in xrange(0,B+1):
-			paths=nx.single_source_dijkstra_path(GB,(s,b),weight='dist')
-			for t in G.nodes():
-				if (t,-1) not in paths or t == s:
-					continue
-				len_p = len(paths[(t,-1)])				
-				if paths[(t,-1)][len_p-2][1]!=0:				# path didn't consume all the budget
-					continue
-				l = 0
-				while l<=len_p-3:								# last node in the path is sink, don't count it
-					(u,x) = paths[(t,-1)][l]
-					(v,y) = paths[(t,-1)][l+1] 
-					H.add_edge((u,x),(v,y),dist=G[u][v]['dist'])
-					l = l+1
-
+		lengths,paths=nx.single_source_dijkstra(GB,(s,B),weight='dist')			
+		for t in G.nodes():
+			if t==s:
+				continue
+			dist = [float("inf")]*(B+1)						# dist[b] = distance with budget b
+			for x in xrange(B,-1,-1):
+				if (t,x) not in lengths:
+					if x<B:
+						dist[B-x] = dist[B-x-1]
+					continue		
+				if x==B or lengths[(t,x)]<dist[B-x-1]:		# path is strictly better than the previous
+					len_p = len(paths[(t,x)])				
+					l = 0
+					while l<=len_p-2:						# last node in the path is sink, don't count it
+						(u,y) = paths[(t,x)][l]
+						(v,z) = paths[(t,x)][l+1] 
+						if (u,y-x,v,z-x) not in edges:
+							edges.add((u,y-x,v,z-x))
+							H.add_edge((u,y-x),(v,z-x),dist=G[u][v]['dist'])
+						l = l+1
+				else:
+					dist[B-x] = dist[B-x-1]
 	# assing ID
 	i = 0
 	for u in H.nodes():

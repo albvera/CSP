@@ -61,7 +61,7 @@ def create_labels(G,Id_map,sources = None, targets = None, prune = None):
 	return(I,D,N)
 
 """
-Remove nodes in label with wron distance label
+Remove nodes in label with wrong distance label
 Uses hub label queries to prune the hubs
 Id_map[Id] returns the node with that ID
 """
@@ -86,8 +86,12 @@ def prune_labels(I,D,N,Id_map):
 					N[reverse][v]-=1
 				else:
 					j = j+1
-
-def prune_labels_prunned(I,D,N,Id_map):							# for floating point error
+"""
+Prune labels by bootstrapping hub labels
+G is the prunned augmented graph
+"""
+def prune_labels_bootstrap(I,D,N,Id_map,G):		
+	print 'Prunning labels'
 	for reverse in range(0,2):
 		print 'Prunning hubs reverse={}'.format(reverse)
 		for v in I[reverse].keys():								# prune the hub of node v
@@ -107,6 +111,40 @@ def prune_labels_prunned(I,D,N,Id_map):							# for floating point error
 					j = j+1
 
 """
+Prune labels using Dijkstra
+G is the prunned augmented graph
+"""
+def prune_labels_dijkstra(I,D,N,Id_map,G):		
+	#TODO: it's not prunning all the nodes
+	print 'Prunning labels'
+	for v in I[0].keys():
+		lengths,_=nx.single_source_dijkstra(G,v,weight='dist')
+		# prune forward hub of v
+		j = 0
+		while j<N[0][v]:
+			w = Id_map[I[0][v][j]]					# j-th node in the hub
+			dist = lengths[w]
+			if dist<D[0][v][j]:
+				del I[0][v][j]
+				del D[0][v][j]
+				N[0][v]-=1
+			else:
+				j = j+1
+
+		# prune backward hubs containing v
+		id_v = G.node[v]['ID']		
+		for u in I[1].keys():
+			if id_v not in I[1][u]:
+				continue
+			dist = lengths[u]
+			j = I[1][u].index(id_v)
+			if dist<D[1][u][j]:
+				del I[1][u][j]
+				del D[1][u][j]
+				N[1][u]-=1
+												 				
+
+"""
 Runs a query using hub labels
 Receives a forward and a backward hub
 Nf, Nb are integers
@@ -121,7 +159,8 @@ def hl_query(If,Df,Ib,Db):
 	Nb = len(Ib)
 	while i<Nf and j<Nb:
 		if If[i]==Ib[j]:
-			d = min(d,Df[i]+Db[j])
+			if Df[i]+Db[j] < d:
+				d = Df[i]+Db[j]
 			i = i+1
 			j = j+1
 		elif If[i]<Ib[j]:
@@ -134,7 +173,11 @@ def hl_query(If,Df,Ib,Db):
 Receives hubs for prunned augmented graph, source, target and budget
 """
 def hl_query_prunned(I,D,s,t,b):
-	#TODO: linear in b, change to bisection to run in log
+	#TODO: linear in b, change to bisection to run in log?
+	if s == t:
+		return 0
+	if (t,0) not in I[1]:
+		return float("inf")
 	dist = float("inf")
 	for x in range(b,-1,-1):
 		if (s,x) not in I[0]:

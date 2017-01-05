@@ -1,4 +1,5 @@
 *.pyc
+*.dat
 Data20
 get_json.py
 SF.json
