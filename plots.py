@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt, networkx as nx 
+import matplotlib.pyplot as plt, networkx as nx, math 
 """
 Simple plot when attribute '
 Assumes that nodes have coordinates as an attribute 'XY'	
@@ -42,7 +42,8 @@ def plotcolor(G,attribute,value1,value2,value3=None):
 #Plot histogram of list
 from collections import Counter
 import numpy as np
-def plotlist(l):
+def plotlist(data,bin_size=30):
+	"""
 	labels, values = zip(*Counter(l).items())
 
 	indexes = np.arange(len(labels))
@@ -50,4 +51,10 @@ def plotlist(l):
 
 	plt.bar(indexes, values, width)
 	plt.xticks(indexes + width * 0.5, labels)
+	plt.show()
+	"""
+	bins = np.arange(0, max(data), bin_size) # fixed bin size
+	plt.xlim([min(data)-5, max(data)+5])
+	plt.hist(data, bins=bins, alpha=0.5)
+	plt.ylabel('count')
 	plt.show()

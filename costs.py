@@ -78,15 +78,16 @@ def prune_augmented(G,B):
 						dist[B-x] = dist[B-x-1]
 					continue		
 				if x==B or lengths[(t,x)]<dist[B-x-1]:		# path is strictly better than the previous
-					len_p = len(paths[(t,x)])				
+					path_tx = paths[(t,x)]
+					len_p = len(path_tx)				
 					l = 0
 					while l<=len_p-2:						# last node in the path is sink, don't count it
-						(u,y) = paths[(t,x)][l]
-						(v,z) = paths[(t,x)][l+1] 
+						(u,y) = path_tx[l]
+						(v,z) = path_tx[l+1] 
 						if (u,y-x,v,z-x) not in edges:
 							edges.add((u,y-x,v,z-x))
 							H.add_edge((u,y-x),(v,z-x),dist=G[u][v]['dist'])
-						l = l+1
+						l += 1
 				else:
 					dist[B-x] = dist[B-x-1]
 	# assing ID
@@ -98,15 +99,17 @@ def prune_augmented(G,B):
 	return H
 
 """
-Receives prunned augmented graph G, source, target and budget
+Receives lengths of paths in the prunned graph G, source, target and budget
 """
-def query_prunned(G,s,t,b):
+def query_prunned(lengths,s,t,b):
+	#TODO: not working, need to explore source instead of target
+	if s == t:
+		return 0
 	dist = float("inf")
 	for x in range(b,-1,-1):
-		if (s,x) not in G.nodes():
+		if (t,x) not in lengths:
 			continue
-		length,path = nx.single_source_dijkstra(G,(s,x),target=(t,0),weight='dist')
-		if (t,0) not in length or length[(t,0)]>dist:
-			continue
-		dist = length[(t,0)]
+		d = lengths[(t,x)]
+		if d<dist:
+			dist = d
 	return dist	
