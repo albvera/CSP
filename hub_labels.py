@@ -13,11 +13,10 @@ I(v) is sorted in increasing order
 Each three-tuple can be backward (reverse=1) or forward (reversed=0)
 Assumes the nodes have unique ID attribute 0,1,...,n-1
 List of targets (backward hubs) and sources (forward hubs) can be specified
-If prune=True, the hubs are prunned using Dijkstra, otherwise they are not prunned
 """
 from array import array
 
-def create_labels(G,Id_map,sources = None, targets = None, prune = None):
+def create_labels(G,Id_map,sources = None, targets = None):
 	#I[0] is an dictionary for forward, I[0][v] is an array with the id's of nodes in hubforward(v)
 	I = {}	
 	I[0] = {}
@@ -38,21 +37,8 @@ def create_labels(G,Id_map,sources = None, targets = None, prune = None):
 		for reverse in range(0,2):								
 			if objectives[reverse]!= None and v not in objectives[reverse]:
 				continue									# v is not an objective (source or target)		
-			# get the candidate for hub			
-			hub,_ = ch_search(G,v,reverse)
-			
-			if prune:  
-				max_dist = 0								# cutoff = max dist from v to a node in the hub
-				hub_keys = hub.keys()
-				for w in hub_keys:					
-					if hub[w] > max_dist:
-						max_dist = hub[w]
-				real_dists,_ = dijkstra_levels(G,v,reverse,omit_levels=True,cutoff=max_dist)
-				
-				for w in hub_keys:
-					if hub[w] > real_dists[w]:       
-						hub.pop(w,None)
-			
+					
+			hub,_ = ch_search(G,v,reverse)					# hub is a dict, keys are nodes visited in the search	
 			# create label by storing in increasing ID 
 			N[reverse][v] = len(hub)
 			I[reverse][v] = sorted({G.node[k]['ID'] for k in hub.keys()})
@@ -65,7 +51,7 @@ def create_labels(G,Id_map,sources = None, targets = None, prune = None):
 
 """
 Prune labels by bootstrapping hub labels
-G is the prunned augmented graph
+G is the pruned augmented graph
 Not only removes nodes with incorrect label, but also those who are not efficient
 Id_map[Id] returns the node with that ID
 """
@@ -80,9 +66,9 @@ def prune_labels_bootstrap(I,D,N,Id_map,G):
 				dist = 0
 				w = Id_map[I[reverse][v][j]]					# j-th node in the hub
 				if reverse == 0 and v!=w:						# if (w,x) not a sink-node, compute SP (v,b-x)->(w,0)
-					dist = hl_query_prunned(I,D,v[0],w[0],v[1]-w[1])
+					dist = hl_query_pruned(I,D,v[0],w[0],v[1]-w[1])
 				if reverse == 1 and v!=w:						# dist wv and (v,b) is a sink node
-					dist = hl_query_prunned(I,D,w[0],v[0],w[1])
+					dist = hl_query_pruned(I,D,w[0],v[0],w[1])
 				if dist<D[reverse][v][j]:
 					del I[reverse][v][j]
 					del D[reverse][v][j]
@@ -92,7 +78,7 @@ def prune_labels_bootstrap(I,D,N,Id_map,G):
 
 """
 Prune labels using Dijkstra, removes also inefficient nodes
-G is the prunned augmented graph 
+G is the pruned augmented graph 
 """
 def prune_labels_dijkstra(I,D,N,Id_map,G):		
 	#TODO: not working, need to run a reverse dijstra from the terminals instead
@@ -103,7 +89,7 @@ def prune_labels_dijkstra(I,D,N,Id_map,G):
 		j = 0
 		while j<N[0][v]:
 			w = Id_map[I[0][v][j]]					# j-th node in the hub
-			dist = query_prunned(lengths,v[0],w[0],v[1]-w[1])
+			dist = query_pruned(lengths,v[0],w[0],v[1]-w[1])
 			if dist<D[0][v][j]:
 				del I[0][v][j]
 				del D[0][v][j]
@@ -116,7 +102,7 @@ def prune_labels_dijkstra(I,D,N,Id_map,G):
 		for u in I[1].keys():
 			if id_v not in I[1][u]:
 				continue
-			dist = query_prunned(lengths,v[0],u[0],v[1])
+			dist = query_pruned(lengths,v[0],u[0],v[1])
 			j = I[1][u].index(id_v)
 			if dist<D[1][u][j]:
 				del I[1][u][j]
@@ -149,9 +135,9 @@ def hl_query(If,Df,Ib,Db):
 	return d
 
 """
-Receives hubs for prunned augmented graph, source, target and budget
+Receives hubs for pruned augmented graph, source, target and budget
 """
-def hl_query_prunned(I,D,s,t,b):
+def hl_query_pruned(I,D,s,t,b):
 	if s == t:
 		return 0
 	if (t,0) not in I[1]:

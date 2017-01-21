@@ -93,7 +93,7 @@ def contract_augmented(G,C,B):
 	for i in bar(xrange(nn-1,-1,-1)):
 		for b in xrange(B,-1,-1):				
 			v = (C[i],b)							# v is to be contracted
-			if not G.has_node(v):					# when the augmented graph is prunned some nodes disappear 
+			if not G.has_node(v):					# when the augmented graph is pruned some nodes disappear 
 				continue
 			G.node[v]['rank'] = rank
 			rank += 1
@@ -112,7 +112,7 @@ def contract_augmented(G,C,B):
 					max_vw = G[v][w]['dist']
 			
 			for u in pred:
-				_,Paths = dijkstra_levels(H,u,0,omit_levels=True,cutoff=G[u][v]['dist']+max_vw)
+				_,Paths = nx.single_source_dijkstra(H,u,target=None,cutoff=G[u][v]['dist']+max_vw, weight='dist')
 				for w in sucs:
 					if u == w or v not in Paths[w]:
 						continue	
@@ -149,41 +149,37 @@ from collections import deque
 from heapq import heappush, heappop
 from itertools import count
 
-def ch_search(G, source, reverse, target=None, cutoff=None):
-	if source == target:
-		return ({source: 0}, {source: [source]})
+def ch_search(G, source, reverse):
 	push = heappush
 	pop = heappop
 	D = {}  								# dictionary of final distances
-	paths = {source: [source]}  			# dictionary of paths
+	parent = {source: source}  				# dictionary of parents
 	seen = {source: 0}
 	c = count()
 	fringe = []  							# use heapq with (distance,label) tuples
 	push(fringe, (0, next(c), source))
 	if reverse == 0:
 		dist = dist_forward
+		neighbours = G.successors
 	else:
 		dist = dist_backward
+		neighbours = G.predecessors
 
 	while fringe:
 		(d, _, v) = pop(fringe)				# min distance and node
 		if v in D:
 			continue  						# already searched this node.
 		D[v] = d							# settle distance
-		if v == target:
-			break
-		N = neighbours(G,v,reverse)
+		N = neighbours(v)
 		for w in N:
 			if G.node[w]['rank']<G.node[v]['rank']:
 				continue	
 			vw_dist = D[v] + dist(G,v,w)
-			if cutoff is not None and vw_dist > cutoff:
-				continue
 			if w not in seen or vw_dist < seen[w]:
 				seen[w] = vw_dist
 				push(fringe, (vw_dist, next(c), w))
-				paths[w] = paths[v] + [w]
-	return (D, paths)
+				parent[w] = v
+	return (D, parent)
 
 """
 Runs a length query from s to t using Contraction Hierarchies
@@ -200,9 +196,8 @@ def ch_query(G,s,t):
 """
 Runs Dijkstra from the source
 Returns list of parents, paths, children and the level of each node (#hops away from source)
-If omit_levels=True, level and children computation is ignored
 """
-def dijkstra_levels(G, source, reverse, omit_levels=None, cutoff=None):
+def dijkstra_levels(G, source, reverse):
 	push = heappush
 	pop = heappop
 	D = {}  								# dictionary of final distances
@@ -224,28 +219,21 @@ def dijkstra_levels(G, source, reverse, omit_levels=None, cutoff=None):
 		if v in D:
 			continue  						# already searched this node.
 		D[v] = d
-		if not omit_levels:
-			hv = h[v]						# settle the level of v
-			if hv in levels:
-				levels[hv].append(v)
-			else:
-				levels[hv] = [v] 		
+		hv = h[v]						# settle the level of v
+		if hv in levels:
+			levels[hv].append(v)
+		else:
+			levels[hv] = [v] 		
 
 		N = neighbours(G,v,reverse)
 		for w in N:	
 			vw_dist = D[v] + dist(G,v,w)
-			if cutoff is not None and vw_dist > cutoff:
-				continue
 			if w not in seen or vw_dist < seen[w]:
 				seen[w] = vw_dist
 				push(fringe, (vw_dist, next(c), w))
 				p[w] = v
 				paths[w] = paths[v] + [w]
-				if not omit_levels:
-					h[w] = hv + 1
-	
-	if omit_levels:
-		return D,paths	
+				h[w] = hv + 1
 	
 	child = {}
 	for l in xrange(1,len(levels)):			# traverse tree top-bottom to determine children

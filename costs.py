@@ -100,9 +100,9 @@ def prune_augmented(G,B):
 	return H
 
 """
-Receives lengths of paths in the prunned graph G, source, target and budget
+Receives lengths of paths in the pruned graph G, source, target and budget
 """
-def query_prunned(lengths,s,t,b):
+def query_pruned(lengths,s,t,b):
 	#TODO: not working, need to explore source instead of target
 	if s == t:
 		return 0
