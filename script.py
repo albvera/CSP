@@ -17,56 +17,52 @@ if __name__ == '__main__':
 		dic = pickle.load(f)
 	C = dic['C']
 	print 'Instance B={}'.format(B)
+	init_time=time.time()
 	
-	init_time=start_time=time.time()
-	GB = augment(G,B)
-	tt = time.time() - start_time
-	print 'Augmentation: {} secs'.format(tt)
-
-	start_time = time.time()
+	GB = augment(G,B)	
 	G_prunned = prune_augmented(G,B)
-	tt = time.time() - start_time
-	print 'Prunning augmented graph: {} secs'.format(tt)
 	print 'Number of edges: G_augmented = {}, G_prunned = {}'.format(nx.number_of_edges(GB),nx.number_of_edges(G_prunned))
 
 	"""
-	init_time = time.time()
-	start_time = time.time()
 	C = contract_spc(G,rank=True)
 	tt = time.time() - start_time
-	print 'Cover computation: {} secs'.format(tt)
 	"""
-
-	start_time = time.time()
+	
 	contract_augmented(G_prunned,C,B)
-	tt = time.time() - start_time
-	print 'Contraction: {} secs'.format(tt)
 	print 'Number of shortcuts: {}'.format(sum(nx.get_edge_attributes(G_prunned,'shortcut').values()))
 
-	start_time = time.time()
 	Id_map = {k: v for v, k in nx.get_node_attributes(G_prunned,'ID').iteritems()}
 	I,D,N = create_labels(G_prunned,Id_map,sources=sources,targets=targets)
-	tt = time.time() - start_time
-	print 'Label construction: {} secs'.format(tt)
-
+	
 	print '--- Results without prunning ---'
 	print 'Max F:{}, Avg F:{}, Std F: {}'.format(max(N[0].values()),average(N[0].values()),std(N[0].values()))
 	print 'Max B:{}, Avg B:{}, Std B: {}'.format(max(N[1].values()),average(N[1].values()),std(N[1].values()))
 	
-	start_time = time.time()
 	prune_labels_bootstrap(I,D,N,Id_map,G_prunned)
-	tt = time.time() - start_time
-	print 'Label prunning: {} secs'.format(tt)
 	print 'Total time: {} secs'.format(time.time() - init_time)
 	print 'Max F:{}, Avg F:{}, Std F: {}'.format(max(N[0].values()),average(N[0].values()),std(N[0].values()))
 	print 'Max B:{}, Avg B:{}, Std B: {}'.format(max(N[1].values()),average(N[1].values()),std(N[1].values()))
 	
-	for k in xrange(0,1000):		#Generate random source-destinations pairs
-		s = choice(G.nodes())
-		t = choice(G.nodes())
-		b = choice(range(0,B+1))
-		hl_dist = hl_query_prunned(I,D,s,t,b)
-		dij_dist = sp_length(GB,(s,b),(t,-1),0)
-		if abs(dij_dist-hl_dist) < 1 or dij_dist==hl_dist:		#Only print if an incorrect result happened
+	test_nodes = []									#random (s,t,b) triplets
+	for k in xrange(0,1000):		
+		test_nodes.append((choice(G.nodes()),choice(G.nodes()),choice(range(0,B+1))))
+
+	init_time = time.time()
+	dij_dist = []	
+	for k in xrange(0,1000):
+		(s,t,b) = test_nodes[k]		
+		dij_dist.append(sp_length(GB,(s,b),(t,-1),0))
+	dij_time = time.time() - init_time
+	
+	init_time = time.time()
+	hl_dist = []	
+	for k in xrange(0,1000):
+		(s,t,b) = test_nodes[k]		
+		hl_dist.append(hl_query_prunned(I,D,s,t,b))
+	hl_time = time.time() - init_time
+			
+	for k in xrange(0,1000):
+		if abs(dij_dist[k]-hl_dist[k]) < 1 or dij_dist[k]==hl_dist[k]:		#Only print if an incorrect result happened
 			continue
-		print 'Diff:{} -- (s,t,b)=({},{},{}) -- HL:{} -- Dij:{}'.format(dij_dist-hl_dist,s,t,b,hl_dist,dij_dist)
+		print 'Error: (s,t,b)={} -- HL:{} -- Dij:{}'.format(test_nodes[k],hl_dist[k],dij_dist[k])
+	print 'Dijkstra query: {} ms, HL query: {} ms'.format(dij_time,hl_time)

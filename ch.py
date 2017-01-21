@@ -1,5 +1,6 @@
 import math, networkx as nx
 from graph_info import *
+import time, progressbar
 
 """
 Uses shortest path covers to contract
@@ -87,8 +88,9 @@ def contract_augmented(G,C,B):
 	nn = len(C)										# number of original nodes
 	H = G.copy()
 	rank = 1
+	bar = progressbar.ProgressBar()
 	print 'Contracting augmented graph'
-	for i in xrange(nn-1,-1,-1):
+	for i in bar(xrange(nn-1,-1,-1)):
 		for b in xrange(B,-1,-1):				
 			v = (C[i],b)							# v is to be contracted
 			if not G.has_node(v):					# when the augmented graph is prunned some nodes disappear 

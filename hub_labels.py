@@ -2,6 +2,7 @@ import networkx as nx
 from graph_info import *
 from ch import *
 from costs import *
+import time, progressbar
 
 """
 Creates hub labels based on hierarchies
@@ -31,9 +32,9 @@ def create_labels(G,Id_map,sources = None, targets = None, prune = None):
 	objectives = {}											# used to work with sources or targets
 	objectives[0] = sources
 	objectives[1] = targets
-	
+	bar = progressbar.ProgressBar()
 	print 'Creating labels'
-	for v in G.nodes():		
+	for v in bar(G.nodes()):		
 		for reverse in range(0,2):								
 			if objectives[reverse]!= None and v not in objectives[reverse]:
 				continue									# v is not an objective (source or target)		
@@ -72,7 +73,8 @@ def prune_labels_bootstrap(I,D,N,Id_map,G):
 	print 'Prunning labels'
 	for reverse in range(0,2):
 		print 'Prunning hubs reverse={}'.format(reverse)
-		for v in I[reverse].keys():								# prune the hub of node v
+		bar = progressbar.ProgressBar()
+		for v in bar(I[reverse].keys()):								# prune the hub of node v
 			j = 0
 			while j<N[reverse][v]:
 				dist = 0

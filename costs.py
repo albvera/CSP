@@ -5,6 +5,7 @@ The edges are selected without replacement
 Creates label 'cost' and overrides any pre-existing costs
 """
 import random, networkx as nx
+import time, progressbar
 
 def randcost(G,k):
 	nx.set_edge_attributes(G, 'cost', 0)		#set all costs to 0
@@ -24,7 +25,6 @@ A unique ID is created by: (0,B) ->1, (1,B) ->2,..., (n-1,B)->n-1, (0,B-1)->n an
 from graph_info import *
 import itertools, math
 def augment(G,B,omit_sink=None):
-	print 'Augmenting graph'
 	H = nx.DiGraph()
 	nodes = list(itertools.product(G.nodes(),range(0,B+1)))
 	if not omit_sink:
@@ -63,10 +63,11 @@ Receives original graph G and augmented graph GB
 from sets import Set
 def prune_augmented(G,B):
 	print 'Prunning augmented graph'
+	bar = progressbar.ProgressBar()
 	H = nx.DiGraph()
 	GB = augment(G,B,omit_sink=True)
 	edges = Set()											# keep track of added edges as 4-tuples
-	for s in G.nodes():
+	for s in bar(G.nodes()):
 		lengths,paths=nx.single_source_dijkstra(GB,(s,B),weight='dist')			
 		for t in G.nodes():
 			if t==s:
