@@ -97,11 +97,11 @@ def contract_augmented(G,C,B):
 				continue
 			G.node[v]['rank'] = rank
 			rank += 1
-			sucs = neighbours(H,v,0)				# successors of v
+			sucs = H.successors(v)					# successors of v
 			if not sucs:							# v has no successors
 				H.remove_node(v)
 				continue
-			pred = neighbours(H,v,1)				# predecessors of v
+			pred = H.predecessors(v)				# predecessors of v
 			if not pred:							# v has no predecessors
 				H.remove_node(v)
 				continue

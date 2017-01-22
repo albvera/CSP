@@ -59,14 +59,19 @@ def augment(G,B,omit_sink=None):
 
 """
 Receives original graph G and augmented graph GB
+If all_nodes=True, then adds all possible (v,b), even if they might no belong to an efficient path
 """
 from sets import Set
-def prune_augmented(G,B):
+def prune_augmented(G,B,all_nodes=False):
 	print 'Prunning augmented graph'
 	bar = progressbar.ProgressBar()
 	H = nx.DiGraph()
 	GB = augment(G,B,omit_sink=True)
 	edges = Set()											# keep track of added edges as 4-tuples
+	
+	if all_nodes:
+		H.add_nodes_from(list(itertools.product(G.nodes(),range(0,B+1))))
+
 	for s in bar(G.nodes()):
 		lengths,paths=nx.single_source_dijkstra(GB,(s,B),weight='dist')			
 		for t in G.nodes():

@@ -57,7 +57,7 @@ Id_map[Id] returns the node with that ID
 """
 def prune_labels_bootstrap(I,D,N,Id_map,G):		
 	print 'Prunning labels'
-	for reverse in range(0,2):
+	for reverse in range(1,-1,-1):
 		print 'Prunning hubs reverse={}'.format(reverse)
 		bar = progressbar.ProgressBar()
 		for v in bar(I[reverse].keys()):								# prune the hub of node v
@@ -82,32 +82,7 @@ G is the pruned augmented graph
 """
 def prune_labels_dijkstra(I,D,N,Id_map,G):		
 	#TODO: not working, need to run a reverse dijstra from the terminals instead
-	print 'Prunning labels'
-	for v in I[0].keys():
-		lengths,_=nx.single_source_dijkstra(G,v,weight='dist')
-		# prune forward hub of v
-		j = 0
-		while j<N[0][v]:
-			w = Id_map[I[0][v][j]]					# j-th node in the hub
-			dist = query_pruned(lengths,v[0],w[0],v[1]-w[1])
-			if dist<D[0][v][j]:
-				del I[0][v][j]
-				del D[0][v][j]
-				N[0][v]-=1
-			else:
-				j += 1
-
-		# prune backward hubs containing v
-		id_v = G.node[v]['ID']		
-		for u in I[1].keys():
-			if id_v not in I[1][u]:
-				continue
-			dist = query_pruned(lengths,v[0],u[0],v[1])
-			j = I[1][u].index(id_v)
-			if dist<D[1][u][j]:
-				del I[1][u][j]
-				del D[1][u][j]
-				N[1][u]-=1
+	return 0
 												 				
 """
 Runs a query using hub labels
@@ -150,6 +125,15 @@ def hl_query_pruned(I,D,s,t,b):
 		if d<dist:
 			dist = d
 	return dist	
+	
+
+"""
+Receives hubs for pruned augmented graph with extra edges (v,b)->(v,b-1), source, target and budget
+"""
+def hl_query_extra_edges(I,D,s,t,b):
+	if s == t:
+		return 0
+	return hl_query(I[0][(s,b)],D[0][(s,b)],I[1][(t,0)],D[1][(t,0)])
 
 """
 Save labels already constructed
