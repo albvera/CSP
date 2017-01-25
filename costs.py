@@ -24,7 +24,7 @@ A unique ID is created by: (0,B) ->1, (1,B) ->2,..., (n-1,B)->n-1, (0,B-1)->n an
 """
 from graph_info import *
 import itertools, math
-def augment(G,B,omit_sink=None):
+def augment(G,B,omit_sink=False):
 	H = nx.DiGraph()
 	nodes = list(itertools.product(G.nodes(),range(0,B+1)))
 	if not omit_sink:
@@ -68,12 +68,13 @@ def prune_augmented(G,B,all_nodes=False):
 	H = nx.DiGraph()
 	GB = augment(G,B,omit_sink=True)
 	edges = Set()											# keep track of added edges as 4-tuples
-	
+	dijkstra = nx.single_source_dijkstra
+
 	if all_nodes:
 		H.add_nodes_from(list(itertools.product(G.nodes(),range(0,B+1))))
 
 	for s in bar(G.nodes()):
-		lengths,paths=nx.single_source_dijkstra(GB,(s,B),weight='dist')			
+		lengths,paths=dijkstra(GB,(s,B),weight='dist')			
 		for t in G.nodes():
 			if t==s:
 				continue

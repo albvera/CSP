@@ -89,6 +89,11 @@ def contract_augmented(G,C,B):
 	H = G.copy()
 	rank = 1
 	bar = progressbar.ProgressBar()
+	dijkstra = nx.single_source_dijkstra
+	successors = H.successors
+	predecessors = H.predecessors
+	remove_node = H.remove_node
+	
 	print 'Contracting augmented graph'
 	for i in bar(xrange(nn-1,-1,-1)):
 		for b in xrange(B,-1,-1):				
@@ -97,13 +102,13 @@ def contract_augmented(G,C,B):
 				continue
 			G.node[v]['rank'] = rank
 			rank += 1
-			sucs = H.successors(v)					# successors of v
+			sucs = successors(v)					# successors of v
 			if not sucs:							# v has no successors
-				H.remove_node(v)
+				remove_node(v)
 				continue
-			pred = H.predecessors(v)				# predecessors of v
+			pred = predecessors(v)					# predecessors of v
 			if not pred:							# v has no predecessors
-				H.remove_node(v)
+				remove_node(v)
 				continue
 
 			max_vw = 0								# max dist(v,w)
@@ -112,7 +117,7 @@ def contract_augmented(G,C,B):
 					max_vw = G[v][w]['dist']
 			
 			for u in pred:
-				_,Paths = nx.single_source_dijkstra(H,u,target=None,cutoff=G[u][v]['dist']+max_vw, weight='dist')
+				_,Paths = dijkstra(H,u,target=None,cutoff=G[u][v]['dist']+max_vw, weight='dist')
 				for w in sucs:
 					if u == w or v not in Paths[w]:
 						continue	
@@ -120,7 +125,7 @@ def contract_augmented(G,C,B):
 					G.add_edge(u,w)
 					G[u][w]['shortcut'] = 1
 					G[u][w]['dist'] = H[u][w]['dist'] = H[u][v]['dist']+H[v][w]['dist']
-			H.remove_node(v)
+			remove_node(v)
 	
 """
 Shortcuts node v and returns edges that must be added to the graph
@@ -142,14 +147,13 @@ def shortcut(H,v,Paths):
 
 """
 Runs a CH search, visiting all nodes with higher rank
+rank is a dictionary indexed by nodes
 The output is a pair (D,P) where D[v] is the distance from start to v and P[v] is the predecessor of v along the shortest path from s to v.
-One can specify cutoff (only paths of length <= cutoff are returned) and target.
 """
-from collections import deque
 from heapq import heappush, heappop
 from itertools import count
 
-def ch_search(G, source, reverse):
+def ch_search(G, source, reverse, rank):
 	push = heappush
 	pop = heappop
 	D = {}  								# dictionary of final distances
@@ -172,7 +176,7 @@ def ch_search(G, source, reverse):
 		D[v] = d							# settle distance
 		N = neighbours(v)
 		for w in N:
-			if G.node[w]['rank']<G.node[v]['rank']:
+			if rank[w]<rank[v]:
 				continue	
 			vw_dist = D[v] + dist(G,v,w)
 			if w not in seen or vw_dist < seen[w]:
@@ -180,18 +184,6 @@ def ch_search(G, source, reverse):
 				push(fringe, (vw_dist, next(c), w))
 				parent[w] = v
 	return (D, parent)
-
-"""
-Runs a length query from s to t using Contraction Hierarchies
-"""
-def ch_query(G,s,t):
-	Df,_ = ch_search(G,s,0)		#forward search from s
-	Db,_ = ch_search(G,t,1)		#backward search from t
-	dist = float("inf")
-	for u in Df.keys():
-		if u in Db and Df[u]+Db[u]<dist:
-			dist = Df[u]+Db[u]
-	return dist
 
 """
 Runs Dijkstra from the source

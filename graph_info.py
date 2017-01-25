@@ -1,13 +1,4 @@
 import networkx as nx
-"""
-Returns the distance of an edge dist(v,w)
-If reverse=1, returns dist(w,v)
-"""
-def dist(G,v,w,reverse):
-	if reverse == 1: 			#do reverse
-		return G[w][v]['dist']
-	else:
-		return G[v][w]['dist']	#do not reverse 
 
 def dist_forward(G,v,w):
 	return G[v][w]['dist']
@@ -29,27 +20,28 @@ def neighbours(G,v,reverse):
 		return G.successors(v)
 
 """
-If reverse=1, returns predecessors shortest path length from w to v
-Otherwise, returns shortest path length from v to w
+Run Dijkstra to obtain all the lengths in the efficient frontier
+Receives augmented graph without sink nodes, source, target and B
 """
-def sp_length(G,v,w,reverse):
+def dijkstra_frontier(G,s,t,B):
+	if t == s:
+		return [0]*(B+1)
+	lengths,_=nx.single_source_dijkstra(G,(s,B),weight='dist')			
+	dist = [float("inf")]*(B+1)
+	if (t,B) in lengths:
+		dist[0] = lengths[(t,B)]
+	for x in xrange(B-1,-1,-1):								# b = B-x
+		if (t,x) not in lengths or lengths[(t,x)]>=dist[B-x-1]:
+			dist[B-x] = dist[B-x-1]
+			continue		
+		dist[B-x] = lengths[(t,x)]
+	return dist
+
+"""
+Returns shortest path length from v to w
+"""
+def sp_length(G,v,w):
 	try:
-		if reverse == 1:
-			return nx.shortest_path_length(G,w,v,weight='dist')
-		else:
-			return nx.shortest_path_length(G,v,w,weight='dist')
+		return nx.shortest_path_length(G,v,w,weight='dist')
 	except:
 		return float("inf")	#Nodes are not reachable
-"""
-Returns closest node to coordinate (x,y)
-"""
-def closest(G,x,y):
-	min_dist = float("inf")
-	node = None
-	for v in G.nodes():
-		x1, y1 = G.node[v]['XY']
-		if pow(x1-x,2)+pow(y1-y,2)<min_dist:
-			min_dist = pow(x1-x,2)+pow(y1-y,2)
-			node = v
-	return node
-			

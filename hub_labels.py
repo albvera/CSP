@@ -31,6 +31,8 @@ def create_labels(G,Id_map,sources = None, targets = None):
 	objectives = {}											# used to work with sources or targets
 	objectives[0] = sources
 	objectives[1] = targets
+	rank = nx.get_node_attributes(G,'rank')
+	ID = nx.get_node_attributes(G,'ID')
 	bar = progressbar.ProgressBar()
 	print 'Creating labels'
 	for v in bar(G.nodes()):		
@@ -38,10 +40,10 @@ def create_labels(G,Id_map,sources = None, targets = None):
 			if objectives[reverse]!= None and v not in objectives[reverse]:
 				continue									# v is not an objective (source or target)		
 					
-			hub,_ = ch_search(G,v,reverse)					# hub is a dict, keys are nodes visited in the search	
+			hub,_ = ch_search(G,v,reverse,rank)				# hub is a dict, keys are nodes visited in the search	
 			# create label by storing in increasing ID 
 			N[reverse][v] = len(hub)
-			I[reverse][v] = sorted({G.node[k]['ID'] for k in hub.keys()})
+			I[reverse][v] = sorted({ID[k] for k in hub.keys()})
 			D[reverse][v] = []
 			for j in xrange(0,N[reverse][v]):			
 				w = Id_map[I[reverse][v][j]]
@@ -55,26 +57,33 @@ G is the pruned augmented graph
 Not only removes nodes with incorrect label, but also those who are not efficient
 Id_map[Id] returns the node with that ID
 """
+import operator
 def prune_labels_bootstrap(I,D,N,Id_map,G):		
-	print 'Prunning labels'
+	#query = hl_query_extra_edges 
+	query = hl_query_pruned
+	keys = {}
+	keys[1] = I[1].keys()
+	keys[0] = I[0].keys()
+	keys[0].sort(key=operator.itemgetter(1))					# order nodes by ascending budget
 	for reverse in range(1,-1,-1):
 		print 'Prunning hubs reverse={}'.format(reverse)
 		bar = progressbar.ProgressBar()
-		for v in bar(I[reverse].keys()):								# prune the hub of node v
+		for v in bar(keys[reverse]):							# prune the hub of node v
 			j = 0
 			while j<N[reverse][v]:
 				dist = 0
 				w = Id_map[I[reverse][v][j]]					# j-th node in the hub
 				if reverse == 0 and v!=w:						# if (w,x) not a sink-node, compute SP (v,b-x)->(w,0)
-					dist = hl_query_pruned(I,D,v[0],w[0],v[1]-w[1])
+					dist = query(I,D,v[0],w[0],v[1]-w[1])
 				if reverse == 1 and v!=w:						# dist wv and (v,b) is a sink node
-					dist = hl_query_pruned(I,D,w[0],v[0],w[1])
+					dist = query(I,D,w[0],v[0],w[1])
 				if dist<D[reverse][v][j]:
 					del I[reverse][v][j]
 					del D[reverse][v][j]
 					N[reverse][v]-=1
 				else:
 					j = j+1
+
 
 """
 Prune labels using Dijkstra, removes also inefficient nodes
@@ -125,7 +134,29 @@ def hl_query_pruned(I,D,s,t,b):
 		if d<dist:
 			dist = d
 	return dist	
-	
+
+"""
+Receives hubs for pruned augmented graph, source and target
+Returns all the efficient distances to s
+"""
+def hl_query_frontier(I,D,s,t,B):
+	if s == t:
+		return [0]*(B+1)
+	if (t,0) not in I[1]:
+		return [float("inf")]*(B+1)	
+	dist = [float("inf")]*(B+1)
+	if (s,0) in I[0]:
+		dist[0] = hl_query(I[0][(s,0)],D[0][(s,0)],I[1][(t,0)],D[1][(t,0)])
+	for b in range(1,B+1):
+		if (s,b) not in I[0]:
+			dist[b] = dist[b-1]
+			continue
+		d = hl_query(I[0][(s,b)],D[0][(s,b)],I[1][(t,0)],D[1][(t,0)])
+		if d<dist[b-1]:
+			dist[b] = d
+		else:
+			dist[b] = dist[b-1]
+	return dist		
 
 """
 Receives hubs for pruned augmented graph with extra edges (v,b)->(v,b-1), source, target and budget
