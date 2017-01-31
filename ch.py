@@ -9,7 +9,7 @@ Returns all the shortest paths
 If rank=True, then returns the cover when the rank is computed and skips the contraction
 """
 from collections import defaultdict
-def contract_spc(G,rank=None):
+def contract_spc(G,rank=False):
 	nx.set_edge_attributes(G, 'shortcut', 0)		# original edges are not shortcuts
 	C = []											# list of nodes in the cover
 	n = G.number_of_nodes()
@@ -19,12 +19,14 @@ def contract_spc(G,rank=None):
 	Ch = {}											# Ch[v] is a dict of children in the three
 	Paths = {}										# Paths[v] dict of paths in the tree
 	print 'Computing paths for cover'
-	for v in H:										# compute all shortest paths
+	bar = progressbar.ProgressBar()
+	for v in bar(H):										# compute all shortest paths
 		P[v],Paths[v],Ch[v],L[v] = dijkstra_levels(G,v,0)
 	
 	print 'Computing SPC'	
-	last = None										# last node added to C									
-	for i in xrange(n,1,-1):						# i = n,n-1,...,2
+	last = None										# last node added to C			
+	bar = progressbar.ProgressBar()						
+	for i in bar(xrange(n,1,-1)):						# i = n,n-1,...,2
 		total_hits = dict.fromkeys(H,0)
 		for v in H:									# process paths starting at v
 			# remove children of last node added to C
@@ -67,7 +69,8 @@ def contract_spc(G,rank=None):
 	#Now we contract in the reverse order of C
 	print 'Contracting'
 	H = G.copy()
-	for i in xrange(n-1,0,-1):						# node C[0] is not contracted
+	bar = progressbar.ProgressBar()
+	for i in bar(xrange(n-1,0,-1)):					# node C[0] is not contracted
 		v = C[i] 									# v is to be contracted
 		new_edges = shortcut(H,v,Paths)
 		for (u,w) in new_edges:				
@@ -77,8 +80,6 @@ def contract_spc(G,rank=None):
 			G[u][w]['dist'] = H[u][w]['dist'] = H[u][v]['dist']+H[v][w]['dist']
 		H.remove_node(v)	
 	
-	return Paths
-
 """
 Uses a rank specified by a permutation C of the original nodes to contract an augmented graph
 """
@@ -88,12 +89,12 @@ def contract_augmented(G,C,B):
 	nn = len(C)										# number of original nodes
 	H = G.copy()
 	rank = 1
-	bar = progressbar.ProgressBar()
 	dijkstra = nx.single_source_dijkstra
 	successors = H.successors
 	predecessors = H.predecessors
 	remove_node = H.remove_node
 	
+	bar = progressbar.ProgressBar()
 	print 'Contracting augmented graph'
 	for i in bar(xrange(nn-1,-1,-1)):
 		for b in xrange(B,-1,-1):				
@@ -110,9 +111,10 @@ def contract_augmented(G,C,B):
 			if not pred:							# v has no predecessors
 				remove_node(v)
 				continue
-
+		
+			#Look in G for cutoff. If look in H, then better (larger) cutoff but takes longer
 			max_vw = 0								# max dist(v,w)
-			for w in G[v].keys():					# search in adjacency list
+			for w in G[v]:							# search in successors of v
 				if G[v][w]['dist'] > max_vw:
 					max_vw = G[v][w]['dist']
 			
@@ -121,10 +123,8 @@ def contract_augmented(G,C,B):
 				for w in sucs:
 					if u == w or v not in Paths[w]:
 						continue	
-					H.add_edge(u,w)
-					G.add_edge(u,w)
-					G[u][w]['shortcut'] = 1
-					G[u][w]['dist'] = H[u][w]['dist'] = H[u][v]['dist']+H[v][w]['dist']
+					H.add_edge(u,w,dist=H[u][v]['dist']+H[v][w]['dist'])
+					G.add_edge(u,w,shortcut=1,dist=H[u][v]['dist']+H[v][w]['dist'])
 			remove_node(v)
 	
 """
@@ -132,11 +132,11 @@ Shortcuts node v and returns edges that must be added to the graph
 Receives the dictionary of paths
 """
 def shortcut(H,v,Paths):
-	sucs = neighbours(H,v,0)						# successors of v
+	sucs = H.successors(v)						# successors of v
 	if not sucs:
 		return []
 	new_edges = []	
-	pred = neighbours(H,v,1)						# predecessors of v
+	pred = H.predecessors(v)					# predecessors of v
 	for u in pred:
 		for w in sucs:
 			if u == w or w not in Paths[u] or v not in Paths[u][w]:

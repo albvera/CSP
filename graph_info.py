@@ -42,6 +42,6 @@ Returns shortest path length from v to w
 """
 def sp_length(G,v,w):
 	try:
-		return nx.shortest_path_length(G,v,w,weight='dist')
+		return int(nx.shortest_path_length(G,v,w,weight='dist'))
 	except:
 		return float("inf")	#Nodes are not reachable

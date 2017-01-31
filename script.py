@@ -7,12 +7,16 @@ from random import choice
 from numpy import average, std
 
 if __name__ == '__main__':
-	name = "SF_costs_var"
+	name = "SF_costs_var_80"
 	G= nx.read_gpickle(name)
 	random.seed(datetime.now())
-	B = 30
-	sources = list(itertools.product(G.nodes(),range(0,B+1)))	# nodes with budget >=0 
-	targets = [(u,0) for u in G.nodes()]						# sink nodes
+	B = 20
+	sources = list(itertools.product(G.nodes(),range(0,B+1)))	# nodes (s,b) 
+	targets = [(u,0) for u in G.nodes()]						# nodes (t,0)
+	"""
+	for (u,v) in G.edges():
+		G[u][v]['dist'] += 100 
+	"""
 	init_time=time.time()
 	print 'Instance {}, B={}'.format(name,B)
 	GB = augment(G,B,omit_sink=True)	
@@ -22,18 +26,17 @@ if __name__ == '__main__':
 	#Add edges (v,b)->(v,b-1), hl_query changed
 	"""
 	for v in G.nodes():
+		d=random.randint(0,100)
 		for b in xrange (B,0,-1):
-			G_pruned.add_edge((v,b),(v,b-1),dist=0)
+			G_pruned.add_edge((v,b),(v,b-1),dist=d)
 	"""
-
+	
 	with open("SF_data_C", "rb") as f:
 		dic = pickle.load(f)
 	C = dic['C']
-	"""
-	C = contract_spc(G,rank=True)
-	tt = time.time() - start_time
-	"""
 	
+	#C = contract_spc(G,rank=True)
+		
 	contract_augmented(G_pruned,C,B)
 	print 'Number of shortcuts: {}'.format(sum(nx.get_edge_attributes(G_pruned,'shortcut').values()))
 
@@ -51,23 +54,25 @@ if __name__ == '__main__':
 	print 'Max F:{}, Avg F:{}, Std F: {}'.format(max(N[0].values()),average(N[0].values()),std(N[0].values()))
 	print 'Max B:{}, Avg B:{}, Std B: {}'.format(max(N[1].values()),average(N[1].values()),std(N[1].values()))
 	
-	test_nodes = []												# random (s,t) pairs
+	test_nodes = []												# random (s,t,b) 
 	dij_dist = {}	
 	hl_dist = {}	
 	for k in xrange(0,1000):		
-		test_nodes.append((choice(G.nodes()),choice(G.nodes())))
+		test_nodes.append((choice(G.nodes()),choice(G.nodes()),choice(range(0,B+1))))
 
 	init_time = time.time()
 	for k in xrange(0,1000):
 		dij_dist[k] = dijkstra_frontier(GB,test_nodes[k][0],test_nodes[k][1],B)
+		#dij_dist[k] = sp_length(GB,(test_nodes[k][0],test_nodes[k][2]),(test_nodes[k][1],-1))
 	dij_time = time.time() - init_time
 	
 	init_time = time.time()
 	for k in xrange(0,1000):		
 		hl_dist[k] = hl_query_frontier(I,D,test_nodes[k][0],test_nodes[k][1],B)
+		#hl_dist[k] = hl_query_extra_edges(I,D,test_nodes[k][0],test_nodes[k][1],test_nodes[k][2])
 	hl_time = time.time() - init_time
 			
 	for k in xrange(0,1000):
 		if dij_dist[k] != hl_dist[k]:
-			print 'Error: (s,t)={} -- HL:{} -- Dij:{}'.format(test_nodes[k],hl_dist[k],dij_dist[k])
+			print 'Error {}: (s,t)={} -- HL:{} -- Dij:{}'.format(k,test_nodes[k],hl_dist[k],dij_dist[k])
 	print 'Dijkstra query: {} ms, HL query: {} ms'.format(dij_time,hl_time)

@@ -63,7 +63,7 @@ If all_nodes=True, then adds all possible (v,b), even if they might no belong to
 """
 from sets import Set
 def prune_augmented(G,B,all_nodes=False):
-	print 'Prunning augmented graph'
+	print 'Pruning augmented graph'
 	bar = progressbar.ProgressBar()
 	H = nx.DiGraph()
 	GB = augment(G,B,omit_sink=True)
