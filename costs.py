@@ -85,6 +85,7 @@ def prune_augmented(G,B,all_nodes=False):
 						dist[B-x] = dist[B-x-1]
 					continue		
 				if x==B or lengths[(t,x)]<dist[B-x-1]:		# path is strictly better than the previous
+					dist[B-x] = lengths[(t,x)]
 					path_tx = paths[(t,x)]
 					len_p = len(path_tx)				
 					l = 0

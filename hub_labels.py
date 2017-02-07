@@ -57,14 +57,16 @@ Not only removes nodes with incorrect label, but also those who are not efficien
 Id_map[Id] returns the node with that ID
 """
 import operator
-def prune_labels_bootstrap(I,D,N,Id_map,G):		
+def prune_labels_bootstrap(I,D,N,Id_map,G,omit_forward=False):		
 	#query = hl_query_extra_edges 
 	query = hl_query_pruned
 	keys = {}
 	keys[1] = I[1].keys()
 	keys[0] = I[0].keys()
 	keys[0].sort(key=operator.itemgetter(1))					# order nodes by ascending budget
-	for reverse in range(1,-1,-1):
+	for reverse in range(1,-1,-1):	
+		if omit_forward and reverse==0:
+			continue
 		if reverse == 1:
 			print 'Pruning backward hubs'
 		else:
@@ -85,6 +87,53 @@ def prune_labels_bootstrap(I,D,N,Id_map,G):
 					N[reverse][v]-=1
 				else:
 					j+=1
+
+"""
+G is the augmented graph without sink nodes
+"""
+def prune_forward_labels(I,D,N,Id_map,G,nodes,B):		
+	print 'Pruning forward hubs'
+	bar = progressbar.ProgressBar()
+	dijkstra = nx.single_source_dijkstra
+	
+	for s in bar(nodes):
+		lengths,paths=dijkstra(G,(s,B),weight='dist')	
+		visit = {}											# visit[b] = nodes visited from (s,b) in an efficient path
+		dist = {}											# dist[t][b] = dist(s,t|b)
+		for b in xrange(0,B+1):
+			visit[b] = Set()		
+		
+		#Compute all efficient paths from s
+		for t in nodes:
+			if t==s:
+				continue
+			dist[t] = [float("inf")]*(B+1)						# dist[b] = distance with budget b
+			for x in xrange(B,-1,-1):
+				if (t,x) not in lengths:
+					if x<B:
+						dist[t][B-x] = dist[t][B-x-1]
+					continue		
+				if x==B or lengths[(t,x)]<dist[t][B-x-1]:		# path is strictly better than the previous
+					visit[B-x].update([(u,y-x) for (u,y) in paths[(t,x)]])
+					dist[t][B-x] = lengths[(t,x)]
+				else:
+					dist[t][B-x] = dist[t][B-x-1]
+
+		#Remove nodes not visited in an efficient path	
+		for b in xrange(B,-1,-1):
+			for x in xrange (b-1,-1,-1):					# add all the nodes visited with higher budget
+				visit[b].update(visit[x])		
+			j = 0
+			v = (s,b)
+			while j<N[0][v]:
+				(w,z) = Id_map[I[0][v][j]]					# j-th node in the hub
+				if s==w or ((w,z) in visit[b] and D[0][v][j]<=dist[w][b-z]):
+					j+=1
+				else:
+					del I[0][v][j]
+					del D[0][v][j]
+					N[0][v]-=1
+					
 """
 Prune labels of not augmented graph
 """
