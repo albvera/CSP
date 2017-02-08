@@ -57,9 +57,11 @@ Not only removes nodes with incorrect label, but also those who are not efficien
 Id_map[Id] returns the node with that ID
 """
 import operator
-def prune_labels_bootstrap(I,D,N,Id_map,G,omit_forward=False):		
-	#query = hl_query_extra_edges 
-	query = hl_query_pruned
+def prune_labels_bootstrap(I,D,N,Id_map,G,omit_forward=False,extra_edges=True):		
+	if extra_edges:	
+		query = hl_query_extra_edges 
+	else:	
+		query = hl_query_pruned
 	keys = {}
 	keys[1] = I[1].keys()
 	keys[0] = I[0].keys()

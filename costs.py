@@ -71,12 +71,14 @@ def prune_augmented(G,B,all_nodes=False):
 	dijkstra = nx.single_source_dijkstra
 
 	if all_nodes:
-		H.add_nodes_from(list(itertools.product(G.nodes(),range(0,B+1))))
+		for v in G.nodes():
+			for b in xrange (B,0,-1):
+				H.add_edge((v,b),(v,b-1),dist=0)
 
 	for s in bar(G.nodes()):
 		lengths,paths=dijkstra(GB,(s,B),weight='dist')			
-		for t in G.nodes():
-			if t==s:
+		for t in G.nodes():									
+			if t==s:										#TODO: create iterate to stop this check
 				continue
 			dist = [float("inf")]*(B+1)						# dist[b] = distance with budget b
 			for x in xrange(B,-1,-1):
@@ -87,15 +89,10 @@ def prune_augmented(G,B,all_nodes=False):
 				if x==B or lengths[(t,x)]<dist[B-x-1]:		# path is strictly better than the previous
 					dist[B-x] = lengths[(t,x)]
 					path_tx = paths[(t,x)]
-					len_p = len(path_tx)				
-					l = 0
-					while l<=len_p-2:						# last node in the path is sink, don't count it
-						(u,y) = path_tx[l]
-						(v,z) = path_tx[l+1] 
+					for (u,y),(v,z) in itertools.izip(path_tx,path_tx[1:]):	# iterate over consecutive nodes in path
 						if (u,y-x,v,z-x) not in edges:
 							edges.add((u,y-x,v,z-x))
 							H.add_edge((u,y-x),(v,z-x),dist=G[u][v]['dist'])
-						l += 1
 				else:
 					dist[B-x] = dist[B-x-1]
 	# assing ID

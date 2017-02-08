@@ -93,8 +93,8 @@ def contract_augmented(G,C,B):
 	successors = H.successors
 	predecessors = H.predecessors
 	remove_node = H.remove_node
-	
 	bar = progressbar.ProgressBar()
+	
 	print 'Contracting augmented graph'
 	for i in bar(xrange(nn-1,-1,-1)):
 		for b in xrange(B,-1,-1):				
@@ -111,22 +111,21 @@ def contract_augmented(G,C,B):
 			if not pred:							# v has no predecessors
 				remove_node(v)
 				continue
-		
-			#Look in G for cutoff. If look in H, then better (larger) cutoff but takes longer
-			max_vw = 0								# max dist(v,w)
-			for w in G[v]:							# search in successors of v
-				if G[v][w]['dist'] > max_vw:
-					max_vw = G[v][w]['dist']
 			
-			for u in pred:
-				_,Paths = dijkstra(H,u,target=None,cutoff=G[u][v]['dist']+max_vw, weight='dist')
-				for w in sucs:
-					if u == w or v not in Paths[w]:
-						continue	
-					H.add_edge(u,w,dist=H[u][v]['dist']+H[v][w]['dist'])
-					G.add_edge(u,w,shortcut=1,dist=H[u][v]['dist']+H[v][w]['dist'])
+			#Look in H for cutoff
+			max_vw = 0								# max dist(v,w)
+			for w in H[v]:							# search in successors of v
+				if H[v][w]['dist'] > max_vw:
+					max_vw = H[v][w]['dist']
 			remove_node(v)
-	
+			for u in pred:
+				Lengths,_ = dijkstra(H,u,target=None,cutoff=G[u][v]['dist']+max_vw, weight='dist')
+				for w in sucs:
+					if u == w or (w in Lengths and Lengths[w]<=G[u][v]['dist']+G[v][w]['dist']):
+						continue
+					H.add_edge(u,w,dist=G[u][v]['dist']+G[v][w]['dist'])
+					G.add_edge(u,w,shortcut=1,dist=G[u][v]['dist']+G[v][w]['dist'])
+			
 """
 Shortcuts node v and returns edges that must be added to the graph
 Receives the dictionary of paths
