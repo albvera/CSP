@@ -38,10 +38,11 @@ def dijkstra_frontier(G,s,t,B):
 	return dist
 
 """
-Returns shortest path length from v to w
+Receives augmented graph with sink nodes
+Runs length query
 """
-def sp_length(G,v,w):
+def dijkstra_sink(G,s,t,b):
 	try:
-		return int(nx.shortest_path_length(G,v,w,weight='dist'))
+		return int(nx.shortest_path_length(G,(s,b),(t,-1),weight='dist'))
 	except:
 		return float("inf")	#Nodes are not reachable

@@ -19,15 +19,15 @@ Returns expanded digraph
 Receives a graph or digraph and budget B
 Assumes a label 'cost' on edges and nodes of G are 0,1,2,...,n-1
 The nodes are (u,b), u=0,...,n-1 and b=0,...,B
-If omit_sink=True, it doesn't add the sink nodes (u,-1)
+If extra_edges=False, it doesn't add the sink nodes (u,-1)
 A unique ID is created by: (0,B) ->1, (1,B) ->2,..., (n-1,B)->n-1, (0,B-1)->n and so on 
 """
 from graph_info import *
 import itertools, math
-def augment(G,B,omit_sink=False):
+def augment(G,B,extra_edges=False):
 	H = nx.DiGraph()
 	nodes = list(itertools.product(G.nodes(),range(0,B+1)))
-	if not omit_sink:
+	if extra_edges:
 		nodes = nodes + [(u,-1) for u in G.nodes()]
 	H.add_nodes_from(nodes)
 	#create the edges
@@ -42,13 +42,13 @@ def augment(G,B,omit_sink=False):
 					b2 = b-G[u][v]['cost']
 					H.add_edge((u,b),(v,b2))
 					H[(u,b)][(v,b2)]['dist'] = G[u][v]['dist']
-			if not omit_sink:			
+			if extra_edges:			
 				d = float(round(math.log(2-b/B),4))				# d decreasing in b and less than 1
 				H.add_edge((u,b),(u,-1),dist=d)	
 			i = i+1
 		b = b-1
 
-	if omit_sink:	
+	if not extra_edges:	
 		return H
 	
 	#Now assing ID for sink nodes
@@ -59,18 +59,18 @@ def augment(G,B,omit_sink=False):
 
 """
 Receives original graph G and augmented graph GB
-If all_nodes=True, then adds all possible (v,b), even if they might no belong to an efficient path
+If extra_edges=True, then adds all possible (v,b), even if they might no belong to an efficient path
 """
 from sets import Set
-def prune_augmented(G,B,all_nodes=False):
+def prune_augmented(G,B,extra_edges=False):
 	print 'Pruning augmented graph'
 	bar = progressbar.ProgressBar()
 	H = nx.DiGraph()
-	GB = augment(G,B,omit_sink=True)
+	GB = augment(G,B,extra_edges=False)
 	edges = Set()											# keep track of added edges as 4-tuples
 	dijkstra = nx.single_source_dijkstra
 
-	if all_nodes:
+	if extra_edges:
 		for v in G.nodes():
 			for b in xrange (B,0,-1):
 				H.add_edge((v,b),(v,b-1),dist=0)

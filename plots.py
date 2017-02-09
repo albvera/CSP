@@ -12,9 +12,9 @@ def plot(G):
 Colors edges depending on an attribute
 Attribute takes values: value1, value2, value3(optional)
 The colors are: green, blue, red
-Example: plotcolor(G,'shortcut',0,1). If shortcut=0, the edge is plotted green
+Example: plot_edge_attributes(G,'shortcut',0,1). If shortcut=0, the edge is plotted green
 """
-def plotcolor(G,attribute,value1,value2,value3=None):
+def plot_edge_attributes(G,attribute,value1,value2,value3=None):
 	#Create dictionary of positions
 	points = []
 	colors = []
@@ -36,25 +36,32 @@ def plotcolor(G,attribute,value1,value2,value3=None):
 	nx.draw(G, pos,edges=G.edges(),edge_color=colors,width=widths) 
 	plt.show() 
 
-
-#Plot with shortcut edges
-
-#Plot histogram of list
-from collections import Counter
-import numpy as np
-def plotlist(data,bin_size=30):
-	"""
-	labels, values = zip(*Counter(l).items())
-
-	indexes = np.arange(len(labels))
-	width = 1
-
-	plt.bar(indexes, values, width)
-	plt.xticks(indexes + width * 0.5, labels)
+""""
+sizes is a dictionary indexed by node
+Plots grapgh with given width for every node
+"""
+import matplotlib as mpl
+def plot_node_attributes(G,sizes):
+	colors = []
+	for u in G.nodes():
+		colors.append(sizes[u])
+	cmap=plt.cm.Reds
+	vmin = min(colors)
+	vmax = max(colors)
+	pos = nx.get_node_attributes(G,'XY')
+	nx.draw(G, pos,node_size=10,node_color=colors,cmap=cmap,vmin=vmin,vmax=vmax,with_labels=False,linewidths=0.5) 
+	sm = plt.cm.ScalarMappable(cmap=cmap, norm=mpl.colors.Normalize(vmin=vmin, vmax=vmax))
+	sm._A = []
+	plt.colorbar(sm)
 	plt.show()
-	"""
-	bins = np.arange(0, max(data), bin_size) # fixed bin size
-	plt.xlim([min(data)-5, max(data)+5])
-	plt.hist(data, bins=bins, alpha=0.5)
-	plt.ylabel('count')
+
+#Plot histogram of list or dictionary
+import numpy as np
+def plot_hist(data,n_bins=30,title="",xlabel="",ylabel=""):
+	if isinstance(data,dict):
+		data = data.values()
+	plt.hist(data,n_bins,alpha=0.5)
+	plt.title(title)
+	plt.xlabel(xlabel)
+	plt.ylabel(ylabel)
 	plt.show()

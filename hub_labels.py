@@ -240,14 +240,14 @@ def hl_query_extra_edges(I,D,s,t,b):
 Save labels already constructed
 """
 import pickle
-def write_labels(I,D,N,name):
+def write_labels(I,D,N,Id_map,name):
 	with open(name, "wb") as f:
-		pickle.dump({'IDs':I, 'Dist':D, 'Size': N}, f)
+		pickle.dump({'IDs':I, 'Dist':D, 'Size': N, 'Map': Id_map}, f)
 
 """
-Read labels from file and return I,D
+Read labels from file and return I,D,N,Id_map
 """
 def read_labels(name):
 	with open(name, "rb") as f:
 		dic = pickle.load(f)
-	return dic['IDs'], dic['Dist'], dic['Size']
+	return dic['IDs'], dic['Dist'], dic['Size'], dic['Map']
