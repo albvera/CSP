@@ -39,9 +39,11 @@ def plot_edge_attributes(G,attribute,value1,value2,value3=None):
 """"
 sizes is a dictionary indexed by node
 Plots grapgh with given width for every node
+If name is set, saves the figure
 """
 import matplotlib as mpl
-def plot_node_attributes(G,sizes):
+import pylab
+def plot_node_attributes(G,sizes,name=None):
 	colors = []
 	for u in G.nodes():
 		colors.append(sizes[u])
@@ -49,11 +51,14 @@ def plot_node_attributes(G,sizes):
 	vmin = min(colors)
 	vmax = max(colors)
 	pos = nx.get_node_attributes(G,'XY')
-	nx.draw(G, pos,node_size=10,node_color=colors,cmap=cmap,vmin=vmin,vmax=vmax,with_labels=False,linewidths=0.5) 
+	nx.draw(G, pos,node_size=1,node_color=colors,cmap=cmap,vmin=vmin,vmax=vmax,with_labels=False,linewidths=0.1,arrows=False,width=0.1) 
 	sm = plt.cm.ScalarMappable(cmap=cmap, norm=mpl.colors.Normalize(vmin=vmin, vmax=vmax))
 	sm._A = []
 	plt.colorbar(sm)
+	if name!=None:
+		pylab.savefig('{}.pdf'.format(name))
 	plt.show()
+	
 
 #Plot histogram of list or dictionary
 import numpy as np
