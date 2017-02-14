@@ -100,8 +100,8 @@ def prune_forward_labels(I,D,N,Id_map,G,nodes,B):
 	
 	for s in bar(nodes):
 		lengths,paths=dijkstra(G,(s,B),weight='dist')	
-		visit = {}											# visit[b] = nodes visited from (s,b) in an efficient path
-		dist = {}											# dist[t][b] = dist(s,t|b)
+		visit = {}												# visit[b] = nodes visited from (s,b) in an efficient path
+		dist = {}												# dist[t][b] = dist(s,t|b)
 		for b in xrange(0,B+1):
 			visit[b] = Set()		
 		
@@ -123,12 +123,12 @@ def prune_forward_labels(I,D,N,Id_map,G,nodes,B):
 
 		#Remove nodes not visited in an efficient path	
 		for b in xrange(B,-1,-1):
-			for x in xrange (b-1,-1,-1):					# add all the nodes visited with higher budget
+			for x in xrange (b-1,-1,-1):						# add all the nodes visited with smaller budget
 				visit[b].update(visit[x])		
 			j = 0
 			v = (s,b)
 			while j<N[0][v]:
-				(w,z) = Id_map[I[0][v][j]]					# j-th node in the hub
+				(w,z) = Id_map[I[0][v][j]]						# j-th node in the hub
 				if s==w or ((w,z) in visit[b] and D[0][v][j]<=dist[w][b-z]):
 					j+=1
 				else:

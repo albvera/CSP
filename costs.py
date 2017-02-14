@@ -78,7 +78,7 @@ def prune_augmented(G,B,extra_edges=False):
 	for s in bar(G.nodes()):
 		lengths,paths=dijkstra(GB,(s,B),weight='dist')			
 		for t in G.nodes():									
-			if t==s:										#TODO: create iterate to stop this check
+			if t==s:										
 				continue
 			dist = [float("inf")]*(B+1)						# dist[b] = distance with budget b
 			for x in xrange(B,-1,-1):

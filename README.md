@@ -1,2 +1,12 @@
-# CSP
-Code for CSP using hierarchichal hub labels
+## Synopsis
+
+Implementation of hub labels for constrained shortest path.
+
+## Code Example
+
+Pending
+
+
+## License
+
+Pending
