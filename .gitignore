@@ -1,10 +1,6 @@
 *.pyc
 *.dat
 Data20
-get_json.py
-SF.json
-DataSF
-draw_samples.py
-html
-pstats_viewer.py
 SF*
+LU*
+Data

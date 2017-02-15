@@ -8,12 +8,12 @@ from numpy import average, std
 import os
 
 if __name__ == '__main__':
-	name = "SF_costs_var"
+	name = "LU4k"
 	technique = "partial_prune"			#frontier, full_prune, partial_prune
-	B = 30
+	B = 5
 	
 	this_dir = os.path.dirname(os.path.realpath('__file__'))
-	G_dir = os.path.join(this_dir,'SF_data/{}'.format(name))
+	G_dir = os.path.join(this_dir,'Data/{}'.format(name))
 	G= nx.read_gpickle(G_dir)
 	random.seed(datetime.now())
 	if technique == "frontier":
@@ -35,7 +35,7 @@ if __name__ == '__main__':
 		G_pruned = prune_augmented(G,B,extra_edges=extra_edges)
 		print 'Number of edges: G_augmented = {}, G_pruned = {}'.format(nx.number_of_edges(GB),nx.number_of_edges(G_pruned))
 		
-		C_dir = os.path.join(this_dir,'SF_data/SF_data_C')	
+		C_dir = os.path.join(this_dir,'Data/LU4k_data_C')	
 		with open(C_dir, "rb") as f:
 			dic = pickle.load(f)
 		C = dic['C']

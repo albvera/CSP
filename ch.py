@@ -79,7 +79,7 @@ def contract_spc(G,rank=False):
 			G[u][w]['shortcut'] = 1
 			G[u][w]['dist'] = H[u][w]['dist'] = H[u][v]['dist']+H[v][w]['dist']
 		H.remove_node(v)	
-	
+	return C
 """
 Uses a rank specified by a permutation C of the original nodes to contract an augmented graph
 """

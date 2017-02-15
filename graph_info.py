@@ -46,3 +46,9 @@ def dijkstra_sink(G,s,t,b):
 		return int(nx.shortest_path_length(G,(s,b),(t,-1),weight='dist'))
 	except:
 		return float("inf")	#Nodes are not reachable
+
+def dijkstra_length(G,s,t):
+	try:
+		return int(nx.shortest_path_length(G,s,t,weight='dist'))
+	except:
+		return float("inf")	#Nodes are not reachable
