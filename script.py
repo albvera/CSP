@@ -8,10 +8,11 @@ from numpy import average, std
 import os
 
 if __name__ == '__main__':
-	name = "LU4k"
-	technique = "partial_prune"			#frontier, full_prune, partial_prune
-	B = 5
+	name = "LU_costs_var_up"
+	technique = "frontier"			#frontier, full_prune, partial_prune
+	B = 10
 	
+	results = []
 	this_dir = os.path.dirname(os.path.realpath('__file__'))
 	G_dir = os.path.join(this_dir,'Data/{}'.format(name))
 	G= nx.read_gpickle(G_dir)
@@ -25,7 +26,7 @@ if __name__ == '__main__':
 	else:
 		omit_forward = False
 
-	while B<=30:
+	while B<=100:
 		sources = list(itertools.product(G.nodes(),range(0,B+1)))	# nodes (s,b) 
 		targets = [(u,0) for u in G.nodes()]						# nodes (t,0)	
 		init_time=time.time()
@@ -35,7 +36,7 @@ if __name__ == '__main__':
 		G_pruned = prune_augmented(G,B,extra_edges=extra_edges)
 		print 'Number of edges: G_augmented = {}, G_pruned = {}'.format(nx.number_of_edges(GB),nx.number_of_edges(G_pruned))
 		
-		C_dir = os.path.join(this_dir,'Data/LU4k_data_C')	
+		C_dir = os.path.join(this_dir,'Data/LU_data_C')	
 		with open(C_dir, "rb") as f:
 			dic = pickle.load(f)
 		C = dic['C']
@@ -89,7 +90,10 @@ if __name__ == '__main__':
 				print 'Error {}: (s,t)={} -- HL:{} -- Dij:{}'.format(k,test_nodes[k],hl_dist[k],dij_dist[k])
 		print 'Dijkstra query: {} ms, HL query: {} ms'.format(dij_time,hl_time)	
 
+		results.append((B,hours*60+minutes,max(N[0].values()),average(N[0].values()),std(N[0].values()),max(N[1].values()),average(N[1].values()),std(N[1].values()),dij_time,hl_time))
 		write_labels(I,D,N,Id_map,'{}_B{}_labels_{}'.format(name,B,technique))
-		B+=5
+		B+=10
 		I = D = N = G_pruned = None
 		gc.collect()
+	for x in results:
+		print ", ".join(str(e) for e in x)

@@ -1,6 +1,6 @@
 import math, networkx as nx
 from graph_info import *
-import time, progressbar
+import time, progressbar, gc
 
 """
 Uses shortest path covers to contract
@@ -9,11 +9,29 @@ Returns all the shortest paths
 If rank=True, then returns the cover when the rank is computed and skips the contraction
 """
 from collections import defaultdict
-def contract_spc(G,rank=False):
+from sklearn.cluster import k_means
+from scipy.spatial.distance import cdist
+from numpy import argmax
+def contract_spc(G,rank=False,sample=None):
 	nx.set_edge_attributes(G, 'shortcut', 0)		# original edges are not shortcuts
 	C = []											# list of nodes in the cover
 	n = G.number_of_nodes()
-	H = nx.nodes(G)									# list of nodes not included in C	
+	if sample == None:
+		H = G.nodes()								# list of nodes not included in C
+	else:
+		print 'Clustering'
+		X = nx.get_node_attributes(G,'XY').values()
+		V = nx.get_node_attributes(G,'XY').keys()
+		c,_,_=k_means(X,n_clusters=sample)			# c is a list of cluster centers
+		D = cdist(c,X,'euclidean')					# D[i][j] is the dist from cluster c[i] to the point X[j]
+		
+		H = []										# H contains the points closest to the cluster centers
+		for i in xrange(0,sample):
+			j = argmax(D[i])
+			H.append(V[j])
+		X,V,c,D = None,None,None,None
+		H = list(set(H))							# Remove duplicates, if any
+		gc.collect()
 	P = {}											# P[v] is a dict of parents in three rooted at v
 	L = {}											# nodes at each level
 	Ch = {}											# Ch[v] is a dict of children in the three
@@ -22,6 +40,13 @@ def contract_spc(G,rank=False):
 	bar = progressbar.ProgressBar()
 	for v in bar(H):										# compute all shortest paths
 		P[v],Paths[v],Ch[v],L[v] = dijkstra_levels(G,v,0)
+	
+	if sample!=None:								# Add fictitious paths for nodes not in the sample
+		for v in G.nodes():							# TODO: improve this
+			if v not in H:
+				P[v],Paths[v],Ch[v],L[v] = {v:v},{v:[v]},{},{0:v}
+				H.append(v)						
+		
 	
 	print 'Computing SPC'	
 	last = None										# last node added to C			
@@ -57,28 +82,33 @@ def contract_spc(G,rank=False):
 		last = max(total_hits, key = total_hits.get)
 		G.node[last]['rank'] = i			
 		H.remove(last)
+		Ch.pop(last, None); L.pop(last, None); P.pop(last, None)
+		gc.collect()
 		C.append(last)	
 	#When the loop ends there is just one node remaining in H
 	v = H[0]
 	G.node[v]['rank'] = 1
 	C.append(v)
 	
+	P,Ch,L = None,None,None
+	gc.collect()
 	if rank:
 		return C
 	
 	#Now we contract in the reverse order of C
 	print 'Contracting'
+	if sample!= None:
+		shortcut = shortcut2
+		Paths = None
+		gc.collect()
 	H = G.copy()
 	bar = progressbar.ProgressBar()
 	for i in bar(xrange(n-1,0,-1)):					# node C[0] is not contracted
 		v = C[i] 									# v is to be contracted
-		new_edges = shortcut(H,v,Paths)
-		for (u,w) in new_edges:				
-			H.add_edge(u,w)
-			G.add_edge(u,w)
-			G[u][w]['shortcut'] = 1
-			G[u][w]['dist'] = H[u][w]['dist'] = H[u][v]['dist']+H[v][w]['dist']
-		H.remove_node(v)	
+		new_edges = shortcut(H,v,Paths)	# TODO: improve this and shortcut based on distances, not on paths
+		for (u,w,d) in new_edges:				
+			H.add_edge(u,w,dist=d)
+			G.add_edge(u,w,dist=d,shortcut=1)
 	return C
 """
 Uses a rank specified by a permutation C of the original nodes to contract an augmented graph
@@ -136,11 +166,38 @@ def shortcut(H,v,Paths):
 		return []
 	new_edges = []	
 	pred = H.predecessors(v)					# predecessors of v
+	
 	for u in pred:
 		for w in sucs:
 			if u == w or w not in Paths[u] or v not in Paths[u][w]:
 				continue	
-			new_edges.append((u,w))
+			new_edges.append((u,w,H[u][v]['dist']+H[v][w]['dist']))
+	H.remove_node(v)
+	return new_edges
+
+def shortcut2(H,v,Paths):
+	sucs = H.successors(v)						# successors of v
+	if not sucs:
+		return []
+	new_edges = []	
+	pred = H.predecessors(v)					# predecessors of v
+	
+
+	max_vw = 0								# max dist(v,w)
+	for w in H[v]:							# search in successors of v
+		if H[v][w]['dist'] > max_vw:
+			max_vw = H[v][w]['dist']
+
+	dist = {u:H[u].copy() for u in pred}			#TODO: improve this
+	dist[v] = H[v].copy()
+	H.remove_node(v)
+	
+	for u in pred:
+		Lengths,_ = nx.single_source_dijkstra(H,u,target=None,cutoff=dist[u][v]['dist']+max_vw, weight='dist')	
+		for w in sucs:
+			if u == w or (w in Lengths and Lengths[w]<=dist[u][v]['dist']+dist[v][w]['dist']):
+				continue	
+			new_edges.append((u,w,dist[u][v]['dist']+dist[v][w]['dist']))
 	return new_edges
 
 
