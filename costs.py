@@ -33,7 +33,7 @@ def augment(G,B,extra_edges=False):
 	#create the edges
 	i = 0
 	b = B
-	while b>=0:
+	for b in xrange(B,-1,-1):
 		for u in G.nodes():
 			H.node[(u,b)]['ID'] = i
 			N = neighbours(G,u,0)								# forward neighbours of u
@@ -46,7 +46,6 @@ def augment(G,B,extra_edges=False):
 				d = float(round(math.log(2-b/B),4))				# d decreasing in b and less than 1
 				H.add_edge((u,b),(u,-1),dist=d)	
 			i = i+1
-		b = b-1
 
 	if not extra_edges:	
 		return H
@@ -95,26 +94,11 @@ def prune_augmented(G,B,extra_edges=False):
 							H.add_edge((u,y-x),(v,z-x),dist=G[u][v]['dist'])
 				else:
 					dist[B-x] = dist[B-x-1]
-	# assing ID
+	# Assign ID. It is paramount that higher budgets have lower ID's
 	i = 0
-	for u in H.nodes():
-		H.node[u]['ID'] = i
-		i = i+1
-
+	for b in xrange(B,-1,-1):
+		for u in G.nodes():
+			if H.has_node((u,b)):
+				H.node[u]['ID'] = i
+				i += 1
 	return H
-
-"""
-Receives lengths of paths in the pruned graph G, source, target and budget
-"""
-def query_pruned(lengths,s,t,b):
-	#TODO: not working, need to explore source instead of target
-	if s == t:
-		return 0
-	dist = float("inf")
-	for x in range(b,-1,-1):
-		if (t,x) not in lengths:
-			continue
-		d = lengths[(t,x)]
-		if d<dist:
-			dist = d
-	return dist	

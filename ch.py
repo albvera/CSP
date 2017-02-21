@@ -5,53 +5,41 @@ import time, progressbar, gc
 """
 Uses shortest path covers to contract
 Adds nodes greedily to a cover C and then contract in reverse order
-Returns all the shortest paths
 If rank=True, then returns the cover when the rank is computed and skips the contraction
+To use only a subset of paths, specify a list sample=(n_clusters,n_init,tol), 
+the cover is computed with n_clusters, running n_init instances of k-means 
 """
 from collections import defaultdict
 from sklearn.cluster import k_means
-from scipy.spatial.distance import cdist
 from numpy import argmax
+from numpy.linalg import norm
+
 def contract_spc(G,rank=False,sample=None):
 	nx.set_edge_attributes(G, 'shortcut', 0)		# original edges are not shortcuts
 	C = []											# list of nodes in the cover
 	n = G.number_of_nodes()
+	P,L,Ch,Paths = {},{},{},{}						# for each tree: parents, nodes in each level, children of each node, paths
 	if sample == None:
 		H = G.nodes()								# list of nodes not included in C
+		weight = {v:1 for v in H}
 	else:
-		print 'Clustering'
-		X = nx.get_node_attributes(G,'XY').values()
-		V = nx.get_node_attributes(G,'XY').keys()
-		c,_,_=k_means(X,n_clusters=sample)			# c is a list of cluster centers
-		D = cdist(c,X,'euclidean')					# D[i][j] is the dist from cluster c[i] to the point X[j]
-		
-		H = []										# H contains the points closest to the cluster centers
-		for i in xrange(0,sample):
-			j = argmax(D[i])
-			H.append(V[j])
-		X,V,c,D = None,None,None,None
-		H = list(set(H))							# Remove duplicates, if any
-		gc.collect()
-	P = {}											# P[v] is a dict of parents in three rooted at v
-	L = {}											# nodes at each level
-	Ch = {}											# Ch[v] is a dict of children in the three
-	Paths = {}										# Paths[v] dict of paths in the tree
+		H,weight = cluster(G,sample) 
+
 	print 'Computing paths for cover'
 	bar = progressbar.ProgressBar()
-	for v in bar(H):										# compute all shortest paths
+	for v in bar(H):								# compute all shortest paths
 		P[v],Paths[v],Ch[v],L[v] = dijkstra_levels(G,v,0)
-	
-	if sample!=None:								# Add fictitious paths for nodes not in the sample
-		for v in G.nodes():							# TODO: improve this
-			if v not in H:
-				P[v],Paths[v],Ch[v],L[v] = {v:v},{v:[v]},{},{0:v}
-				H.append(v)						
-		
+	if sample != None:								# add single-hop paths for nodes not in the sample
+		gen = (v for v in G.nodes() if v not in H)
+		for v in gen:								
+			P[v],Paths[v],Ch[v],L[v] = {v:v},{v:[v]},{},{0:v}
+			H.append(v)					
+			weight[v] = 1
 	
 	print 'Computing SPC'	
 	last = None										# last node added to C			
 	bar = progressbar.ProgressBar()						
-	for i in bar(xrange(n,1,-1)):						# i = n,n-1,...,2
+	for i in bar(xrange(n,1,-1)):					
 		total_hits = dict.fromkeys(H,0)
 		for v in H:									# process paths starting at v
 			# remove children of last node added to C
@@ -76,36 +64,30 @@ def contract_spc(G,rank=False,sample=None):
 					h[u] = h[u] + 1					# count the (v,u)-path
 					h[pu] = h[pu] + h[u]
 					j = j+1
-			for u in h.keys():
-				total_hits[u] = total_hits[u]+h[u]
+			for u in h:
+				total_hits[u] = total_hits[u]+h[u]#h[u]*weight[v]	#TODO:change this
 		
 		last = max(total_hits, key = total_hits.get)
-		G.node[last]['rank'] = i			
-		H.remove(last)
-		Ch.pop(last, None); L.pop(last, None); P.pop(last, None)
-		gc.collect()
+		G.node[last]['rank'] = i		
 		C.append(last)	
+		H.remove(last);	Ch.pop(last, None); L.pop(last, None); P.pop(last, None)
+			
 	#When the loop ends there is just one node remaining in H
 	v = H[0]
 	G.node[v]['rank'] = 1
 	C.append(v)
-	
-	P,Ch,L = None,None,None
+	C.reverse()	
+	P,Ch,L,Paths,weight = None,None,None,None,None
 	gc.collect()
 	if rank:
 		return C
 	
 	#Now we contract in the reverse order of C
 	print 'Contracting'
-	if sample!= None:
-		shortcut = shortcut2
-		Paths = None
-		gc.collect()
 	H = G.copy()
 	bar = progressbar.ProgressBar()
-	for i in bar(xrange(n-1,0,-1)):					# node C[0] is not contracted
-		v = C[i] 									# v is to be contracted
-		new_edges = shortcut(H,v,Paths)	# TODO: improve this and shortcut based on distances, not on paths
+	for v in bar(C):					
+		new_edges = shortcut(H,v)
 		for (u,w,d) in new_edges:				
 			H.add_edge(u,w,dist=d)
 			G.add_edge(u,w,dist=d,shortcut=1)
@@ -119,85 +101,51 @@ def contract_augmented(G,C,B):
 	nn = len(C)										# number of original nodes
 	H = G.copy()
 	rank = 1
-	dijkstra = nx.single_source_dijkstra
-	successors = H.successors
-	predecessors = H.predecessors
-	remove_node = H.remove_node
 	bar = progressbar.ProgressBar()
 	
 	print 'Contracting augmented graph'
-	for i in bar(xrange(nn-1,-1,-1)):
+	for u in bar(C):
 		for b in xrange(B,-1,-1):				
-			v = (C[i],b)							# v is to be contracted
+			v = (u,b)								# v is to be contracted
 			if not G.has_node(v):					# when the augmented graph is pruned some nodes disappear 
 				continue
 			G.node[v]['rank'] = rank
 			rank += 1
-			sucs = successors(v)					# successors of v
-			if not sucs:							# v has no successors
-				remove_node(v)
-				continue
-			pred = predecessors(v)					# predecessors of v
-			if not pred:							# v has no predecessors
-				remove_node(v)
-				continue
-			
-			#Look in H for cutoff
-			max_vw = 0								# max dist(v,w)
-			for w in H[v]:							# search in successors of v
-				if H[v][w]['dist'] > max_vw:
-					max_vw = H[v][w]['dist']
-			remove_node(v)
-			for u in pred:
-				Lengths,_ = dijkstra(H,u,target=None,cutoff=G[u][v]['dist']+max_vw, weight='dist')
-				for w in sucs:
-					if u == w or (w in Lengths and Lengths[w]<=G[u][v]['dist']+G[v][w]['dist']):
-						continue
-					H.add_edge(u,w,dist=G[u][v]['dist']+G[v][w]['dist'])
-					G.add_edge(u,w,shortcut=1,dist=G[u][v]['dist']+G[v][w]['dist'])
+			new_edges = shortcut(H,v)
+			for (u,w,d) in new_edges:				
+				H.add_edge(u,w,dist=d)
+				G.add_edge(u,w,dist=d,shortcut=1)
 			
 """
-Shortcuts node v and returns edges that must be added to the graph
-Receives the dictionary of paths
+Removes node v and returns edges that must be added to the graph
+The output is a list of triplets of the form [(u,w,dist(u,v)+dist(v,w)),...]
 """
-def shortcut(H,v,Paths):
+def shortcut(H,v):
+	pred = H.predecessors(v)					# predecessors of v
+	if not pred:
+		return []
 	sucs = H.successors(v)						# successors of v
 	if not sucs:
 		return []
+
+	dijkstra = nx.single_source_dijkstra
 	new_edges = []	
-	pred = H.predecessors(v)					# predecessors of v
-	
-	for u in pred:
-		for w in sucs:
-			if u == w or w not in Paths[u] or v not in Paths[u][w]:
-				continue	
-			new_edges.append((u,w,H[u][v]['dist']+H[v][w]['dist']))
-	H.remove_node(v)
-	return new_edges
+	max_vw = 0									# max dist(v,w)
+	dist_from_v = {}							# copy some distances because v will be removed
+	for w in sucs:								# search in successors of v
+		dist_from_v[w]=H[v][w]['dist']
+		if dist_from_v[w] > max_vw:
+			max_vw = dist_from_v[w]
 
-def shortcut2(H,v,Paths):
-	sucs = H.successors(v)						# successors of v
-	if not sucs:
-		return []
-	new_edges = []	
-	pred = H.predecessors(v)					# predecessors of v
-	
-
-	max_vw = 0								# max dist(v,w)
-	for w in H[v]:							# search in successors of v
-		if H[v][w]['dist'] > max_vw:
-			max_vw = H[v][w]['dist']
-
-	dist = {u:H[u].copy() for u in pred}			#TODO: improve this
-	dist[v] = H[v].copy()
+	dist_to_v = {u:H[u][v]['dist'] for u in pred}
 	H.remove_node(v)
 	
 	for u in pred:
-		Lengths,_ = nx.single_source_dijkstra(H,u,target=None,cutoff=dist[u][v]['dist']+max_vw, weight='dist')	
+		Lengths,_ = dijkstra(H,u,target=None,cutoff=dist_to_v[u]+max_vw, weight='dist')	
 		for w in sucs:
-			if u == w or (w in Lengths and Lengths[w]<=dist[u][v]['dist']+dist[v][w]['dist']):
+			if u == w or (w in Lengths and Lengths[w]<=dist_to_v[u]+dist_from_v[w]):
 				continue	
-			new_edges.append((u,w,dist[u][v]['dist']+dist[v][w]['dist']))
+			new_edges.append((u,w,dist_to_v[u]+dist_from_v[w]))
 	return new_edges
 
 
@@ -257,23 +205,25 @@ def dijkstra_levels(G, source, reverse):
 	c = count()
 	fringe = []  							# use heapq with (distance,label) tuples
 	push(fringe, (0, next(c), source))
-	#TODO:implement a function here to call dist and neighbours
+
 	if reverse == 0:
 		dist = dist_forward
+		neighbours = G.successors
 	else:
 		dist = dist_backward
+		neighbours = G.predecessors
 	while fringe:
 		(d, _, v) = pop(fringe)				# min distance and node
 		if v in D:
 			continue  						# already searched this node.
 		D[v] = d
-		hv = h[v]						# settle the level of v
+		hv = h[v]							# settle the level of v
 		if hv in levels:
 			levels[hv].append(v)
 		else:
 			levels[hv] = [v] 		
 
-		N = neighbours(G,v,reverse)
+		N = neighbours(v)
 		for w in N:	
 			vw_dist = D[v] + dist(G,v,w)
 			if w not in seen or vw_dist < seen[w]:
@@ -306,3 +256,35 @@ def remove_children_of(u,Ch,P):
 	for v in Ch[u]:
 		remove_children_of(v,Ch,P)
 	Ch.pop(u,None)
+
+"""
+Cluster the nodes, the parameters are in a list sample=(n_clusters,n_init,tol), 
+Returns a list of nodes and the size of each cluster
+"""
+import sys
+def cluster(G,sample):
+	print 'Clustering: ',
+	sys.stdout.flush()
+	init_time = time.time()
+	X = nx.get_node_attributes(G,'XY').values()
+	V = nx.get_node_attributes(G,'XY').keys()
+	c,l,_=k_means(X,n_clusters=sample[0],n_init=sample[1],tol=sample[2])	# c is a list of cluster centers, l contains labels of cluster membership
+	H = []										# H contains the points closest to the cluster centers
+	size = {}									# size of clusters	
+	for i in xrange(0,sample[0]):					# identify each cluster center. Iterative is more stable
+		min_v = None
+		min_dist = float("inf")
+		for j in xrange(0,len(X)):
+			d = norm(c[i]-X[j])
+			if d<min_dist:
+				min_dist=d
+				min_v=V[j]
+		H.append(min_v)
+		size[min_v] = len([x for x in l if x==i])	
+	H = list(set(H))							# remove duplicates, if any	
+	
+	X,V,c,l = None,None,None,None
+	gc.collect()
+	minut, secs = divmod(time.time() - init_time, 60)
+	print '{:0>2}:{:0>2}'.format(int(minut),int(secs))
+	return H,size

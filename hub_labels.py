@@ -17,17 +17,12 @@ List of targets (backward hubs) and sources (forward hubs) can be specified
 from array import array
 
 def create_labels(G,Id_map,sources = None, targets = None):
+	I,D,N = {},{},{}	
 	#I[0] is an dictionary for forward, I[0][v] is an array with the id's of nodes in hubforward(v)
-	I = {}	
-	I[0] = {}
-	I[1] = {}
-	#D[0] is an dictionary for forward, D[0][v] is an array of distances from node to hub			
-	D = {}		
-	D[0] = {}
-	D[1] = {}
-	N = {}	
-	N[0] = {}												# sizes of forward hubs
-	N[1] = {}												# sizes of reversed hubs
+	I[0],I[1] = {},{}
+	#D[0] is an dictionary for forward, D[0][v] is an array of distances from node to hub				
+	D[0],D[1] = {},{}
+	N[0],N[1] = {},{}										# sizes of forward and backward hubs
 	objectives = {}											# used to work with sources or targets
 	objectives[0] = sources
 	objectives[1] = targets
@@ -39,9 +34,7 @@ def create_labels(G,Id_map,sources = None, targets = None):
 		for reverse in range(0,2):								
 			if objectives[reverse]!= None and v not in objectives[reverse]:
 				continue									# v is not an objective (source or target)		
-					
 			hub,_ = ch_search(G,v,reverse,rank)				# hub is a dict, keys are nodes visited in the search	
-			# create label by storing in increasing ID 
 			N[reverse][v] = len(hub)
 			I[reverse][v] = sorted({ID[k] for k in hub.keys()})
 			D[reverse][v] = []
@@ -165,7 +158,7 @@ def prune_labels_regular(I,D,N,Id_map):
 												 				
 """
 Runs a query using hub labels
-Receives a forward and a backward hub
+Receives forward, backward hub and starting points
 Nf, Nb are integers
 Df, Db are arrays of floats 
 If, Ib are arrays of id's
