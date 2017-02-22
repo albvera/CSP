@@ -181,23 +181,6 @@ def hl_query(If,Df,Ib,Db):
 			j += 1
 	return d
 
-def hl_query2(If,Df,Ib,Db,j):
-	d = float("inf")	
-	i = 0
-	Nf = len(If)
-	Nb = len(Ib)
-	while i<Nf and j<Nb:
-		if If[i]==Ib[j]:
-			if Df[i]+Db[j] < d:
-				d = Df[i]+Db[j]
-			i += 1
-			j += 1
-		elif If[i]<Ib[j]:
-			i += 1
-		else:
-			j += 1
-	return d
-
 """
 Receives hubs for pruned augmented graph, source, target and budget
 """
