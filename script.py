@@ -4,7 +4,8 @@ import time, gc
 from hub_labels import *; from costs import *; from graph_info import *
 from plots import *; from ch import *; from delauney import *
 from random import choice
-from numpy import average, std
+from numpy import std
+from numpy import average as avg
 import os
 
 if __name__ == '__main__':
@@ -26,7 +27,7 @@ if __name__ == '__main__':
 		omit_forward = True
 	else:
 		omit_forward = False
-
+	results = []
 	for B in runs:
 		sources = list(itertools.product(G.nodes(),range(0,B+1)))	# nodes (s,b) 
 		targets = [(u,0) for u in G.nodes()]						# nodes (t,0)	
@@ -49,19 +50,20 @@ if __name__ == '__main__':
 		I,D,N = create_labels(G_pruned,Id_map,sources=sources,targets=targets)
 	
 		print 'Results without prunning:'
-		print 'Max F:{}, Avg F:{}, Std F: {}'.format(max(N[0].values()),int(average(N[0].values())),int(std(N[0].values())))
-		print 'Max B:{}, Avg B:{}, Std B: {}'.format(max(N[1].values()),int(average(N[1].values())),int(std(N[1].values())))
+		print 'Max F:{}, Avg F:{}, Std F: {}'.format(max(N[0].values()),int(avg(N[0].values())),int(std(N[0].values())))
+		print 'Max B:{}, Avg B:{}, Std B: {}'.format(max(N[1].values()),int(avg(N[1].values())),int(std(N[1].values())))
 	
 		if technique == "full_prune":	
 			G2 = augment(G,B,extra_edges=False)	
 			prune_forward_labels(I,D,N,Id_map,G2,G.nodes(),B)
 		prune_labels_bootstrap(I,D,N,Id_map,G_pruned,omit_forward=omit_forward,extra_edges=extra_edges)
 
-		hours, rem = divmod(time.time() - init_time, 3600)
+		tot_time = time.time() - init_time
+		hours, rem = divmod(tot_time, 3600)
 		minutes, _ = divmod(rem, 60)
 		print 'Total time: {:0>2}:{:0>2}'.format(int(hours),int(minutes))
-		print 'Max F:{}, Avg F:{}, Std F: {}'.format(max(N[0].values()),int(average(N[0].values())),int(std(N[0].values())))
-		print 'Max B:{}, Avg B:{}, Std B: {}'.format(max(N[1].values()),int(average(N[1].values())),int(std(N[1].values())))
+		print 'Max F:{}, Avg F:{}, Std F: {}'.format(max(N[0].values()),int(avg(N[0].values())),int(std(N[0].values())))
+		print 'Max B:{}, Avg B:{}, Std B: {}'.format(max(N[1].values()),int(avg(N[1].values())),int(std(N[1].values())))
 	
 		test_nodes = []												# random (s,t,b) 
 		dij_dist = {}	
@@ -90,7 +92,7 @@ if __name__ == '__main__':
 			if dij_dist[k] != hl_dist[k]:
 				print 'Error {}: (s,t)={} -- HL:{} -- Dij:{}'.format(k,test_nodes[k],hl_dist[k],dij_dist[k])
 		print 'Dijkstra query: {} ms, HL query: {} ms'.format(dij_time,hl_time)	
-
+		results.append((B,tot_time/60,max(N[0].values()),avg(N[0].values()),max(N[1].values()),avg(N[1].values()),dij_time,hl_time))
 		#write_labels(I,D,N,Id_map,'{}_B{}_labels_{}'.format(name,B,technique))
 		I = D = N = G_pruned = None
 		gc.collect()

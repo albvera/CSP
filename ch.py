@@ -24,7 +24,7 @@ def contract_spc(G,rank=False,sample=None):
 	Paths = {}										# Paths[v] dict of paths in the tree
 	print 'Computing paths for cover'
 	bar = progressbar.ProgressBar()
-	for v in bar(H):										# compute all shortest paths
+	for v in bar(H):								# compute all shortest paths
 		if v in skip:
 			P[v],Paths[v],Ch[v],L[v] = {v:v},{v:[v]},{},{0:v}
 		else:
@@ -98,7 +98,7 @@ def contract_augmented(G,C,B):
 	print 'Contracting augmented graph'
 	for i in bar(xrange(0,nn)):
 		for b in xrange(B,-1,-1):				
-			v = (u,b)								# v is to be contracted
+			v = (C[i],b)							# v is to be contracted
 			if not G.has_node(v):					# when the augmented graph is pruned some nodes disappear 
 				continue
 			G.node[v]['rank'] = rank
@@ -242,35 +242,3 @@ def remove_children_of(u,Ch,P):
 	for v in Ch[u]:
 		remove_children_of(v,Ch,P)
 	Ch.pop(u,None)
-
-"""
-Cluster the nodes, the parameters are in a list sample=(n_clusters,n_init,tol), 
-Returns a list of nodes and the size of each cluster
-"""
-import sys
-def cluster(G,sample):
-	print 'Clustering: ',
-	sys.stdout.flush()
-	init_time = time.time()
-	X = nx.get_node_attributes(G,'XY').values()
-	V = nx.get_node_attributes(G,'XY').keys()
-	c,l,_=k_means(X,n_clusters=sample[0],n_init=sample[1],tol=sample[2])	# c is a list of cluster centers, l contains labels of cluster membership
-	H = []										# H contains the points closest to the cluster centers
-	size = {}									# size of clusters	
-	for i in xrange(0,sample[0]):				# identify each cluster center. Iterative is more stable
-		min_v = None
-		min_dist = float("inf")
-		for j in xrange(0,len(X)):
-			d = norm(c[i]-X[j])
-			if d<min_dist:
-				min_dist=d
-				min_v=V[j]
-		H.append(min_v)
-		size[min_v] = len([x for x in l if x==i])	
-	H = list(set(H))							# remove duplicates, if any	
-	
-	X,V,c,l = None,None,None,None
-	gc.collect()
-	minut, secs = divmod(time.time() - init_time, 60)
-	print '{:0>2}:{:0>2}'.format(int(minut),int(secs))
-	return H,size
