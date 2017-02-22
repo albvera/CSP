@@ -99,6 +99,6 @@ def prune_augmented(G,B,extra_edges=False):
 	for b in xrange(B,-1,-1):
 		for u in G.nodes():
 			if H.has_node((u,b)):
-				H.node[u]['ID'] = i
+				H.node[(u,b)]['ID'] = i
 				i += 1
 	return H

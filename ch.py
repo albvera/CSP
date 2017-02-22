@@ -65,7 +65,7 @@ def contract_spc(G,rank=False,sample=None):
 					h[pu] = h[pu] + h[u]
 					j = j+1
 			for u in h:
-				total_hits[u] = total_hits[u]+h[u]#h[u]*weight[v]	#TODO:change this
+				total_hits[u] = total_hits[u]+h[u]*weight[v]	#TODO:change this
 		
 		last = max(total_hits, key = total_hits.get)
 		G.node[last]['rank'] = i		
@@ -87,7 +87,7 @@ def contract_spc(G,rank=False,sample=None):
 	H = G.copy()
 	bar = progressbar.ProgressBar()
 	for v in bar(C):					
-		new_edges = shortcut(H,v)
+		new_edges = shortcut(H,v,G)
 		for (u,w,d) in new_edges:				
 			H.add_edge(u,w,dist=d)
 			G.add_edge(u,w,dist=d,shortcut=1)
@@ -111,16 +111,17 @@ def contract_augmented(G,C,B):
 				continue
 			G.node[v]['rank'] = rank
 			rank += 1
-			new_edges = shortcut(H,v)
+			new_edges = shortcut(H,v,G)
 			for (u,w,d) in new_edges:				
 				H.add_edge(u,w,dist=d)
 				G.add_edge(u,w,dist=d,shortcut=1)
 			
 """
 Removes node v and returns edges that must be added to the graph
+H is the graph to be contracted (copy) and G is the original
 The output is a list of triplets of the form [(u,w,dist(u,v)+dist(v,w)),...]
 """
-def shortcut(H,v):
+def shortcut(H,v,G):
 	pred = H.predecessors(v)					# predecessors of v
 	if not pred:
 		return []
@@ -131,21 +132,17 @@ def shortcut(H,v):
 	dijkstra = nx.single_source_dijkstra
 	new_edges = []	
 	max_vw = 0									# max dist(v,w)
-	dist_from_v = {}							# copy some distances because v will be removed
 	for w in sucs:								# search in successors of v
-		dist_from_v[w]=H[v][w]['dist']
-		if dist_from_v[w] > max_vw:
-			max_vw = dist_from_v[w]
+		if H[v][w]['dist'] > max_vw:
+			max_vw = H[v][w]['dist']
 
-	dist_to_v = {u:H[u][v]['dist'] for u in pred}
 	H.remove_node(v)
-	
 	for u in pred:
-		Lengths,_ = dijkstra(H,u,target=None,cutoff=dist_to_v[u]+max_vw, weight='dist')	
+		Lengths,_ = dijkstra(H,u,target=None,cutoff=G[u][v]['dist']+max_vw, weight='dist')	
 		for w in sucs:
-			if u == w or (w in Lengths and Lengths[w]<=dist_to_v[u]+dist_from_v[w]):
+			if u == w or (w in Lengths and Lengths[w]<=G[u][v]['dist']+G[v][w]['dist']):
 				continue	
-			new_edges.append((u,w,dist_to_v[u]+dist_from_v[w]))
+			new_edges.append((u,w,G[u][v]['dist']+G[v][w]['dist']))
 	return new_edges
 
 
@@ -271,7 +268,7 @@ def cluster(G,sample):
 	c,l,_=k_means(X,n_clusters=sample[0],n_init=sample[1],tol=sample[2])	# c is a list of cluster centers, l contains labels of cluster membership
 	H = []										# H contains the points closest to the cluster centers
 	size = {}									# size of clusters	
-	for i in xrange(0,sample[0]):					# identify each cluster center. Iterative is more stable
+	for i in xrange(0,sample[0]):				# identify each cluster center. Iterative is more stable
 		min_v = None
 		min_dist = float("inf")
 		for j in xrange(0,len(X)):

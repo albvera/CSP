@@ -139,7 +139,7 @@ def prune_labels_regular(I,D,N,Id_map):
 		else:
 			print 'Pruning forward hubs'
 		bar = progressbar.ProgressBar()
-		for v in bar(I[reverse].keys()):								# prune the hub of node v
+		for v in bar(I[reverse].keys()):						# prune the hub of node v
 			j = 0
 			while j<N[reverse][v]:
 				dist = 0
@@ -153,7 +153,7 @@ def prune_labels_regular(I,D,N,Id_map):
 					del D[reverse][v][j]
 					N[reverse][v]-=1
 				else:
-					j = j+1
+					j += 1
 
 												 				
 """
@@ -173,12 +173,29 @@ def hl_query(If,Df,Ib,Db):
 		if If[i]==Ib[j]:
 			if Df[i]+Db[j] < d:
 				d = Df[i]+Db[j]
-			i = i+1
-			j = j+1
+			i += 1
+			j += 1
 		elif If[i]<Ib[j]:
-			i = i+1
+			i += 1
 		else:
-			j = j+1
+			j += 1
+	return d
+
+def hl_query2(If,Df,Ib,Db,j):
+	d = float("inf")	
+	i = 0
+	Nf = len(If)
+	Nb = len(Ib)
+	while i<Nf and j<Nb:
+		if If[i]==Ib[j]:
+			if Df[i]+Db[j] < d:
+				d = Df[i]+Db[j]
+			i += 1
+			j += 1
+		elif If[i]<Ib[j]:
+			i += 1
+		else:
+			j += 1
 	return d
 
 """
