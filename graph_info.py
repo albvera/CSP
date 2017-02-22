@@ -1,3 +1,35 @@
+"""
+Cluster the nodes using k-means
+Returns a list of nodes
+"""
+import sys, time, gc
+from numpy.linalg import norm
+from sklearn.cluster import k_means
+def cluster(G,n_clusters,n_init=10,tol=1e-5):
+	print 'Clustering: ',
+	sys.stdout.flush()
+	init_time = time.time()
+	X = nx.get_node_attributes(G,'XY').values()
+	V = nx.get_node_attributes(G,'XY').keys()
+	c,_,_=k_means(X,n_clusters=n_clusters,n_init=n_init,tol=tol)	# c is a list of cluster centers
+	H = []										# H contains the points closest to the cluster centers	
+	for i in xrange(0,n_clusters):				# identify each cluster center. Iterative is more stable
+		min_v = None
+		min_dist = float("inf")
+		for j in xrange(0,len(X)):
+			d = norm(c[i]-X[j])
+			if d<min_dist:
+				min_dist=d
+				min_v=V[j]
+		H.append(min_v)
+	H = list(set(H))							# remove duplicates, if any	
+	
+	X,V,c = None,None,None
+	gc.collect()
+	minut, secs = divmod(time.time() - init_time, 60)
+	print '{:0>2}:{:0>2}'.format(int(minut),int(secs))
+	return H
+
 import networkx as nx
 
 def dist_forward(G,v,w):

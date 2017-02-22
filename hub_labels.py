@@ -138,8 +138,8 @@ def prune_labels_regular(I,D,N,Id_map):
 			print 'Pruning backward hubs'
 		else:
 			print 'Pruning forward hubs'
-		bar = progressbar.ProgressBar()
-		for v in bar(I[reverse].keys()):						# prune the hub of node v
+		bar = progressbar.ProgressBar()							
+		for v in bar(I[reverse]):								# prune the hub of node v
 			j = 0
 			while j<N[reverse][v]:
 				dist = 0

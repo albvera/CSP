@@ -1,40 +1,34 @@
 import math, networkx as nx
 from graph_info import *
-import time, progressbar, gc
+import time, progressbar,gc
 
 """
 Uses shortest path covers to contract
 Adds nodes greedily to a cover C and then contract in reverse order
 If rank=True, then returns the cover when the rank is computed and skips the contraction
-To use only a subset of paths, specify a list sample=(n_clusters,n_init,tol), 
-the cover is computed with n_clusters, running n_init instances of k-means 
+If sample is a list of nodes, then computes the cover with nodes from that list only
 """
 from collections import defaultdict
-from sklearn.cluster import k_means
-from numpy import argmax
-from numpy.linalg import norm
-
 def contract_spc(G,rank=False,sample=None):
 	nx.set_edge_attributes(G, 'shortcut', 0)		# original edges are not shortcuts
 	C = []											# list of nodes in the cover
 	n = G.number_of_nodes()
-	P,L,Ch,Paths = {},{},{},{}						# for each tree: parents, nodes in each level, children of each node, paths
-	if sample == None:
-		H = G.nodes()								# list of nodes not included in C
-		weight = {v:1 for v in H}
+	H = nx.nodes(G)									# list of nodes not included in C
+	if sample != None:
+		skip = list(set(H)-set(sample))		
 	else:
-		H,weight = cluster(G,sample) 
-
+		skip = []
+	P = {}											# P[v] is a dict of parents in three rooted at v
+	L = {}											# nodes at each level
+	Ch = {}											# Ch[v] is a dict of children in the three
+	Paths = {}										# Paths[v] dict of paths in the tree
 	print 'Computing paths for cover'
 	bar = progressbar.ProgressBar()
-	for v in bar(H):								# compute all shortest paths
-		P[v],Paths[v],Ch[v],L[v] = dijkstra_levels(G,v,0)
-	if sample != None:								# add single-hop paths for nodes not in the sample
-		gen = (v for v in G.nodes() if v not in H)
-		for v in gen:								
+	for v in bar(H):										# compute all shortest paths
+		if v in skip:
 			P[v],Paths[v],Ch[v],L[v] = {v:v},{v:[v]},{},{0:v}
-			H.append(v)					
-			weight[v] = 1
+		else:
+			P[v],Paths[v],Ch[v],L[v] = dijkstra_levels(G,v,0)
 	
 	print 'Computing SPC'	
 	last = None										# last node added to C			
@@ -58,14 +52,14 @@ def contract_spc(G,rank=False,sample=None):
 					u = L[v][l][j]
 					if u not in P[v]:
 						L[v][l].remove(u)			# u is descendant of last, remove it
-						len_L = len_L-1
+						len_L -= 1
 						continue
 					pu = P[v][u]					# parent of u		
-					h[u] = h[u] + 1					# count the (v,u)-path
+					h[u] +=  1						# count the (v,u)-path
 					h[pu] = h[pu] + h[u]
-					j = j+1
-			for u in h:
-				total_hits[u] = total_hits[u]+h[u]*weight[v]	#TODO:change this
+					j += 1
+			for u in h.keys():
+				total_hits[u] = total_hits[u]+h[u]
 		
 		last = max(total_hits, key = total_hits.get)
 		G.node[last]['rank'] = i		
@@ -76,22 +70,20 @@ def contract_spc(G,rank=False,sample=None):
 	v = H[0]
 	G.node[v]['rank'] = 1
 	C.append(v)
-	C.reverse()	
-	P,Ch,L,Paths,weight = None,None,None,None,None
+	C.reverse()
+	P,Paths,Ch,L = None,None,None,None
 	gc.collect()
 	if rank:
 		return C
 	
-	#Now we contract in the reverse order of C
+	#Now we contract 
 	print 'Contracting'
 	H = G.copy()
 	bar = progressbar.ProgressBar()
-	for v in bar(C):					
-		new_edges = shortcut(H,v,G)
-		for (u,w,d) in new_edges:				
-			H.add_edge(u,w,dist=d)
-			G.add_edge(u,w,dist=d,shortcut=1)
+	for i in bar(xrange(0,n)):					
+		shortcut(H,C[i] ,G)
 	return C
+
 """
 Uses a rank specified by a permutation C of the original nodes to contract an augmented graph
 """
@@ -104,46 +96,43 @@ def contract_augmented(G,C,B):
 	bar = progressbar.ProgressBar()
 	
 	print 'Contracting augmented graph'
-	for u in bar(C):
+	for i in bar(xrange(0,nn)):
 		for b in xrange(B,-1,-1):				
 			v = (u,b)								# v is to be contracted
 			if not G.has_node(v):					# when the augmented graph is pruned some nodes disappear 
 				continue
 			G.node[v]['rank'] = rank
 			rank += 1
-			new_edges = shortcut(H,v,G)
-			for (u,w,d) in new_edges:				
-				H.add_edge(u,w,dist=d)
-				G.add_edge(u,w,dist=d,shortcut=1)
-			
-"""
-Removes node v and returns edges that must be added to the graph
-H is the graph to be contracted (copy) and G is the original
-The output is a list of triplets of the form [(u,w,dist(u,v)+dist(v,w)),...]
-"""
-def shortcut(H,v,G):
-	pred = H.predecessors(v)					# predecessors of v
-	if not pred:
-		return []
-	sucs = H.successors(v)						# successors of v
-	if not sucs:
-		return []
+			shortcut(H,v,G)
 
-	dijkstra = nx.single_source_dijkstra
-	new_edges = []	
-	max_vw = 0									# max dist(v,w)
-	for w in sucs:								# search in successors of v
+"""
+Shortcuts node v from graph H
+Graph G is the original
+"""
+from networkx import single_source_dijkstra as dijkstra
+def shortcut(H,v,G):
+	sucs = H.successors(v)					# successors of v
+	if not sucs:							# v has no successors
+		H.remove_node(v)
+		return
+	pred = H.predecessors(v)				# predecessors of v
+	if not pred:							# v has no predecessors
+		H.remove_node(v)
+		return
+			
+	#Look in H for cutoff
+	max_vw = 0								# max dist(v,w)
+	for w in H[v]:							# search in successors of v
 		if H[v][w]['dist'] > max_vw:
 			max_vw = H[v][w]['dist']
-
 	H.remove_node(v)
 	for u in pred:
-		Lengths,_ = dijkstra(H,u,target=None,cutoff=G[u][v]['dist']+max_vw, weight='dist')	
+		Lengths,_ = dijkstra(H,u,target=None,cutoff=G[u][v]['dist']+max_vw, weight='dist')
 		for w in sucs:
 			if u == w or (w in Lengths and Lengths[w]<=G[u][v]['dist']+G[v][w]['dist']):
-				continue	
-			new_edges.append((u,w,G[u][v]['dist']+G[v][w]['dist']))
-	return new_edges
+				continue
+			H.add_edge(u,w,dist=G[u][v]['dist']+G[v][w]['dist'])
+			G.add_edge(u,w,shortcut=1,dist=G[u][v]['dist']+G[v][w]['dist'])
 
 
 """
