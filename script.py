@@ -8,11 +8,13 @@ from numpy import average, std
 import os
 
 if __name__ == '__main__':
-	name = "LU4k"
-	technique = "partial_prune"			#frontier, full_prune, partial_prune
-	B = 5
-	
 	this_dir = os.path.dirname(os.path.realpath('__file__'))
+
+	name = "SF_costs_var"
+	technique = "partial_prune"			#frontier, full_prune, partial_prune
+	runs = [10]
+	C_dir = os.path.join(this_dir,'Data/SF_data_C')
+	
 	G_dir = os.path.join(this_dir,'Data/{}'.format(name))
 	G= nx.read_gpickle(G_dir)
 	random.seed(datetime.now())
@@ -25,17 +27,17 @@ if __name__ == '__main__':
 	else:
 		omit_forward = False
 
-	while B<=30:
+	for B in runs:
 		sources = list(itertools.product(G.nodes(),range(0,B+1)))	# nodes (s,b) 
 		targets = [(u,0) for u in G.nodes()]						# nodes (t,0)	
 		init_time=time.time()
 		print '\n -----------Instance {}, B={}, {}-----------'.format(name,B,technique)
 		
 		GB = augment(G,B,extra_edges=extra_edges)	
-		G_pruned = prune_augmented(G,B,extra_edges=extra_edges)
+		#G_pruned = prune_augmented(G,B,extra_edges=extra_edges)
+		G_pruned=nx.read_gpickle("SF_pruned_B10")		
 		print 'Number of edges: G_augmented = {}, G_pruned = {}'.format(nx.number_of_edges(GB),nx.number_of_edges(G_pruned))
 		
-		C_dir = os.path.join(this_dir,'Data/LU4k_data_C')	
 		with open(C_dir, "rb") as f:
 			dic = pickle.load(f)
 		C = dic['C']
@@ -89,7 +91,6 @@ if __name__ == '__main__':
 				print 'Error {}: (s,t)={} -- HL:{} -- Dij:{}'.format(k,test_nodes[k],hl_dist[k],dij_dist[k])
 		print 'Dijkstra query: {} ms, HL query: {} ms'.format(dij_time,hl_time)	
 
-		write_labels(I,D,N,Id_map,'{}_B{}_labels_{}'.format(name,B,technique))
-		B+=5
+		#write_labels(I,D,N,Id_map,'{}_B{}_labels_{}'.format(name,B,technique))
 		I = D = N = G_pruned = None
 		gc.collect()
