@@ -1,0 +1,59 @@
+We use a variant of HL to find the efficient paths.
+There is a subtle difference, we are only interested in paths ending in a sink node.
+We explain how to create the HL and use them to answer the value of $\dist(s,t|b)$.
+Afterwards we show how to use the previous to reconstruct the desired path in linear time.
+
+Nodes $\pp{v,b}$ have associated a forward hub $\Lf(\pp{v,b})\subseteq V^B$.
+A sink node has a backward hub $\Lb(\pp{u,-1})\subseteq V^B$.
+The hubs must satisfy the cover property: for every pair $\pp{s,b}$, $b\geq 0$, and $\pp{t,-1}$, there exists a node in $\pp{u,x}\in L(\pp{s,b})^+\cap L(\pp{t,-1})^-$ such that $\pp{u,x}$ is in the shortest path from $\pp{s,b}$ to $\pp{t,-1}$.
+As before, if the intersection contains many nodes, we take the one minimizing the quantity $\dist(\pp{s,b},\pp{u,x})+\dist(\pp{u,x},\pp{t,-1})$.
+Additionally, if there is no such $\pp{u,x}$, then there exists no path, i.e., $\dist(s,t|b)=\infty$.
+
+The algorithm to construct the path is very simple if, as discussed in Section~\ref{sec:path_oracl}, we also store the first hop to every node in the hub.
+Assume we can answer queries of the form $SP(\pp{s,b},\pp{t,-1})$ and output either ``not possible'' or a node $\pp{v,x}$ in the SP and the budget consumed.
+Consider the case when all the budget was used.
+We can find a node in the SP from $\pp{s,b}$ to $\pp{v,x}$ by running a query $SP(\pp{s,b-x},\pp{v,-1})$.
+This process can be repeated until the path is recovered.
+In the other hand, if there was a surplus of budget, we adjust $b$ to the smaller quantity; the adjustment is necessary only in the very first query, the subsequent queries will always consume all the budget.
+
+\subsubsection{Query Time and Data Requirements}
+We now prove that the desired HL exist and show how much extra information is needed.
+It is interesting to note that the augmented graph is only a theoretical construction.
+From a computational point of view, we can obtain the HL using only the EPHS of the original graph.
+Nevertheless, the augmented graph allows us to prove that all the pieces fit together.
+
+\begin{theorem}\label{theo:HLeff}
+Assume the system $\PE$ admits an $(h_c,r)$-EPHS for every $r$.
+Then, we can construct HL such that, for every $u\in V$ and $b\geq 0$, $\card{L(\pp{u,b})^+}\leq bh_c\log D$ and $\card{L(\pp{u,-1})^-}\leq Bh_c\log D$. 
+\end{theorem}
+\begin{proof}
+For $i=0,1,\ldots,\log D$, let $C_i$ be an $(h_c,2^{i-1})$-EPHS.
+Now augment $C_i$ to $C_i^B$ as in Equation~(\ref{eq:hitset}).
+Define the HL by
+\begin{align*}
+L(\pp{v,b})^+ &:= \bigcup_{i=1}^{\log D} C_i^B\cap \Bf_{2^i}(\pp{v,b})\\
+L(\pp{u,-1})^-  &:= \bigcup_{i=1}^{\log D} C_i^B\cap \Bb_{2^i}(\pp{u,-1}).
+\end{align*}
+The cover property is proved as in Theorem~\ref{theo:construct_hl}, we just bound the size here.
+The number of elements in each forward hub is as claimed because $ \card{C_i^B\cap \Bf_{2^i}(\pp{v,b})}\leq bh_c$.
+For a backward hub we use that
+\begin{align*}
+\Bb_{2^i}(\pp{u,-1}) &= \{\pp{v,x}: \exists P\in \calP_{v,u}, c(P)=x, \ell(P)\leq 2^i\}\\
+&\subseteq \Bb_{2^i}(u)\times \{0,1,\ldots,B\}.
+\end{align*}
+Thus, $\Bb_{2^i}(\pp{u,-1})\cap C_i^B\leq Bh_c$.
+\end{proof}
+
+
+\begin{proposition}
+Using the HL given by Theorem~\ref{theo:HLeff}, we can implement queries for $s,t,b$ in time $O(b h_c\log D)$.
+The total space requirement is $O(nB \cdot Bh_c\log D)$.
+\end{proposition}
+\begin{proof}
+The backward hub for a sink $\pp{u,-1}$ has at most $Bh_c\log D$ nodes.
+For each such node $\pp{v,b}\in\Lb(\pp{u,-1})$ we store: the distance to the sink $\dist(v,u|b)$ and the efficient cost, i.e., we know how much surplus there is.
+In the case of forward hub for a node $\pp{u,b}$ we store only distances.
+
+To perform a query for $s,t,b$, we look only for nodes $\pp{u,x}$ with $x\leq b$ in the backward hub of $\pp{t,-1}$ \anote{this requires a data structure to know the level of each node, but I guess it's clear from the context}.
+As we compare two ordered lists of size at most $h_cb\log D$, the result follows.
+\end{proof}

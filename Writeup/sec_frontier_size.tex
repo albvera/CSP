@@ -1,0 +1,70 @@
+\label{sec:frontier}
+If all the other edges are used by some efficient path, then we have no more improvements.
+To avoid this, we assume the following condition on the structure of the efficient paths.
+
+\begin{definition}
+Given a function $g:\N\to \N$, we say that $(G,\ell,c)$ satisfies the $g$ property if, for every $s,t\in V$, $b\in \N$,
+\[
+\card{\{P\in\calP_{s,t}^E: c(P)\leq b\}} \leq g(b).
+\]
+\end{definition}
+
+\begin{theorem}
+Under assumptions, we can create hub labels of size $O(g(B)h_c\log D)$ and answer queries with budget $b$ in time $O(g(b)h_c\log D)$.
+\end{theorem}
+\begin{proof}
+We make the hubs slightly bigger by storing, for each node in $\Lf(\pp{v,b})$,  the distance from $\pp{v,b}$ and surplus of budget.
+Let $C_i$ be the $(h_c,2^{i-1})$-EPHS and $\PE_{s,t}$ the efficient paths from $s$ to $t$.
+The hub is obtained by running Algorithm~\ref{alg:forwardhub}.
+Note that the marked nodes will be used as input for another algorithm.
+
+\begin{algorithm}
+\caption{Construction of forward hub}\label{alg:forwardhub}
+\begin{algorithmic}[1]
+\Require Node $s\in V$, set of efficient paths $\PE_{s,t}$ for every $t$ and sets $C_i$.
+\Ensure Forward hubs $Lf(\pp{s,b})$ for $b=0,\ldots,B$ and a marked node $v_P$ for every path.
+\State Order each $\PE_{s,t}$ by increasing cost and remove paths consuming more than $B$.
+\For{$t\in V\setminus s$}
+	\For{$P\in\calP_{s,t}^E$}
+		\State $b\gets c(P)$, $b'\gets c(P')$, where $P'$ is the next path in the list ($b'=B$ if no such path).
+		\State Find the largest $i$ such that $P$ is $2^{i-1}$-efficient.
+		\State Find $v\in C_i$ hitting $P$ and mark $v$ as the node $v_P$.
+		\State Add $\pp{v,c(P[v,t])}$ to $L(\pp{s,b})^+$  with distance $\ell(P[s,v])$ and surplus zero.
+		\For{$x$ between $b$ and $b'$}
+			\State Add $\pp{v,c(P[v,t])}$ to $L(\pp{s,x})^+$  with distance $\ell(P[s,v])$ and surplus $x-b$.
+		\EndFor
+	\EndFor
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+Observe that, whenever a node $v\in C_i$ is added, $v\in \Bf_{2^i}(s)$ guarantees that at most $h_c$ such points are needed for the whole process.
+Additionally, every such $v$ is added at most $g(b)$ times in the hub of $\pp{s,b}$.
+The data requirement guarantee follows.
+
+The backward hub is easier; we need to store only the distance from a node to the destination.
+The construction is given in Algortihm~\ref{alg:backwardhub}
+\begin{algorithm}
+\caption{Construction of backward hub}\label{alg:backwardhub}
+\begin{algorithmic}[1]
+\Require Node $t\in V$, set of efficient paths $\calP_{s,t}^E$ for every $s$, marked nodes and sets $C_i$.
+\Ensure Backward hub $\Lb(\pp{t,0})$.
+\State Order each $\calP_{s,t}^E$ by increasing cost and remove paths consuming more than $B$.
+\State $\Lb(\pp{t,0})\gets \varnothing$
+\For{$s\in V\setminus t$}
+	\For{$P\in\calP_{s,t}^E$}
+		\State Find the largest $i$ such that $P$ is $2^{i-1}$-efficient.
+		\State Take $v$ as the marked node $v_P$.
+		\State Add $\pp{v,c(P[v,t])}$ to $\Lb(\pp{t,0})$ with distance $\ell(P[v,t])$.
+	\EndFor
+\EndFor
+\end{algorithmic}
+\end{algorithm}
+
+The bound for data requirements is $g(B) h_c\log D$, the argument is analogous to the forward case.
+Finally, we need to prove the cover property.
+Take any query $s,t,b$ and let $P$ be the solution.
+In $Lf(\pp{s,b})$ there is a node $v_P$ added by Algorithm~\ref{alg:forwardhub}.
+By construction, the same node $v_P$ was added to $Lb(\pp{d,0})$.
+The result follows.
+\end{proof}
