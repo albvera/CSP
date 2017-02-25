@@ -2,7 +2,7 @@
 \usepackage{graphicx}
 \usepackage{balance}  % for  \balance command ON LAST PAGE  (only there!)
 
-\usepackage{amsmath,dsfont,amssymb,amsfonts}
+\usepackage{amsmath,dsfont,amssymb,amsfonts,enumitem}
 \usepackage{graphicx,xcolor,tikz}
 \usepackage[colorlinks]{hyperref} 						%Hyiperlinks and bookmarks
 \usepackage{algorithm}
@@ -19,6 +19,7 @@
 \newcommand{\N}{\mathbb{N}}								%naturals					
 \renewcommand{\Pr}{\mathbb{P}}							%probability
 \newcommand{\anote}[1]{{\color{red}Alberto: #1}}		%to leave notes
+\newcommand{\sbnote}[1]{{\color{red}Sid: #1}}		%to leave notes
 \newcommand{\todo}[1]{{\color{green}TODO: #1}}		    %to leave notes
 \newcommand{\norm}[1]{\lvert\lvert#1\rvert\rvert}		%norm	
 \newcommand{\card}[1]{\lvert#1\rvert}					%cardinal of a set
@@ -60,7 +61,7 @@
 
 % ****************** TITLE ****************************************
 
-\title{Large-Scale Constrained Shortest-Path}
+\title{Computing Constrained Shortest-Paths at Scale}
 
 
 % ****************** AUTHORS **************************************
@@ -69,25 +70,33 @@
 
 \author{
 \alignauthor
-Siddhartha Banerjee
+Alberto Vera
 \affaddr{Cornell University}\\
-\email{email@cornell.edu}
+\email{aav39@cornell.edu}
 % 2nd. author
 \alignauthor
-Samitha Samaranayake
+Siddhartha Banerjee
 \affaddr{Cornell University}\\
-\email{email@cornell.edu}
+\email{sbanerjee@cornell.edu}
 % 3rd. author
 \alignauthor
-Alberto Vera          \\               
+Samitha Samaranayake          \\               
 \affaddr{Cornell University}\\
-\email{email@cornell.edu}
+\email{samitha@cornell.edu}
 }
 
 \maketitle
 
 \begin{abstract}
-We do lots of cool stuff in this paper.
+We consider the problem of computing constrained shortest paths at scale, motivated primarily by the need for accurate and robust routing and travel-time estimates in modern transportation platforms. 
+In recent times, the use of preprocessing techniques and network augmentation has led to dramatic improvements in the speed and scalability of shortest path queries in road networks.
+These techniques however do not extend to constrained shortest-path (CSP) computations, which are necessary in order to provide robust estimates which incorporate uncertainties in travel times.
+To this end, we make three main contributions: 
+\begin{itemize}[nosep,leftmargin=*]
+\item We provide a theoretical characterization of settings where CSP queries can support fast query-times via preprocessing. In particular, we extend the idea of the \emph{highway-dimension}, which encodes the complexity of shortest-path speedup techniques, and show that under an additional condition, we can get similar bounds for CSP problems.
+\item We develop a practical algorithm for scalable CSP computation, based on combining the hub-labels technique for shortest-path computations with an augmented graph that encodes efficient paths for the CSP problem.
+\item We perform experimental evaluations of our techniques on datasets with detailed travel-time information for San Francisco and Luxembourg. Our experiments show that our algorithms are orders of magnitude faster than Dijkstra, have small additional storage requirements, and good preprocessing times even on a single machine. 
+\end{itemize}	
 \end{abstract}
 
 \section{Introduction}
