@@ -5,7 +5,9 @@ For each node $v$, we denote its in-neighborhood as $\Nb$ and out-neighborhood a
 Finally, we define the maximum degree $\Delta = \max_v\Delta(v)$.
 
 
-A \emph{path} $P$ is an acyclic sequence of nodes $\crl*{u_1u_2u_3\ldots u_k}$ with $(u_i,u_{i+1})\in E$~\footnote{By acyclic, we refer to the fact that $u_i\neq u_j$.}. 
+We define a (simple) \emph{path} $P$ to be an acyclic sequence of nodes  $\crl*{u_1u_2u_3\ldots u_k}$ with $(u_i,u_{i+1})\in E$~\footnote{By acyclic, we refer to the fact that $u_i\neq u_j$ for any $i\neq j$ and $u_i,u_j\in P$.}. 
+For any source-terminal pair $s,t\in V$, we denote by $\calP_{s,t}$ the set of all paths from $s$ to $t$.
+
 The length $\ell(P)$ is the sum of edge lengths in $P$; by convention, a path with a single node $v$ has length zero.
 For $s,t\in V$, the distance from $s$ to $t$, denoted $\dist(s,t)$, is the smallest length among all paths $P$ that start at $s$ and terminate at $t$.
 The distance from a node $v$ to a path $P$, denoted $\dist(v,P)$, is measured as the minimum distance from $v$ to a node $w\in P$.
@@ -20,11 +22,11 @@ $G$ is said to have \emph{doubling dimension} $\alpha$ if, for any node $v$ and 
 
 
 
-Analogous to the length of a path $P$, we define the cost $c(P)$ as the sum of edge costs.
-For any source-terminal pair $s,t\in V$, denote by $\calP_{s,t}$ the set of all simple paths from $s$ to $t$.
-A path $P\in \calP_{s,t}$ is called efficient if there is no other path $P'\in \calP_{s,t}$ such that $\ell(P')\leq \ell(P)$ and $c(P')\leq c(P)$ with at least one inequality strict.
-The set of all efficient paths is denoted $\PE$.
-In particular, all paths in $\calP_{s,t}\cap\PE$ form the Pareto frontier from $s$ to $t$.
-Observe that every subpath of an efficient path is also efficient.
-Indeed, if that is not the case, we could improve the path by replacing the subpath.
+Analogous to the length of a path $P$, we define the cost $c(P)$ as the sum of edge costs. 
+Our goal in this work is to develop a data structure that enables fast computation of \emph{efficient paths}
+\begin{definition}
+A path $P\in \calP_{s,t}$ is said to be \emph{efficient} if there is no other path $P'\in \calP_{s,t}$ such that $\ell(P')\leq \ell(P)$ and $c(P')\leq c(P)$ with at least one inequality strict.
+\end{definition}
+We denote the set of all efficient paths as $\PE$, and define the \emph{Pareto frontier} from $s$ to $t$ as $\calP_{s,t}\cap\PE$.
+Observe that every subpath of an efficient path is also efficient (if not, we could improve the path by replacing the subpath).
 
