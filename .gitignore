@@ -13,10 +13,10 @@ script3.py
 *.log
 *.fdb_latexmk
 *.out
+build
 *.synctex.gz
 *.lb
 *.fls
-build
 
 *.lb
 
