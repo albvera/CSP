@@ -41,13 +41,19 @@
 \newcommand{\Sb}{S^-}
 \newcommand{\Lf}{L^+}									%forward hub
 \newcommand{\Lb}{L^-}									
-\newcommand{\dist}{\text{dist}}							%distance
+\newcommand{\dist}{\mbox{dist}}							%distance
 \newcommand{\pp}[1]{\langle#1\rangle}					%to denote a path
 \newcommand{\PE}{\calP^E}								%efficient paths
 \newcommand{\Gp}{\tilde G}								%pruned augmented graph
 \newcommand{\Ep}{\tilde E}								
 \newcommand{\Vp}{\tilde V}			
 \newcommand{\hc}{h_c}				
+
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert} %
+\DeclarePairedDelimiter{\brk}{[}{]}
+\DeclarePairedDelimiter{\crl}{\{}{\}}
+\DeclarePairedDelimiter{\prn}{(}{)}
 
 
 \newtheorem{theorem}{Theorem}
@@ -103,7 +109,7 @@ To this end, we make three main contributions:
 \input{sec_intro.tex}
 
 \section{Theory}
-\subsection{Directed HD}
+\subsection{Preliminary Definitions}
 \input{sec_hd.tex}
 
 \subsection{Hub Labels Using HD}
