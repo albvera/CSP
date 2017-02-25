@@ -1,7 +1,7 @@
 %!TEX root = main_vldb.tex
 
 We consider a directed graph $G=(V,E)$ with length function $\ell:E\to \N$.
-A \emph{path} $P$ is a sequence of nodes $\crl*{u_1u_2u_3\ldots u_k}$ with $(u_i,u_{i+1})\in E$. 
+A \emph{path} $P$ is an acyclic sequence of nodes $\crl*{u_1u_2u_3\ldots u_k}$ with $(u_i,u_{i+1})\in E$~\footnote{By acyclic, we refer to the fact that $u_i\neq u_j$}. 
 The length $\ell(P)$ is the sum of edge lengths in $P$; by convention, a path with a single node $v$ has length zero.
 For $s,t\in V$, the distance from $s$ to $t$, denoted $\dist(s,t)$, is the smallest length among all paths $P$ that start at $s$ and terminate at $t$.
 For $r>0$ and $v\in V$, we define the \emph{forward and reverse balls} by $\Bf_r(v):=\{u\in V: \dist(v,u)\leq r\}$ and $\Bb_r(v):=\{u\in V: \dist(u,v)\leq r\}$.
@@ -11,7 +11,9 @@ We denote the shortest $(s,t)$-path (if it exists) as $P(s,t)$, and denote the s
 
 \subsubsection{Hitting sets and the highway dimension}
 
-\sbnote{A \emph{path system} $\calQ$ is any collection of paths, but cycles are not allowed.}
+We now define the notions of hitting sets for path systems, and the highway dimension (HD), which we use to parametrize the query and storage complexity of various algorithms. The use of the highway dimension to characterize the performance of shortest path algorithms was introduced by Abraham et al.~\citet{highway2010,highway2013}. Our presentation closely follows these works; however, while the original definitions were restricted to the set $\calP$, we extend the definitions to general path systems.
+
+A \emph{path system} $\calQ$ is any collection of paths.
 Given a set $C\subseteq V$ and a path $Q$, we say that $C$ \emph{hits} $Q$ if some node in $Q$ belongs to $C$.
 Similarly, $C$ \emph{hits a path system} $\calQ$ if it hits every $Q\in\calQ$.
 
