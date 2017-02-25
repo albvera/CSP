@@ -1,0 +1,128 @@
+\documentclass[letterpaper,11pt]{article}
+
+%Document configuration
+\usepackage{fullpage}
+\usepackage[numbers]{natbib} 	%\citet{jon90} --> Jones et al. [21], \citep{jon90} --> [21]
+\usepackage[font={small}]{caption}						% small font for figures
+
+%Packages
+\usepackage{amsmath,dsfont,amssymb,amsfonts}
+\usepackage[amsmath,amsthm,thmmarks]{ntheorem}
+\usepackage{graphicx,xcolor,tikz}
+\usepackage[colorlinks]{hyperref} 						%Hyiperlinks and bookmarks
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+%Useful commands
+\newcommand{\E}{\mathbb{E}} 							%expectation
+\newcommand{\Var}{\mathbb{V}\textnormal{ar}} 			%variance
+\newcommand{\In}[1]{\mathds{1}_{\left\{ #1 \right\}}} 	%indicator
+\newcommand{\R}{\mathbb{R}}								%reals
+\newcommand{\N}{\mathbb{N}}								%naturals					
+\renewcommand{\Pr}{\mathbb{P}}							%probability
+\newcommand{\anote}[1]{{\color{red}Alberto: #1}}		%to leave notes
+\newcommand{\todo}[1]{{\color{green}TODO: #1}}		%to leave notes
+\newcommand{\norm}[1]{\lvert\lvert#1\rvert\rvert}		%norm	
+\newcommand{\card}[1]{\lvert#1\rvert}					%cardinal of a set
+\newcommand{\ceil}[1]{\lceil#1\rceil}					%ceiling function
+\newcommand{\Or}{O}
+
+
+%Theorems, lemmas, proofs, etc
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{remark}[theorem]{Remark}
+\let\oldproofname=\proofname  							%proof in sc font
+\renewcommand{\proofname}{\rm\sc{\oldproofname}}
+\newenvironment{proofof}[1]{\begin{proof}[{\rm\sc Proof of #1}]}{\end{proof}}
+\newenvironment{sketch}{\begin{proof}[Proof Sketch]}{\end{proof}}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+%Additional commands
+\newcommand{\calP}{\mathcal{P}}							%Set of paths
+\newcommand{\calQ}{\mathcal{Q}}							
+\newcommand{\Bf}{B^+}									%forward ball
+\newcommand{\Bb}{B^-}									%backward ball
+\newcommand{\Sf}{S^+}
+\newcommand{\Sb}{S^-}
+\newcommand{\Lf}{L^+}									%forward hub
+\newcommand{\Lb}{L^-}									
+\newcommand{\dist}{\text{dist}}							%distance
+\newcommand{\pp}[1]{\langle#1\rangle}					%to denote a path
+\newcommand{\PE}{\calP^E}								%efficient paths
+\newcommand{\Gp}{\tilde G}								%pruned augmented graph
+\newcommand{\Ep}{\tilde E}								
+\newcommand{\Vp}{\tilde V}			
+\newcommand{\hc}{h_c}				
+
+\title{\vspace{-1cm} \bf Constrained Shortest Path \vspace{-1.3cm}}
+\author{}
+\begin{document}
+\maketitle
+
+\section{Introduction}
+\input{sec_intro.tex}
+
+\section{Directed HD and Path Systems}
+\input{sec_hd}
+
+\section{Hub Labels}
+\input{sec_hl_correctness}
+
+\section{Constrained HD}
+\input{sec_chd.tex}
+
+\section{Augmented Graph}
+
+\input{sec_augmented.tex}
+
+\section{VC-Dimension of Path Systems}
+
+\input{sec_preproc.tex}
+
+\section{Algorithm For CSP}
+\input{sec_constrained_hl.tex}
+
+\section{Size of the efficient frontier}
+\input{sec_frontier_size.tex}
+
+
+\section{Partial Witness Property}
+
+We present some scenarios where partial witnesses arise as a consequence of ``fairness''.
+If the network belongs to an agent, e.g.\ the Government, who wishes to place costs satisfying some guarantees, this naturally leads to the desired property.
+
+An important notion is that, if efficient paths oscillate too much between free and tolled edges, then it is very unlikely to observe partial witnesses.
+In Figure~\ref{fig:nosubpath} we present a graph with no $\frac{1}{2}$-partial witness.
+Every edge has unit length, dash edges have zero cost and solid edges have unit cost.
+The path $uvwx$ is efficient, but every subpath that is shortest has length one.
+The example can be generalized by placing the graph side by side many times.
+This shows that, for any constant $k$ we can find examples with no $\frac{1}{k}$-partial witnesses.
+
+
+\begin{figure}
+\caption{Example with unit cost and no subpath property}
+\label{fig:nosubpath}
+\centering
+\includegraphics[scale=1.3]{TexImg/Nosubpath.pdf}
+\end{figure}
+
+\section{Additional Properties of  HD}
+\input{sec_extensions.tex}
+
+\section{Numerical results}
+\input{sec_numeric.tex}
+
+
+\section{Contraction Hierarchies}
+\input{sec_ch.tex}
+
+\bibliographystyle{plainnat}
+\bibliography{biblio}
+
+\end{document}

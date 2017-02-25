@@ -1,0 +1,40 @@
+Arguably the two most successful algorithms for the SP problem are CH and HL.
+When a network has small HD, it is possible to obtain efficient structures for both of these algorithms.
+We explain here the construction for HL.
+For the construction of CH see Section~\ref{sec:ch}.
+
+The HL algorithm is described as follows.
+Every node $v$ is assigned two sets of nodes, $\Lf(v)$ and $\Lb(v)$, referred to as forward and backward hubs.
+We store $\dist(v,w),\dist(u,v)$ for every $w\in\Lf(v),u\in\Lb(v)$.
+The hubs are said to satisfy the cover property if, for any $s\neq t\in V$, $\Lf(s)\cap\Lb(t)$ contains at least one node in $P(s,t)$.
+In the case that $t$ is not reachable from $s$, it must be that $\Lf(s)\cap\Lb(t)=\varnothing$.
+
+With the cover property it is trivial to obtain $\dist(s,t)$; we just compare all nodes $w\in\Lf(s)\cap\Lb(t)$ and return the minimum of $\dist(s,w)+\dist(w,t)$.
+If the hubs are ordered by ID, we can obtain the distance with a single coordinated sweep in time $\Or(\card{\Lf(s)}+\card{\Lb(t)})$.
+Note that the size of the HL bounds both the query time and the storage requirements.
+The following result shows how to obtain small HL, the construction of hubs mimics the undirected case.
+
+\begin{theorem}\label{theo:construct_hl}
+If $(G,\ell)$ has HD $h$, then we can construct hub labels of size at most $h\log D$.
+\end{theorem}
+\begin{proof}
+The hubs are defined as
+\begin{align*}
+\Lf(v):&=  \bigcup_{i=1}^{\log D}C_i\cap \Bf_{2^i}(v)\\
+\Lb(v):&= \bigcup_{i=1}^{\log D}C_i\cap \Bb_{2^i}(v).
+\end{align*}
+Since $C_i$ is an $(h,2^{i-1})$-SPHS and we intersect with balls of radii $2\cdot 2^{i-1}$, every set in the union contributes at most $h$ elements and the maximum size is as claimed.
+
+To prove the cover property, we note that, if $t$ is not reachable from $s$, by definition $\Lf(s)\cap\Lb(t)=\varnothing$.
+This is because the elements in $\Lf(s)$ are reachable from $s$ and the elements in $\Lb(t)$ reach $t$.
+
+In the case that $P(s,t)$ exists, take $i$ such that $2^{i-1}<\ell(P(s,t))\leq 2^i$.
+The path $P(s,t)$ is hit by $C_i$ and any point in the path belongs to both $\Bf_{2^i}(s)$ and $\Bb_{2^i}(t)$.
+Such point hitting $P(s,t)$ is then in both hubs, which shows the result.
+\end{proof}
+
+\subsubsection{Distance Oracles and Path Computation} \label{sec:path_oracl}
+The previous construction is for distance oracles, i.e., they return the length of the SP, but not the path itself.
+It is possible to recover the path with additional data; if we double the storage and compute not only the distance to $w\in\Lf(v)$, but also the second node in $P(v,w)$, then it is easy to recover the path.
+Each time we run a HL query, at least one node $w\in P(s,t)$, $w\neq s,t$, is returned and we sequentially run queries for the subpaths $P(s,w)$ and $P(w,t)$.
+Note that we do need to store this extra information, for example, it could be that $\Lf(s)\cap\Lb(t)=\{s\}$, so the process cannot continue without an additional node.

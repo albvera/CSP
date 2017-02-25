@@ -1,0 +1,153 @@
+\documentclass{vldb}
+\usepackage{graphicx}
+\usepackage{balance}  % for  \balance command ON LAST PAGE  (only there!)
+
+\usepackage{amsmath,dsfont,amssymb,amsfonts,enumitem}
+\usepackage{graphicx,xcolor,tikz}
+\usepackage[colorlinks]{hyperref} 						%Hyiperlinks and bookmarks
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+
+\newcommand{\citet}{\cite}%CHANGE THIS
+\newcommand{\citep}{\cite}
+
+%Useful commands
+\newcommand{\E}{\mathbb{E}} 							%expectation
+\newcommand{\Var}{\mathbb{V}\textnormal{ar}} 			%variance
+\newcommand{\In}[1]{\mathds{1}_{\left\{ #1 \right\}}} 	%indicator
+\newcommand{\R}{\mathbb{R}}								%reals
+\newcommand{\N}{\mathbb{N}}								%naturals					
+\renewcommand{\Pr}{\mathbb{P}}							%probability
+\newcommand{\anote}[1]{{\color{red}Alberto: #1}}		%to leave notes
+\newcommand{\sbnote}[1]{{\color{red}Sid: #1}}		%to leave notes
+\newcommand{\todo}[1]{{\color{green}TODO: #1}}		    %to leave notes
+\newcommand{\norm}[1]{\lvert\lvert#1\rvert\rvert}		%norm	
+\newcommand{\card}[1]{\lvert#1\rvert}					%cardinal of a set
+\newcommand{\ceil}[1]{\lceil#1\rceil}					%ceiling function
+\newcommand{\Or}{O}
+
+%\newenvironment{proofof}[1]{\begin{proof}[{\rm\sc Proof of #1}]}{\end{proof}}
+
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+%Additional commands
+\newcommand{\calP}{\mathcal{P}}							%Set of paths
+\newcommand{\calQ}{\mathcal{Q}}							
+\newcommand{\Bf}{B^+}									%forward ball
+\newcommand{\Bb}{B^-}									%backward ball
+\newcommand{\Sf}{S^+}
+\newcommand{\Sb}{S^-}
+\newcommand{\Lf}{L^+}									%forward hub
+\newcommand{\Lb}{L^-}									
+\newcommand{\dist}{\text{dist}}							%distance
+\newcommand{\pp}[1]{\langle#1\rangle}					%to denote a path
+\newcommand{\PE}{\calP^E}								%efficient paths
+\newcommand{\Gp}{\tilde G}								%pruned augmented graph
+\newcommand{\Ep}{\tilde E}								
+\newcommand{\Vp}{\tilde V}			
+\newcommand{\hc}{h_c}				
+
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newdef{definition}{Definition}
+\newdef{remark}{Remark}
+
+
+\begin{document}
+
+% ****************** TITLE ****************************************
+
+\title{Computing Constrained Shortest-Paths at Scale}
+
+
+% ****************** AUTHORS **************************************
+
+\numberofauthors{3} 
+
+\author{
+\alignauthor
+Alberto Vera
+\affaddr{Cornell University}\\
+\email{aav39@cornell.edu}
+% 2nd. author
+\alignauthor
+Siddhartha Banerjee
+\affaddr{Cornell University}\\
+\email{sbanerjee@cornell.edu}
+% 3rd. author
+\alignauthor
+Samitha Samaranayake          \\               
+\affaddr{Cornell University}\\
+\email{samitha@cornell.edu}
+}
+
+\maketitle
+
+\begin{abstract}
+We consider the problem of computing constrained shortest paths at scale, motivated primarily by the need for accurate and robust routing and travel-time estimates in modern transportation platforms. 
+In recent times, the use of preprocessing techniques and network augmentation has led to dramatic improvements in the speed and scalability of shortest path queries in road networks.
+These techniques however do not extend to constrained shortest-path (CSP) computations, which are necessary in order to provide robust estimates which incorporate uncertainties in travel times.
+To this end, we make three main contributions: 
+\begin{itemize}[nosep,leftmargin=*]
+\item We provide a theoretical characterization of settings where CSP queries can support fast query-times via preprocessing. In particular, we extend the idea of the \emph{highway-dimension}, which encodes the complexity of shortest-path speedup techniques, and show that under an additional condition, we can get similar bounds for CSP problems.
+\item We develop a practical algorithm for scalable CSP computation, based on combining the hub-labels technique for shortest-path computations with an augmented graph that encodes efficient paths for the CSP problem.
+\item We perform experimental evaluations of our techniques on datasets with detailed travel-time information for San Francisco and Luxembourg. Our experiments show that our algorithms are orders of magnitude faster than Dijkstra, have small additional storage requirements, and good preprocessing times even on a single machine. 
+\end{itemize}	
+\end{abstract}
+
+\section{Introduction}
+\input{sec_intro.tex}
+
+\section{Theory}
+\subsection{Directed HD}
+\input{sec_hd.tex}
+
+\subsection{Hub Labels Using HD}
+\input{sec_hl_correctness.tex}
+
+\subsection{Constrained HD}
+\input{sec_chd.tex}
+
+\subsection{Augmented Graph}
+\input{sec_augmented.tex}
+
+\subsection{Hub Labels For CSP}
+\input{sec_constrained_hl.tex}
+
+\subsubsection{Preprocessing}
+\input{sec_preproc.tex}
+
+\subsection{Using the size of the Pareto Frontier}
+\input{sec_frontier_size.tex}
+
+\subsubsection{Extensions}
+\input{sec_extensions.tex}
+
+\section{Experiments}
+\input{sec_numeric.tex}
+
+\section{Conclusions}
+
+
+% ensure same length columns on last page (might need two sub-sequent latex runs)
+\balance
+
+%ACKNOWLEDGMENTS are optional
+\section{Acknowledgments}
+
+\bibliographystyle{abbrv}
+\bibliography{biblio} 
+
+
+\begin{appendix}
+
+\section{Contraction Hierarchies}
+\input{sec_ch.tex}
+
+\end{appendix}
+
+\end{document}

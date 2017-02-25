@@ -1,0 +1,30 @@
+Assume each arc has, besides a certain length, an associated cost. 
+The problem of computing the shortest path, with cost at most a given value, is known to be NP-Hard.
+A dynamic programming approach can compute the shortest path in pseudo-polynomial time, which is the best bound known so far \todo{add reference}.
+
+In the face of uncertainty, a natural problem is to compute the shortest path subject to a reliability constraint.
+We want to estimate how much time it will take to travel from $s$ to $t$, but, for the answer to be robust, we ask that the path exceeds the estimate with small probability.
+Formally, given $s,t$ and parameters $p,\delta$, the goal is to find an $(s,t)$-path $P$ minimizing $\E(\ell(P))$, but satisfying $\Pr(\ell(P)>\E(\ell(P))+\delta)\leq p$.
+This is a variant of the stochastic on time arrival (SOTA) problem \todo{add reference}.
+We propose an approximate solution, which respects the reliability, but may not be optimal.
+Observe that, using Chebyshov's Inequality, $\Pr(X>\E(X)+\delta)\leq \Var(X)/\delta^2$, hence we can solve
+the problem 
+\[
+\min_{ P\in\calP_{s,t}}\sum_{i\in P}\mu_i \qquad \text{s.t.}\qquad \sum_{i\in P}\sigma^2_i\leq \delta^2p.
+\]
+
+
+The CSP can also capture other natural problems in transit networks.
+Consider the case where each edge has a probability $p_e$ of triggering a bad event, which results in a fee of $F$.
+In this case the agents want to minimize the travel cost and the expected fee.
+For example, \citet{fareevasion} consider a model for fare evasion where $p_e$ is the probability of encountering an inspector.
+In this case, assuming independence, the natural object is to minimize $\ell(P)+F\cdot\Pr(\text{trigger bad event})$, i.e.,
+\[
+\min_{P\in\calP_{s,t}} \ell(P)+F\Bigl(1-\prod_{e\in P}(1-p_e)\Bigr).
+\]
+In \citep{fareevasion} it is suggested to use a CSP to solve this problem.
+Indeed, after taking logarithms, the non-linear part of the objective function becomes a linear constraint.
+
+The concept of Highway Dimension (HD) \cite{highway2010,highway2013} allows to prove the efficiency of shortest path computations in undirected graphs.
+We will see that directed graphs are fundamental for the analysis of constrained paths.
+As a first step, we extend the notions of HD to directed graphs.

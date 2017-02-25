@@ -1,0 +1,80 @@
+Consider a directed graph $G=(V,E)$ with length function $\ell:E\to \N$.
+Paths are sequences of nodes $u_1u_2u_3\ldots u_k$ with $(u_i,u_{i+1})\in E$.
+By convention, the path with a single node $v$ is accepted and has length zero.
+For $u,v\in V$, the distance from $u$ to $v$ is denoted $\dist(u,v)$.
+For a path $P$, the length $\ell(P)$ is simply the sum of edge lengths in $P$.
+The shortest $(s,t)$-path, if it exists, is denoted $P(s,t)$.
+The set of all shortest paths in $G$ is denoted $\calP$.
+
+For $r>0$ and $v\in V$, denote the forward and backward balls, respectively, by $\Bf_r(v):=\{u\in V: \dist(v,u)\leq r\}$ and $\Bb_r(v):=\{u\in V: \dist(u,v)\leq r\}$.
+We also denote $B_r(v):=\Bf_r(v)\cup\Bb_r(v)$.
+A \emph{path system} $\calQ$ is any collection of paths, but cycles are not allowed.
+Given a set $C\subseteq V$ and a path $Q$, we say that $C$ \emph{hits} $Q$ if some node in $Q$ belongs to $C$.
+Similarly, $C$ \emph{hits a path system} $\calQ$ if it hits every $Q\in\calQ$.
+We describe now some notions that will be central for the definition of HD.
+
+\begin{definition}
+Given $r>0$, a path $Q$ is $r$-significant for the system $\calQ$ if $Q\in\calQ$ and $\ell(Q)>r$.
+We denote $\calQ_r$ as the set of all $r$-significant paths for the system $\calQ$.
+\end{definition}
+
+\begin{definition}
+Given a system $\calQ$ and $r>0$, an $(h,r)$-SPHS is a set $C\subseteq V$ with two properties: 
+\begin{enumerate}
+\item Hitting: $C$ hits the system $\calQ_r$.
+\item Local sparsity: for every $v\in V$, $\card{\Bb_{2r}(v)\cap C}\leq h$ and $\card{\Bf_{2r}(v)\cap C}\leq h$.
+\end{enumerate}
+\end{definition}
+
+We define now de notion of a path neighbourhood around a node.
+The distance from a node $v$ to a path $P$, denoted $\dist(v,P)$, is measured as the minimum distance from $v$ to a node $w\in P$.
+The distance to $v$, $\dist(P,v)$, is defined analogously.
+
+\begin{definition}
+For $v\in V, r>0$, the forward and backward path neighbourhoods, respect to a system $\calQ$, are defined as 
+\begin{align*}
+S_r^+(v,\calQ) &:=\{Q\in\calQ:\ell(Q)>r,  \dist(v,Q)\leq 2r \}, \\  
+S_r^-(v,\calQ) &:=\{Q\in\calQ:\ell(Q)>r,  \dist(Q,v)\leq 2r \}.
+\end{align*}
+\end{definition}
+
+\begin{definition}
+A system $\calQ$ has HD $h$ if, for every $r>0, v\in V$, there exists $H_{v,r}\subseteq V$ such that $\card{H_{v,r}}\leq h$ and $H_{v,r}$ hits both neighbourhoods $S_r^+(v,\calQ)$ and $S_r^-(v,\calQ)$.
+\end{definition}
+
+The analogous HD of a network, defined in \citet{highway2013} for the undirected case, is obtained when the system of interest is $\calP$, the collection of all shortest paths.
+When we refer to the HD of a network $(G,\ell)$, it is understood that the system of interest is $\calP$.
+The idea behind this generalized definition is to capture more structure in a road network.
+
+We briefly explain the relation between HD and SPHS.
+The existence of $(h,r)$-SPHS enables the construction of efficient hub labels, but the existence alone allows to compute just a $\log n$ approximation of these sets in polynomial time.
+The HD permits to construct a $\log h$ approximation of the SPHS in polynomial time.
+Additionally, HD is an upper bound to the doubling dimension.
+
+The HD of a graph does not bound the maximum degree $\Delta$.
+On the other hand, the HD of the geometric realization does bound $\Delta$.
+\anote{This is because we switched to the weaker definition, now paths of single nodes are not significant.}
+
+\begin{proposition}
+If the path system $\calQ$ has HD $h$, then, for every $r>0$, there exists an $(h,r)$-SPHS.
+\end{proposition}
+
+\subsubsection{Multi-Scale Hitting Sets} \label{sec:multi_scale}
+The constructions in the following sections will depend on the existence of SPHS.
+Let $D=\max_{P\in\calP}\ell(P)$ be the diameter.
+We assume that the network $(G,\ell)$ admits sets $C_i$, $i=1,\ldots,\log D$, such that $C_i$ is an $(h,2^{i-1})$-SPHS.
+
+Computing the desired hitting sets in polynomial time is an interesting problem in its own right.
+A greedy algorithm achieves a $\Or(\log n)$ approximation, meaning that the sparsity will be $\Or(h\log n)$ instead of $h$ .
+We will also show how to obtain a $\Or(\Delta\log(h\Delta))$ approximation using a more sophisticated tool\todo{insert reference}.
+The results will still carry out, but one needs to replace $h$ for this approximation when talking about polynomial time preprocessing.
+
+A more subtle point is that the algorithm for the better approximation, even though runs in polynomial time, is impractical.
+On the other hand, the greedy algorithm also poses some restrictions.
+It involves an all shortest path computation, so it can be done either with (i) $\Omega(n^2)$ memory and $\Omega(n^3)$ time or (ii) $\Or(n)$ memory and $\Omega(n^3\log n)$ time \todo{double check these times}. 
+\anote{More on this?}
+
+Given the previous restrictions, we use instead a heuristic for the approximation.
+We compute only $k<<n$ shortest path trees, leading to $\Or(kn)$ memory and $\Or(kn^2)$.
+It is an open problem to determine the approximation guarantee of this algorithm.
+For more details see \todo{insert reference}.
