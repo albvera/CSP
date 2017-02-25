@@ -16,3 +16,4 @@ script3.py
 *.synctex.gz
 *.lb
 *.fls
+build
