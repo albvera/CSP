@@ -71,11 +71,13 @@ def plot_node_attributes(G,sizes,name=None,big_nodes=None):
 
 #Plot histogram of list or dictionary
 import numpy as np
-def plot_hist(data,n_bins=30,title="",xlabel="",ylabel=""):
+def plot_hist(data,n_bins=30,title="",xlabel="",ylabel="",name=None):
 	if isinstance(data,dict):
 		data = data.values()
 	plt.hist(data,n_bins,alpha=0.5)
 	plt.title(title)
 	plt.xlabel(xlabel)
 	plt.ylabel(ylabel)
+	if name!=None:
+		pylab.savefig('{}.pdf'.format(name))
 	plt.show()
