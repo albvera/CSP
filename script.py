@@ -11,10 +11,10 @@ import os
 if __name__ == '__main__':
 	this_dir = os.path.dirname(os.path.realpath('__file__'))
 
-	name = "SF_costs_var"
+	name = "LU_costs_3210"
 	technique = "partial_prune"			#frontier, full_prune, partial_prune
-	runs = [10]
-	C_dir = os.path.join(this_dir,'Data/SF_data_C')
+	runs = [10,20,30]
+	C_dir = os.path.join(this_dir,'Data/LU_data_C')
 	
 	G_dir = os.path.join(this_dir,'Data/{}'.format(name))
 	G= nx.read_gpickle(G_dir)
@@ -35,14 +35,13 @@ if __name__ == '__main__':
 		print '\n -----------Instance {}, B={}, {}-----------'.format(name,B,technique)
 		
 		GB = augment(G,B,extra_edges=extra_edges)	
-		#G_pruned = prune_augmented(G,B,extra_edges=extra_edges)
-		G_pruned=nx.read_gpickle("SF_pruned_B10")		
+		G_pruned = prune_augmented(G,B,extra_edges=extra_edges)
 		print 'Number of edges: G_augmented = {}, G_pruned = {}'.format(nx.number_of_edges(GB),nx.number_of_edges(G_pruned))
 		
 		with open(C_dir, "rb") as f:
 			dic = pickle.load(f)
 		C = dic['C']
-		
+	
 		contract_augmented(G_pruned,C,B)
 		print 'Number of shortcuts: {}'.format(sum(nx.get_edge_attributes(G_pruned,'shortcut').values()))
 
@@ -92,7 +91,7 @@ if __name__ == '__main__':
 			if dij_dist[k] != hl_dist[k]:
 				print 'Error {}: (s,t)={} -- HL:{} -- Dij:{}'.format(k,test_nodes[k],hl_dist[k],dij_dist[k])
 		print 'Dijkstra query: {} ms, HL query: {} ms'.format(dij_time,hl_time)	
-		results.append((B,tot_time/60,max(N[0].values()),avg(N[0].values()),max(N[1].values()),avg(N[1].values()),dij_time,hl_time))
+		results.append((B,tot_time/60,max(N[0].values()),avg(N[0].values()),std(N[0].values()),max(N[1].values()),avg(N[1].values()),std(N[1].values()),dij_time,hl_time))
 		#write_labels(I,D,N,Id_map,'{}_B{}_labels_{}'.format(name,B,technique))
 		I = D = N = G_pruned = None
 		gc.collect()

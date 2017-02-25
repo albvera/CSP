@@ -2,7 +2,7 @@ import networkx as nx
 from graph_info import *
 from ch import *
 from costs import *
-import time, progressbar
+import time, progressbar, gc
 
 """
 Creates hub labels based on hierarchies
@@ -82,6 +82,7 @@ def prune_labels_bootstrap(I,D,N,Id_map,G,omit_forward=False,extra_edges=True):
 					N[reverse][v]-=1
 				else:
 					j+=1
+		gc.collect()	
 
 """
 G is the augmented graph without sink nodes
@@ -128,7 +129,7 @@ def prune_forward_labels(I,D,N,Id_map,G,nodes,B):
 					del I[0][v][j]
 					del D[0][v][j]
 					N[0][v]-=1
-					
+	gc.collect()				
 """
 Prune labels of not augmented graph
 """
@@ -154,6 +155,7 @@ def prune_labels_regular(I,D,N,Id_map):
 					N[reverse][v]-=1
 				else:
 					j += 1
+		gc.collect()
 
 												 				
 """
