@@ -2,14 +2,7 @@ We have established that small HD explains the remarkable performance of HL.
 In the same spirit, we introduce a notion that allows for the construction of provably efficient HL for the CSP problem.
 The system of interest will be that of efficient paths, in contrast to shortest paths.
 
-Let $c:E\to \N\cup\{0\}$ be the cost function.
-Analogously as the length of a path $P$, the cost $c(P)$ is the sum of edge costs.
-For any source-terminal pair $s,t\in V$, denote by $\calP_{s,t}$ the set of all simple paths from $s$ to $t$.
-A path $P\in \calP_{s,t}$ is called efficient if there is no other path $P'\in \calP_{s,t}$ such that $\ell(P')\leq \ell(P)$ and $c(P')\leq c(P)$ with at least one inequality strict.
-The set of all efficient paths is denoted $\PE$.
-In particular, all paths in $\calP_{s,t}\cap\PE$ form the Pareto frontier from $s$ to $t$.
-Observe that every subpath of an efficient path is also efficient.
-Indeed, if that is not the case, we could improve the path by replacing the subpath.
+%Let $c:E\to \N\cup\{0\}$ be the cost function. Analogously as the length of a path $P$, the cost $c(P)$ is the sum of edge costs. For any source-terminal pair $s,t\in V$, denote by $\calP_{s,t}$ the set of all simple paths from $s$ to $t$. A path $P\in \calP_{s,t}$ is called efficient if there is no other path $P'\in \calP_{s,t}$ such that $\ell(P')\leq \ell(P)$ and $c(P')\leq c(P)$ with at least one inequality strict. The set of all efficient paths is denoted $\PE$. In particular, all paths in $\calP_{s,t}\cap\PE$ form the Pareto frontier from $s$ to $t$. Observe that every subpath of an efficient path is also efficient. Indeed, if that is not the case, we could improve the path by replacing the subpath.
 
 The definition of Constrained Highway Dimension (CHD) is the natural object when we take the system of efficient paths.
 Note that every shortest path is efficient, thus the CHD will always be bigger than the HD of a network.
