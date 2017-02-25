@@ -1,3 +1,5 @@
+%!TEX root = main_vldb.tex
+
 We have established that small HD explains the remarkable performance of HL.
 In the same spirit, we introduce a notion that allows for the construction of provably efficient HL for the CSP problem.
 The system of interest will be that of efficient paths, in contrast to shortest paths.
@@ -54,7 +56,7 @@ therefore the sparsity is $\Theta(n)$, the worst possible.
 It is conjectured that road networks have small HD.
 Is there evidence to conjecture small CHD in these networks?
 We show how doubling dimension plus an additional property, defined bellow, do imply a positive answer.
-A network is said to have doubling dimension $\alpha$ if, for any $r>0$, every ball of radius $2r$ can be covered by at most $\alpha$ balls of radius $r$ \anote{A tad vague because of forward and backward balls, I didn't find references with doubling dimension and directed graphs}.
+%A network is said to have doubling dimension $\alpha$ if, for any $r>0$, every ball of radius $2r$ can be covered by at most $\alpha$ balls of radius $r$ \anote{A tad vague because of forward and backward balls, I didn't find references with doubling dimension and directed graphs}.
 A path $P'$ \emph{partially witnesses} $P$ if $P'\subseteq P$ and $P'$ is ``long enough''.
 Formally, we define the following relation for path systems.
 
@@ -75,11 +77,11 @@ If $(G,\ell)$ admits an $(h,r)$-SPHS for any $r$, then $(G,\ell,c)$ admits an $(
 \end{proposition}
 \begin{proof}
 Let $r>0$, we need to construct a hitting set $C^E$ for $\calP_r^E$.
-Define $k:=\ceil{\log_2\beta}$ and observe that $\frac{1}{\beta}\geq 2^{-k}$.
+Define $k\defeq\ceil{\log_2\beta}$ and observe that $\frac{1}{\beta}\geq 2^{-k}$.
 Take $C$ as the hitting set for $\calP_{2^{-k}r}$, which is guaranteed to be sparse with respect to balls of radius $2^{-k+1}r$.
 Define the desired set by
 \[
-C^E:=\{v\in C: v \text{ is in some $r$-efficient path} \}.
+C^E\defeq\{v\in C: v \text{ is in some $r$-efficient path} \}.
 \]
 
 Since $\calP$ is a $2^{-k}$-witness for $\PE$, $C^E$ is indeed a hitting set for $\PE_r$.

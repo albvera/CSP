@@ -15,3 +15,5 @@ build
 *.synctex.gz
 *.lb
 *.fls
+
+Writeup/main_vldb.pdf
