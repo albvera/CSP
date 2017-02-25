@@ -13,15 +13,7 @@ script3.py
 *.log
 *.fdb_latexmk
 *.out
+build
 *.synctex.gz
 *.lb
 *.fls
-build
-
-*.lb
-
-*.fls
-
-Writeup/.main_vldb.lb
-
-Writeup/main_vldb.fls

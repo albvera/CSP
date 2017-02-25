@@ -4,15 +4,17 @@ We consider a directed graph $G=(V,E)$ with length function $\ell:E\to \N$.
 A \emph{path} $P$ is a sequence of nodes $\crl*{u_1u_2u_3\ldots u_k}$ with $(u_i,u_{i+1})\in E$. 
 The length $\ell(P)$ is the sum of edge lengths in $P$; by convention, a path with a single node $v$ has length zero.
 For $s,t\in V$, the distance from $s$ to $t$, denoted $\dist(s,t)$, is the smallest length among all paths $P$ that start at $s$ and terminate at $t$.
-The shortest $(s,t)$-path, if it exists, is denoted $P(s,t)$.
-The set of all shortest paths in $G$ is denoted $\calP$.
-
 For $r>0$ and $v\in V$, we define the \emph{forward and reverse balls} by $\Bf_r(v):=\{u\in V: \dist(v,u)\leq r\}$ and $\Bb_r(v):=\{u\in V: \dist(u,v)\leq r\}$.
 We also denote $B_r(v):=\Bf_r(v)\cup\Bb_r(v)$.
+We denote the shortest $(s,t)$-path (if it exists) as $P(s,t)$, and denote the set of all shortest paths in $G$ as $\calP$.
+
+
+\subsubsection{Hitting sets and the highway dimension}
+
 \sbnote{A \emph{path system} $\calQ$ is any collection of paths, but cycles are not allowed.}
 Given a set $C\subseteq V$ and a path $Q$, we say that $C$ \emph{hits} $Q$ if some node in $Q$ belongs to $C$.
 Similarly, $C$ \emph{hits a path system} $\calQ$ if it hits every $Q\in\calQ$.
-We describe now some notions that will be central for the definition of HD.
+
 
 \begin{definition}
 Given $r>0$, a path $Q$ is $r$-significant for the system $\calQ$ if $Q\in\calQ$ and $\ell(Q)>r$.
@@ -27,12 +29,12 @@ Given a system $\calQ$ and $r>0$, an $(h,r)$-SPHS is a set $C\subseteq V$ with t
 \end{enumerate}
 \end{definition}
 
-We define now de notion of a path neighbourhood around a node.
+We define now de notion of a path neighborhood around a node.
 The distance from a node $v$ to a path $P$, denoted $\dist(v,P)$, is measured as the minimum distance from $v$ to a node $w\in P$.
 The distance to $v$, $\dist(P,v)$, is defined analogously.
 
 \begin{definition}
-For $v\in V, r>0$, the forward and reverse path neighbourhoods, respect to a system $\calQ$, are defined as 
+For $v\in V, r>0$, the forward and reverse path neighborhoods, respect to a system $\calQ$, are defined as 
 \begin{align*}
 S_r^+(v,\calQ) &:=\{Q\in\calQ:\ell(Q)>r,  \dist(v,Q)\leq 2r \}, \\  
 S_r^-(v,\calQ) &:=\{Q\in\calQ:\ell(Q)>r,  \dist(Q,v)\leq 2r \}.
@@ -40,7 +42,7 @@ S_r^-(v,\calQ) &:=\{Q\in\calQ:\ell(Q)>r,  \dist(Q,v)\leq 2r \}.
 \end{definition}
 
 \begin{definition}
-A system $\calQ$ has HD $h$ if, for every $r>0, v\in V$, there exists $H_{v,r}\subseteq V$ such that $\card{H_{v,r}}\leq h$ and $H_{v,r}$ hits both neighbourhoods $S_r^+(v,\calQ)$ and $S_r^-(v,\calQ)$.
+A system $\calQ$ has HD $h$ if, for every $r>0, v\in V$, there exists $H_{v,r}\subseteq V$ such that $\card{H_{v,r}}\leq h$ and $H_{v,r}$ hits both neighborhoods $S_r^+(v,\calQ)$ and $S_r^-(v,\calQ)$.
 \end{definition}
 
 The analogous HD of a network, defined in \citet{highway2013} for the undirected case, is obtained when the system of interest is $\calP$, the collection of all shortest paths.
