@@ -18,6 +18,8 @@ build
 *.lb
 *.fls
 
+Writeup/main_vldb.pdf
+
 *.lb
 
 *.fls
