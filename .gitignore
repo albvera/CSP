@@ -1,7 +1,7 @@
 *.pyc
 *.dat
-SF*
-LU*
+SF_results
+LU_results
 Data
 *.xlsx
 script2.py
@@ -21,7 +21,7 @@ build
 *.lb
 
 *.fls
-
+.ipynb*
 Writeup/.main_vldb.lb
 
 Writeup/main_vldb.fls
