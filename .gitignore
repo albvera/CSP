@@ -1,7 +1,5 @@
 *.pyc
 *.dat
-SF*
-LU*
 Data
 *.xlsx
 script2.py
