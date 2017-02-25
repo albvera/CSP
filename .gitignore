@@ -17,3 +17,11 @@ script3.py
 *.lb
 *.fls
 build
+
+*.lb
+
+*.fls
+
+Writeup/.main_vldb.lb
+
+Writeup/main_vldb.fls
