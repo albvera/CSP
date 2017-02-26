@@ -17,9 +17,10 @@ Following \cite{highway2013}, for any $r>0$, we say a path $Q$ is $r$-significan
 \item Local sparsity: for every $v\in V$, $\card{\Bb_{2r}(v)\cap C}\leq h$ and $\card{\Bf_{2r}(v)\cap C}\leq h$.
 \end{enumerate}
 \end{definition}
-\sbnote{Can we instead say $B_{2r}\leq h$ - that simplifies things.}
+\sbnote{Can we instead say $B_{2r}\leq h$ - that simplifies things.} 
+\anote{You mean $\card{B_{2r}(v)\cap C}\leq h$? Since that is a stronger requirement, it would work.}
 
-The existence of $(h,r)$-SPHS enables the compression of path-system $\calQ$ via the construction of \emph{hub labels} (cf. Section~\ref{ssec:hldef}). Moreover, a natural greedy algorithm gives hitting sets with local-sparsity $h\log n$ in polynomial time. To find hitting sets which are independent of $n$,Abraham et al.~\citep{highway2013} introduced the stronger notion of the \emph{highway dimension}. To define this, we need two additional definitions:
+The existence of $(h,r)$-LSHS enables the compression of path-system $\calQ$ via the construction of \emph{hub labels} (cf. Section~\ref{ssec:hldef}). Moreover, a natural greedy algorithm gives hitting sets with local-sparsity $h\log n$ in polynomial time. To find hitting sets which are independent of $n$,Abraham et al.~\citep{highway2013} introduced the stronger notion of the \emph{highway dimension}. To define this, we need two additional definitions:
 for $v\in V, r>0$, we define the \emph{forward and reverse path neighborhoods} with respect to path-system $\calQ$ as 
 \begin{align*}
 S_r^+(v,\calQ) &\defeq\{Q\in\calQ_r: \dist(v,Q)\leq 2r \}, \\  
@@ -31,12 +32,12 @@ S_r^-(v,\calQ) &\defeq\{Q\in\calQ_r: \dist(Q,v)\leq 2r \}.
 A path-system $\calQ$ has HD $h$ if, for every $r>0$, and for every $v\in V$, there exist sets $H_{v,r}\subseteq V$ such that $\card{H_{v,r}}\leq h$ and $H_{v,r}$ is a hitting set for $S_r^+(v,\calQ)\cup S_r^-(v,\calQ)$.
 \end{definition}
 The highway dimension essentially re-orders the sequence of qualifiers in the definition of $(h,r)$-LSHS: it requires the existence of a small hitting set for each individual neighborhood, rather than a single hitting set which is locally sparse. 
-The HD permits to construct a $\log h$ approximation of the SPHS in polynomial time.
+The HD permits to construct a $\log h$ approximation of the LSHS in polynomial time.
 Additionally, HD is an upper bound to the doubling dimension.
 
 
 \begin{proposition}
-If the path system $\calQ$ has HD $h$, then, for every $r>0$, there exists an $(h,r)$-SPHS.
+If the path system $\calQ$ has HD $h$, then, for every $r>0$, there exists an $(h,r)$-LSHS.
 \end{proposition}
 It was first defined in \citet{highway2013} for undirected graphs and the shortest-path system $\calP$; the above is the natural analog for directed graphs and general set systems. As shorthand, we refer to the HD of $(G,\ell)$ as that of the path system $\calP$.
 
@@ -46,9 +47,9 @@ On the other hand, the HD of the geometric realization does bound $\Delta$.
 
 
 \subsubsection{Multi-Scale Hitting Sets} \label{sec:multi_scale}
-The constructions in the following sections will depend on the existence of SPHS.
+The constructions in the following sections will depend on the existence of LSHS.
 Let $D=\max_{P\in\calP}\ell(P)$ be the diameter.
-We assume that the network $(G,\ell)$ admits sets $C_i$, $i=1,\ldots,\log D$, such that $C_i$ is an $(h,2^{i-1})$-SPHS.
+We assume that the network $(G,\ell)$ admits sets $C_i$, $i=1,\ldots,\log D$, such that $C_i$ is an $(h,2^{i-1})$-LSHS.
 
 Computing the desired hitting sets in polynomial time is an interesting problem in its own right.
 A greedy algorithm achieves a $\Or(\log n)$ approximation, meaning that the sparsity will be $\Or(h\log n)$ instead of $h$ .

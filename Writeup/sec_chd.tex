@@ -13,13 +13,13 @@ Note that every shortest path is efficient, thus the CHD will always be bigger t
 The CHD of $(G,\ell,c)$, denoted $h_c$, is the HD of the system $\PE$.
 \end{definition}
 
-The first question we want to tackle is: how worse is the sparsity in an EPHS compared to a SPHS?
+The first question we want to tackle is: how worse is the sparsity in an EPHS compared to a LSHS?
 We show that, in general, the sparsity of an EPHS is arbitrarily worse.
 Intuitively, this occurs when shortest and efficient paths are unrelated. 
 \anote{The current example uses the stronger notion of $r$-significant. I can create a very simple example with the weaker definition, but it looks like cheating.}
 
 \begin{proposition}\label{prop:treelike}
-For any $h$, we can construct a family of networks such that the sparsity of SPHS is $h$ and that of EPHS is arbitrarily worse than $h$.
+For any $h$, we can construct a family of networks such that the sparsity of LSHS is $h$ and that of EPHS is arbitrarily worse than $h$.
 \end{proposition}
 \begin{proof}
 First, we construct an example where the sparsity grows from $h$ to $h^2$.
@@ -29,7 +29,7 @@ The grandchildren of $v$ are the same as the grandchildren of $u$.
 
 All the edges are bidirectional and have unit cost.
 The lengths are as follows: $ux_i$ and $vy_i$ (dashed in Figure~\ref{fig:treelike}) are zero; $uv$ and from $y_i$ to the leafs is one; from $x_i$ to the leafs is three.
-It is easy to see that the sparsity of a SPHS is $h+1$.
+It is easy to see that the sparsity of a LSHS is $h+1$.
 
 On the other hand, every leaf $w$ is a $2$-efficient path.
 Indeed, it can be extended to $x_iw$ that is the shortest path from $x_i$ to $w$ with constraint 1.
@@ -73,7 +73,7 @@ We stress that doubling dimension depends only on $G$ and $\ell$; the partial wi
 
 \begin{proposition}\label{prop:doubling}
 Assume $G$ is $\alpha$-doubling and $\calP$ is a $\beta$-witness for $\PE$.
-If $(G,\ell)$ admits an $(h,r)$-SPHS for any $r$, then $(G,\ell,c)$ admits an $(\alpha^{\ceil{\log_2\beta}} h,r)$-EPHS for any $r$.
+If $(G,\ell)$ admits an $(h,r)$-LSHS for any $r$, then $(G,\ell,c)$ admits an $(\alpha^{\ceil{\log_2\beta}} h,r)$-EPHS for any $r$.
 \end{proposition}
 \begin{proof}
 Let $r>0$, we need to construct a hitting set $C^E$ for $\calP_r^E$.
@@ -93,5 +93,5 @@ The argument for backward balls is identical.
 
 \begin{remark}
 The existence of a $\beta$-witness is not enough to bound the CHD.
-Nevertheless, as discussed in Section~\ref{sec:multi_scale}, the existence of $(h,r)$-SPHS already allows the construction of HL.
+Nevertheless, as discussed in Section~\ref{sec:multi_scale}, the existence of $(h,r)$-LSHS already allows the construction of HL.
 \end{remark}

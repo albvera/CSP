@@ -70,7 +70,7 @@ Indeed,
 where the last expression is exactly $\ell(P)$.
 \end{proof}
 
-Using the previous result, we can construct SPHS in the augmented graph using the EPHS of the original graph.
+Using the previous result, we can construct LSHS in the augmented graph using the EPHS of the original graph.
 It is interesting that, assuming doubling dimension $\alpha$ and $\beta$-witness, we obtain sparsity of $\alpha^{\ceil{\log_2\beta}} hB$ and thus query times of $O(\alpha^{\ceil{\log_2\beta}} hB\log D)$.
 This is much better than the $O(Bn\Delta)$ of dynamic programming, but it is still pseudo-polynomial.
 We observe that the query time can be made strongly polynomial if and only if the Pareto frontier contains at most a poly-logarithmic number of points.
@@ -82,7 +82,7 @@ A hitting set for $\PE$ can be used to obtain a hitting set for $\calP^B$, but, 
  
 \begin{proposition}
 Assume the system $\PE$ admits $(\hc,r)$-EPHS.
-Then, $\calP^B$ admits $(\hc B,r)$-SPHS.
+Then, $\calP^B$ admits $(\hc B,r)$-LSHS.
 \end{proposition}
 \begin{proof}
 We define a set $C^B$ and prove that hits $\calP_r^B$ and that it is locally sparse.
@@ -109,7 +109,7 @@ In Equation~(\ref{eq:hitset}) we see that the sparsity around the node $\pp{u,b}
 This will be key for the query time guarantee.
 \end{remark}
 
-The last result shows how SPHS translate to the augmented graph.
+The last result shows how LSHS translate to the augmented graph.
 Since the notion of HD is much stronger, it is not always possible to make the analogous between two path systems.
 Surprisingly, in this case we are able to relate the HD of both path systems.
 

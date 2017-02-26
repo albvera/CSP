@@ -21,11 +21,11 @@ Given a system $\calQ$, the corresponding set system $(E,\{\pi(Q):Q\in\calQ\})$ 
 \end{proposition}
 
 We now show how to obtain polynomial time preprocessing.
-Specifically, the algorithms we use are based on the existence of $(h,2^i)$-SPHS.
+Specifically, the algorithms we use are based on the existence of $(h,2^i)$-LSHS.
 Assuming a system has HD $h$, we can obtain an approximation of these set, where the sparsity increases by the maximum degree $\Delta$. 
 
 \begin{proposition}
-If a system $\calQ$ has HD $h$, for some $h'=\Or(h\Delta\log(h\Delta))$ there exists a polynomial time algorithm to obtain a $(h',r)$-SPHS.	
+If a system $\calQ$ has HD $h$, for some $h'=\Or(h\Delta\log(h\Delta))$ there exists a polynomial time algorithm to obtain a $(h',r)$-LSHS.	
 \end{proposition}
 \begin{proof}
 Denote $S_r(v):=\Sf_r(v,\calQ)\cup\Sb_r(v,\calQ)$, i.e., $S_r(v)$ contains all the $r$-significant paths ``close'' to $v$. 
@@ -41,7 +41,7 @@ It follows that $F_{v,r}\subseteq V$ can be obtained in polynomial time and is a
 
 Assume for now that we know the value of $h$.
 Note that the value $h'$ can be computed from $h$ and the guarantee given by the oracle, i.e., the constant inside the big-O.
-We construct the $(2h',r)$-SPHS iteratively.
+We construct the $(2h',r)$-LSHS iteratively.
 At each iteration $i$ we maintain the following invariant: $C_i$ hits every path in $\calQ_r$.
 In an iteration we check if $C_i$ is locally sparse, if not, we strictly reduce the cardinality of $C_i$ while maintaining the invariant.
 Start with $C_0=V$. 
