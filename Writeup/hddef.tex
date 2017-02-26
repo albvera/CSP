@@ -1,8 +1,6 @@
 %!TEX root = main_vldb.tex
 
-We now define the notions of hitting sets for path systems, and the highway dimension (HD), which we use to parametrize the performance of our algorithms. The highway dimension was introduced by Abraham et al.~\cite{highway2010,highway2013} for undirected graphs and the shortest-path set system. Our presentation closely follows these works; however, for our purposes, we need to extend the definitions to directed graphs and general path systems.
-
-\sbnote{Do we need downward closure?}
+We now define the notions of hitting sets for path systems, and the highway dimension (HD), which we use to parametrize the performance of our algorithms. The highway dimension was introduced by Abraham et al.~\cite{highway2010,highway2013} for undirected graphs and the shortest-path set system. Our presentation closely follows these works; however, for our purposes, we need to extend the definitions to directed graphs and general path systems. \sbnote{Downward closure?}
 
 We define a \emph{path system} $\calQ$ as any collection of paths. Given a set $C\subseteq V$ and a path $Q$, we say that $C$ \emph{hits} $Q$ if some node in $Q$ belongs to $C$. Moreover, we say that $C$ is a \emph{hitting set for a path system} $\calQ$ if it hits every $Q\in\calQ$.
 
