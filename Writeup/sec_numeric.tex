@@ -1,4 +1,4 @@
-
+\subsection{Practical algorithm}
 The augmented graph may contain a lot of unnecessary information.
 For example, the same efficient path $uv$ can be repeated many times in the form $\pp{u,1}\pp{v,0}$, $\pp{u,2}\pp{v,1}$ and so on.
 If there are not too many efficient paths, we can obtain considerable improvements both in query time and in data storage.
@@ -18,7 +18,7 @@ In $\Gp^B$ all the lengths are preserved.
 \end{definition}
 Note that in $\Gp^B$ there are no sink nodes, hence it has at least $n$ nodes and $nB$ arcs fewer compared to $G^B$.
 
-\subsection{HD of the pruned augmented graph}
+\subsubsection{HD of the pruned augmented graph}
 
 A shortest path in $\Gp$ does not necessarily project to an efficient path, even if the path ends in a node of the form $\pp{t,0}$.
 On the other hand, if $P$ projects to an efficient path, then necessarily $P$ is shortest. 
@@ -64,6 +64,40 @@ Run a similar process for $\Lb(v)$.
 \end{enumerate}
 Note that in the last step we bootstrap HL to improve it.
 This works because the fact that some nodes have incorrect distance labels does not impact the correctness of a HL query; a node minimizing the distance is returned and such node must have a correct label.
+
+\subsection{Experiments}
+
+All the experiments were run on a 64-bit desktop computer, Intel Core i7-6700, 3.40GHz,  with 16GB RAM and operative system Ubuntu 16.04.
+The entire code is in Python 2.7, the main library we use is Networkx, which implements graph representation and Dijkstra's algorithm.
+To compute the SP cover we follow the exhibition in \cite{hubimplem}.
+
+We evaluated the performance of our algorithms with real-world test networks: a small San Francisco network with 2643 nodes and 6588 edges for which real-world travel-time data was available as a Gaussian mixture model \cite{sf_data}, and a second (relatively larger) Luxembourg network with 30647 nodes and 71655 edges for which travel-time distributions were synthesized from road speed limits, as real-world data was unavailable.
+Additionally, we tested on the subgraph corresponding to Luxembourg City with 4026 nodes and 9282 edges.
+
+The first experiment was on San Francisco.
+We used the following cost structure.
+The 10\% edges with the highest variance are assigned cost 1, the rest cost 0.
+On Table~\ref{tab:sf_results} we present the results for different maximum budgets $B$.
+The column for $B=0$ represents the original graph (without augmentation).
+The query times are measured as the average of 1000 random $s,t$ pairs, were the task is to recover $\dist(s,t|b)$ for every $b=0,1,\ldots,B$, i.e., the entire efficient frontier.
+
+\begin{table}\caption{Results for the San Francisco network}\label{tab:sf_results}
+\begin{center}
+\begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.1cm} | p{1.1cm} | }
+\hline
+	B & Preproc [m] & Avg F Size & Avg B Size & Query Dij [ms] & Query HL [ms] \\ \hline
+	0 & 1 & 23 & 22 & 10.71 & 0.005 \\ \hline
+	5 & 5 & 17 & 28 & 74.71 & 0.02 \\ \hline
+	10 & 13 & 17 & 28 & 183.18 & 0.03 \\ \hline
+	15 & 14 & 17 & 28 & 250 & 0.03 \\ \hline
+	20 & 21 & 17 & 28 & 489.74 & 0.04 \\ \hline
+	25 & 22 & 17 & 28 & 467.84 & 0.04 \\ \hline
+	30 & 37 & 17 & 28 & 648.17 & 0.04 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+ 
+
 
 \begin{figure}\label{fig:map_LU} \caption{Significance in Luxembourg City}
 \begin{center}
