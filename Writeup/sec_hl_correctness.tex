@@ -1,62 +1,55 @@
-Arguably the two most successful algorithms for the SP problem are CH and HL.
-When a network has small HD, it is possible to obtain efficient structures for both of these algorithms.
-We explain here the construction for HL.
-For the construction of CH see Appendix~\ref{sec:ch}.
+Two of the most successful data-structures that enable fast shortest path queries at scale are \emph{contraction hierarchies} (CH)~\cite{} and \emph{hub labels} (HL)~\cite{cohen_definition_hl}.
+These are general techniques which always guarantee correct shortest-path computations, but have no uniform storage/query-time bounds for all graphs.
+However, Abraham et al.~\cite{highway2013} show that for a graph with HD $\leq h$, the preprocessing time, storage requirements and query time of particular implementations of the CH and HL algorithms can be bounded solely in terms of $h$, the maximum degree $\Delta$ and the diameter $D$. 
+We now explain the construction for HL for directed graphs; for the construction of CH see Appendix~\ref{sec:ch}.
+HL was also shown to admit the best query-time guarantees in~\cite{highway2013}; consequently, we adapt the HL technique for scaling CSP computations in Section \ref{sec:chd}.
 
-The HL algorithm is described as follows.
-Every node $v$ is assigned two sets of nodes, $\Lf(v)$ and $\Lb(v)$, referred to as forward and backward hubs.
-We store $\dist(v,w),\dist(u,v)$ for every $w\in\Lf(v),u\in\Lb(v)$.
-The hubs are said to satisfy the cover property if, for any $s\neq t\in V$, $\Lf(s)\cap\Lb(t)$ contains at least one node in $P(s,t)$.
+The basic HL technique is as follows:
+Every node $v$ is associated with a \emph{hub labels}, $L(v) = \crl*{\Lf(v),\Lb(v)}$, comprising of a set of forward hubs $\Lf(v)$ and backward hubs $\Lb(v)$.
+We also store $\dist(v,w),\dist(u,v)$ for every $w\in\Lf(v),u\in\Lb(v)$.
+The hub labels are said to satisfy the \emph{cover property} if, for any $s\neq t\in V$, $\Lf(s)\cap\Lb(t)$ contains at least one node in $P(s,t)$.
 In the case that $t$ is not reachable from $s$, it must be that $\Lf(s)\cap\Lb(t)=\varnothing$.
 
-With the cover property it is trivial to obtain $\dist(s,t)$; we just compare all nodes $w\in\Lf(s)\cap\Lb(t)$ and return the minimum of $\dist(s,w)+\dist(w,t)$.
-If the hubs are ordered by ID, we can obtain the distance with a single coordinated sweep in time $\Or(\card{\Lf(s)}+\card{\Lb(t)})$.
-Note that the size of the HL bounds both the query time and the storage requirements.
-The following result shows how to obtain small HL, the construction of hubs mimics the undirected case.
+With the aid of the cover property, we can obtain $\dist(s,t)$ by searching for the minimum value of $\dist(s,w)+\dist(w,t)$ over all nodes $w\in\Lf(s)\cap\Lb(t)$.
+If the hubs are sorted by ID, this can be done in time $\Or(\card{\Lf(s)}+\card{\Lb(t)})$ via a single sweep.
+Moreover, by storing the second node in $P(v,w)$ for each $w\in \Lf(s)$, and the second node in $P(w,v)$ for each $w\in \Lb(s)$, we can also recover the shortest path.
+Now, each time we run a HL query, we find at least one new node $w\in P(s,t)$, $w\neq s,t$, is returned; we can then recurse to find subpaths $P(s,w)$ and $P(w,t)$.
+Note that we need to store this extra information, as otherwise, we could have $\Lf(s)\cap\Lb(t)=\{s\}$.
+Let $\Lm \defeq \max_v\abs*{L(v)}$ be the size of the maximum HL; then the per-node storage requirement is proportional to $\Lm$, while the query time is proportional to $\Lm\cdot P(s,t)$.
 
-\begin{theorem}\label{theo:construct_hl}
-If $(G,\ell)$ has HD $h$, then we can construct hub labels of size at most $h\log D$.
-\end{theorem}
+To construct hub labels with guarantees on preprocessing time and $\Lm$, we need the additional notion of a \emph{multi-scale LSHS}. 
+For $i=1,\ldots,\log D$, we assume that graph $(G,\ell)$ admits a collection of sets $\crl*{C_i}$, such that each $C_i$ is an $(h,2^{i-1})$-LSHS.
+Given such a collection $\crl*{C_i}$, we can now obtain small HL; we outline this construction for directed graphs, closely following the construction in \cite{highway2013} (Theorem 5.1) for the undirected case.
+\begin{proposition}
+\label{theo:construct_hl}
+For $(G,\ell)$, given a multi-scale LSHS collection $\crl*{C_i;i=1,\ldots,\log D}$ (where each $C_i$ is an $(h,2^{i-1})$-LSHS), we can construct hub labels of size at most $h\log D$.
+\end{proposition}
 \begin{proof}
-The hubs are defined as
+For each node $v$, we define the hub label $L(v)$ as
 \begin{align*}
-\Lf(v):&=  \bigcup_{i=1}^{\log D}C_i\cap \Bf_{2^i}(v)\\
-\Lb(v):&= \bigcup_{i=1}^{\log D}C_i\cap \Bb_{2^i}(v).
+\Lf(v)\defeq  \bigcup_{i=1}^{\log D}\crl*{C_i\cap \Bf_{2^i}(v)}\;,\;
+\Lb(v)\defeq \bigcup_{i=1}^{\log D}\crl*{C_i\cap \Bb_{2^i}(v)}.
 \end{align*}
-Since $C_i$ is an $(h,2^{i-1})$-LSHS and we intersect with balls of radii $2\cdot 2^{i-1}$, every set in the union contributes at most $h$ elements and the maximum size is as claimed.
+Since each $C_i$ is an $(h,2^{i-1})$-LSHS which we intersect with balls of radius $2\cdot 2^{i-1}$, every set in the union contributes at most $h$ elements and the maximum size is as claimed.
 
 To prove the cover property, we note that, if $t$ is not reachable from $s$, by definition $\Lf(s)\cap\Lb(t)=\varnothing$.
 This is because the elements in $\Lf(s)$ are reachable from $s$ and the elements in $\Lb(t)$ reach $t$.
-
-In the case that $P(s,t)$ exists, take $i$ such that $2^{i-1}<\ell(P(s,t))\leq 2^i$.
-The path $P(s,t)$ is hit by $C_i$ and any point in the path belongs to both $\Bf_{2^i}(s)$ and $\Bb_{2^i}(t)$.
-Such point hitting $P(s,t)$ is then in both hubs, which shows the result.
+On the other hand, when $P(s,t)$ exists, let $i$ be such that $2^{i-1}<\ell(P(s,t))\leq 2^i$.
+Now any point in the path belongs to both $\Bf_{2^i}(s)$ and $\Bb_{2^i}(t)$, and hence $C_i\cap P(s,t)$  (which is not empty since $C_i$ hits all SP of length $\geq 2^{i-1}$) is then in both hubs, which shows the result.
 \end{proof}
 
-\subsubsection{Distance Oracles and Path Computation} \label{sec:path_oracl}
-The previous construction is for distance oracles, i.e., they return the length of the SP, but not the path itself.
-It is possible to recover the path with additional data; if we double the storage and compute not only the distance to $w\in\Lf(v)$, but also the second node in $P(v,w)$, then it is easy to recover the path.
-Each time we run a HL query, at least one node $w\in P(s,t)$, $w\neq s,t$, is returned and we sequentially run queries for the subpaths $P(s,w)$ and $P(w,t)$.
-Note that we do need to store this extra information, for example, it could be that $\Lf(s)\cap\Lb(t)=\{s\}$, so the process cannot continue without an additional node.
 
-\subsubsection{Multi-Scale Hitting Sets} \label{sec:multi_scale}
-The constructions in the following sections will depend on the existence of LSHS.
-Let $D=\max_{P\in\calP}\ell(P)$ be the diameter.
-We assume that the network $(G,\ell)$ admits sets $C_i$, $i=1,\ldots,\log D$, such that $C_i$ is an $(h,2^{i-1})$-LSHS.
-
-\sbnote{If $G$ has HD $h$, then this permits the construction of a $\log h$ approximation of the LSHS in polynomial time. }
-
-Computing the desired hitting sets in polynomial time is an interesting problem in its own right.
-A greedy algorithm achieves a $\Or(\log n)$ approximation, meaning that the sparsity will be $\Or(h\log n)$ instead of $h$ .
-We will also show how to obtain a $\Or(\Delta\log(h\Delta))$ approximation using a more sophisticated tool\todo{insert reference}.
+Finally, we need to compute the desired multi-scale LSHS in polynomial time.
+To this end, a greedy algorithm achieves a $\Or(\log n)$ approximation, meaning that the sparsity will be $\Or(h\log n)$ instead of $h$ .
+We will also show how to obtain a $\Or(\Delta\log(h\Delta))$ approximation using a more sophisticated tool~\ref{}.
 The results will still carry out, but one needs to replace $h$ for this approximation when talking about polynomial time preprocessing.
 
 A more subtle point is that the algorithm for the better approximation, even though runs in polynomial time, is impractical.
 On the other hand, the greedy algorithm also poses some restrictions.
-It involves an all shortest path computation, so it can be done either with (i) $\Omega(n^2)$ memory and $\Omega(n^3)$ time or (ii) $\Or(n)$ memory and $\Omega(n^3\log n)$ time \todo{double check these times}. 
-\anote{More on this?}
+It involves an all shortest path computation, so it can be done either with (i) $\Omega(n^2)$ memory and $\Omega(n^3)$ time or (ii) $\Or(n)$ memory and $\Omega(n^3\log n)$ time.
+\todo{double check these times}. \anote{More on this?}
 
 Given the previous restrictions, we use instead a heuristic for the approximation.
 We compute only $k<<n$ shortest path trees, leading to $\Or(kn)$ memory and $\Or(kn^2)$.
 It is an open problem to determine the approximation guarantee of this algorithm.
-For more details see \todo{insert reference}.
+For more details refer Section \ref{}.
