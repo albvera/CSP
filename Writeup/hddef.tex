@@ -18,7 +18,11 @@ Following \cite{highway2013}, for any $r>0$, we say a path $Q$ is $r$-significan
 \end{definition}
 
 
-The existence of $(h,r)$-LSHS enables the compression of path-system $\calQ$ via the construction of \emph{hub labels} (cf. Section~\ref{ssec:hldef}). Moreover, a natural greedy algorithm gives hitting sets with local-sparsity $h\log n$ in polynomial time. To find hitting sets which are independent of $n$,~Abraham et al.~\cite{highway2013} introduced the notion of the \emph{highway dimension}. We first need two additional definitions:
+The existence of $(h,r)$-LSHS enables the compression of path-system $\calQ$ via the construction of \emph{hub labels} (cf. Section~\ref{ssec:hldef}). Moreover, a natural greedy algorithm gives hitting sets with local-sparsity $h\log n$ in polynomial time. 
+
+\sbnote{Need an algorithm + lemma here}
+
+To find hitting sets which are independent of $n$,~Abraham et al.~\cite{highway2013} introduced the notion of the \emph{highway dimension}. We first need two additional definitions:
 for $v\in V, r>0$, we define the \emph{forward and reverse path-neighborhoods} with respect to path-system $\calQ$ as 
 \begin{align*}
 S_r^+(v,\calQ) &\defeq\crl*{Q\in\calQ_r: \dist(v,Q)\leq 2r}, \\  
