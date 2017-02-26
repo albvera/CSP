@@ -6,7 +6,6 @@ Data
 *.xlsx
 script2.py
 script3.py
-*.cls
 *.aux
 *.bbl
 *.blg
