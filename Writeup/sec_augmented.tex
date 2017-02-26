@@ -1,11 +1,11 @@
 In order to describe the main structure used to construct HL, we start with a discussion on efficient paths.
-Given a source-terminal pair $s,t$ and a budget $b$, we want to solve the problem
-\begin{alignat*}{3}
-&\text{min}   &&\quad \ell(P) \\
-&\text{s.t. } &&\quad  c(P) \leq b\\
-& &&\quad P \in \calP_{s,t}.
-\end{alignat*}
-Call $\dist(s,t|b)$ the minimum of this problem, potentially $+\infty$ if there is no feasible solution.
+%Given a source-terminal pair $s,t$ and a budget $b$, we want to solve the problem
+%\begin{alignat*}{3}
+%&\text{min}   &&\quad \ell(P) \\
+%&\text{s.t. } &&\quad  c(P) \leq b\\
+%& &&\quad P \in \calP_{s,t}.
+%\end{alignat*}
+%Call $\dist(s,t|b)$ the minimum of this problem, potentially $+\infty$ if there is no feasible solution.
 Note that a solution to $\dist(s,t|b)$ is not necessarily efficient, i.e., there could be another path with the same length and lower cost.
 Additionally, the budget constraint may not be tight and there could be multiple minimizers. 
 As a consequence, a direct approach with EPHS would not work; there are potentially many more solutions than efficient paths.

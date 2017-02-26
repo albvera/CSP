@@ -1,7 +1,7 @@
 Arguably the two most successful algorithms for the SP problem are CH and HL.
 When a network has small HD, it is possible to obtain efficient structures for both of these algorithms.
 We explain here the construction for HL.
-For the construction of CH see Section~\ref{sec:ch}.
+For the construction of CH see Appendix~\ref{sec:ch}.
 
 The HL algorithm is described as follows.
 Every node $v$ is assigned two sets of nodes, $\Lf(v)$ and $\Lb(v)$, referred to as forward and backward hubs.
@@ -38,3 +38,25 @@ The previous construction is for distance oracles, i.e., they return the length 
 It is possible to recover the path with additional data; if we double the storage and compute not only the distance to $w\in\Lf(v)$, but also the second node in $P(v,w)$, then it is easy to recover the path.
 Each time we run a HL query, at least one node $w\in P(s,t)$, $w\neq s,t$, is returned and we sequentially run queries for the subpaths $P(s,w)$ and $P(w,t)$.
 Note that we do need to store this extra information, for example, it could be that $\Lf(s)\cap\Lb(t)=\{s\}$, so the process cannot continue without an additional node.
+
+\subsubsection{Multi-Scale Hitting Sets} \label{sec:multi_scale}
+The constructions in the following sections will depend on the existence of LSHS.
+Let $D=\max_{P\in\calP}\ell(P)$ be the diameter.
+We assume that the network $(G,\ell)$ admits sets $C_i$, $i=1,\ldots,\log D$, such that $C_i$ is an $(h,2^{i-1})$-LSHS.
+
+\sbnote{If $G$ has HD $h$, then this permits the construction of a $\log h$ approximation of the LSHS in polynomial time. }
+
+Computing the desired hitting sets in polynomial time is an interesting problem in its own right.
+A greedy algorithm achieves a $\Or(\log n)$ approximation, meaning that the sparsity will be $\Or(h\log n)$ instead of $h$ .
+We will also show how to obtain a $\Or(\Delta\log(h\Delta))$ approximation using a more sophisticated tool\todo{insert reference}.
+The results will still carry out, but one needs to replace $h$ for this approximation when talking about polynomial time preprocessing.
+
+A more subtle point is that the algorithm for the better approximation, even though runs in polynomial time, is impractical.
+On the other hand, the greedy algorithm also poses some restrictions.
+It involves an all shortest path computation, so it can be done either with (i) $\Omega(n^2)$ memory and $\Omega(n^3)$ time or (ii) $\Or(n)$ memory and $\Omega(n^3\log n)$ time \todo{double check these times}. 
+\anote{More on this?}
+
+Given the previous restrictions, we use instead a heuristic for the approximation.
+We compute only $k<<n$ shortest path trees, leading to $\Or(kn)$ memory and $\Or(kn^2)$.
+It is an open problem to determine the approximation guarantee of this algorithm.
+For more details see \todo{insert reference}.
