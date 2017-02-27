@@ -1,9 +1,10 @@
 %!TEX root = main_vldb.tex
 
-We now define the notions of hitting sets for path systems, and the highway dimension (HD), which we use to parametrize the performance of our algorithms. The highway dimension was introduced by Abraham et al.~\cite{highway2010,highway2013} for undirected graphs and the shortest-path set system. Our presentation closely follows these works; however, for our purposes, we need to extend the definitions to directed graphs and general path systems. \sbnote{Downward closure?}
+We now define the notions of hitting sets for path systems, and the highway dimension (HD), which we use to parametrize the performance of our algorithms. The highway dimension was introduced by Abraham et al.~\cite{highway2010,highway2013} for undirected graphs and the shortest-path set system. Our presentation closely follows these works; however, for our purposes, we need to extend the definitions to directed graphs and general path systems. 
 
-We define a \emph{path system} $\calQ$ as any collection of paths. Given a set $C\subseteq V$ and a path $Q$, we say that $C$ \emph{hits} $Q$ if some node in $Q$ belongs to $C$. Moreover, we say that $C$ is a \emph{hitting set for a path system} $\calQ$ if it hits every $Q\in\calQ$.
-
+We define a \emph{path system} $\calQ$ as any \sbedit{downward-closed} collection of paths
+\sbedit{(by downward-closed, we mean that if $P\in\calQ$ and $P'\subset P$, then $P'\in\calQ$)}.
+Given a set $C\subseteq V$ and a path $Q$, we say that $C$ \emph{hits} $Q$ if some node in $Q$ belongs to $C$. Moreover, we say that $C$ is a \emph{hitting set for a path system} $\calQ$ if it hits every $Q\in\calQ$.
 
 Hitting sets are useful for compressing path systems. In particular, though a hitting set may be large, the extent to which a path system can be compressed depends on the \emph{local sparsity} of a hitting set with respect to \emph{significant paths} of $\calQ$. 
 Following \cite{highway2013}, for any $r>0$, we say a path $Q$ is $r$-significant $\ell(Q)>r$. For a given path-system $\calQ$, we denote $\calQ_r$ as the set of all $r$-significant paths in $\calQ$.
