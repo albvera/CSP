@@ -1,4 +1,4 @@
-In order to describe the main structure used to construct HL, we start with a discussion on efficient paths.
+%In order to describe the main structure used to construct HL, we start with a discussion on efficient paths.
 %Given a source-terminal pair $s,t$ and a budget $b$, we want to solve the problem
 %\begin{alignat*}{3}
 %&\text{min}   &&\quad \ell(P) \\
@@ -6,14 +6,16 @@ In order to describe the main structure used to construct HL, we start with a di
 %& &&\quad P \in \calP_{s,t}.
 %\end{alignat*}
 %Call $\dist(s,t|b)$ the minimum of this problem, potentially $+\infty$ if there is no feasible solution.
-Note that a solution to $\dist(s,t|b)$ is not necessarily efficient, i.e., there could be another path with the same length and lower cost.
-Additionally, the budget constraint may not be tight and there could be multiple minimizers. 
-As a consequence, a direct approach with EPHS would not work; there are potentially many more solutions than efficient paths.
+%Note that a solution to $\dist(s,t|b)$ is not necessarily efficient, i.e., there could be another path with the same length and lower cost.
+%Additionally, the budget constraint may not be tight and there could be multiple minimizers. 
+%As a consequence, a direct approach with EPHS would not work; there are potentially many more solutions than efficient paths.
 
-For a fixed parameter $B\in \N$, we construct a structure that allows to obtain $\dist(s,d|b)$ for any $b\leq B$.
-Additionally, we will always answer with an efficient path, so there could be a ``surplus of budget''.
-On an intuitive level, we create a graph with the following properties:
-\begin{enumerate}
+
+In order to convert the constrained highway dimension to hub labels, we first expand the original graph into an \emph{augmented graph} which 
+%For a fixed parameter $B\in \N$, we construct a structure that allows to obtain $\dist(s,d|b)$ for any $b\leq B$.
+%Additionally, we will always answer with an efficient path, so there could be a ``surplus of budget''.
+%On an intuitive level, we create a graph with the following properties:
+\begin{enumerate}[nosep]
 \item All paths starting from a given node are feasible, i.e., they satisfy the budget constraint.
 \item Efficient paths become shortest paths.
 \item The use of ``unnecessary resource'' is penalized, hence inefficient paths are not shortest.
