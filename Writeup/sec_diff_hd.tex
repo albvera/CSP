@@ -4,3 +4,38 @@ Second, we defined the path neighbourhood of a node $v$ to be the set of paths i
 These are weaker notions than the ones used in \cite{highway2013}. 
 
 \todo{finish this}. 
+
+\begin{proposition}\label{prop:treelike}
+For any $h$, we can construct a family of networks such that the sparsity of LSHS is $h$ and that of EPHS is arbitrarily worse than $h$.
+\end{proposition}
+\begin{proof}
+First, we construct an example where the sparsity grows from $h$ to $h^2$.
+Consider an $h$-ary tree rooted at $u$ with three levels, i.e., with $1+h+h^2$ nodes.
+Now add a node $v$ with $h$ children as in Figure~\ref{fig:treelike}. 
+The grandchildren of $v$ are the same as the grandchildren of $u$.
+
+All the edges are bidirectional and have unit cost.
+The lengths are as follows: $ux_i$ and $vy_i$ (dashed in Figure~\ref{fig:treelike}) are zero; $uv$ and from $y_i$ to the leafs is one; from $x_i$ to the leafs is three.
+It is easy to see that the sparsity of a LSHS is $h+1$.
+
+On the other hand, every leaf $w$ is a $2$-efficient path.
+Indeed, it can be extended to $x_iw$ that is the shortest path from $x_i$ to $w$ with constraint 1.
+All the leafs are in the ball $B_4(u)$, so the sparsity is at least $h^2$.
+
+\begin{figure}
+\caption{Example where the CHD is much larger than the HD}
+\label{fig:treelike}
+\centering
+\includegraphics[scale=0.6]{TexImg/Treelike.pdf}
+\end{figure}
+
+The general case works in the same fashion.
+We make the sparsity grow to $h^k$ by creating two complete, $k$-level, $h$-ary trees $T$ and $T'$.
+Connect the root of $T$ to the root of $T'$ and the leafs of both trees are shared.
+Observe that the number of nodes is 
+\begin{align*}
+n &=[\text{$k$-level $h$-ary tree}] + [\text{$(k-1)$-level $h$-ary tree}]\\
+&= \frac{h^{k+1}-1}{h-1} + \frac{h^k-1}{h-1},
+\end{align*}
+therefore the sparsity is $\Theta(n)$, the worst possible.
+\end{proof}
