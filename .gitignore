@@ -28,3 +28,5 @@ Writeup/.main_vldb.lb
 Writeup/main_vldb.fls
 
 Writeup/main_vldb.pdf
+
+*.~*

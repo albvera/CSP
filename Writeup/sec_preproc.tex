@@ -1,3 +1,4 @@
+\anote{maybe not a subsection of CSP? it applies to any path system (e.g. shortest paths)}
 It was shown in \cite{highway2013} that the set system of shortest paths has VC-dimension of $2$.
 More formally, paths $v_1v_2\ldots v_k$ are mapped to sets $\{v_1,\ldots,v_k\}$ and this new set system has small VC-dimension.
 Observe that, if $G$ is undirected, then each subset represents exactly two paths, namely the $(s,t)$-path and the $(t,s)$-path.
@@ -33,7 +34,7 @@ Observe that, for fixed $v\in V$, the set system $(E,\{\pi(Q):Q \in S_r(v)\})$ a
 Indeed, we know that exists $H_{v,r}\subseteq V$, $\card{H_{v,r}}\leq h$, hitting every path in $\Sf_r(v,\calQ)$ and in $\Sb_r(v,\calQ)$.
 The desired hitting set consists of all the edges adjacent to a node in $H_{v,r}$.
 
-If the minimum size of a set system is $s$ and the VC-dimension is $d$, then the algorithm in \todo{add reference} obtains, in polynomial time, a hitting set of size at most $\Or(sd\log(sd))$.
+If the minimum size of a set system is $s$ and the VC-dimension is $d$, then the algorithm in \cite{vc_dim_hitting} obtains, in polynomial time, a hitting set of size at most $\Or(sd\log(sd))$.
 In particular, we can use the algorithm to obtain a set $\tilde F_{v,r}\subseteq E$, of size at most $h'=\Or(h\Delta\log(h\Delta))$, hitting the set system $(E,\{\pi(Q):Q \in S_r(v)\})$ .
 
 Consider the set $F_{v,r}\subseteq V$ that contains all the endpoints of edges in $\tilde F_{v,r}$.

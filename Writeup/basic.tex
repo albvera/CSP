@@ -10,7 +10,7 @@ For any source-terminal pair $s,t\in V$, we denote by $\calP_{s,t}$ the set of a
 Throughout this work, we only consider simple paths, which for brevity, we henceforth refer to as paths.
 \sbedit{For convenience, we also assume that all paths have unique lengths -- since we allow path-lengths to take values in the reals, this can be ensured with minimal loss by small perturbations of the edge lengths.}
 
-The length $\ell(P)$ is the sum of edge lengths in $P$. We define a path with a single node $v$ to have length zero; note also that any path $P$ with more than one node has length at least $1$ (since $\ell:E\to \N_+$).
+The length $\ell(P)$ is the sum of edge lengths in $P$. We define a path with a single node $v$ to have length zero \anote{I think single nodes should not be considered paths, they are only relevant for the stronger version of HD }; note also that any path $P$ with more than one node has length at least $1$ (since $\ell:E\to \N_+$).
 For $s,t\in V$, the distance from $s$ to $t$, denoted $\dist(s,t)$, is the smallest length among all paths $P$ that start at $s$ and terminate at $t$.
 The distance from a node $v$ to a path $P$, denoted $\dist(v,P)$, is measured as the minimum distance from $v$ to a node $w\in P$.
 The distance to $v$, $\dist(P,v)$, is defined analogously~\footnote{Note that  $\dist(P,v)$ and  $\dist(v,P)$ need not be the same as the graph is directed.}.
