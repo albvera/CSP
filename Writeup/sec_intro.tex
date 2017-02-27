@@ -1,4 +1,4 @@
-%!TEX root = main_vldb.tex
+	%!TEX root = main_vldb.tex
 
 Assume each arc has, besides a certain length, an associated cost. 
 The problem of computing the shortest path, with cost at most a given value, is known to be NP-Hard.
@@ -7,7 +7,7 @@ A dynamic programming approach can compute the shortest path in pseudo-polynomia
 In the face of uncertainty, a natural problem is to compute the shortest path subject to a reliability constraint.
 We want to estimate how much time it will take to travel from $s$ to $t$, but, for the answer to be robust, we ask that the path exceeds the estimate with small probability.
 Formally, given $s,t$ and parameters $p,\delta$, the goal is to find an $(s,t)$-path $P$ minimizing $\E(\ell(P))$, but satisfying $\Pr(\ell(P)>\E(\ell(P))+\delta)\leq p$.
-This is a variant of the stochastic on time arrival (SOTA) problem \todo{add reference}.
+This is a variant of the stochastic on time arrival (SOTA) problem \cite{fan2005arriving}.
 We propose an approximate solution, which respects the reliability, but may not be optimal.
 Observe that, using Chebyshov's Inequality, $\Pr(X>\E(X)+\delta)\leq \Var(X)/\delta^2$, hence we can solve
 the problem 
@@ -52,6 +52,4 @@ Skeleton dimension \cite{skeleton}
 
 Survey on CSP \cite{csp_survey}
 
-SOTA problem with gaussian travel times solved by exhaustive search \cite{nikolova_gaussian}
-
-SOTA solved with discretization for directed acyclic graphs \cite{nikolova_discretization}
+SOTA problem with gaussian travel times solved by exhaustive search \cite{nikolova_gaussian}, optimal policy \cite{samaranayake2012speedup}, pre-processing \cite{sabran2014precomputation} anb solved with discretization for directed acyclic graphs \cite{nikolova_discretization}
