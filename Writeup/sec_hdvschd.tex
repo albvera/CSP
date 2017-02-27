@@ -41,13 +41,12 @@ therefore the sparsity is $\Theta(n)$, the worst possible.
 It is conjectured that road networks have small HD.
 Is there evidence to conjecture small CHD in these networks?
 We show how doubling dimension plus an additional property, defined bellow, do imply a positive answer.
-%A network is said to have doubling dimension $\alpha$ if, for any $r>0$, every ball of radius $2r$ can be covered by at most $\alpha$ balls of radius $r$ \anote{A tad vague because of forward and backward balls, I didn't find references with doubling dimension and directed graphs}.
 A path $P'$ \emph{partially witnesses} $P$ if $P'\subseteq P$ and $P'$ is ``long enough''.
 Formally, we define the following relation for path systems.
 
 \begin{definition}
-Let $\beta\geq 1$.
-We say that a path system $\calQ'$ is a $\beta$-witness of the path system $\calQ$ if, for every $Q\in\calQ$, exists $Q'\in\calQ'$ such that $Q'\subseteq Q$ and $\ell(Q')\geq \frac{1}{\beta}\ell(Q)$.
+Let $\beta\geq 0$.
+We say that a path system $\calQ'$ is a $\beta$-witness of the path system $\calQ$ if, for every $Q\in\calQ$, exists $Q'\in\calQ'$ such that $Q'\subseteq Q$ and $\ell(Q')\geq 2^{-\beta}\ell(Q)$.
 \end{definition}
 
 We explore first when the system of shortest paths $\calP$ is a partial witness for the system of efficient paths $\PE$.
@@ -55,25 +54,31 @@ At an intuitive level, the partial witness property says that efficient and shor
 As a consequence, an important node hitting numerous paths in $\calP$, should also hit many paths in $\PE$.
 The bad examples in Proposition~\ref{prop:treelike} exploit networks that do not have partial witnesses.
 We stress that doubling dimension depends only on $G$ and $\ell$; the partial witness property depends on the interplay between $G$, $c$ and $\ell$.
+To get a bound using the partial witness, we relax the condition and ask only for long efficient paths to be witnessed.
 
 \begin{proposition}\label{prop:doubling}
-Assume $G$ is $\alpha$-doubling and $\calP$ is a $\beta$-witness for $\PE$.
-If $(G,\ell)$ admits an $(h,r)$-LSHS for any $r$, then $(G,\ell,c)$ admits an $(\alpha^{\ceil{\log_2\beta}} h,r)$-EPHS for any $r$.
+Assume $G$ is $\alpha$-doubling and $\calP$ is a $\beta$-witness for $\PE_r$ for every $r\geq \beta/2$.
+If $(G,\ell)$ admits an $(h,r)$-LSHS for any $r$, then $(G,\ell,c)$ admits an $(\alpha^{\beta} h,r)$-EPHS for any $r$.
 \end{proposition}
 \begin{proof}
-Let $r>0$, we need to construct a hitting set $C^E$ for $\calP_r^E$.
-Define $k\defeq\ceil{\log_2\beta}$ and observe that $\frac{1}{\beta}\geq 2^{-k}$.
-Take $C$ as the hitting set for $\calP_{2^{-k}r}$, which is guaranteed to be sparse with respect to balls of radius $2^{-k+1}r$.
+For any $r$, we need to construct a hitting set $C^E$ for $\calP_r^E$.
+Assume first $r\geq\beta/2$.
+Take $C$ as the hitting set for $\calP_{2^{-\beta}r}$, which is guaranteed to be sparse with respect to balls of radius $2^{-\beta+1}r$.
 Define the desired set by
 \[
 C^E\defeq\{v\in C: v \text{ is in some $r$-efficient path} \}.
 \]
 
-Since $\calP$ is a $2^{-k}$-witness for $\PE$, $C^E$ is indeed a hitting set for $\PE_r$.
+Since $\calP$ is a $2^{-\beta}$-witness for $\PE$, $C^E$ is indeed a hitting set for $\PE_r$.
 We are only left to prove the sparsity.
-Take some $u\in V$, by doubling dimension we can cover $\Bf_{2r}(u)$ by at most $\alpha^k$ balls of radius $2^{-k+1}r$.
+Take some $u\in V$, by doubling dimension we can cover $\Bf_{2r}(u)$ by at most $\alpha^\beta$ balls of radius $2^{-\beta+1}r$.
 Each of these balls contains at most $h$ elements of $C$, therefore the sparsity is as claimed.
 The argument for backward balls is identical.
+
+Now we analyse the case $r<\beta/2$.
+It is no longer true that the efficient paths are witnessed, but now the neigborhoods are small.
+Since the edge lengths are integers, $\card{B_{2r}(v)}\leq \Delta^{2r}$.
+Take $C=V$ \todo{finish this}
 \end{proof}
 
 \begin{remark}
