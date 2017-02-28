@@ -1,11 +1,12 @@
+% !TEX root = main_vldb.tex
 \subsection{Practical algorithm}
-The augmented graph may contain a lot of unnecessary information.
+The augmented graph defined in section \ref{sec:augmented} may contain a lot of redundant information relative to the minimal representation.
 For example, the same efficient path $uv$ can be repeated many times in the form $\pp{u,1}\pp{v,0}$, $\pp{u,2}\pp{v,1}$ and so on.
-If there are not too many efficient paths, we can obtain considerable improvements both in query time and in data storage.
+By encoding this information more efficiently, we can reduce the size of the augmented graph and obtain considerable improvements both in query time and in data storage.
 
-The idea is to construct an augmented graph without duplicated information.
-The nodes are, as before, pairs $\pp{v,b}$, but an edge $(\pp{v,b},\pp{v',b'})$ is placed only if some efficient path uses it.
-In other words, if we let $\calP_{s,t}^E$ be the set of all efficient paths from $s$ to $t$, we take every $P\in \calP_{s,t}^E$ with cost $b\leq B$ and trace it in the augmented graph starting at $\pp{s,b}$ and ending at $\pp{t,0}$.
+We can construct an augmented graph without this duplicated information as follows.
+The nodes are, as before, pairs $\pp{v,b}$, but an edge $(\pp{v,b},\pp{v',b'})$ is placed only if the minimal set of efficient paths uses it.
+If we let $\calP_{s,t}^E$ be the set of all efficient paths from $s$ to $t$, we take every $P\in \calP_{s,t}^E$ with cost $b\leq B$ and trace it in the augmented graph only if it ends at $\pp{t,0}$. In other words, all efficient paths $P\in \calP_{s,t}^E$ can be represented by a set a set of efficient paths ending at $\pp{t,0}$. 
 
 \begin{definition}
 The pruned augmented graph is defined by $\Gp^B=(\Vp^B,\Ep^B)$, where
@@ -32,8 +33,8 @@ We omit the proof since it is identical as the one in Proposition~\ref{prop:HDau
 The HD of $\tilde\calP^B$ is $Bh_c$, where $h_c$ is the HD of $\PE$.
 \end{proposition}
 
-We use techniques described by \cite{hubimplem} together with an approach tailored for augmented graphs.
-The main idea is to use contraction hierarchies first, then define the forward hub of a node as the nodes visited during a contraction-based forward search.
+We use techniques described in \cite{hubimplem} combined with an approach tailored for augmented graphs.
+The main idea is to first use contraction hierarchies to get a node ranking and then define the forward hubs of a node as the nodes visited during a contraction-based forward search.
 The backward hub is defined analogously.
 These are valid hubs, since the highest rank node in a path is guaranteed to be in both hubs.
 
