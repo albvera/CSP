@@ -9,7 +9,7 @@ The hubs must satisfy the cover property: for every pair $\pp{s,b}$, $b\geq 0$, 
 As before, if the intersection contains many nodes, we take the one minimizing the quantity $\dist(\pp{s,b},\pp{u,x})+\dist(\pp{u,x},t^-)$.
 Additionally, if there is no such $\pp{u,x}$, then there exists no path, i.e., $\dist(s,t|b)=\infty$.
 
-The algorithm to construct the path is very simple if, as discussed in Section~\ref{sec:path_oracl}, we also store the first hop to every node in the hub.
+The algorithm to construct the path is very simple if, as discussed in \todo{reference}, we also store the first hop to every node in the hub.
 Assume we can answer queries of the form $SP(\pp{s,b},t^-)$ and output either ``not possible'' or a node $\pp{v,x}$ in the SP and the budget consumed.
 Consider the case when all the budget was used.
 We can find a node in the SP from $\pp{s,b}$ to $\pp{v,x}$ by running a query $SP(\pp{s,b-x},v^-)$.

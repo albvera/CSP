@@ -4,8 +4,7 @@ We now define the notions of hitting sets for path systems, and the highway dime
 Our presentation closely follows these works.
 However, we need to extend the definitions to directed graphs and general path systems for our purposes. 
 
-We define a \emph{path system} $\calQ$ as any \sbedit{downward-closed} collection of paths
-\sbedit{(by downward-closed, we mean that if $P\in\calQ$ and $P'\subset P$, then $P'\in\calQ$)}.
+We define a \emph{path system} $\calQ$ as any collection of paths.
 Given a set $C\subseteq V$ and a path $Q$, we say that $C$ \emph{hits} $Q$ if some node in $Q$ belongs to $C$. Moreover, we say that $C$ is a \emph{hitting set for a path system} $\calQ$ if it hits every $Q\in\calQ$.
 
 Hitting sets are useful for compressing path systems. In particular, though a hitting set may be large, the extent to which a path system can be compressed depends on the \emph{local sparsity} of a hitting set with respect to \emph{significant paths} of $\calQ$. 

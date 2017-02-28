@@ -41,7 +41,7 @@
 
 \newcommand{\defeq}{\coloneqq}
 
-%\newenvironment{proofof}[1]{\begin{proof}[{\rm\sc Proof of #1}]}{\end{proof}}
+
 
 %Additional commands
 \newcommand{\calP}{\mathcal{P}}							%Set of paths
@@ -70,6 +70,7 @@
 \newdef{definition}{Definition}
 \newdef{remark}{Remark}
 
+\newenvironment{proofof}[1]{\begin{proof}[{\rm\sc of #1}]}{\end{proof}}
 
 \begin{document}
 
@@ -184,6 +185,9 @@ The authors would like to thank Moritz Kobitzsch for sharing sanitized versions 
 \section{Contraction Hierarchies}
 \input{sec_ch.tex}
 
+\section{Proofs}
+\label{sec:proofs}
+\input{sec_proofs.tex}
 \end{appendix}
 
 \end{document}

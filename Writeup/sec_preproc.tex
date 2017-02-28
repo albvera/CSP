@@ -21,41 +21,11 @@ We denote $\pi(Q)$ the set of edges in a path $Q$.
 Given a system $\calQ$, the corresponding set system $(E,\{\pi(Q):Q\in\calQ\})$ has VC-dimension 2.
 \end{proposition}
 
-We now show how to obtain polynomial time preprocessing.
+We now stablish how to obtain polynomial time preprocessing.
 Specifically, the algorithms we use are based on the existence of $(h,2^i)$-LSHS.
-Assuming a system has HD $h$, we can obtain an approximation of these set, where the sparsity increases by the maximum degree $\Delta$. 
+Assuming a system has HD $h$, we can obtain an approximation of these set, where the sparsity increases by the maximum degree $\Delta$.
+The proof can be found in Section~\ref{sec:proofs}.
 
-\begin{proposition}
+\begin{proposition}\label{prop:poly_lshs}
 If a system $\calQ$ has HD $h$, for some $h'=\Or(h\Delta\log(h\Delta))$ there exists a polynomial time algorithm to obtain a $(h',r)$-LSHS.	
 \end{proposition}
-\begin{proof}
-Denote $S_r(v):=\Sf_r(v,\calQ)\cup\Sb_r(v,\calQ)$, i.e., $S_r(v)$ contains all the $r$-significant paths ``close'' to $v$. 
-Observe that, for fixed $v\in V$, the set system $(E,\{\pi(Q):Q \in S_r(v)\})$ admits a hitting set of size $h\Delta$.
-Indeed, we know that exists $H_{v,r}\subseteq V$, $\card{H_{v,r}}\leq h$, hitting every path in $\Sf_r(v,\calQ)$ and in $\Sb_r(v,\calQ)$.
-The desired hitting set consists of all the edges adjacent to a node in $H_{v,r}$.
-
-If the minimum size of a set system is $s$ and the VC-dimension is $d$, then the algorithm in \cite{vc_dim_hitting} obtains, in polynomial time, a hitting set of size at most $\Or(sd\log(sd))$.
-In particular, we can use the algorithm to obtain a set $\tilde F_{v,r}\subseteq E$, of size at most $h'=\Or(h\Delta\log(h\Delta))$, hitting the set system $(E,\{\pi(Q):Q \in S_r(v)\})$ .
-
-Consider the set $F_{v,r}\subseteq V$ that contains all the endpoints of edges in $\tilde F_{v,r}$.
-It follows that $F_{v,r}\subseteq V$ can be obtained in polynomial time and is a hitting set for $S_r(v)$ of size $\card{F_{v,r}}\leq 2h'$.
-
-Assume for now that we know the value of $h$.
-Note that the value $h'$ can be computed from $h$ and the guarantee given by the oracle, i.e., the constant inside the big-O.
-We construct the $(2h',r)$-LSHS iteratively.
-At each iteration $i$ we maintain the following invariant: $C_i$ hits every path in $\calQ_r$.
-In an iteration we check if $C_i$ is locally sparse, if not, we strictly reduce the cardinality of $C_i$ while maintaining the invariant.
-Start with $C_0=V$. 
-Let $B_{2r}(v):=\Bf_{2r}(v)\cup \Bb_{2r}(v)$.
-Assume $v\in V$ is such that $\card{B_{2r}(v)\cap C_i}>2h'$ and let $C_{i+1}:=(C_i\setminus B_{2r}(v))\cup F_{v,r} $.
-The cardinality strictly decreases and we only need to check the invariant.
-Consider the paths hit by nodes removed in $C_i$, this set is
-\begin{align*}
-&\hspace{-1cm}\{Q\in\calQ_r: Q\cap C_i\cap B_{2r}(v)\neq \varnothing\}\\
-&\subseteq \{Q\in\calQ_r: Q\cap B_{2r}(v)\neq \varnothing\} \subseteq S_r(v).
-\end{align*}
-Since $F_{v,r}$ hits $S_r(v)$, the proof is completed.
-
-If we do not know the value of $h$, we can do a doubling search for $h'$. 
-Indeed, if the guess of $h'$ is low, then at some point it could be that $\card{F_{v,r}}>2h'$, then we double $h'$ and restart the process.
-\end{proof}

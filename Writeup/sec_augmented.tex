@@ -1,17 +1,4 @@
-%In order to describe the main structure used to construct HL, we start with a discussion on efficient paths.
-%Given a source-terminal pair $s,t$ and a budget $b$, we want to solve the problem
-%\begin{alignat*}{3}
-%&\text{min}   &&\quad \ell(P) \\
-%&\text{s.t. } &&\quad  c(P) \leq b\\
-%& &&\quad P \in \calP_{s,t}.
-%\end{alignat*}
-%Call $\dist(s,t|b)$ the minimum of this problem, potentially $+\infty$ if there is no feasible solution.
-%Note that a solution to $\dist(s,t|b)$ is not necessarily efficient, i.e., there could be another path with the same length and lower cost.
-%Additionally, the budget constraint may not be tight and there could be multiple minimizers. 
-%As a consequence, a direct approach with EPHS would not work; there are potentially many more solutions than efficient paths.
-
-
-In order to convert the constrained highway dimension to hub labels, we first convert the original graph $G$ into an \emph{augmented graph} $G^B$ under which the efficient paths are now shortest paths in th
+In order to convert the constrained highway dimension to hub labels, we first convert the original graph $G$ into an \emph{augmented graph} $G^B$ under which the efficient paths are now shortest paths by enforcing the following properties
 %For a fixed parameter $B\in \N$, we construct a structure that allows to obtain $\dist(s,d|b)$ for any $b\leq B$.
 %Additionally, we will always answer with an efficient path, so there could be a ``surplus of budget''.
 %On an intuitive level, we create a graph with the following properties:
@@ -29,7 +16,7 @@ Finally, we create $n$ sink nodes, denoted $v^-$.
 
 
 \begin{definition}
-Given a network $(G,\ell)$ and $B\in\N$, the augmented version $(G^B,\ell)$, where $G^B=(V^B,E^B)$, is defined by
+Given a network $(G,\ell)$ and $B\in\N$, the augmented version $G^B=(V^B,E^B)$ is defined by
 \begin{align*}
 V^B &:=\crl*{\pp{v,b}: v\in V, b=0,1,\ldots,B}\cup\crl*{v^-:v\in V},\\
 E^B &:=\crl*{\pp{v,b}\pp{v',b'} : vv'\in E, b'=b-c_{vv'}, b'\geq 0}\cup E^{B}_{-},\\
@@ -43,20 +30,24 @@ The other lengths are preserved, i.e., $\ell(\pp{v,b},\pp{v',b'})=\ell(vv')$.
 \input{TexImg/augmented.tex}
 \end{figure}
 
-An illustration is presented in Figure~\ref{fig:augmented}.
+An illustration of the construction is presented in Figure~\ref{fig:augmented}.
 The original graph is on the left with labelled costs and unit lengths.
 On the right is the augmented version, the unlabelled lengths are $1$.
-We did not draw the links to the sinks $u^-,v^-$ in order to get a cleaner figure. 
+We did not draw the links to the sinks $u^-,v^-$ for exposition purposes. 
 
 \begin{remark}
 The edge costs are allowed to be zero, therefore the augmented graph may contain cycles.
 On the other hand, the dynamic programming approach requires a DAG \cite{alex_bicriteria}; the topological order is what ensures the efficiency of the algorithm.
 \end{remark}
 
+We map paths in $G^B$ to paths in $G$ in the intuitive way.
+The augmented path is projected by removing the budget labels and sink nodes.
+Formally,
+
 \begin{definition}
-Let $P=\pp{v_1,b_1}\pp{v_2,b_2}\ldots\pp{v_k,b_k}$ be a path in $G^B$.
-The projection of $P$, denoted $\bar P$, is the path in $G$ induced by $P$. 
-Formally, in the case $b_k\geq 0$, $\bar P:=v_1v_2\ldots v_k$ and $\bar P:=v_1v_2\ldots v_{k-1}$ in the case $b_k=-1$. 
+Let $P$ be a path in $G^B$.
+If $P$ is of the form $\pp{v_1,b_1}\ldots\pp{v_k,b_k}$, then the projection of $P$, denoted $\bar P$, is the path $\bar P\defeq v_1v_2\ldots v_k$.
+Analogously, if $P$ is of the form $\pp{v_1,b_1}\ldots\pp{v_k,b_k}v_{k}^-$, then $\bar P:=v_1\ldots v_{k}$. 
 \end{definition}
 
 
@@ -83,7 +74,7 @@ where the last expression is exactly $\ell(P)$.
 \end{proof}
 
 Using the previous result, we can construct LSHS in the augmented graph using the EPHS of the original graph.
-It is interesting that, assuming doubling dimension $\alpha$ and $\beta$-witness, we obtain sparsity of $\alpha^{\ceil{\log_2\beta}} hB$ and thus query times of $O(\alpha^{\ceil{\log_2\beta}} hB\log D)$.
+It is interesting that, assuming doubling dimension $\alpha$ and $\beta$-witness, we obtain sparsity of $\alpha^{\beta} hB$ and thus query times of $O(\alpha^{\beta} hB\log D)$ \anote{now the witness is defined later}.
 This is much better than the $O(Bn\Delta)$ of dynamic programming, but it is still pseudo-polynomial.
 We observe that the query time can be made strongly polynomial if and only if the Pareto frontier contains at most a poly-logarithmic number of points.
 See Section~\ref{sec:frontier} for a further discussion on this.

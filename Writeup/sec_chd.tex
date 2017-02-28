@@ -1,6 +1,6 @@
 We now turn to the problem of constructing hub-labels for finding constrained shortest-paths (and more particularly, for computing efficient paths) in $G$. 
 Recall we are interested in settings where each edge in the network is endowed with a length and a cost, where we assume all edge-costs are non-negative integers.
-Now, we want to develop a data-structure that supports fast queries for \emph{efficient paths}: given any pair $(s,t)$ and an (integer) budget $B$, we want to return a path $P\in \calP_{s,t}$ such that there is no other path $P'\in \calP_{s,t}$ with $\ell(P')\leq \ell(P)$ and $c(P')\leq c(P)$ (with at least one inequality strict). \sbedit{By our assumption of uniqueness of path lengths, an $(s,t,B)$ query always returns a unique efficient path.}
+Now, we want to develop a data-structure that supports fast queries for \emph{efficient paths}: given any pair $(s,t)$ and an (integer) budget $B$, we want to return a path $P\in \calP_{s,t}$ such that there is no other path $P'\in \calP_{s,t}$ with $\ell(P')\leq \ell(P)$ and $c(P')\leq c(P)$ (with at least one inequality strict). 
 
 
 As in Section \ref{ssec:hldef}, we will use hub labels to enable fast querying of  we discuss how if a graph $G$ has HD $\leq h$, then we can simultaneously bound the preprocessing time, storage requirements and query time of a certain algorithm for constructing hub-label as functions of $h$.
