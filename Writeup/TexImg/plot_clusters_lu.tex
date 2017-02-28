@@ -1,0 +1,18 @@
+\begin{tikzpicture}[trim axis left]
+\begin{axis}[
+	scale only axis,
+	height=6cm,
+	width=7cm,
+	xtick distance=100,
+	ytick distance=1,	
+	xmin = 100, xmax =1000,
+	xlabel={Number of clusters},
+	ylabel={},
+	every axis plot/.append style={ultra thick}]
+\addplot table {tab_avg_lu.dat};
+\addplot table {tab_max_lu.dat};
+\addplot table {tab_shorts_lu.dat};
+
+\legend{Avg hub size, Max hub size,\# shortcuts}
+\end{axis}
+\end{tikzpicture}

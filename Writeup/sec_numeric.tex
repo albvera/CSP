@@ -81,11 +81,11 @@ On Table~\ref{tab:sf_results} we present the results for different maximum budge
 The column for $B=0$ represents the original graph (without augmentation).
 The query times are measured as the average of 1000 random $s,t$ pairs, were the task is to recover $\dist(s,t|b)$ for every $b=0,1,\ldots,B$, i.e., the entire efficient frontier.
 
-\begin{table}\caption{Results for the San Francisco network}\label{tab:sf_results}
+\begin{table}\caption{Results for San Francisco}\label{tab:sf_results}
 \begin{center}
-\begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.1cm} | p{1.1cm} | }
+\begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.2cm} | p{1.2cm} | }
 \hline
-	B & Preproc [m] & Avg F Size & Avg B Size & Query Dij [ms] & Query HL [ms] \\ \hline
+	B & Preproc [m] & Avg F Size & Avg B Size & Query Dij [ms] & Query HL [ms] \\ \hline \hline
 	0 & 1 & 23 & 22 & 10.71 & 0.005 \\ \hline
 	5 & 5 & 17 & 28 & 74.71 & 0.02 \\ \hline
 	10 & 13 & 17 & 28 & 183.18 & 0.03 \\ \hline
@@ -97,33 +97,58 @@ The query times are measured as the average of 1000 random $s,t$ pairs, were the
 \end{center}
 \end{table}
  
+\begin{table}\caption{Results for Luxembourg City}\label{tab:lu4k_results}
+\begin{center}
+\begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.2cm} | p{1.2cm} |}
+\hline
+	B & Preproc  [m] & Avg F Size & Avg B Size & Query Dij [ms] & Query HL [ms] \\ \hline \hline
+	0 & 6 & 18 & 18 & 16.35 & 0.004 \\ \hline
+	5 & 23 & 14& 19 & 151.91 & 0.019 \\ \hline
+	10 & 36 & 14 & 19 & 305.33 & 0.021 \\ \hline
+	15 & 51 & 14& 19 & 490.75 & 0.024 \\ \hline
+	20 & 69 & 14 & 19 & 808.90 & 0.030 \\ \hline
+	25 & 89 & 14 & 19 & 1016.71 & 0.034 \\ \hline
+	30 & 101 & 14& 19 & 1144.07 & 0.032 \\ \hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\begin{figure}\caption{Luxembourg City with different clusters}\label{fig:clusters_lu}
+\hfill
+\input{TexImg/plot_clusters_lu.tex}
+\end{figure}
+
+\begin{figure}\caption{San Francisco with different clusters}\label{fig:clusters_sf}
+\hfill
+\input{TexImg/plot_clusters_sf.tex}
+\end{figure}
 
 
-\begin{figure}\label{fig:map_LU} \caption{Significance in Luxembourg City}
+\begin{figure}\caption{Significance in Luxembourg City}\label{fig:map_LU} 
 \begin{center}
 \includegraphics[scale=0.37]{TexImg/map_LU_sig.png}
 \end{center}
 \end{figure}
 
-\begin{figure}\label{fig:SF_bwd_size} \caption{Size of backward hubs, $B=25$}
+\begin{figure} \caption{Size of backward hubs, $B=25$}\label{fig:SF_bwd_size}
 \begin{center}
 \includegraphics[scale=0.5]{TexImg/SF_bwd_hub_size.pdf}
 \end{center}
 \end{figure}
 
-\begin{figure}\label{fig:SF_query_dij} \caption{Histogram Dijkstra queries, $B=25$}
+\begin{figure} \caption{Histogram Dijkstra queries, $B=25$}\label{fig:SF_query_dij}
 \begin{center}
 \includegraphics[scale=0.5]{TexImg/SF_query_dij_B25.pdf}
 \end{center}
 \end{figure}
 
-\begin{figure}\label{fig:SF_query_hl} \caption{Histogram HL queries, $B=25$}
+\begin{figure} \caption{Histogram HL queries, $B=25$}\label{fig:SF_query_hl}
 \begin{center}
 \includegraphics[scale=0.5]{TexImg/SF_query_hl_B25.pdf}
 \end{center}
 \end{figure}
 
-\begin{figure}\label{fig:SF_hub_size_map} \caption{Map of backward size, $B=25$}
+\begin{figure} \caption{Map of backward size, $B=25$}\label{fig:SF_hub_size_map}
 \begin{center}
 \includegraphics[clip, trim=2cm 1cm 5cm 2cm,scale=0.8]{TexImg/SF_hub_sizes.pdf}
 \includegraphics[clip, trim=13cm 0cm 1.1cm 0cm,scale=0.55]{TexImg/SF_hub_sizes.pdf}
