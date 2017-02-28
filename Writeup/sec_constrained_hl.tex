@@ -4,7 +4,7 @@ We explain how to create the HL and use them to answer the value of $\dist(s,t|b
 Afterwards we show how to use the previous to reconstruct the desired path in linear time.
 
 Nodes $\pp{v,b}$ have associated a forward hub $\Lf(\pp{v,b})\subseteq V^B$.
-A sink node has a backward hub $\Lb(u^-)\subseteq V^B$.
+A sink node has a reverse hub $\Lb(u^-)\subseteq V^B$.
 The hubs must satisfy the cover property: for every pair $\pp{s,b}$, $b\geq 0$, and $t^-$, there exists a node in $\pp{u,x}\in L(\pp{s,b})^+\cap L(t^-)^-$ such that $\pp{u,x}$ is in the shortest path from $\pp{s,b}$ to $t^-$.
 As before, if the intersection contains many nodes, we take the one minimizing the quantity $\dist(\pp{s,b},\pp{u,x})+\dist(\pp{u,x},t^-)$.
 Additionally, if there is no such $\pp{u,x}$, then there exists no path, i.e., $\dist(s,t|b)=\infty$.
@@ -36,7 +36,7 @@ L(u^-)^-  &:= \bigcup_{i=1}^{\log D} C_i^B\cap \Bb_{2^i}(u^-).
 \end{align*}
 The cover property is proved as in Theorem~\ref{theo:construct_hl}, we just bound the size here.
 The number of elements in each forward hub is as claimed because $ \card{C_i^B\cap \Bf_{2^i}(\pp{v,b})}\leq bh_c$.
-For a backward hub we use that
+For a reverse hub we use that
 \begin{align*}
 \Bb_{2^i}(u^-) &= \{\pp{v,x}: \exists P\in \calP_{v,u}, c(P)=x, \ell(P)\leq 2^i\}\\
 &\subseteq \Bb_{2^i}(u)\times \{0,1,\ldots,B\}.
@@ -50,10 +50,10 @@ Using the HL given by Theorem~\ref{theo:HLeff}, we can implement queries for $s,
 The total space requirement is $O(nB \cdot Bh_c\log D)$.
 \end{proposition}
 \begin{proof}
-The backward hub for a sink $u^-$ has at most $Bh_c\log D$ nodes.
+The reverse hub for a sink $u^-$ has at most $Bh_c\log D$ nodes.
 For each such node $\pp{v,b}\in\Lb(u^-)$ we store: the distance to the sink $\dist(v,u|b)$ and the efficient cost, i.e., we know how much surplus there is.
 In the case of forward hub for a node $\pp{u,b}$ we store only distances.
 
-To perform a query for $s,t,b$, we look only for nodes $\pp{u,x}$ with $x\leq b$ in the backward hub of $t^-$ \anote{this requires a data structure to know the level of each node, but I guess it's clear from the context}.
+To perform a query for $s,t,b$, we look only for nodes $\pp{u,x}$ with $x\leq b$ in the reverse hub of $t^-$ \anote{this requires a data structure to know the level of each node, but I guess it's clear from the context}.
 As we compare two ordered lists of size at most $h_cb\log D$, the result follows.
 \end{proof}
