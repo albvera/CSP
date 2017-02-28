@@ -25,18 +25,28 @@ We give now the formal description of the augmented graph.
 Consider nodes as pairs of the form $\pp{v,b}$. 
 This encodes the information of remaining resource $b\geq 0$ and location $v\in V$.
 A node is connected to neighbours (according to $E$) as long as the remaining resource of that transition is non-negative.
-Finally, we create $n$ sink nodes, denoted $\pp{v,-1}$.
+Finally, we create $n$ sink nodes, denoted $v^-$.
+
 
 \begin{definition}
 Given a network $(G,\ell)$ and $B\in\N$, the augmented version $(G^B,\ell)$, where $G^B=(V^B,E^B)$, is defined by
 \begin{align*}
-V^B &:=\{\pp{v,b}: v\in V, b=-1,0,1,\ldots,B\},\\
-E^B &:=\{\pp{v,b}\pp{v',b'} : vv'\in E, b'=b-c_{vv'}, b'\geq 0\}\cup E^{B}_{-},\\
-E^{B}_{-} &:= \{\pp{v,b}\pp{v,-1}: v\in V, B\geq b\geq 0\}.
+V^B &:=\crl*{\pp{v,b}: v\in V, b=0,1,\ldots,B}\cup\crl*{v^-:v\in V},\\
+E^B &:=\crl*{\pp{v,b}\pp{v',b'} : vv'\in E, b'=b-c_{vv'}, b'\geq 0}\cup E^{B}_{-},\\
+E^{B}_{-} &:= \crl*{\pp{v,b}v^-: v\in V, B\geq b\geq 0}.
 \end{align*}
-The lengths to sink nodes are $\ell(\pp{v,b},\pp{v,-1})=\frac{1}{b+1}$.
+The lengths to sink nodes are $\ell(\pp{v,b},v^-)=\frac{1}{b+1}$.
 The other lengths are preserved, i.e., $\ell(\pp{v,b},\pp{v',b'})=\ell(vv')$.
 \end{definition}
+
+\begin{figure}\caption{Example of an augmented graph}\label{fig:augmented}
+\input{TexImg/augmented.tex}
+\end{figure}
+
+An illustration is presented in Figure~\ref{fig:augmented}.
+The original graph is on the left with labelled costs and unit lengths.
+On the right is the augmented version, the unlabelled lengths are $1$.
+We did not draw the links to the sinks $u^-,v^-$ in order to get a cleaner figure. 
 
 \begin{remark}
 The edge costs are allowed to be zero, therefore the augmented graph may contain cycles.
@@ -51,18 +61,18 @@ Formally, in the case $b_k\geq 0$, $\bar P:=v_1v_2\ldots v_k$ and $\bar P:=v_1v_
 
 
 \begin{proposition}\label{prop:shorteffic}
-A shortest path from $\pp{s,b}$ to a sink node $\pp{t,-1}$ projects to an efficient path in $G$ solving $\dist(s,t|b)$. 
+A shortest path from $\pp{s,b}$ to a sink node $t^-$ projects to an efficient path in $G$ solving $\dist(s,t|b)$. 
 \end{proposition}
 \begin{proof}
-Let $P$ be the shortest path from $\pp{s,b}$ to $\pp{t,-1}$.
-To reach $\pp{t,-1}$, $P$ must pass trough some $\pp{t,b'}$, $b'\geq 0$.
+Let $P$ be the shortest path from $\pp{s,b}$ to $t^-$.
+To reach $t^-$, $P$ must pass trough some $\pp{t,b'}$, $b'\geq 0$.
 By construction, $P$ consumes $b-b'$ units of resource, hence it is feasible.
 Note that $\bar P$ is the shortest among $(s,t)$-paths with cost $b-b'$.
 
 Assume, by way of contradiction, that $\bar P$ is not efficient.
 As $\bar P$ is the shortest using $b-b'$ units of resource, there exists $P'$ such that $\ell(\bar P')\leq \ell(\bar P)$ and $c(\bar P')< c(\bar P)$.
 It must be that $P'$ passes through $\pp{t,b''}$, with $b''>b'$.
-We argue that, in this case, $P$ would not be a shortest path to $\pp{t,-1}$.
+We argue that, in this case, $P$ would not be a shortest path to $t^-$.
 Indeed, 
 \[
 \ell(P')=\ell(\bar P')+\frac{1}{1+b''}

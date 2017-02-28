@@ -11,9 +11,9 @@ import os
 if __name__ == '__main__':
 	this_dir = os.path.dirname(os.path.realpath('__file__'))
 
-	name = "LU_costs_3210"
-	technique = "partial_prune"			#frontier, full_prune, partial_prune
-	runs = [10,20,30]
+	name = "LU_costs_50"
+	technique = "frontier"			#frontier, full_prune, partial_prune
+	runs = [5,10,15,20,25,30]
 	C_dir = os.path.join(this_dir,'Data/LU_data_C')
 	
 	G_dir = os.path.join(this_dir,'Data/{}'.format(name))
