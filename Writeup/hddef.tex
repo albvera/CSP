@@ -20,11 +20,10 @@ Following \cite{highway2013}, for any $r>0$, we say a path $Q$ is $r$-significan
 \end{definition}
 
 
-The existence of $(h,r)$-LSHS enables the compression of path-system $\calQ$ via the construction of \emph{hub labels} (cf. Section~\ref{ssec:hldef}). Moreover, a natural greedy algorithm gives hitting sets with local-sparsity $h\log n$ in polynomial time. 
+The existence of $(h,r)$-LSHS enables the compression of path-system $\calQ$ via the construction of \emph{hub labels} (cf. Section~\ref{ssec:hldef}). However, existence is not sufficient to guarantee efficient computation. 
+To circumvent this, Abraham et al.~\cite{highway2013} introduced the notion of the \emph{highway dimension} -- a property of the graph which ensures both existence and efficient computation of LSHS. 
 
-\sbnote{Need an algorithm + lemma here}
-
-To find hitting sets which are independent of $n$,~Abraham et al.~\cite{highway2013} introduced the notion of the \emph{highway dimension}. We first need two additional definitions:
+We first need two additional definitions:
 for $v\in V, r>0$, we define the \emph{forward and reverse path-neighborhoods} with respect to path-system $\calQ$ as 
 \begin{align*}
 S_r^+(v,\calQ) &\defeq\crl*{Q\in\calQ_r: \dist(v,Q)\leq 2r}, \\  
@@ -43,7 +42,7 @@ However, if $G$ has $HD\leq h$, then this guarantees the existence of a $(h,r)$-
 \begin{proposition}
 If the path system $\calQ$ has HD $h$, then, $\forall\,r>0$, there exists an $(h,r)$-LSHS.
 \end{proposition}
-This follows directly from Theorem 4.2 in \cite{highway2013}, which showed it for the shortest-path system. Moreover, as we discuss in Section~\ref{sec:preproc}, if $G$ has HD$\leq h$, then this permits the construction of a $(h\log h,r)$-LSHS in polynomial time.
+This follows directly from Theorem 4.2 in \cite{highway2013}, which showed it for the shortest-path system. More importantly, as we discuss in Section~\ref{sec:preproc}, if $G$ has HD$\leq h$, then this permits efficient computation of locally-spare hitting sets; in particular, for any $r$, a simple greedy algorithm gives an $(h\log n,r)$-LSHS, and a more complex algorithm (which is still poly-time) gives an $(h\log h,r)$-LSHS.
 
 
 Finally, we note that for pedagogical reasons, Definition~\ref{def:hddef} differs slightly from \cite{highway2013}; in particular, we consider a less restrictive definition of path neighborhoods (albeit for general path systems) that is appropriate for our needs. Consequently the highway dimension as returned by our definition is smaller than that of \cite{highway2013}~\footnote{In particular, unlike \cite{highway2013}, the HD of $G$ as per our definition is not an upper bound to the maximum degree $\Delta$ or the doubling dimension $\alpha$.}.

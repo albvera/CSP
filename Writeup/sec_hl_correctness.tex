@@ -12,7 +12,7 @@ In the case that $t$ is not reachable from $s$, it must be that $\Lf(s)\cap\Lb(t
 
 With the aid of the cover property, we can obtain $\dist(s,t)$ by searching for the minimum value of $\dist(s,w)+\dist(w,t)$ over all nodes $w\in\Lf(s)\cap\Lb(t)$.
 If the hubs are sorted by ID, this can be done in time $\Or(\card{\Lf(s)}+\card{\Lb(t)})$ via a single sweep.
-Moreover, by storing the second node in $P(v,w)$ for each $w\in \Lf(s)$, and the second node in $P(w,v)$ for each $w\in \Lb(s)$, we can also recover the shortest path.
+Moreover, by storing the second node in $P(s,w)$ for each $w\in \Lf(s)$, and the second-last node in $P(w,t)$ for each $w\in \Lb(t)$, we can also recover the shortest path.
 Now, each time we run a HL query, we find at least one new node $w\in P(s,t)$, $w\neq s,t$, is returned; we can then recurse to find subpaths $P(s,w)$ and $P(w,t)$.
 Note that we need to store this extra information, as otherwise, we could have $\Lf(s)\cap\Lb(t)=\{s\}$.
 Let $\Lm \defeq \max_v\abs*{L(v)}$ be the size of the maximum HL; then the per-node storage requirement is proportional to $\Lm$, while the query time is proportional to $\Lm\cdot P(s,t)$.
@@ -43,7 +43,5 @@ Finally, we need to compute the desired multi-scale LSHS in polynomial time.
 As we mention before, a greedy algorithm returns a $\Or(h\log n)$ approximation to any $(h,r)$-LSHS; however if the HD $\leq h$, this can be improved to obtain a $\Or(h\Delta\log(h\Delta))$ approximation; this argument, which extends Corollary 7.3 in \cite{highway2013}, is presented in Section~\ref{sec:preproc}.
 %\sbnote{The results will still carry out, but one needs to replace $h$ for this approximation when talking about polynomial time preprocessing.}
 A more subtle point is that the resulting algorithm, even though admitting a polynomial time guarantee, is impractical for large networks; in Section~\ref{sec:numeric}, we discuss heuristics that work better in practice.
-
-\anote{We had a discussion of distance oracles vs path oracles here, we don't want it?}
 
 %On the other hand, the greedy algorithm also poses some restrictions. It involves an all shortest path computation, so it can be done either with (i) $\Omega(n^2)$ memory and $\Omega(n^3)$ time or (ii) $\Or(n)$ memory and $\Omega(n^3\log n)$ time. \todo{double check these times}. \anote{More on this?} Given the previous restrictions, we use instead a heuristic for the approximation. We compute only $k<<n$ shortest path trees, leading to $\Or(kn)$ memory and $\Or(kn^2)$. It is an open problem to determine the approximation guarantee of this algorithm. For more details refer Section \ref{}.

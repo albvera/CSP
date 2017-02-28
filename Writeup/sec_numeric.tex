@@ -54,7 +54,7 @@ If $w$ is in the forward search of $v$ with distance $d$, it might be that $\dis
 When $\dist(v,w)<d$, we can safely remove $w$ from the hub of $v$, since the highest ranked node in a shortest path will have the correct distance.
 We describe now the process in the following steps.
 
-\begin{enumerate}
+\begin{enumerate}[nosep]
 \item Compute the shortest paths in $G$ and obtain a cover $C$
 \item Compute the pruned augmented graph $\tilde G_B$
 \item Contract $\tilde G_B$ using the rank given by $C$
