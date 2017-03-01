@@ -75,14 +75,14 @@ To compute the SP cover we follow the exhibition in \cite{hubimplem}.
 We evaluated the performance of our algorithms with real-world test networks: a small San Francisco network with 2643 nodes and 6588 edges for which real-world travel-time data was available as a Gaussian mixture model \cite{sf_data}, and a second (relatively larger) Luxembourg network with 30647 nodes and 71655 edges for which travel-time distributions were synthesized from road speed limits \cite{niknami2016tractable}, as real-world data was unavailable.
 Additionally, we tested on the subgraph corresponding to Luxembourg City with 4026 nodes and 9282 edges.
 
-The first experiment was on San Francisco.
-We used the following cost structure.
-The 10\% edges with the highest variance are assigned cost 1, the rest cost 0.
+In our experiments, we use the mean travel times for our length function and the following cost structure. The 10\% edges with the highest variance are assigned cost 1 and the rest cost 0.
+
+\subsubsection{Runtime performance}
 On Table~\ref{tab:sf_results} we present the results for different maximum budgets $B$.
 The column for $B=0$ represents the original graph (without augmentation).
 The query times are measured as the average of 1000 random $s,t$ pairs, were the task is to recover $\dist(s,t|b)$ for every $b=0,1,\ldots,B$, i.e., the entire efficient frontier.
 
-\begin{table}\caption{Results for San Francisco}\label{tab:sf_results}
+\begin{table}[htb]
 \begin{center}
 \begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.2cm} | p{1.2cm} | }
 \hline
@@ -106,10 +106,11 @@ The query times are measured as the average of 1000 random $s,t$ pairs, were the
 30-f & 63 & 73 & 28 & 151.27 & 0.01  \\
 30-p & 32 & 84 & 28 & 161.99 & 0.01  \\\hline
 \end{tabular}
+\caption{Results for San Francisco. Specify the parameters. }\label{tab:sf_results}
 \end{center}
 \end{table}
  
-\begin{table}\caption{Results for Luxembourg City}\label{tab:lu4k_results}
+\begin{table}[htb]
 \begin{center}
 \begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.2cm} | p{1.2cm} |}
 \hline
@@ -128,44 +129,55 @@ The query times are measured as the average of 1000 random $s,t$ pairs, were the
 	30 & 101 & 14& 19 & 1144.07 & 0.032 \\ 
 	30-p & 93 & 62 & 19 & 272.40 & 0.010 \\ \hline
 \end{tabular}
+\caption{Results for Luxembourg City. Specify the parameters.}\label{tab:lu4k_results}
 \end{center}
 \end{table}
 
-\begin{figure}\caption{Luxembourg City with different clusters}\label{fig:clusters_lu}
-\hfill
-\input{TexImg/plot_clusters_lu.tex}
-\end{figure}
 
-\begin{figure}\caption{San Francisco with different clusters}\label{fig:clusters_sf}
-\hfill
-\input{TexImg/plot_clusters_sf.tex}
-\end{figure}
-
-
-\begin{figure}\caption{Significance in Luxembourg City, frontier, $B=25$}\label{fig:map_LU} 
-\begin{center}
-\includegraphics[scale=0.37]{TexImg/map_LU_sig.png}
-\end{center}
-\end{figure}
-
-\begin{figure} \caption{Size of backward hubs SF, frontier, $B=25$}\label{fig:SF_bwd_size}
-\begin{center}
-\includegraphics[scale=0.5]{TexImg/SF_bwd_hub_size.pdf}
-\end{center}
-\end{figure}
-
-\begin{figure} \caption{Histogram frontier queries, Dijkstra (left) and HL (right). $B=25$}\label{fig:SF_query}
+\begin{figure}[htb]
 \begin{center}
 \includegraphics[clip, trim=0.6cm 0.3cm 1.2cm 0.8cm,scale=0.3]{TexImg/SF_query_dij_B25.pdf}
 \includegraphics[clip, trim=0.9cm 0.3cm 1.1cm 0.8cm,scale=0.3]{TexImg/SF_query_hl_B25.pdf}
 \end{center}
+\caption{Histogram frontier queries, Dijkstra (left) and HL (right). $B=25$}\label{fig:SF_query}
 \end{figure}
 
 
+\subsubsection{Clustering}
 
-\begin{figure} \caption{Map of backward size, $B=25$}\label{fig:SF_hub_size_map}
+\begin{figure}[htb]
+\hfill
+\input{TexImg/plot_clusters_lu.tex}
+\caption{Luxembourg City with different clusters}\label{fig:clusters_lu}
+\end{figure}
+
+\begin{figure}[htb]
+\hfill
+\input{TexImg/plot_clusters_sf.tex}
+\caption{San Francisco with different clusters}\label{fig:clusters_sf}
+\end{figure}
+
+\subsubsection{Hub sizes and node significance}
+
+\begin{figure}[htb]
+\begin{center}
+\includegraphics[scale=0.37]{TexImg/map_LU_sig.png}
+\end{center}
+\caption{Significance in Luxembourg City, frontier, $B=25$}\label{fig:map_LU} 
+\end{figure}
+
+\begin{figure}[htb] 
+\begin{center}
+\includegraphics[scale=0.5]{TexImg/SF_bwd_hub_size.pdf}
+\end{center}
+\caption{Size of backward hubs SF, frontier, $B=25$}\label{fig:SF_bwd_size}
+\end{figure}
+
+
+\begin{figure}[htb] 
 \begin{center}
 \includegraphics[clip, trim=1.7cm 2.2cm 4.7cm 1.7cm,scale=0.8]{TexImg/SF_hub_sizes.pdf}
 \includegraphics[clip, trim=13cm 0cm 1.1cm 0cm,scale=0.45]{TexImg/SF_hub_sizes.pdf}
 \end{center}
+\caption{Map of backward size, $B=25$}\label{fig:SF_hub_size_map}
 \end{figure}
