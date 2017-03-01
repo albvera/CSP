@@ -1,5 +1,5 @@
-We now turn to the problem of constructing hub-labels for finding constrained shortest-paths (and more particularly, for computing efficient paths) in $G$. 
-Recall we are interested in settings where each edge in the network is endowed with a length and a cost, where we assume all edge-costs are non-negative integers.
+We now turn to the problem of constructing hub-labels for constrained shortest-paths queries (and in particular, for computing efficient paths) in $G$. 
+Recall we are interested in settings where edges are endowed with lengths and costs, and wherein all edge-costs are non-negative integers.
 Now, we want to develop a data-structure that supports fast queries for \emph{efficient paths}: given any pair $(s,t)$ and an (integer) budget $B$, we want to return a path $P\in \calP_{s,t}$ such that there is no other path $P'\in \calP_{s,t}$ with $\ell(P')\leq \ell(P)$ and $c(P')\leq c(P)$ (with at least one inequality strict). 
 
 
