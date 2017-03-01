@@ -1,9 +1,10 @@
+%!TEX root = main_vldb.tex
 We now turn to the problem of constructing hub-labels for constrained shortest-paths queries (and in particular, for computing efficient paths) in $G$. 
-Recall we are interested in settings where edges are endowed with lengths and costs, and wherein all edge-costs are non-negative integers.
-Now, we want to develop a data-structure that supports fast queries for \emph{efficient paths}: given any pair $(s,t)$ and an (integer) budget $B$, we want to return a path $P\in \Pst$ such that there is no other path $P'\in \Pst$ with $\ell(P')\leq \ell(P)$ and $c(P')\leq c(P)$ (with at least one inequality strict). 
+Recall we are interested in settings where edges contain both lengths and costs, and wherein all edge-costs are non-negative integers.
+Now, we want to develop a data-structure that supports fast queries for \emph{efficient paths}. 
 
 
-As in Section \ref{ssec:hldef}, we will use hub labels to enable fast querying of  we discuss how if a graph $G$ has HD $\leq h$, then we can simultaneously bound the preprocessing time, storage requirements and query time of a certain algorithm for constructing hub-label as functions of $h$.
+As in Section \ref{ssec:hldef}, if a graph $G$ has HD $\leq h$, we discuss how we can simultaneously bound the preprocessing time, storage requirements and query time of a certain algorithm for constructing hub-labels, as functions of $h$.
 This suggests that for the construction of provably efficient HL for the CSP problem, one needs to define an analogous property for the set of \emph{efficient paths}.
 To this end, we have
 \begin{definition}
