@@ -1,6 +1,6 @@
 % !TEX root = main_vldb.tex
 \label{sec:augmented}
-In order to convert the constrained highway dimension to hub labels, we first convert the original graph $G$ (with length and cost functions) into an \emph{augmented graph} $G^B$ with only edge lengths, such that the \emph{efficient paths of $G$ are in bijection with the shortest paths of $G^B$}, i.e. it satisfies
+In order to link the constrained highway dimension to hub labels, we first convert the original graph $G$ (with length and cost functions) into an \emph{augmented graph} $G^B$ with only edge lengths, such that the \emph{efficient paths of $G$ are in bijection with the shortest paths of $G^B$}, i.e. it satisfies
 \begin{enumerate}[nosep]
 \item All paths starting from a given node are feasible, i.e., they satisfy the budget constraint in $G$.
 \item Efficient paths become shortest paths.
@@ -10,7 +10,8 @@ We achieve this as follows: Each node in $G^B$ is of the form $\pp{v,b}$, which 
 A node is connected to neighbors (according to $E$) as long as the remaining budget of that transition is non-negative.
 Finally, we create $n$ sink nodes, denoted $v^-$, and connect node $\pp{v,b}$ to $v^-$ with length $1/(b+1)$.
 An illustration of the construction is presented in Figure~\ref{fig:augmented}.
-Formally, we have
+The following definition formalizes this. 
+
 \begin{definition}
 Given a network $(G,\ell)$ and $B\in\N$, the augmented version $G^B=(V^B,E^B,\ell^B)$ is defined by
 \begin{align*}
@@ -18,14 +19,12 @@ V^B &\defeq\crl*{\pp{v,b}: v\in V, b=0,1,\ldots,B}\cup\crl*{v^-:v\in V},\\
 E^B &\defeq\crl*{(\pp{v,b},\pp{v',b'}) : vv'\in E, b'=b-c_{vv'}, b'\geq 0}\cup E^{B}_{-},\\
 E^{B}_{-} &\defeq \crl*{(\pp{v,b},v^-): v\in V, B\geq b\geq 0}
 \end{align*}
-and with length function $\ell^B(\cdot)$
+and with length function $\ell^B(\cdot)$,
 \begin{align*}
 \ell^B(\pp{v,b},v^-) \defeq \frac{1}{b+1}\;,\;
-\ell^B(\pp{v,b},\pp{v',b'}) \defeq \ell(vv')
+\ell^B(\pp{v,b},\pp{v',b'}) \defeq \ell(vv').
 \end{align*}
 \end{definition}
-
-
 
 \begin{figure}
 \input{TexImg/augmented.tex}
@@ -34,8 +33,7 @@ and with length function $\ell^B(\cdot)$
 \label{fig:augmented}
 \end{figure}
 
-
-Paths in $G^B$ are mapped to paths in $G$ in the intuitive way, by removing the budget labels and sink nodes. Formally
+Paths in $G^B$ are mapped to paths in $G$ in the intuitive way, by removing the budget labels and sink nodes.
 \begin{definition}
 Let $P$ be a path in $G^B$.
 If $P$ is of the form $\prn*{\pp{v_1,b_1},\ldots,\pp{v_k,b_k}}$, then the projection of $P$, denoted $\bar P$, is the path $\bar P\defeq v_1v_2\ldots v_k$.

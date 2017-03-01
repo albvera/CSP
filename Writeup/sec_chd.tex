@@ -1,16 +1,16 @@
+%!TEX root = main_vldb.tex
 We now turn to the problem of constructing hub-labels for constrained shortest-paths queries (and in particular, for computing efficient paths) in $G$. 
-Recall we are interested in settings where edges are endowed with lengths and costs, and wherein all edge-costs are non-negative integers.
-Now, we want to develop a data-structure that supports fast queries for \emph{efficient paths}: given any pair $(s,t)$ and an (integer) budget $B$, we want to return a path $P\in \Pst$ such that there is no other path $P'\in \Pst$ with $\ell(P')\leq \ell(P)$ and $c(P')\leq c(P)$ (with at least one inequality strict). 
+Recall we are interested in settings where edges contain both lengths and costs, and wherein all edge-costs are non-negative integers.
+Now, we want to develop a data-structure that supports fast queries for \emph{efficient paths}. 
 
 
-As in Section \ref{ssec:hldef}, we will use hub labels to enable fast querying of  we discuss how if a graph $G$ has HD $\leq h$, then we can simultaneously bound the preprocessing time, storage requirements and query time of a certain algorithm for constructing hub-label as functions of $h$.
+As in Section \ref{ssec:hldef}, if a graph $G$ has HD $\leq h$, we discuss how we can simultaneously bound the preprocessing time, storage requirements and query time of a certain algorithm for constructing hub-labels, as functions of $h$.
 This suggests that for the construction of provably efficient HL for the CSP problem, one needs to define an analogous property for the set of \emph{efficient paths}.
-To this end, we have
 \begin{definition}
 \textbf{(Constrained Highway Dimension)}\\ The constrained highway dimension (CHD) of $(G,\ell,c)$, denoted $h_c$, is the HD of the efficient-path system $\PE$.
 \end{definition}
 Note that every shortest path is efficient, and thus $h_c\geq h$ (where $h$ is the HD of $G$ under shortest paths).
 
 
-We now have two main issues with this definition: First, it is unclear how this can be used to get hub labels, and second, it is unclear how the corresponding hub labels compare with those for shortest-path computations. To circumvent this, we first convert efficient paths in $G$ to shortest paths in a larger \emph{augmented graph}. In Section \ref{ssec:hlcsp}, we use this to construct hub labels for CSP queries whose storage and query complexity can be bounded as $Bh_c$ (which can be strengthened further to $g(b)h_c$, where $g(b)$ is measure of the size of the Pareto frontier; cf. Section~\ref{sec:frontier}.). Finally, in Section \ref{ssec:hdvschd}, we show that the hub labels for CSP queries can in fact be related to the hub labels for SP queries under an additional natural condition on the efficient paths.
+We now have two main issues with this definition: first, it is unclear how this can be used to get hub labels, and second, it is unclear how the corresponding hub labels compare with those for shortest-path computations. To address this, we first convert efficient paths in $G$ to shortest paths in a larger \emph{augmented graph}. In Section \ref{ssec:hlcsp}, we use this to construct hub labels for CSP queries whose storage and query complexity can be bounded as $Bh_c$ (which can be strengthened further to $g(b)h_c$, where $g(b)$ is measure of the size of the Pareto frontier; cf. Section~\ref{sec:frontier}.). Finally, in Section \ref{ssec:hdvschd}, we show that the hub labels for CSP queries can in fact be related to the hub labels for SP queries under an additional natural condition on the efficient paths.
 

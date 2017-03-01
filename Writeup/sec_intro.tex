@@ -52,32 +52,26 @@ Abraham et al.~\cite{highway2010,highway2013} then proposed the \emph{Highway Di
 Our work adopts a similar program to provide partial answers for the above questions; in particular, our contributions are as follows:
 \begin{itemize}[nosep,leftmargin=*]
 \item \textbf{Theoretical contributions}: 
-We extend the HD to directed graphs and general path systems (Section \ref{ssec:hddef}), and define an analogous notion of a \emph{constrained highway dimension} (CHD) for Pareto efficient paths (cf. Section \ref{sec:chd}). We then construct an augmented graph (Section \ref{ssec:aug} under which efficient paths are mapped to shortest paths, and use it to develop hub labels for CSP queries, whose complexity is parameterized by the CHD (Section \ref{ssec:hlcsp}).
-Finally, we show that although the CHD can be much bigger than the HD in general, the two can be related under an additional \emph{partial witness condition} (Section \ref{ssec:hdvschd}). This provides some justification for the use of preprocessing techniques for CSP, as it suggests that they should work well in settings where SP computation admits good speedup techniques.
-\item \textbf{Practical contributions}: Although the theoretical results justify the use of preprocessing techniques for CSP, they are impractical for using in real networks. To this end, we show how we can adapt the theoretical ideas to develop a practical construction technique for hub labels that support CSP queries (Section \ref{sec:numeric}). We then evaluate our algorithm on datasets with detailed travel-time information for San Francisco and Luxembourg (Section \ref{sec:exp}. Our experiments show that our hub labels support query times which are orders of magnitude than existing techniques (without preprocessing), have small per-node storage requirements, and good preprocessing times even on a single machine. 
+We extend the HD to directed graphs and general path systems (Section~\ref{ssec:hddef}), and define an analogous notion of a \emph{constrained highway dimension} (CHD) for Pareto efficient paths (cf. Section~\ref{sec:chd}). We then construct an augmented graph (Section~\ref{ssec:aug} under which efficient paths are mapped to shortest paths, and use it to develop hub labels for CSP queries, whose complexity is parameterized by the CHD (Section~\ref{ssec:hlcsp}).
+Finally, we show that although the CHD can be much bigger than the HD in general, the two can be related under an additional \emph{partial witness condition} (Section~\ref{ssec:hdvschd}). This provides some justification for the use of preprocessing techniques for CSP, as it suggests that they should work well in settings where SP computation admits good speedup techniques.
+\item \textbf{Practical contributions}: Although the theoretical results justify the use of preprocessing techniques for CSP, they are impractical for using in real networks. To this end, we show how we can adapt the theoretical ideas to develop a practical construction technique for hub labels that support CSP queries (Section~\ref{sec:numeric}). We then evaluate our algorithm on datasets with detailed travel-time information for San Francisco and Luxembourg (Section~\ref{sec:exp}). Our experiments show that our hub labels support query times which are orders of magnitude than existing techniques (without preprocessing), have small per-node storage requirements, and good preprocessing times even on a single machine. 
 \end{itemize}	
 
 \subsection{Related work}
 
-Bicriteria with augmented graph and robot applications \cite{alex_bicriteria}
+As we mention before, our work is inspired by the recent developments (both theoretical and practical) in shortest path algorithms~\cite{highway2013,hubimplem,highway2010,dimacs09,geisberger_ch_definition,skeleton}; refer~\cite{goldberg_survey} for an excellent survey of these developments. 
 
-Introduced hub labels\cite{cohen_definition_hl}
 
-Survey on shortest path algorithms \cite{goldberg_survey}
+The problem of finding robust shortest paths is closely related to the stochastic on-time arrival (SOTA) problem~\cite{fan2005arriving}.
+The SOTA problem with Gaussian travel times was solved via exhaustive search~\cite{nikolova_gaussian}. The optimal policy under discrete distributions was given in~\cite{samaranayake2012speedup}, and pre-processing policies were considered in~\cite{sabran2014precomputation}. Finally, ~\cite{nikolova_discretization} provide an approximation technique based on discretization for DAGs.
 
-Bounds for hub labels in different classes of graphs. 
-Show that there exists a hierarchichal hub label meeting the bound of HD \cite{babenko_hl_complexity}
+The primary speedup technique we use in our work is that of hub labels (HL). This was introduced first in~\cite{cohen_definition_hl}. More recently, HL was shown to admit the best query time bounds in low HD graphs~\cite{highway2010,highway2013}, and this observation was experimentally confirmed in~\cite{hubimplem} (see also Figure 7 in~\cite{goldberg_survey}).  
+Finally, the HD-based bounds for hub labels was shown to be tight in~\cite{babenko_hl_complexity,white_complexity_hd}, and it was also shown that finding optimal hub labels is NP hard.
 
-Shows that the lower bounds of the HL size, given by the HD, is tight for a family of graphs \cite{white_complexity_hd}
+There is an extensive literature on CSP problems, which is well surveyed in~\cite{csp_survey}; most of this work however considers only query-time techniques without preprocessing. Our graph augmentation technique is similar to that proposed in~\cite{alex_bicriteria}, which is based on a dynamic programming approach. 
 
-Introduce a class of restrictions as label constraints \cite{language_csp}
+Finally, a related class of problems to CSP is that of shortest paths under label constraints, first introduced in~\cite{language_csp}. Contraction hierarchies were adapted to solve a restricted class of such problems in~\cite{rice_csp}, where the aim was to find shortest paths that avoided certain labels (for example, toll roads/ferries). Our work is similar in spirit to this paper. Note however that the label-constrained problem in~\cite{rice_csp} is a concatenation of parallel shortest-path problems, and involves only local constraints. 
+In contrast, the CSP is NP-hard as it involves global constraints on paths; consequently, a small number of edges with costs can affect all nodes. Thus, though the techniques in~\cite{rice_csp} do not apply to our setting, our theoretical results do in fact shed light on why contraction hierarchies work well in their setting.
 
-For a restricted language, it is possible to use CH for the problem \cite{rice_csp}
 
-Skeleton dimension \cite{skeleton}
 
-Survey on CSP \cite{csp_survey}
-
-This objective is closely related to the stochastic on time arrival (SOTA) problem \cite{fan2005arriving}.
-
-SOTA problem with gaussian travel times solved by exhaustive search \cite{nikolova_gaussian}, optimal policy \cite{samaranayake2012speedup}, pre-processing \cite{sabran2014precomputation} anb solved with discretization for directed acyclic graphs \cite{nikolova_discretization}
