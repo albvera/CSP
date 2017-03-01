@@ -13,16 +13,16 @@ An illustration of the construction is presented in Figure~\ref{fig:augmented}.
 The following definition formalizes this. 
 
 \begin{definition}
-Given a network $(G,\ell)$ and $B\in\N$, the augmented version $G^B=(V^B,E^B,\ell^B)$ is defined by
+Given a network $(G,\ell)$ and $B\in\N$, the augmented version $G^B=(V^B,E^B,\ell)$ is defined by
 \begin{align*}
 V^B &\defeq\crl*{\pp{v,b}: v\in V, b=0,1,\ldots,B}\cup\crl*{v^-:v\in V},\\
 E^B &\defeq\crl*{(\pp{v,b},\pp{v',b'}) : vv'\in E, b'=b-c_{vv'}, b'\geq 0}\cup E^{B}_{-},\\
 E^{B}_{-} &\defeq \crl*{(\pp{v,b},v^-): v\in V, B\geq b\geq 0}
 \end{align*}
-and with length function $\ell^B(\cdot)$,
+and with length function $\ell(\cdot)$,
 \begin{align*}
-\ell^B(\pp{v,b},v^-) \defeq \frac{1}{b+1}\;,\;
-\ell^B(\pp{v,b},\pp{v',b'}) \defeq \ell(vv').
+\ell(\pp{v,b},v^-) \defeq \frac{1}{b+1}\;,\;
+\ell(\pp{v,b},\pp{v',b'}) \defeq \ell(vv').
 \end{align*}
 \end{definition}
 
@@ -36,8 +36,8 @@ and with length function $\ell^B(\cdot)$,
 Paths in $G^B$ are mapped to paths in $G$ in the intuitive way, by removing the budget labels and sink nodes.
 \begin{definition}
 Let $P$ be a path in $G^B$.
-If $P$ is of the form $\prn*{\pp{v_1,b_1},\ldots,\pp{v_k,b_k}}$, then the projection of $P$, denoted $\bar P$, is the path $\bar P\defeq v_1v_2\ldots v_k$.
-Analogously, if $P$ is of the form $\prn*{\pp{v_1,b_1}\ldots\pp{v_k,b_k}v_{k}^-}$, then $\bar P\defeq v_1\ldots v_{k}$. 
+If $P$ is of the form $\pp{v_1,b_1}\ldots\pp{v_k,b_k}$, then the projection of $P$, denoted $\bar P$, is the path $\bar P\defeq v_1v_2\ldots v_k$.
+Analogously, if $P$ is of the form $\pp{v_1,b_1}\ldots\pp{v_k,b_k}v_{k}^-$, then $\bar P\defeq v_1\ldots v_{k}$. 
 \end{definition}
 
 
@@ -61,16 +61,17 @@ Indeed,
 where the last expression is exactly $\ell(P)$.
 \end{proof}
 
-We note that the augmented graph is similar to existing techniques for solving CSP via dynamic programming~\cite{alex_bicriteria}; such an approach however requires that all costs are non-zero (and thus the augmented graph is a DAG).
+We note that the augmented graph is similar to existing techniques for solving CSP via dynamic programming~\cite{alex_bicriteria}.
+Such an approach, however, requires that all costs are non-zero, thus the augmented graph is a DAG.
 In contrast, we allow edge costs to be zero, and therefore, our augmented graph may contain cycles. 
 
 The above result now allows us to relate EPHS of the original graph to LSHS in the augmented graph.
-Note that in $G^B$, we are interested only in shortest paths ending in sink nodes (since these project to efficient paths). 
-Let $\PB$ be the path-system comprising all shortest paths in $G^B$ ending in a sink node.
+Note that in $G^B$ we are interested only in shortest paths ending in sink nodes (since these project to efficient paths). 
+Let $\PB$ be the path system comprising all shortest paths in $G^B$ ending in a sink node.
 A hitting set for $\PE$ can be used to obtain a hitting set for $\PB$, but, since the augmented graph has more nodes, the sparsity increases.
  
 \begin{proposition}
-If the path-system $\PE$ admits $(\hc,r)$-EPHS, then $\PB$ admits $(\hc B,r)$-LSHS.
+If the path system $\PE$ admits $(\hc,r)$-EPHS, then $\PB$ admits $(\hc B,r)$-LSHS.
 \end{proposition}
 \begin{proof}
 %We define a set $C^B$ and prove that hits $\PB_r$ and that it is locally sparse.
@@ -97,7 +98,7 @@ This is key for our subsequent query time guarantees.
 %\end{remark}
 %The last result shows how LSHS translate to the augmented graph.
 %Since the notion of HD is stronger, it is not always possible to make the analogous between two path systems. Surprisingly, in this case we are able to relate the HD of both path systems.
-Moreover, we can also relate the highway dimensions of the path-systems $\PE$ and $\PB$ (Note: this does not follow from above, since the HD is a stronger notion than existence of locally-sparse hitting sets).
+Moreover, we can also relate the highway dimensions of the path systems $\PE$ and $\PB$ (Note: this does not follow from above, since the HD is a stronger notion than existence of locally-sparse hitting sets).
 \begin{proposition}\label{prop:HDaugmented}
 If the HD of the system $\PE$ is $h_c$, then the HD of the system $\PB$ is $Bh_c$.
 \end{proposition}
@@ -112,4 +113,6 @@ Finally, $H_{v,r}$ hits $\bar P$, thus $H$ hits $P$.
 A similar argument shows that $H$ hits $\Sb_r(\pp{v,b},\PB)$.
 \end{proof}
 
-In the next section, we discuss how the above augmented graph can be used to construct hub labels for answering CSP queries. We note however that this technique is primarily a theoretical proof-of-concept, that shows that the CHD (and in fact, the HD of $G$ under an additional condition; cf. Section \ref{ssec:hdvschd}) is a good parametrization for the complexity of HL construction. In practice (cf. Section \ref{ssec:practical}), we use a similar idea of an augmented graph, but with a construction more amenable for implementation.
+In the next section, we discuss how the above augmented graph can be used to construct hub labels for answering CSP queries. 
+We note, however, that this technique is primarily a theoretical proof-of-concept, that shows the CHD (and in fact, the HD of $G$ under an additional condition (cf. Section \ref{ssec:hdvschd}) to be a good parametrization for the complexity of HL construction.
+In practice (cf. Section \ref{ssec:practical}), we use a similar idea of an augmented graph, but with a construction more amenable for implementation.

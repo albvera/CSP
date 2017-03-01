@@ -6,7 +6,7 @@ However, we need to extend the definitions to directed graphs and general path s
 
 We define a \emph{path system} $\calQ$ as any collection of paths.
 Given a set $C\subseteq V$ and a path $Q$, we say that $C$ \emph{hits} $Q$ if some node in $Q$ belongs to $C$. Moreover, we say that $C$ is a \emph{hitting set for a path system} $\calQ$ if it hits every $Q\in\calQ$. Also, for any $r>0$, we say a path $Q$ is $r$-significant if $\ell(Q)>r$. 
-For a given path-system $\calQ$, we denote $\calQ_r$ as the set of all $r$-significant paths in $\calQ$.
+For a given path system $\calQ$, we denote $\calQ_r$ as the set of all $r$-significant paths in $\calQ$.
 
 Hitting sets are useful for compressing path systems. In particular, even if the hitting set is large, the extent to which a path system can be compressed depends on the \emph{local sparsity} of hitting sets with respect to \emph{significant paths} of $\calQ$.
 
@@ -20,11 +20,11 @@ Hitting sets are useful for compressing path systems. In particular, even if the
 \end{definition}
 
 
-The existence of $(h,r)$-LSHS enables the compression of path-system $\calQ$ via the construction of \emph{hub labels} (cf. Section~\ref{ssec:hldef}). However, this existence does not guarantee the ability to efficiently compute it. 
+The existence of $(h,r)$-LSHS enables the compression of path system $\calQ$ via the construction of \emph{hub labels} (cf. Section~\ref{ssec:hldef}). However, this existence does not guarantee the ability to efficiently compute it. 
 To address this, Abraham et al.~\cite{highway2013} introduced the notion of the \emph{highway dimension} -- a property of the graph which ensures both existence and efficient computation of LSHS. 
 
 To define the highway dimension, we first need two additional definitions:
-for $v\in V, r>0$, we define the \emph{forward and reverse path-neighborhoods} with respect to path-system $\calQ$ as: 
+for $v\in V, r>0$, we define the \emph{forward and reverse path-neighborhoods} with respect to path system $\calQ$ as: 
 \begin{align*}
 S_r^+(v,\calQ) &\defeq\crl*{Q\in\calQ_r: \dist(v,Q)\leq 2r}, \\  
 S_r^-(v,\calQ) &\defeq\crl*{Q\in\calQ_r: \dist(Q,v)\leq 2r}.
@@ -33,7 +33,7 @@ As before, we have $S_r(v,\calQ) = S_r^+(v,\calQ)\cup S_r^-(v,\calQ)$. Now we ca
 \begin{definition}
 \label{def:hddef}
 \textbf{(Highway Dimension)}
-A path-system $\calQ$ has HD $h$ if, for every $r>0$, and for every $v\in V$, there exists a set $H_{v,r}\subseteq V$ such that $\card{H_{v,r}}\leq h$ and $H_{v,r}$ is a hitting set for $S_r^+(v,\calQ)\cup S_r^-(v,\calQ)$.
+A path system $\calQ$ has HD $h$ if, for every $r>0$, and for every $v\in V$, there exists a set $H_{v,r}\subseteq V$ such that $\card{H_{v,r}}\leq h$ and $H_{v,r}$ is a hitting set for $S_r^+(v,\calQ)\cup S_r^-(v,\calQ)$.
 \end{definition}
 The HD was defined in \cite{highway2013} for undirected graphs and the shortest-path system $\PS$; the above definition is the natural analog for directed graphs and general path systems.
 As shorthand, we refer to the HD of $(G,\ell)$ as that of $\PS$. 
