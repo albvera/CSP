@@ -69,6 +69,22 @@ Run a similar process for $\Lb(v)$.
 Note that in the last step we bootstrap HL to improve it.
 This works because the fact that some nodes have incorrect distance labels does not impact the correctness of a HL query; a node minimizing the distance is returned and such node must have a correct label.
 
+\subsubsection{Frontier and specific queries}
+
+We test our algorithms with two different tasks.
+Recall that the preprocess is done for some fixed value $B$ of maximum budget.
+The first task is called a frontier query, which given $s$ and $t$ we must return the lengths of all efficient paths with costs $b=0,1,\ldots,B$.
+The second is called a specific query, for given $s,t,b$ we return $\dist(s,t|b)$, i.e., only one efficient path.
+
+Note that the pruned augmented graph $\Gp^B$ is designed for frontier queries.
+Fixed the terminal $\pp{t,0}$, as we ask for the shortest path from $\pp{s,B},\pp{s,B-1},\ldots,\pp{s,0}$ we are guaranteed to recover the entire frontier.
+On the other hand, it may be that the shortest path between $\pp{s,b}$ and $\pp{t,0}$ does not correspond to $\dist(s,t|b)$.
+This occurs when $b$ is not a tight budget and the efficient path requires less.
+
+To answer specific queries, we modify $\Gp^B$ by adding extra edges.
+For every $v\in V(G)$ and $b=1,2,\ldots,B$, we include the edge $\pp{v,b}\pp{v,b-1}$ with length $0$.
+A simple argument shows that with the added edges, the shortest path between $\pp{s,b}$ and $\pp{t,0}$ has length $\dist(s,t|b)$
+
 \subsection{Experiments}
 
 All the experiments were performed on a 64-bit desktop computer with a 3.40GHz Intel Core i7-6700 processor and 16GB RAM running Ubuntu 16.04.
@@ -114,17 +130,17 @@ Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computati
 	B & Preproc  [m] & Avg F Size & Avg B Size & Query Dij [ms] & Query HL [ms] \\ \hline \hline
 	0 & 6 & 18 & 18 & 16.35 & 0.004 \\ \hline
 	5-f & 23 & 14& 19 & 151.91 & 0.019 \\ 
-	5-p & 21 & 43 &19 & 72.03 & 0.008 \\ \hline
+	5-s & 21 & 43 &19 & 72.03 & 0.008 \\ \hline
 	10-f & 36 & 14 & 19 & 305.33 & 0.021 \\ 
-10-p & 35 & 49 & 19 & 102.52 & 0.008 \\ \hline
-	15v & 51 & 14& 19 & 490.75 & 0.024 \\ 
-	15-p & 46 & 53 & 19 & 140.80 & 0.008 \\ \hline
+	10-s & 35 & 49 & 19 & 102.52 & 0.008 \\ \hline
+	15-f & 51 & 14& 19 & 490.75 & 0.024 \\ 
+	15-s & 46 & 53 & 19 & 140.80 & 0.008 \\ \hline
 	20-f & 69 & 14 & 19 & 808.90 & 0.030 \\ 
-	20-p & 60 & 57 & 19 & 183.10 & 0.009 \\ \hline
+	20-s & 60 & 57 & 19 & 183.10 & 0.009 \\ \hline
 	25-f & 89 & 14 & 19 & 1016.71 & 0.034 \\ 
-	25-p & 77 & 60 & 19 & 227.16 & 0.009 \\ \hline
+	25-s & 77 & 60 & 19 & 227.16 & 0.009 \\ \hline
 	30-f & 101 & 14& 19 & 1144.07 & 0.032 \\ 
-	30-p & 93 & 62 & 19 & 272.40 & 0.010 \\ \hline
+	30-s & 93 & 62 & 19 & 272.40 & 0.010 \\ \hline
 \end{tabular}
 \caption{Luxembourg City network}\label{tab:lu4k_results}
 \end{center}
