@@ -23,7 +23,7 @@ A natural way to incorporate travel-time uncertainty is to compute the shortest 
 In particular, in many settings, we want \emph{robust} travel time estimates: formally, we require that given $s,t$ and parameters $p,\delta$, a routing algorithm returns an $(s,t)$-path $P$ minimizing $\E[\ell(P)]$, subject to $\Pr[\ell(P)>\E[\ell(P)]+\delta]\leq p$.
 Even assuming that travel times on different road segments are independent, computing this exactly for general distributions is expensive due to the need for computing convolutions of distributions. However, for uncorrelated travel-times, we have $\Pr[\sum_eT_e>\E[\sum_eT_e])+\delta]\leq \sum_e\Var(T_e)/\delta^2$ by Chebyshev's inequality; using this, we can replace the robust trip-time estimation problem with the following
 \begin{center}
-$\min_{ P\in\calP_{s,t}}\sum_{i\in P}\mu_i \qquad \text{s.t.}\qquad \sum_{i\in P}\sigma^2_i\leq \delta^2p.$
+$\min_{ P\in\Pst}\sum_{i\in P}\mu_i \qquad \text{s.t.}\qquad \sum_{i\in P}\sigma^2_i\leq \delta^2p.$
 \end{center}
 This is now a CSP problem. Note that the solution, though not necessarily optimal, always respects the reliability constraint -- this is often more critical for practical applications.
 
@@ -33,7 +33,7 @@ Consider the case where each edge has a probability $q_e$ of triggering a bad ev
 In this case, we want to minimize the travel time as well as the expected penalty.
 In this case, assuming independence, we have the following natural problem
 \begin{center}
-$\min_{P\in\calP_{s,t}} \ell(P)+p\prn*{1-\prod_{e\in P}(1-q_e)}.$
+$\min_{P\in\Pst} \ell(P)+p\prn*{1-\prod_{e\in P}(1-q_e)}.$
 \end{center}
 This model is considered in \citet{fareevasion} (for routing with fare evasion, where $q_e$ is the probability of encountering an inspector, and $p$ the penalty), where the authors suggest using a CSP formulation, wherein the non-linear objective is replaced by a linear constraint by taking logarithms.
 

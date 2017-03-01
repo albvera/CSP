@@ -2,20 +2,20 @@
 We present here how to extend the concept of HD in order to prove the efficiency of CH in directed graphs.
 
 \begin{definition}
-	For $r>0$, the shortest path $P\in\calP$ is $r$-significant if we can add at most one vertex at each end of $P$ to obtain a shortest path $P'\in\calP$ such that $\ell(P')>r$.
+	For $r>0$, the shortest path $P\in\PS$ is $r$-significant if we can add at most one vertex at each end of $P$ to obtain a shortest path $P'\in\PS$ such that $\ell(P')>r$.
 	The path $P'$ is called an $r$-witness of $P$.
-	We denote $\calP_r$ as the set of all $r$-significant paths.
+	We denote $\PS_r$ as the set of all $r$-significant paths.
 \end{definition}
 
 
 Intuitively, a path is significant if it represents a long path.
-Observe that, if $P\in \calP$ is such that $\ell(P)>r$, then $P$ is $r$-significant by definition.
+Observe that, if $P\in\PS$ is such that $\ell(P)>r$, then $P$ is $r$-significant by definition.
 We remark also that a path can have many $r$-witnesses.
 
 \begin{definition}
 	For $r>0$, an $(h,r)$-LSHS is a set $C\subseteq V$ satisfying: 
 	\begin{enumerate}
-		\item The set $\calP_r$ is hit by $C$: for every $P\in\calP_r$, $P\cap C\not=\varnothing$.
+		\item The set $\PS_r$ is hit by $C$: for every $P\in\PS_r$, $P\cap C\not=\varnothing$.
 		\item $C$ is $h$-sparse: for every $v\in V$, $\card{\Bb_{2r}(v)\cap C}\leq h$ and $\card{\Bf_{2r}(v)\cap C}\leq h$.
 	\end{enumerate}
 \end{definition}
@@ -26,7 +26,7 @@ We do not say that $P$ is close to $v$ if $\dist(v,P)$ is small, but rather if $
 
 
 \begin{definition}
-	For $v\in V, r>0$, the path neighbourhood  $\Sf_r(v)$ is defined as the set of paths $P\in\calP_r$ such that $P$ has some $r$-witness $P'$ with $\dist(v,P')\leq 2r$.
+	For $v\in V, r>0$, the path neighbourhood  $\Sf_r(v)$ is defined as the set of paths $P\in\PS_r$ such that $P$ has some $r$-witness $P'$ with $\dist(v,P')\leq 2r$.
 	The neighbourhood $\Sb_r(v)$ is defined analogously.
 \end{definition}
 

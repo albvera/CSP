@@ -49,8 +49,8 @@ These are valid hubs, since the highest rank node in a path is guaranteed to be 
 
 The most important parameter in CH is the rank; results vary greatly from one choice of ranks to another.
 We obtain a rank in $G$ by running a greedy shortest-path cover, defined as follows.
-Start with a cover $C=\varnothing$ and compute the set of all shortest paths $\calP$.
-Take a node $v\notin C$ hitting most paths in $\calP$, then remove all those paths from $\calP$, add $v$ to $C$ and iterate.
+Start with a cover $C=\varnothing$ and compute the set of all shortest paths $\PS$.
+Take a node $v\notin C$ hitting most paths in $\PS$, then remove all those paths from $\PS$, add $v$ to $C$ and iterate.
 The rank is defined as $n$ for the first node added to $C$, $n-1$ for the second and so on.
 
 We work with the pruned augmented graph $\tilde G_B$, which takes some time to compute, but yields considerably better hubs. 

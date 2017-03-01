@@ -23,7 +23,7 @@ Consider the directed graph $G$ defined in Figure~\ref{fig:big_chd}.
 It is easy to see that $H_{v,r}=\crl{s}$ is a shortest-path hitting set for every $r>0$ and $v\in V(G)$; hence the HD is $1$.
 On the other hand, suppose the costs are such that $c(u_iv_i)=0$ for every $i$, while all other costs are set to $1$.
 Note that the $1$-significant efficent paths intersecting the ball $B_s(2)$ are $u_iv_i$, which are all disjoint.
-Therefore, the hitting set $H_{s,1}$ must contain at least $n$ elements. Moreover, the same argument shows that the sparsity of the best LSHS for $\calP$ is $1$, whereas the sparsity of \emph{any} EPHS is also lower bounded by $n$.
+Therefore, the hitting set $H_{s,1}$ must contain at least $n$ elements. Moreover, the same argument shows that the sparsity of the best LSHS for $\PS$ is $1$, whereas the sparsity of \emph{any} EPHS is also lower bounded by $n$.
 \end{proof}
 
 \begin{remark}
@@ -37,28 +37,28 @@ For real-world networks, however, this appears unlikely -- in particular, intuit
 Let $\beta\geq 0$.
 We say that a path system $\calQ'$ is a $\beta$-witness of the path system $\calQ$ if, for every $Q\in\calQ$, there exists some $Q'\in\calQ'$ such that $Q'\subseteq Q$ and $\ell(Q')\geq 2^{-\beta}\ell(Q)$.
 \end{definition}
-Given this definition, we can now ask if the hub labels for computing SPs and CSPs can be related in settings where the shortest-path set system $\calP$ is a partial witness for the efficient path system $\PE$. At an intuitive level, the partial witness property says that efficient and shortest paths are not completely different, i.e., if $Q$ is efficient, a fraction $2^{-\beta}$ of $Q$ is a shortest path.
-As a consequence, an node hitting numerous paths in $\calP$, should also hit many paths in $\PE$.
+Given this definition, we can now ask if the hub labels for computing SPs and CSPs can be related in settings where the shortest-path set system $\PS$ is a partial witness for the efficient path system $\PE$. At an intuitive level, the partial witness property says that efficient and shortest paths are not completely different, i.e., if $Q$ is efficient, a fraction $2^{-\beta}$ of $Q$ is a shortest path.
+As a consequence, a node hitting numerous paths in $\PS$, should also hit many paths in $\PE$.
 %The bad examples in Proposition~\ref{prop:treelike} exploit networks that do not have partial witnesses.
 Note also that asking for the witness property to hold for all lengths is too extreme, as this essentially requires that all single-hop paths with 0 costs are shortest paths; thus, we really want this property only for `long-enough' paths. 
 
 
 We now show that if costs are such that the graph indeed has the partial witness property (for long-enough paths) for some $\beta$, then we can relate the HL sizes for the two problems in terms of $\beta$ and the doubling dimension $\alpha$. Note that the doubling dimension depends on $G$ and $\ell$; the partial witness property depends on the interplay between $G$, $c$ and $\ell$.
 \begin{theorem}\label{theo:witness_doubling}
-Assume that $G$ is $\alpha$-doubling and $\calP$ is a $\beta$-witness for $\PE_r$ for every $r\geq \frac{\log(\alpha^\beta h)}{2\log\Delta}$. 
+Assume that $G$ is $\alpha$-doubling and $\PS$ is a $\beta$-witness for $\PE_r$ for every $r\geq \frac{\log(\alpha^\beta h)}{2\log\Delta}$. 
 Then, given an $(h,r)$-LSHS for any $r>0$, we can construct (in polynomial time) an $(\alpha^{\beta} h,r)$-EPHS for $(G,\ell,c)$. 
 \end{theorem}
 
 \begin{proof}
 For any $r$, we need to construct a hitting set $C^E$ for $\PE_r$.
 Assume first $r\geq \frac{\log(\alpha^\beta h)}{2\log\Delta}$.
-Take $C$ as the hitting set for $\calP_{2^{-\beta}r}$, which is guaranteed to be sparse with respect to balls of radius $2^{-\beta+1}r$.
+Take $C$ as the hitting set for $\PS_{2^{-\beta}r}$, which is guaranteed to be sparse with respect to balls of radius $2^{-\beta+1}r$.
 Define the desired set by
 \[
 C^E\defeq\{v\in C: v \text{ is in some $r$-efficient path} \}.
 \]
 
-Since $\calP$ is a $2^{-\beta}$-witness for $\PE_r$, $C^E$ is indeed a hitting set for $\PE_r$.
+Since $\PS$ is a $2^{-\beta}$-witness for $\PE_r$, $C^E$ is indeed a hitting set for $\PE_r$.
 We are only left to prove the sparsity.
 Take some $u\in V$, by doubling dimension we can cover $\Bf_{2r}(u)$ by at most $\alpha^\beta$ balls of radius $2^{-\beta+1}r$.
 Each of these balls contains at most $h$ elements of $C$, therefore the sparsity is as claimed.
@@ -85,7 +85,7 @@ Formally,
 
 \begin{corollary}
 Let $f$ be a function such that, for every $u\in V, r\geq 0$, $\card{B_r(u)}\leq f(r)$ .
-Then, assuming only that $\calP_r$ is $\beta$-witnessed for $r\geq f^{-1}(\alpha^\beta h)$,we can get the same guarantee as in Theorem~\ref{theo:witness_doubling}.
+Then, assuming only that $\PE_r$ is $\beta$-witnessed for $r\geq f^{-1}(\alpha^\beta h)$,we can get the same guarantee as in Theorem~\ref{theo:witness_doubling}.
 \end{corollary}
 
 \sbedit{Put link to extensions}

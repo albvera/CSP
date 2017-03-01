@@ -13,8 +13,8 @@ The length $\ell(P)$ is the sum of edge lengths in $P$. Note also that any path 
 For $s,t\in V$, the distance from $s$ to $t$, denoted $\dist(s,t)$, is the smallest length among all paths $P$ that start at $s$ and terminate at $t$.
 The distance from a node $v$ to a path $P$, denoted $\dist(v,P)$, is measured as the minimum distance from $v$ to a node $w\in P$.
 The distance to $v$, $\dist(P,v)$, is defined analogously.\footnote{Note that  $\dist(P,v)$ and  $\dist(v,P)$ need not be the same as the graph is directed.}
-We denote the shortest $(s,t)$-path (if it exists) as $P(s,t)$, and denote the set of all shortest paths in $G$ as $\calP$.
-Finally, we define $D=\max_{P\in\calP}\ell(P)$ to be the diameter of $G$.
+We denote the shortest $(s,t)$-path (if it exists) as $P(s,t)$, and denote the set of all shortest paths in $G$ as $\PS$.
+Finally, we define $D=\max_{P\in\PS}\ell(P)$ to be the diameter of $G$.
 
 
 Analogous to length, we define the cost $c(P)$ as the sum of edge costs on path $P$. 
