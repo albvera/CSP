@@ -2,14 +2,7 @@ The above sections thus show that we can construct hub labels for solving CSP wh
 This however still does not give a sense of how much worse the hub labels for the CSP problem can be in comparison with those for finding shortest paths. 
 We now try to understand this question.
 
-\sbedit{Comparing the size of the \emph{optimal} hub labels for SP and CSP is infeasible as even finding the optimal hub labels for SP is NP-hard~\cite{babenko_hl_complexity}. 
-
-
-It is conjectured that road networks have small HD.
-Is there evidence to conjecture small CHD in these networks?
-}
-
-However, we now show that in general, the CHD, and in fact, the sparsity of any EPHS, can be \emph{arbitrarily worse} than the HD. 
+Comparing the size of the \emph{optimal} hub labels for SP and CSP is infeasible as even finding the optimal hub labels for SP is NP-hard~\cite{babenko_hl_complexity}. However, since we can parametrize the complexity of HL construction for SP in terms of the HD, a natural question is whether graphs with small HD also have a small small CHD. Note that the answer to this depends on both the graph and the costs; we now show that in general, the CHD (and in fact, the sparsity of any EPHS) can be \emph{arbitrarily worse} than the HD. 
 \begin{proposition}
 There are networks with HD $1$ where the CHD, and also the sparsity of any EPHS, is $n$.
 \end{proposition}
@@ -37,23 +30,24 @@ One criticism of the graph in Figure~\ref{fig:big_chd} is that it has a maximum 
 In Appendix~\ref{app:generalhd}, where we discuss alternate notions of HD, we give a more involved example with bounded degrees that exhibits the same separation between HD and CHD for even stronger notions of HD.
 \end{remark}
 
-Intuitively, the separation between HD and CHD occurs due to the fact that for arbitrary graphs and cost functions, the shortest and efficient paths may be completely unrelated. 
+Intuitively, the separation between HD and CHD (or more particularly, the hub labels for computing SPs and CSPs) occurs due to the fact that for arbitrary graphs and cost functions, the shortest and efficient paths may be completely unrelated. 
 For real-world networks, however, this appears unlikely -- in particular, intuition suggests that efficient paths largely comprise of segments which are in fact shortest-paths in their own right. This notion can be formalized via the following notion of a \emph{partial witness} 
 \begin{definition}
 Let $\beta\geq 0$.
 We say that a path system $\calQ'$ is a $\beta$-witness of the path system $\calQ$ if, for every $Q\in\calQ$, there exists some $Q'\in\calQ'$ such that $Q'\subseteq Q$ and $\ell(Q')\geq 2^{-\beta}\ell(Q)$.
 \end{definition}
-Given this definition, we can now ask if the HD and CHD can be related in settings where the shortest-path set system $\calP$ is a partial witness for the efficient path system $\PE$. At an intuitive level, the partial witness property says that efficient and shortest paths are not completely different, i.e., if $Q$ is efficient, a fraction $2^{-\beta}$ of $Q$ is a shortest path.
+Given this definition, we can now ask if the hub labels for computing SPs and CSPs can be related in settings where the shortest-path set system $\calP$ is a partial witness for the efficient path system $\PE$. At an intuitive level, the partial witness property says that efficient and shortest paths are not completely different, i.e., if $Q$ is efficient, a fraction $2^{-\beta}$ of $Q$ is a shortest path.
 As a consequence, an node hitting numerous paths in $\calP$, should also hit many paths in $\PE$.
-The bad examples in Proposition~\ref{prop:treelike} exploit networks that do not have partial witnesses.
+%The bad examples in Proposition~\ref{prop:treelike} exploit networks that do not have partial witnesses.
 Note also that asking for the witness property to hold for all lengths is too extreme, as this essentially requires that all single-hop paths with 0 costs are shortest paths; thus, we really want this property only for `long-enough' paths. 
 
 
-We now show that if costs are such that the graph indeed obeys the partial witness property (for long-enough paths) for some $\beta$, then we can relate the CHD and HD in terms of $\beta$ and the doubling dimension $\alpha$. Note that the doubling dimension depends only on $G$ and $\ell$; the partial witness property depends on the interplay between $G$, $c$ and $\ell$.
+We now show that if costs are such that the graph indeed has the partial witness property (for long-enough paths) for some $\beta$, then we can relate the HL sizes for the two problems in terms of $\beta$ and the doubling dimension $\alpha$. Note that the doubling dimension depends on $G$ and $\ell$; the partial witness property depends on the interplay between $G$, $c$ and $\ell$.
 \begin{theorem}\label{theo:witness_doubling}
 Assume that $G$ is $\alpha$-doubling and $\calP$ is a $\beta$-witness for $\PE_r$ for every $r\geq \frac{\log(\alpha^\beta h)}{2\log\Delta}$. 
-If $(G,\ell)$ admits an $(h,r)$-LSHS for any $r$, then $(G,\ell,c)$ admits an $(\alpha^{\beta} h,r)$-EPHS for any $r$.
+Then, given an $(h,r)$-LSHS for any $r>0$, we can construct (in polynomial time) an $(\alpha^{\beta} h,r)$-EPHS for $(G,\ell,c)$. 
 \end{theorem}
+
 \begin{proof}
 For any $r$, we need to construct a hitting set $C^E$ for $\calP_r^E$.
 Assume first $r\geq \frac{\log(\alpha^\beta h)}{2\log\Delta}$.
@@ -75,10 +69,9 @@ Take $C=V$ as the EPHS.
 Clearly $C$ hits all the paths and the local sparsity is at most the size of the ball.
 Using our assumption on $r$ and the fact that the lengths are integers, it follows that $\card{B_{2r}(v)}\leq\Delta^{2r}\leq\alpha^\beta h$. 
 \end{proof}
-
 \begin{remark}
-The existence of a $\beta$-witness is not enough to bound the CHD.
-Nevertheless, as discussed in Section~\ref{ssec:hldef}, the existence of $(h,r)$-LSHS already allows the construction of HL.
+The existence of a $\beta$-witness is not enough to bound the CHD. Nevertheless, as we discuss in Section~\ref{ssec:hldef}, the existence of $(h,r)$-LSHS already allows the construction of HL. Moreover, the above argument does indeed give a bound for a weaker definition of the highway dimension~\cite{highway2010}.
 \end{remark}
-
-\anote{There is no relation between the quantities $\alpha$ and $\Delta$ in the sense that neither bounds the other.}
+\begin{remark}
+We state the above result in terms of $\alpha, \Delta$ and $h$, in order to make it more transparent. The three quantities are however somewhat related -- in particular, it can be shown that $\alpha\leq 2h\Delta$ (cf.~\cite{skeleton}).
+\end{remark}
