@@ -1,8 +1,9 @@
-\subsection{Practical algorithm}
+% !TEX root = main_vldb.tex
+\subsection{Practical HL construction}
 \label{ssec:practical}
 
 We start by defining a similar structure as the augmented graph, but more amenable to practical purposes.
-The graph $G^B$ defined in section \ref{sec:augmented} may contain a lot of redundant information, hence it is not a minimal representation.
+The graph $G^B$ defined in Section \ref{sec:augmented} may contain a lot of redundant information, hence it is not a minimal representation.
 For example, the same efficient path $uv$ can be repeated many times in the form $\pp{u,1}\pp{v,0}$, $\pp{u,2}\pp{v,1}$ and so on.
 By encoding this information more efficiently, we can reduce the size of the augmented graph and obtain considerable improvements both in query time and in data storage.
 
@@ -23,7 +24,7 @@ In $\Gp^B$ all the lengths are preserved.
 \end{definition}
 Note that in $\Gp^B$ there are no sink nodes, hence it has at least $n$ nodes and $nB$ arcs fewer compared to $G^B$.
 In the worst case, those $nB$ arcs are the only gain by doing this process.
-Nevertheless, in practice this graph can be up to 40\% smaller than $G^B$.
+Nevertheless, in our experiments $\tilde{G^B}$ is up to 40\% smaller than $G^B$.
 Observe that, by running Dijkstra in $G^B$, $\Gp^B$ can be computed in time $\Or(n^2B\log(nB))$.
 
 \subsubsection{HD of the pruned augmented graph}
@@ -37,10 +38,10 @@ To bound the HD, the correct system to study is
 The following result shows how the HD of this system relates to that of $\PE$.
 We omit the proof since it is identical as the one in Proposition~\ref{prop:HDaugmented}.
 \begin{proposition}
-The HD of $\tilde\PB$ is $Bh_c$, where $h_c$ is the HD of $\PE$.
+Given CHD $h_c$, the HD of $\tilde\PB$ is $Bh_c$.
 \end{proposition}
 
-\subsubsection{Description of the practical algorithm}
+\subsubsection{HL construction via Contraction Hierarchies}
 
 We use techniques described in \cite{hubimplem} combined with an approach tailored for augmented graphs.
 The main idea is to first use contraction hierarchies to get a node ranking and then define the forward hubs of a node as the nodes visited during a contraction-based forward search.
@@ -52,12 +53,12 @@ We obtain a rank in $G$ by running a greedy shortest-path cover, defined as foll
 Start with a cover $C=\varnothing$ and compute the set of all shortest paths $\PS$.
 Take a node $v\notin C$ hitting most paths in $\PS$, then remove all those paths from $\PS$, add $v$ to $C$ and iterate.
 The rank is defined as $n$ for the first node added to $C$, $n-1$ for the second and so on.
-To implement the SP cover we follow the exhibition in \cite{hubimplem}.
+To implement the SP cover we follow the algorithm in \cite{hubimplem}.
 
 We work with the pruned augmented graph $\tilde G_B$, which takes some time to compute, but yields considerably better hubs. 
-Recall that in $\tilde G_B$ there are no sink-nodes nor ``replicated information'', since efficient paths are stored just once.
+Recall that in $\tilde G_B$ there are no sink-nodes nor replicated information, since efficient paths are stored just once.
 Given a rank for nodes in $G$, we contract $\tilde G_B$ as follows.
-Say that $V$ is ordered according to the rank, so node $1$ is the least important and $n$ the most important.
+Say that $V$ is ordered according to the rank, so node~$1$ is the least important and $n$ the most important.
 In $\tilde G_B$, we first contract the nodes $\pp{1,b}$ for $b=B,\ldots,0$, then the nodes $\pp{2,b}$ and so on till the nodes $\pp{n,b}$ are the last to contract. 
 
 To obtain better hubs we prune the results obtained by contraction-based searches.
@@ -77,13 +78,14 @@ Note that in the last step we bootstrap HL to improve it.
 This works because the fact that some nodes have incorrect distance labels does not impact the correctness of a HL query; a node minimizing the distance is returned and such node must have a correct label.
 
 \begin{remark}
-For the first step, a direct approach requires to store in memory all the shortest paths.
+For the first step, a direct approach requires storing all the shortest paths in memory.
 In many cases, this can impose a prohibitive memory requirement.
 There are two ways around this issue.
 We can compute the cover by processing one shortest path tree at a time, this translates to $\Omega(n^3\log n)$ running time, but $\Or(n)$ memory.
 The second approach we suggest is to compute only $k<<n$ shortest path trees and cover these greedily.
 We use an off-the-shelf clustering method to obtain $k$ cluster centers, from which we compute the shortest paths. 
-As shown in Figure~\ref{fig:clusters}, the clustering approach provide a very good approximation of the hubs with even a relatively small $k$.
+As shown in Figure~\ref{fig:clusters}, the clustering approach provides a very good approximation of the hubs with even a small $k$.
+Note that we can use any existing technique for Contraction~Hierarchies~\cite{rice_csp,hubimplem}.
 \end{remark}
 
 \begin{figure}
@@ -97,8 +99,8 @@ As shown in Figure~\ref{fig:clusters}, the clustering approach provide a very go
 \subsubsection{Frontier and specific queries}
 
 We test our algorithms with two different tasks.
-Recall that the preprocess is done for some fixed value $B$ of maximum budget.
-The first task is called a frontier query, for which, given $s$ and $t$, we must return the lengths of all efficient paths with costs $b=0,1,\ldots,B$.
+Recall that the preprocessing is done for some fixed maximum budget $B$.
+The first task is a frontier query, wherein given $s$ and $t$, we return the lengths of all efficient paths with costs $b=0,1,\ldots,B$.
 The second is called a specific query, for given $s,t,b$ we return $\dist(s,t|b)$, i.e., only one efficient path.
 
 Note that the pruned augmented graph $\Gp^B$ is designed for frontier queries.
