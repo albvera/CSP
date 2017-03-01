@@ -1,6 +1,7 @@
+% !TEX root = main_vldb.tex
 \label{sec:frontier}
 
-The linear dependence on $B$ in the bound on hub-label sizes (cf. Theorem \ref{theo:HLeff}) is somewhat weak -- essentially, this corresponds to a worst-case setting where the efficient paths between any pair of nodes is different for each value of budget. In most practical settings, changing the budget does not change the paths too much, and ideally the hub-label sizes should reflect this fact. This is achieved via a more careful construction of hub labels, resulting in the following bound. 
+The linear dependence on $B$ in the bound on HL sizes (cf. Theorem \ref{theo:HLeff}) is somewhat weak -- essentially, this corresponds to a worst-case setting where the efficient paths between any pair of nodes is different for each value of budget. In most practical settings, changing the budget does not change the paths too much, and ideally the hub-label sizes should reflect this fact. This is achieved via a more careful construction of hub labels, resulting in the following bound. 
 \begin{theorem}
 \label{thm:markedhubs}
 Suppose $(G,\ell,c)$ admits a function $g:\N\to \N$ that satisfies for every $s,t\in V$, $b\in \N$,
@@ -10,7 +11,7 @@ Suppose $(G,\ell,c)$ admits a function $g:\N\to \N$ that satisfies for every $s,
 Then, we can construct hub labels of size $O(g(B)h_c\log D)$, and answer queries with budget $b$ in time $O(g(b)h_c\log D)$.
 \end{theorem}
 
-The proof depends on a different technique for constructing hub labels (refer Algorithms \ref{alg:forwardhub} and \ref{alg:reversehub} in Appendix \ref{sec:proofs}). The main idea is to sort the efficient paths for each source node $s$ by cost, and then carefully mark nodes when they are added to forward hub labels; these marked nodes are then used to construct the reverse hub labels.
+The proof depends on a different technique for constructing HL (refer Algorithms \ref{alg:forwardhub} and \ref{alg:reversehub} in Appendix \ref{sec:proofs}). The main idea is to sort the efficient paths for each source node $s$ by cost, and then carefully mark nodes when they are added to forward HL; these marked nodes are then used to construct the reverse HL.
 For brevity, the complete algorithmic details and proof are deferred to Appendix \ref{sec:proofs}.
 
 

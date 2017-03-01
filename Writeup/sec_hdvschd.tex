@@ -1,8 +1,9 @@
+% !TEX root = main_vldb.tex
 The above sections thus show that we can construct hub labels for solving CSP whose preprocessing time, storage and query time can all be parameterized in terms of the constrained highway dimension $h_c$. 
 This however still does not give a sense of how much worse the hub labels for the CSP problem can be in comparison with those for finding shortest paths. 
 We now try to understand this question.
 
-Comparing the size of the \emph{optimal} hub labels for SP and CSP is infeasible as even finding the optimal hub labels for SP is NP-hard~\cite{babenko_hl_complexity}. However, since we can parametrize the complexity of HL construction for SP in terms of the HD, a natural question is whether graphs with small HD also have a small small CHD. Note that the answer to this depends on both the graph and the costs; we now show that in general, the CHD (and in fact, the sparsity of any EPHS) can be \emph{arbitrarily worse} than the HD. 
+Comparing the size of the \emph{optimal} hub labels for SP and CSP is infeasible as even finding the optimal hub labels for SP is NP-hard~\cite{babenko_hl_complexity}. However, since we can parametrize the complexity of HL construction for SP in terms of the HD, a natural question is whether graphs with small HD also have a small CHD. Note that the answer to this depends on both the graph and the costs; we now show that in general, the CHD (and in fact, the sparsity of any EPHS) can be \emph{arbitrarily worse} than the HD. 
 \begin{proposition}
 There are networks with HD $1$ where the CHD, and also the sparsity of any EPHS, is $n$.
 \end{proposition}
@@ -81,7 +82,6 @@ We finish by observing that the $\beta$-witness property can be relaxed further 
 We used the crude bound $\card{B_r(u)}\leq \Delta^r$, but some networks exhibit a much different behaviour.
 For example, a grid satisfies  $\card{B_r(u)}=\Or(r^2)$, so the bound we used could have an exponential gap.
 This implies that we need a witness only for very long paths.
-Formally,
 
 \begin{corollary}
 Let $f$ be a function such that, for every $u\in V, r\geq 0$, $\card{B_r(u)}\leq f(r)$ .
