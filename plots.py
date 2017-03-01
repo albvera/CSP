@@ -55,9 +55,9 @@ def plot_node_attributes(G,sizes,name=None,big_nodes=None):
 	for u in G.nodes():
 		colors.append(sizes[u])
 		if big_nodes!=None and u in big_nodes:
-			node_size.append(6)
+			node_size.append(15)
 		else:
-			node_size.append(1)
+			node_size.append(10)
 	cmap=plt.cm.Reds
 	pos = nx.get_node_attributes(G,'XY')
 	nx.draw(G, pos,node_size=node_size,node_color=colors,cmap=cmap,vmin=vmin,vmax=vmax,with_labels=False,linewidths=0.1,arrows=False,width=0.1) 
