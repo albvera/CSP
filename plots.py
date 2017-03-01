@@ -55,9 +55,9 @@ def plot_node_attributes(G,sizes,name=None,big_nodes=None):
 	for u in G.nodes():
 		colors.append(sizes[u])
 		if big_nodes!=None and u in big_nodes:
-			node_size.append(15)
+			node_size.append(20)
 		else:
-			node_size.append(10)
+			node_size.append(5)
 	cmap=plt.cm.Reds
 	pos = nx.get_node_attributes(G,'XY')
 	nx.draw(G, pos,node_size=node_size,node_color=colors,cmap=cmap,vmin=vmin,vmax=vmax,with_labels=False,linewidths=0.1,arrows=False,width=0.1) 
@@ -65,19 +65,22 @@ def plot_node_attributes(G,sizes,name=None,big_nodes=None):
 	sm._A = []
 	plt.colorbar(sm)
 	if name!=None:
-		pylab.savefig('{}.pdf'.format(name))
+		pylab.savefig('{}.pdf'.format(name),bbox_inches='tight')
 	plt.show()
 	
 
 #Plot histogram of list or dictionary
 import numpy as np
-def plot_hist(data,n_bins=30,title="",xlabel="",ylabel="",name=None):
+def plot_hist(data,n_bins=30,title="",xlabel="",ylabel="",name=None,nticks=4):
 	if isinstance(data,dict):
 		data = data.values()
 	plt.hist(data,n_bins,alpha=0.5)
 	plt.title(title)
 	plt.xlabel(xlabel)
 	plt.ylabel(ylabel)
+	plt.locator_params(tight=True, nbins=nticks)
+	plt.rcParams["font.family"] = "serif"
+	plt.rcParams.update({'font.size': 20})
 	if name!=None:
-		pylab.savefig('{}.pdf'.format(name))
+		pylab.savefig('{}.pdf'.format(name),bbox_inches='tight')
 	plt.show()
