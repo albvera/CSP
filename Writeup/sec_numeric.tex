@@ -159,17 +159,24 @@ Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computati
 
 \remark{\todo{move figures to Appendix} As explained in Section XXX, creating the hub-labels efficiently requires storing all pairs shortest path distances during the preprocessing stage. In many cases, this can impose a prohibitive memory requirement. However, as can be seen in Figures~\ref{fig:clusters_sf} and~\ref{fig:clusters_lu}, the clustering approach from Section XXX provides a very good approximation of the hubs with even a relatively small number of clusters.}
 
-\begin{figure}
+\begin{figure*}
 \hfill
+\begin{subfigure}{0.45\textwidth}
 \input{TexImg/plot_clusters_sf.tex}
-\caption{San Francisco with different clusters}\label{fig:clusters_sf}
-\end{figure}
-
-\begin{figure}
-\hfill
+\caption{San Francisco network}\label{fig:clusters_sf}
+\end{subfigure}
+\begin{subfigure}{0.45\textwidth}
 \input{TexImg/plot_clusters_lu.tex}
-\caption{Luxembourg City with different clusters}\label{fig:clusters_lu}
-\end{figure}
+\caption{Luxembourg City network}\label{fig:clusters_lu}
+\end{subfigure}
+\caption{Hub sizes as a function of the number of clusters}\label{fig:clusters}
+\end{figure*}
+
+% \begin{figure}
+% \hfill
+% \input{TexImg/plot_clusters_lu.tex}
+% \caption{Luxembourg City with different clusters}\label{fig:clusters_lu}
+% \end{figure}
 
 
 \subsubsection{Hub sizes and node significance}
