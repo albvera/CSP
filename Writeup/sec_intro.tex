@@ -29,7 +29,7 @@ Even assuming that travel times on different road segments are independent, comp
 This is now a CSP problem. Note that the solution, though not necessarily optimal, always respects the reliability constraint -- this is often more critical for practical applications.
 
 
-Another natural problem that can be modeled as a CSP is that of finding shortest paths satisfying some \emph{reliability constraint}.
+Another problem that can be modeled as a CSP is that of finding \emph{reliable shortest paths}.
 Consider the case where each edge has a probability $q_e$ of triggering a bad event, with resulting penalty $p$ (for example, slowdowns due to accidents).
 In this case, we want to minimize the travel time as well as the expected penalty.
 In this case, assuming independence, we have the following natural problem
@@ -47,18 +47,16 @@ Finally, another class of problems which is related to the CSP is that of routin
 \item How can we use preprocessing and graph augmentation techniques to speed up CSP computation 
 \item How can we give preprocessing/storage/query time guarantees for such techniques
 \end{enumerate}
-The concept of Highway Dimension (HD) \cite{highway2010,highway2013} allows to prove the efficiency of shortest path computations in undirected graphs.
-We will see that directed graphs are fundamental for the analysis of constrained paths.
-As a first step, we extend the notions of HD to directed graphs.
 
-\sbnote{copied from abstract}
-Our work extends these ideas to CSP queries, via two main contributions:  \todo{add references to results here}
+In the case of SP problem, there was significant initial development on the first question, leading to many different techniques~\cite{dimacs09}, which worked well in practice, but had no performance guarantees.
+Abraham et al.~\cite{highway2010,highway2013} then proposed the \emph{Highway Dimension} (HD), a graph structural metric, which they showed could parametrize the preprocessing, storage and query time of sevelral of these heuristics (hub labels, contraction hierarchies, etc.).
+Our work adopts a similar program to provide partial answers for the above questions; in particular, our contributions are as follows:
 \begin{itemize}[nosep,leftmargin=*]
-	\item Theoretical contributions: We adapt existing preprocessing techniques for fast SP queries (hub labels and contraction hierarchies) to handle CSP queries. More importantly, we extend the idea of \emph{highway-dimension}, a proposed measure of the complexity of SP speedup techniques, to an analogous \emph{constrained highway dimension} for CSP queries.
+\item \textbf{Theoretical contributions}: We adapt existing preprocessing techniques for fast SP queries (hub labels and contraction hierarchies) to handle CSP queries. More importantly, we extend the idea of \emph{highway-dimension}, a proposed measure of the complexity of SP speedup techniques, to an analogous \emph{constrained highway dimension} for CSP queries.
 	We also show that the two notions can be related under an additional partial witness condition, which we argue is natural for road networks.
-	\item Practical contributions: We develop a practical algorithm for fast CSP queries, which combines the hub labels technique for SP computations with an augmented graph that encodes efficient paths for the CSP problem. We evaluate our algorithm on datasets with detailed travel-time information for San Francisco and Luxembourg, and show that our algorithms support query times which are orders of magnitude than existing techniques (without preprocessing), have small per-node storage requirements, and good preprocessing times even on a single machine. 
+\item \textbf{Practical contributions}: We develop a practical algorithm for fast CSP queries, which combines the hub labels technique for SP computations with an augmented graph that encodes efficient paths for the CSP problem. We evaluate our algorithm on datasets with detailed travel-time information for San Francisco and Luxembourg, and show that our algorithms support query times which are orders of magnitude than existing techniques (without preprocessing), have small per-node storage requirements, and good preprocessing times even on a single machine. 
 \end{itemize}	
-
+\todo{add references to results here}
 
 \subsection{Related work}
 
