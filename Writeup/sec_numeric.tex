@@ -52,6 +52,7 @@ We obtain a rank in $G$ by running a greedy shortest-path cover, defined as foll
 Start with a cover $C=\varnothing$ and compute the set of all shortest paths $\PS$.
 Take a node $v\notin C$ hitting most paths in $\PS$, then remove all those paths from $\PS$, add $v$ to $C$ and iterate.
 The rank is defined as $n$ for the first node added to $C$, $n-1$ for the second and so on.
+To implement the SP cover we follow the exhibition in \cite{hubimplem}.
 
 We work with the pruned augmented graph $\tilde G_B$, which takes some time to compute, but yields considerably better hubs. 
 Recall that in $\tilde G_B$ there are no sink-nodes nor ``replicated information'', since efficient paths are stored just once.
@@ -111,10 +112,9 @@ For every $v\in V(G)$ and $b=1,2,\ldots,B$, we include the edge $\pp{v,b}\pp{v,b
 A simple argument shows that with the added edges, the shortest path between $\pp{s,b}$ and $\pp{t,0}$ has length $\dist(s,t|b)$
 
 \subsection{Experiments} \label{sec:exp}
-\todo{mention code is in github}
 All the experiments were performed on a 64-bit desktop computer with a 3.40GHz Intel Core i7-6700 processor and 16GB RAM running Ubuntu 16.04.
 The entire code is written in Python 2.7. We use the library Networkx for the graph representation and Dijkstra's algorithm.
-To compute the SP cover we follow the exhibition in \cite{hubimplem}.
+The code is available at \url{github.com/albvera/HHL_CSP}.
 
 We evaluated the performance of our algorithms with real-world test networks: a small San Francisco network with 2643 nodes and 6588 edges for which real-world travel-time data was available as a Gaussian mixture model \cite{sf_data}, and a second (slightly larger) Luxembourg City network with 4026 nodes and 9282 edges for which travel-time distributions were synthesized from road speed limits \cite{niknami2016tractable}, as real-world data was unavailable.
  

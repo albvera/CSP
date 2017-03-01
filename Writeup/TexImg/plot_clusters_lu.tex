@@ -1,14 +1,14 @@
 \begin{tikzpicture}[trim axis left]
 \begin{axis}[
 	scale only axis,
-	height=4cm,
+	height=3cm,
 	width=4cm,
 	xtick distance=300,
 	ytick distance=1,	
 	xmin = 10, xmax =1000,
 	xlabel={Number of clusters},
 	ylabel={},
-	every axis plot/.append style={ultra thick}]
+	every axis plot/.append style={thick}]
 \addplot[mark size=0.3,draw=black, mark=square*] table {tab_avg_lu.dat};
 \addplot[mark size=0.3,draw=red, mark=triangle*] table {tab_max_lu.dat};
 \addplot[mark size=0.3,draw=blue, mark=diamond*] table {tab_shorts_lu.dat};
