@@ -1,14 +1,23 @@
 	%!TEX root = main_vldb.tex
 
 
-We consider the problem of computing constrained shortest paths at scale, motivated primarily by the requirements of modern transportation platforms. 
-In recent years, the use of preprocessing techniques and network augmentation has led to dramatic improvements in the speed and scalability of shortest path (SP) computations in road networks.
-These techniques however do not extend to constrained shortest-path (CSP) computations, which are necessary in order to provide accurate and robust routing and travel-time estimates, which incorporate uncertainties in travel times.
+We consider the problem of fast computation of constrained shortest paths in large-scale graphs, using preprocessing and graph augmentation techniques.
+The Shortest-path (SP) computation problem is one of the canonical algorithm design problems.
+In recent years, however, it has been revolutionized both in terms of academic research as well as real-world applications (cf.~\cite{dimacs09,goldberg_survey} for surveys).
+In particular, the use of preprocessing techniques and network augmentation has led to dramatic improvements in the speed and scalability of SP computation in road networks.
+These techniques however do not extend to constrained shortest-path (CSP) computations, and our work aims to bridge this gap.
 
 
-Assume each arc has, besides a certain length, an associated cost. 
-The problem of computing the shortest path, with cost at most a given value, is known to be NP-Hard.
+The SP and CSP problems can be summarized as follows: We are given a graph $G$, where each edge has an associated \emph{length} and \emph{cost}. 
+Now, given any two nodes $s,t$, the SP problem requires finding an  $s\rightarrow t$ path of minimum length; the CSP problem takes in a further input of a budget $b$, and requires finding a minimum length $s\rightarrow t$ path \emph{which moreover has a total cost less than $b$}.
+The two problems, though similar, have very different basic complexity: SP computation admits a polynomial-time algorithm (in particular, the famous Dijkstra's algorithm), while the problem of CSP computation is known to be NP-Hard~\cite{csp_survey}.
 A dynamic programming approach can compute the shortest path in pseudo-polynomial time, which is the best bound known so far \todo{add reference}.
+
+
+Our interest in CSP computation is motivated primarily by the requirements of modern transportation platforms. 
+which are necessary in order to provide accurate and robust routing and travel-time estimates, which incorporate uncertainties in travel times.
+
+
 
 In the face of uncertainty, a natural problem is to compute the shortest path subject to a reliability constraint.
 We want to estimate how much time it will take to travel from $s$ to $t$, but, for the answer to be robust, we ask that the path exceeds the estimate with small probability.
@@ -36,6 +45,9 @@ Indeed, after taking logarithms, the non-linear part of the objective function b
 The concept of Highway Dimension (HD) \cite{highway2010,highway2013} allows to prove the efficiency of shortest path computations in undirected graphs.
 We will see that directed graphs are fundamental for the analysis of constrained paths.
 As a first step, we extend the notions of HD to directed graphs.
+
+\subsection{Our Contributions}
+
 
 \subsection{Related work}
 
