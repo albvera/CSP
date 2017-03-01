@@ -13,12 +13,13 @@ However, we now show that in general, the CHD, and in fact, the sparsity of any 
 \begin{proposition}
 There are networks with HD $1$ where the CHD, and also the sparsity of any EPHS, is $n$.
 \end{proposition}
-\begin{proof}
 \begin{figure}
 	\label{fig:big_chd}
 	\input{TexImg/big_chd.tex}
 	\caption{Example of a graph with small HD but large CHD: The graph comprises $2n+1$ nodes, with the edge labels representing the lengths. Note that the shortest paths in the graph are of the form $sv_i$, $u_is$ and $u_isv_j$ (for all combinations $i,j$). Thus, the HD is $1$ as $H_{v,r}=\crl{s}$ is a hitting set for all these paths. On the other hand, if we have costs such that $c(u_iv_i)=0\,\forall\,i$, while all other edges have cost $1$; then we have $n$ parallel efficient paths $u_iv_i$, which must all be hit by any EPHS.}
 \end{figure}
+
+\begin{proof}
 Consider the directed graph $G$ defined in Figure~\ref{fig:big_chd}.
 %, which comprises $2n$ nodes $u_i,v_i$ and a special node $s$.
 %Every $u_i$ has two outgoing edges, one to $v_i$ with length $3$ and one to $s$ with length $1$.
