@@ -29,28 +29,28 @@ If $\PE$ does not alternate, then it admits $(\alpha^{\log\beta}h+\alpha^{\log\b
 \end{theorem}
 
 
-\subsection{Correlated Costs}
-We have studied so far the case where $c(P)$ is just the sum of individual edge costs.
-In practice it could be that the cost depends on combinations of arcs.
-Think of a turn in a road network; we can turn right quickly, but turning left means waiting for a green arrow in most cases.
-Another example is minimizing expectation subject to bounded variance.
-If there is no independence, the variance of a path is not the sum of individual variances.
+% \subsection{Correlated Costs}
+% We have studied so far the case where $c(P)$ is just the sum of individual edge costs.
+% In practice it could be that the cost depends on combinations of arcs.
+% Think of a turn in a road network; we can turn right quickly, but turning left means waiting for a green arrow in most cases.
+% Another example is minimizing expectation subject to bounded variance.
+% If there is no independence, the variance of a path is not the sum of individual variances.
 
-We explain now how to deal with more general cases using the same framework.
-Assume the cost function $c_2:E\times E\to \N\cup \{0\}$ depends on pairs of edges, so if a path is $P=e_0e_1\ldots e_k$, then the cost would be $c_2(P)=\sum_{i=1}^{k}c_2(e_{i-1},e_i)$.
-The nodes in the augmented graph will be triplets $\pp{u,v,b}$, where $v$ is the current state, $u$ is the previous state and $b$ is the available budget.
-The arcs are given by
-\[
-(\pp{u,v,b},\pp{v,w,b'}), \quad uv,vw\in E, b'=b-c_2(u,v,2).
-\]
+% We explain now how to deal with more general cases using the same framework.
+% Assume the cost function $c_2:E\times E\to \N\cup \{0\}$ depends on pairs of edges, so if a path is $P=e_0e_1\ldots e_k$, then the cost would be $c_2(P)=\sum_{i=1}^{k}c_2(e_{i-1},e_i)$.
+% The nodes in the augmented graph will be triplets $\pp{u,v,b}$, where $v$ is the current state, $u$ is the previous state and $b$ is the available budget.
+% The arcs are given by
+% \[
+% (\pp{u,v,b},\pp{v,w,b'}), \quad uv,vw\in E, b'=b-c_2(u,v,2).
+% \]
 
-Define analogously the concept of efficient paths.
-It is easy to see that, as in the previous case, shortest paths in the augmented graph are efficient paths.
-The system $\tilde\PE$ of such paths may also allow for a $\beta$-witness.
-With the previous properties we can construct the hub labels in the same fashion to prove the following result.
+% Define analogously the concept of efficient paths.
+% It is easy to see that, as in the previous case, shortest paths in the augmented graph are efficient paths.
+% The system $\tilde\PE$ of such paths may also allow for a $\beta$-witness.
+% With the previous properties we can construct the hub labels in the same fashion to prove the following result.
 
-\begin{theorem}
-Assume the system $\tilde\PE$ has HD $\tilde h$.
-Then, there exists HL such that, queries $s,t,b$ can be answered in time $\Or(b\tilde h\log D)$ and the space requirement is $\Or(Bn\Delta\cdot B\tilde h\log D)$ \todo{double check this}.
-In particular, if $\PS$ is a $\beta$-witness for $\tilde \PE$, then $\tilde h\leq h2^{\log_2\beta}$. 
-\end{theorem}
+% \begin{theorem}
+% Assume the system $\tilde\PE$ has HD $\tilde h$.
+% Then, there exists HL such that, queries $s,t,b$ can be answered in time $\Or(b\tilde h\log D)$ and the space requirement is $\Or(Bn\Delta\cdot B\tilde h\log D)$ \todo{double check this}.
+% In particular, if $\PS$ is a $\beta$-witness for $\tilde \PE$, then $\tilde h\leq h2^{\log_2\beta}$. 
+% \end{theorem}
