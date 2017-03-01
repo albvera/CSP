@@ -1,61 +1,56 @@
-The first question we want to tackle is: how worse is the sparsity in an EPHS compared to a LSHS?
-We show that, in general, the sparsity of an EPHS is arbitrarily worse.
-Intuitively, this occurs when shortest and efficient paths are unrelated. 
+The above sections thus show that we can construct hub labels for solving CSP whose preprocessing time, storage and query time can all be parameterized in terms of the constrained highway dimension $h_c$. 
+This however still does not give a sense of how much worse the hub labels for the CSP problem can be in comparison with those for finding shortest paths. 
+We now try to understand this question.
 
-\begin{proposition}
-There is a family of networks with HD $1$ where the CHD can be arbitrarily large.
-Additionally, the sparsity of the EPHS is also arbitrarily large.
-\end{proposition}
-\begin{proof}
-Consider a directed graph $G$ defined as in Figure~\ref{fig:big_chd}.
-There are $2n$ nodes $u_i,v_i$ and a special node $s$.
-Every $u_i$ has two outgoing edges, one to $v_i$ with length $3$ and one to $s$ with length $1$.
-Finally, $s$ has $n$ outgoing edges, one to every $v_i$ with length $1$.
+\sbedit{Comparing the size of the \emph{optimal} hub labels for SP and CSP is infeasible as even finding the optimal hub labels for SP is NP-hard~\cite{babenko_hl_complexity}. 
 
-\begin{figure}\caption{Graph with small HD and bi CHD}\label{fig:big_chd}
-\input{TexImg/big_chd.tex}
-\end{figure}
-
-Let us first determine the HD of $G$.
-There are $2n$ shortest paths, namely $sv_i$ and $u_isv_i$ for different $i$.
-We conclude that the HD is $1$, because it suffices to set $H_{v,r}=\crl{s}$ as the hitting set for every $r>0$ and $v\in V(G)$.
-
-Now we add some costs and show that the CHD is at least $n$.
-Let $c(u_iv_i)=0$ for every $i$ and set all other costs to $1$.
-Note that the $1$-significant efficent paths intersecting the ball $B_s(2)$ are $u_iv_i$, which are all disjoint.
-Therefore, the hitting set $H_{s,1}$ must contain at least $n$ elements.
-
-We showed that the difference between HD and CHD is at least $n$.
-We finish by noting that a similar argument shows that the sparsity of LSHS for $\calP$ is $1$, whereas the sparsity of EPHS is also lower bounded by $n$.
-\end{proof}
-
-\begin{remark}
-Although this example shows the difference between HD and CHD, the reader may think that we are exploiting the maximum degree to our advantage.
-This is not necessarily the case. 
-In Section~\ref{app:generalhd}, where we discuss other notions of HD, we give a different, more involved, example that exhibits the same behaviour for even stronger versions of HD.
-\end{remark}
 
 It is conjectured that road networks have small HD.
 Is there evidence to conjecture small CHD in these networks?
-We show how doubling dimension plus an additional property, defined bellow, do imply a positive answer.
-A path $P'$ \emph{partially witnesses} $P$ if $P'\subseteq P$ and $P'$ is ``long enough''.
-Formally, we define the following relation for path systems.
+}
 
+However, we now show that in general, the CHD, and in fact, the sparsity of any EPHS, can be \emph{arbitrarily worse} than the HD. 
+\begin{proposition}
+There are networks with HD $1$ where the CHD, and also the sparsity of any EPHS, is $n$.
+\end{proposition}
+\begin{proof}
+\begin{figure}
+	\label{fig:big_chd}
+	\input{TexImg/big_chd.tex}
+	\caption{Example of a graph with small HD but large CHD: The graph comprises $2n+1$ nodes, with the edge labels representing the lengths. Note that the shortest paths in the graph are of the form $sv_i$, $u_is$ and $u_isv_j$ (for all combinations $i,j$). Thus, the HD is $1$ as $H_{v,r}=\crl{s}$ is a hitting set for all these paths. On the other hand, if we have costs such that $c(u_iv_i)=0\,\forall\,i$, while all other edges have cost $1$; then we have $n$ parallel efficient paths $u_iv_i$, which must all be hit by any EPHS.}
+\end{figure}
+Consider the directed graph $G$ defined in Figure~\ref{fig:big_chd}.
+%, which comprises $2n$ nodes $u_i,v_i$ and a special node $s$.
+%Every $u_i$ has two outgoing edges, one to $v_i$ with length $3$ and one to $s$ with length $1$.
+%Finally, $s$ has $n$ outgoing edges, one to every $v_i$ with length $1$.
+%Let us first determine the HD of $G$.
+%There are $3n$ shortest paths, namely $sv_i$ and $u_isv_i$ for different $i$.
+It is easy to see that $H_{v,r}=\crl{s}$ is a shortest-path hitting set for every $r>0$ and $v\in V(G)$; hence the HD is $1$.
+On the other hand, suppose the costs are such that $c(u_iv_i)=0$ for every $i$, while all other costs are set to $1$.
+Note that the $1$-significant efficent paths intersecting the ball $B_s(2)$ are $u_iv_i$, which are all disjoint.
+Therefore, the hitting set $H_{s,1}$ must contain at least $n$ elements. Moreover, the same argument shows that the sparsity of the best LSHS for $\calP$ is $1$, whereas the sparsity of \emph{any} EPHS is also lower bounded by $n$.
+\end{proof}
+
+\begin{remark}
+One criticism of the graph in Figure~\ref{fig:big_chd} is that it has a maximum degree of $n$; the result however continues to hold even for bounded degree graphs.
+In Appendix~\ref{app:generalhd}, where we discuss alternate notions of HD, we give a more involved example with bounded degrees that exhibits the same separation between HD and CHD for even stronger notions of HD.
+\end{remark}
+
+Intuitively, the separation between HD and CHD occurs due to the fact that for arbitrary graphs and cost functions, the shortest and efficient paths may be completely unrelated. 
+For real-world networks, however, this appears unlikely -- in particular, intuition suggests that efficient paths largely comprise of segments which are in fact shortest-paths in their own right. This notion can be formalized via the following notion of a \emph{partial witness} 
 \begin{definition}
 Let $\beta\geq 0$.
-We say that a path system $\calQ'$ is a $\beta$-witness of the path system $\calQ$ if, for every $Q\in\calQ$, exists $Q'\in\calQ'$ such that $Q'\subseteq Q$ and $\ell(Q')\geq 2^{-\beta}\ell(Q)$.
+We say that a path system $\calQ'$ is a $\beta$-witness of the path system $\calQ$ if, for every $Q\in\calQ$, there exists some $Q'\in\calQ'$ such that $Q'\subseteq Q$ and $\ell(Q')\geq 2^{-\beta}\ell(Q)$.
 \end{definition}
-
-We explore first when the system of shortest paths $\calP$ is a partial witness for the system of efficient paths $\PE$.
-At an intuitive level, the partial witness property says that efficient and shortest paths are not completely different, i.e., if $Q$ is efficient, some fraction of $Q$ is shortest.
-As a consequence, an important node hitting numerous paths in $\calP$, should also hit many paths in $\PE$.
+Given this definition, we can now ask if the HD and CHD can be related in settings where the shortest-path set system $\calP$ is a partial witness for the efficient path system $\PE$. At an intuitive level, the partial witness property says that efficient and shortest paths are not completely different, i.e., if $Q$ is efficient, a fraction $2^{-\beta}$ of $Q$ is a shortest path.
+As a consequence, an node hitting numerous paths in $\calP$, should also hit many paths in $\PE$.
 The bad examples in Proposition~\ref{prop:treelike} exploit networks that do not have partial witnesses.
-We stress that doubling dimension depends only on $G$ and $\ell$; the partial witness property depends on the interplay between $G$, $c$ and $\ell$.
-For our result, we actually relax the partial witness property.
-Notice that, in the statement of Theorem~\ref{theo:witness_doubling}, we ask only for long paths to be witnessed.
+Note also that asking for the witness property to hold for all lengths is too extreme, as this essentially requires that all single-hop paths with 0 costs are shortest paths; thus, we really want this property only for `long-enough' paths. 
 
+
+We now show that if costs are such that the graph indeed obeys the partial witness property (for long-enough paths) for some $\beta$, then we can relate the CHD and HD in terms of $\beta$ and the doubling dimension $\alpha$. Note that the doubling dimension depends only on $G$ and $\ell$; the partial witness property depends on the interplay between $G$, $c$ and $\ell$.
 \begin{theorem}\label{theo:witness_doubling}
-Assume that $G$ is $\alpha$-doubling and $\calP$ is a $\beta$-witness for $\PE_r$ for every $r\geq \frac{\log(\alpha^\beta h)}{2\log\Delta}$. \anote{There is no relation between the quantities $\alpha$ and $\Delta$ in the sense that neither bounds the other.}
+Assume that $G$ is $\alpha$-doubling and $\calP$ is a $\beta$-witness for $\PE_r$ for every $r\geq \frac{\log(\alpha^\beta h)}{2\log\Delta}$. 
 If $(G,\ell)$ admits an $(h,r)$-LSHS for any $r$, then $(G,\ell,c)$ admits an $(\alpha^{\beta} h,r)$-EPHS for any $r$.
 \end{theorem}
 \begin{proof}
@@ -84,3 +79,5 @@ Using our assumption on $r$ and the fact that the lengths are integers, it follo
 The existence of a $\beta$-witness is not enough to bound the CHD.
 Nevertheless, as discussed in Section~\ref{ssec:hldef}, the existence of $(h,r)$-LSHS already allows the construction of HL.
 \end{remark}
+
+\anote{There is no relation between the quantities $\alpha$ and $\Delta$ in the sense that neither bounds the other.}
