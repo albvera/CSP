@@ -104,11 +104,11 @@ Samitha Samaranayake          \\
 \maketitle
 
 \begin{abstract}
-We study the problem of computing constrained shortest paths at scale, motivated by the need of modern transportation platforms for accurate travel-time estimates. 
+We study the problem of computing constrained shortest paths at scale, motivated by the needs of modern transportation platforms for travel-time estimates with probabilistic guarantees. 
 The use of preprocessing techniques and network augmentation has led to dramatic improvements in the speed and scalability of shortest path (SP) computations.
 Our work extends these ideas to CSP queries, via two main contributions: 
 \begin{itemize}[nosep,leftmargin=*]
-\item We adapt existing preprocessing techniques for fast SP queries (in particular, hub labels) to handle CSP queries; we also extend the \emph{highway-dimension}, a proposed complexity measure for SP speedup techniques, to an analogous \emph{constrained highway dimension} for CSP queries.
+\item We adapt existing preprocessing techniques for fast SP queries (in particular, hub labels) to handle CSP queries; we also extend the \emph{highway-dimension}, a measure of graph structure that enables SP speedup techniques, to an analogous \emph{constrained highway dimension} for CSP queries.
 Finally, we show that the two notions can be related under an additional partial witness condition.
 \item We develop a practical algorithm for fast CSP queries, combining hub labels with an augmented graph that encodes efficient paths. We evaluate our algorithm on datasets with detailed travel-time information for San Francisco and Luxembourg, and show that our algorithms are orders of magnitude faster compared to existing techniques, and also have small per-node storage requirements, and good preprocessing times even on a single machine. 
 \end{itemize}	
