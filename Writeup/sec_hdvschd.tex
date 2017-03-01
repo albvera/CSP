@@ -77,4 +77,13 @@ The existence of a $\beta$-witness is not enough to bound the CHD. Nevertheless,
 We state the above result in terms of $\alpha, \Delta$ and $h$, in order to make it more transparent. The three quantities are however somewhat related -- in particular, it can be shown that $\alpha\leq 2h\Delta$ (cf.~\cite{skeleton}).
 \end{remark}
 
-\todo{add corollary if $|B_r|\leq \Delta^r$}
+We finish by observing that the $\beta$-witness property can be relaxed further if we assume something about neighborhoods' growth rate.
+We used the crude bound $\card{B_r(u)}\leq \Delta^r$, but some networks exhibit a much different behaviour.
+For example, a grid satisfies  $\card{B_r(u)}=\Or(r^2)$, so the bound we used could have an exponential gap.
+This implies that we need a witness only for very long paths.
+Formally,
+
+\begin{corollary}
+Let $f$ be a function such that, for every $u\in V, r\geq 0$, $\card{B_r(u)}\leq f(r)$ .
+Then, assuming only that $\calP_r$ is $\beta$-witnessed for $r\geq f^{-1}(\alpha^\beta h)$,we can get the same guarantee as in Theorem~\ref{theo:witness_doubling}.
+\end{corollary}

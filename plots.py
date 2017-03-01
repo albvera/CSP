@@ -81,8 +81,9 @@ def plot_hist(data,n_bins=30,title="",xlabel="",ylabel="",name=None,xticks=4,yti
 	plt.title(title)
 	plt.xlabel(xlabel)
 	plt.ylabel(ylabel)
-	plt.locator_params(tight=True, nbins=xticks,axis='x')
-	plt.locator_params(tight=True, nbins=yticks,axis='y')
+	axes = plt.gca()
+	plt.yticks(np.ceil(np.linspace(axes.get_ylim()[0],axes.get_ylim()[1], num=yticks+1)[1:]))
+	plt.xticks(np.linspace(axes.get_xlim()[0],axes.get_xlim()[1], num=xticks))
 	plt.rcParams["font.family"] = "serif"
 	plt.rcParams.update({'font.size': 30})
 	if name!=None:
