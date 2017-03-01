@@ -1,3 +1,4 @@
+% !TEX root = main_vldb.tex
 We consider the fast computation of constrained shortest paths in large-scale graphs, using preprocessing and graph augmentation techniques.
 The Shortest-path (SP) problem is one of the canonical algorithm design problems.
 In recent years, however, it has been revolutionized both in terms of academic research as well as real-world applications (cf.~\cite{goldberg_survey,dimacs09} for surveys).
@@ -48,7 +49,7 @@ Finally, another class of problems which is related to the CSP is that of routin
 \end{enumerate}
 
 In the case of SP problem, there was significant initial development on the first question, leading to many different techniques~\cite{dimacs09}, which worked well in practice, but had no performance guarantees.
-Abraham et al.~\cite{highway2010,highway2013} then proposed the \emph{Highway Dimension} (HD), a graph structural metric, which they showed could parametrize the preprocessing, storage and query time of sevelral of these heuristics (hub labels, contraction hierarchies, etc.).
+Abraham et al.~\cite{highway2013, highway2010} then proposed the \emph{Highway Dimension} (HD), a graph structural metric, which they showed could parametrize the preprocessing, storage and query time of sevelral of these heuristics (hub labels, contraction hierarchies, etc.).
 Our work adopts a similar program to provide partial answers for the above questions; in particular, our contributions are as follows:
 \begin{itemize}[nosep,leftmargin=*]
 \item \textbf{Theoretical contributions}: 
@@ -65,7 +66,7 @@ As we mention before, our work is inspired by the recent developments (both theo
 The problem of finding robust shortest paths is closely related to the stochastic on-time arrival (SOTA) problem~\cite{fan2005arriving}.
 The SOTA problem with Gaussian travel times was solved via exhaustive search~\cite{nikolova_gaussian}. The optimal policy under discrete distributions was given in~\cite{samaranayake2012speedup}, and pre-processing policies were considered in~\cite{sabran2014precomputation}. Finally, ~\cite{nikolova_discretization} provide an approximation technique based on discretization for DAGs.
 
-The primary speedup technique we use in our work is that of hub labels (HL). This was introduced first in~\cite{cohen_definition_hl}. More recently, HL was shown to admit the best query time bounds in low HD graphs~\cite{highway2010,highway2013}, and this observation was experimentally confirmed in~\cite{hubimplem} (see also Figure 7 in~\cite{goldberg_survey}).  
+The primary speedup technique we use in our work is that of hub labels (HL). This was introduced first in~\cite{cohen_definition_hl}. More recently, HL was shown to admit the best query time bounds in low HD graphs~\cite{highway2013,highway2010}, and this observation was experimentally confirmed in~\cite{hubimplem} (see also Figure 7 in~\cite{goldberg_survey}).  
 Finally, the HD-based bounds for hub labels was shown to be tight in~\cite{babenko_hl_complexity,white_complexity_hd}, and it was also shown that finding optimal hub labels is NP hard.
 
 There is an extensive literature on CSP problems, which is well surveyed in~\cite{csp_survey}; most of this work however considers only query-time techniques without preprocessing. Our graph augmentation technique is similar to that proposed in~\cite{alex_bicriteria}, which is based on a dynamic programming approach. 
