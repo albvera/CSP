@@ -82,8 +82,16 @@ There are two ways around this issue.
 We can compute the cover by processing one shortest path tree at a time, this translates to $\Omega(n^3\log n)$ running time, but $\Or(n)$ memory.
 The second approach we suggest is to compute only $k<<n$ shortest path trees and cover these greedily.
 We use an off-the-shelf clustering method to obtain $k$ cluster centers, from which we compute the shortest paths. 
-As shown in Figures~\ref{fig:clusters_sf} and~\ref{fig:clusters_lu}, the clustering approach provide a very good approximation of the hubs with even a relatively small $k$.
+As shown in Figure~\ref{fig:clusters}, the clustering approach provide a very good approximation of the hubs with even a relatively small $k$.
 \end{remark}
+
+\begin{figure}
+\input{TexImg/plot_clusters_sf.tex}
+\includegraphics[clip, trim=14cm 3cm 3cm 3cm,scale=0.1]{TexImg/SF_hub_sizes.pdf}
+\input{TexImg/plot_clusters_lu.tex}
+\caption{Performance of clustering for San Francisco (left) and Luxembourg (right). In the $y$-axis the quantities are normalized by the best greedy cover, i.e., using $k=n$.}
+\label{fig:clusters}
+\end{figure}
 
 \subsubsection{Frontier and specific queries}
 
@@ -103,7 +111,7 @@ For every $v\in V(G)$ and $b=1,2,\ldots,B$, we include the edge $\pp{v,b}\pp{v,b
 A simple argument shows that with the added edges, the shortest path between $\pp{s,b}$ and $\pp{t,0}$ has length $\dist(s,t|b)$
 
 \subsection{Experiments}
-\todo{mentuon code is in github}
+\todo{mention code is in github}
 All the experiments were performed on a 64-bit desktop computer with a 3.40GHz Intel Core i7-6700 processor and 16GB RAM running Ubuntu 16.04.
 The entire code is written in Python 2.7. We use the library Networkx for the graph representation and Dijkstra's algorithm.
 To compute the SP cover we follow the exhibition in \cite{hubimplem}.
@@ -120,7 +128,6 @@ Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computati
 For frontier queries, labelled as `f', the query times are measured as the average of 1000 random $s,t$.
 For specific queries, labelled as `s', the times are measured as 1000 random triplets $s,t,b$.
 The column for $B=0$ represents the original graph (without augmentation). 
-%For each maximum budget level $B$, the results: i) $B-f$ that computes the entire solution frontier for all budgets $b\leq B$ on a fully pruned graph (as given in Definition~\ref{def:pruned_aug_graph}, and ii) $B-s$ that computes the solution only for the specified budget level on the fully pruned graph with XXX (\todo{Alberto to connect with previous section}).
 As can be seen in the experimental results, our method finds the constrained shortest path solution on average four orders of magnitude faster than running Dijkstra's algorithm on the augmented graph. 
 Preprocessing for frontier queries results in a more compact set of hub labels, since a node $\pp{s,b}$ needs to store information for paths with budget exactly equal to $b$.
 On the other hand, for specific queries, $\pp{s,b}$ needs to store information for all budgets up to $b$.
@@ -183,57 +190,46 @@ In the contraction step, we want to remove a node without altering the shortest 
 \includegraphics[clip, trim=0.2cm 0.3cm 0.2cm 0.2cm,scale=0.26]{TexImg/SF_query_dij_B25.pdf}
 \includegraphics[clip, trim=1.3cm 0.3cm 0.2cm 0.2cm,scale=0.26]{TexImg/SF_query_hl_B25.pdf}
 \end{center}
-\caption{Histogram frontier queries, Dijkstra (left) and HL (right). $B=25$}\label{fig:SF_query}
+\caption{Histogram frontier queries in San Francisco augmented with $B=25$. Dijkstra (left) and HL (right).}
+\label{fig:SF_query}
 \end{figure}
 
-
-
-\begin{figure*}
-\hfill
-\begin{subfigure}{0.45\textwidth}
-\input{TexImg/plot_clusters_sf.tex}
-\caption{San Francisco network}\label{fig:clusters_sf}
-\end{subfigure}
-\begin{subfigure}{0.45\textwidth}
-\input{TexImg/plot_clusters_lu.tex}
-\caption{Luxembourg City network}\label{fig:clusters_lu}
-\end{subfigure}
-\caption{Hub sizes as a function of the number of clusters}\label{fig:clusters}
-\end{figure*}
-
-% \begin{figure}
-% \hfill
-% \input{TexImg/plot_clusters_lu.tex}
-% \caption{Luxembourg City with different clusters}\label{fig:clusters_lu}
-% \end{figure}
 
 
 \subsubsection{Hub sizes and node significance}
 
-Figures \ref{fig:SF_hub_size_map} and \ref{fig:sig_colapse} show the spatial relationships between the node hub sizes and significance (the number of nodes for which this node is a hub) in the San Francisco network. Figure \ref{fig:SF_bwd_size} shows a histogram of these metrics. 
+We focus the analysis on two meaningful quantities.
+The first is hub size, which is well captured by  $\card{\Lb(\pp{t,0})}$ for $t\in V$.
+Indeed, for frontier queries the backward hub is bounding the space requirements; for specific queries the same is true up to a constant factor.
+For the second quantity, we define the significance of $s\in V$ as the number of hubs containing $s$, i.e., $\sum_t\sum_b\In{\pp{s,b}\in \Lb(\pp{t,0})}$.
+Intuitively, a node is highly significant if belongs to many efficient paths.
+Figure~\ref{fig:SF_bwd_size} shows a histogram of these metrics. 
+
+Figures \ref{fig:SF_hub_size_map} and \ref{fig:sig_colapse} show the spatial relationships between the hub size and significance in the San Francisco network. 
 
 \begin{figure} 
-\begin{center}
 \includegraphics[clip, trim = 0.1cm 0.3cm 0cm 0cm,scale=0.27]{TexImg/SF_bwd_hub_size.pdf}
 \includegraphics[clip, trim = 1.3cm 0.3cm 0cm 0cm,scale=0.27]{TexImg/significance.pdf}
-\end{center}
-\caption{Size of backward hubs SF (left) and significance(right), frontier, $B=25$}\label{fig:SF_bwd_size}
+\caption{Size of reverse hubs (left) and significance (right) for frontier queries in San Francisco augmented with $B=25$.}
+\label{fig:SF_bwd_size}
 \end{figure}
-
-
+	
 \begin{figure}
 \begin{center}
 \includegraphics[clip, trim=4.5cm 4.8cm 4.7cm 3cm,scale=0.8]{TexImg/SF_hub_sizes.pdf}
 \includegraphics[clip, trim=15.8cm 0cm 0.4cm 1cm,scale=0.3]{TexImg/SF_hub_sizes.pdf}
 \end{center}
-\caption{Map of backward size, $B=25$}\label{fig:SF_hub_size_map}
+\caption{Heat map of hub size for frontier queries in San Francisco augmented with $B=25$.}\label{fig:SF_hub_size_map}
 \end{figure}
 
 \begin{figure} 
 \begin{center}
 \includegraphics[clip, trim=3.7cm 2.9cm 4.2cm 3cm,scale=0.8]{TexImg/sig_colapse.pdf}
 \includegraphics[clip, trim=15cm 1.5cm 0.1cm 0.8cm,scale=0.45]{TexImg/sig_colapse.pdf}
-\caption{Significance, $B=25$}\label{fig:sig_colapse}
+\caption{Heat map of significance for frontier queries in San Francisco augmented with $B=25$.
+The most significant nodes have been drawn bigger.
+The top 3 most significant correspond to Geary Blvd \& Gough St, Franklin St \& O'Farrel St and Market St \& Polk St.}
+\label{fig:sig_colapse}
 \end{center}
 \end{figure}
 
@@ -241,5 +237,7 @@ Figures \ref{fig:SF_hub_size_map} and \ref{fig:sig_colapse} show the spatial rel
 \begin{center}
 \includegraphics[scale=0.37]{TexImg/map_LU_sig.png}
 \end{center}
-\caption{Significance in Luxembourg City, frontier, $B=25$}\label{fig:map_LU} 
+\caption{Heat map of significance for frontier queries in Luxembourg City augmented with $B=25$.
+Notice how the highly significant nodes are in main road crossings.}
+\label{fig:map_LU} 
 \end{figure}

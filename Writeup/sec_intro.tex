@@ -1,12 +1,8 @@
-	%!TEX root = main_vldb.tex
-
-
 We consider the problem of fast computation of constrained shortest paths in large-scale graphs, using preprocessing and graph augmentation techniques.
 The Shortest-path (SP) computation problem is one of the canonical algorithm design problems.
 In recent years, however, it has been revolutionized both in terms of academic research as well as real-world applications (cf.~\cite{dimacs09,goldberg_survey} for surveys).
 In particular, the use of preprocessing techniques and network augmentation has led to dramatic improvements in the speed and scalability of SP computation in road networks.
 These techniques however do not extend to constrained shortest-path (CSP) computations, and our work aims to bridge this gap.
-
 
 The SP and CSP problems can be summarized as follows: We are given a graph $G$, where each edge has an associated \emph{length} and \emph{cost}. 
 Now, given any two nodes $s,t$, the SP problem requires finding an  $s\rightarrow t$ path of minimum length; the CSP problem takes in a further input of a budget $b$, and requires finding a minimum length $s\rightarrow t$ path \emph{which moreover has a total cost less than $b$}.
