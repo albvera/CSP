@@ -2,10 +2,10 @@ Two of the most successful data-structures that enable fast shortest path querie
 These are general techniques which always guarantee correct shortest-path computations, but have no uniform storage/query-time bounds for all graphs.
 However, Abraham et al.~\cite{highway2013} show that for a graph with HD $\leq h$, the preprocessing time, storage requirements and query time of particular implementations of the CH and HL algorithms can be bounded solely in terms of $h$, the maximum degree $\Delta$ and the diameter $D$. 
 We now explain the construction for HL for directed graphs; for the construction of CH see Appendix~\ref{sec:ch}.
-HL was also shown to admit the best query-time guarantees in~\cite{highway2013}; consequently, we adapt the HL technique for scaling CSP computations in Section \ref{sec:chd}.
+HL was also shown to admit the best query-time guarantees in~\cite{highway2013}, consequently, we adapt the HL technique for scaling CSP computations in Section \ref{sec:chd}.
 
 The basic HL technique is as follows:
-Every node $v$ is associated with a \emph{hub labels}, $L(v) = \crl*{\Lf(v),\Lb(v)}$, comprising of a set of forward hubs $\Lf(v)$ and reverse hubs $\Lb(v)$.
+Every node $v$ is associated with \emph{hub labels}, $L(v) = \crl*{\Lf(v),\Lb(v)}$, comprising of a set of forward hubs $\Lf(v)$ and reverse hubs $\Lb(v)$.
 We also store $\dist(v,w),\dist(u,v)$ for every $w\in\Lf(v),u\in\Lb(v)$.
 The hub labels are said to satisfy the \emph{cover property} if, for any $s\neq t\in V$, $\Lf(s)\cap\Lb(t)$ contains at least one node in $P(s,t)$.
 In the case that $t$ is not reachable from $s$, it must be that $\Lf(s)\cap\Lb(t)=\varnothing$.
@@ -13,16 +13,18 @@ In the case that $t$ is not reachable from $s$, it must be that $\Lf(s)\cap\Lb(t
 With the aid of the cover property, we can obtain $\dist(s,t)$ by searching for the minimum value of $\dist(s,w)+\dist(w,t)$ over all nodes $w\in\Lf(s)\cap\Lb(t)$.
 If the hubs are sorted by ID, this can be done in time $\Or(\card{\Lf(s)}+\card{\Lb(t)})$ via a single sweep.
 Moreover, by storing the second node in $P(s,w)$ for each $w\in \Lf(s)$, and the second-last node in $P(w,t)$ for each $w\in \Lb(t)$, we can also recover the shortest path.
-Now, each time we run a HL query, we find at least one new node $w\in P(s,t)$, $w\neq s,t$, is returned; we can then recurse to find subpaths $P(s,w)$ and $P(w,t)$.
+Now, each time we run a HL query, at least one new node $w\in P(s,t)$, $w\neq s,t$, is returned; we can then recurse to find subpaths $P(s,w)$ and $P(w,t)$.
 Note that we need to store this extra information, as otherwise, we could have $\Lf(s)\cap\Lb(t)=\{s\}$.
-Let $\Lm \defeq \max_v\abs*{L(v)}$ be the size of the maximum HL; then the per-node storage requirement is proportional to $\Lm$, while the query time is proportional to $\Lm\cdot P(s,t)$.
+Let $\Lm \defeq \max_v\abs*{L(v)}$ be the size of the maximum HL.
+The per-node storage requirement is $\Or(\Lm)$, while the query time is $\Or(\Lm\ell(P(s,t)))$.
 
 To construct hub labels with guarantees on preprocessing time and $\Lm$, we need the additional notion of a \emph{multi-scale LSHS}. 
-For $i=1,\ldots,\log D$, we assume that graph $(G,\ell)$ admits a collection of sets $\crl*{C_i}$, such that each $C_i$ is an $(h,2^{i-1})$-LSHS.
-Given such a collection $\crl*{C_i}$, we can now obtain small HL; we outline this construction for directed graphs, closely following the construction in \cite{highway2013} (Theorem 5.1) for the undirected case.
+We assume that graph $(G,\ell)$ admits a collection of sets $\crl*{C_i: i=1,\ldots,\log D}$, such that each $C_i$ is an $(h,2^{i-1})$-LSHS.
+Given such a collection, we can now obtain small HL.
+We outline this construction for directed graphs, closely following the construction in \cite{highway2013} (Theorem 5.1) for the undirected case.
 \begin{proposition}
 \label{theo:construct_hl}
-For $(G,\ell)$, given a multi-scale LSHS collection $\crl*{C_i;i=1,\ldots,\log D}$ (where each $C_i$ is an $(h,2^{i-1})$-LSHS), we can construct hub labels of size at most $h\log D$.
+For $(G,\ell)$, given a multi-scale LSHS collection $\crl*{C_i:i=1,\ldots,\log D}$, where each $C_i$ is an $(h,2^{i-1})$-LSHS, we can construct hub labels of size at most $h\log D$.
 \end{proposition}
 \begin{proof}
 For each node $v$, we define the hub label $L(v)$ as
@@ -40,5 +42,7 @@ Now any point in the path belongs to both $\Bf_{2^i}(s)$ and $\Bb_{2^i}(t)$, and
 
 
 Finally, we need to compute the desired multi-scale LSHS in polynomial time.
-As we mention before, a greedy algorithm returns a $\Or(h\log n)$ approximation to any $(h,r)$-LSHS; however if the HD $\leq h$, this can be improved to obtain a $\Or(h\Delta\log(h\Delta))$ approximation; this argument, which extends Corollary 7.3 in \cite{highway2013}, is presented in Section~\ref{sec:preproc}.
-A more subtle point is that the resulting algorithm, even though admitting a polynomial time guarantee, is impractical for large networks; in Section~\ref{sec:numeric}, we discuss heuristics that work better in practice.
+As we mentioned before, a greedy algorithm returns a $\Or(h\log n)$ approximation to any $(h,r)$-LSHS, however, if the HD $\leq h$, this can be improved to obtain a $\Or(h\Delta\log(h\Delta))$ approximation.
+This argument, which extends Corollary 7.3 in \cite{highway2013}, is presented in Section~\ref{sec:preproc}.
+A more subtle point is that the resulting algorithm, even though admitting a polynomial time guarantee, is impractical for large networks.
+In Section~\ref{sec:numeric}, we discuss heuristics that work better in practice.

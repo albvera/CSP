@@ -1,8 +1,5 @@
 \label{sec:ch}
 We present here how to extend the concept of HD in order to prove the efficiency of CH in directed graphs.
-
-\subsection{Additional Data Requirements}
-
 Given a rank in the nodes, the shortcut process works as in the non-directed case:
 \begin{enumerate}
 	\item Let $G'$ be a temporary copy of $G$.
@@ -56,8 +53,6 @@ The proof is basically the same.
 \end{proof}
 
 We can conclude now that the number of shortcuts, i.e.\ $\card{E^+}$, is at most $2nh\log D$.
-
-\subsection{Query Time}
 
 As we mentioned before, the query performs Dijkstra from the source and target, but always constructing paths of increasing rank.
 When scanning a vertex $v$, the forward search has a label $\dist(s,v)'$. 
