@@ -80,13 +80,15 @@ In our experiments, we use the mean travel times for our length function and the
 \subsubsection{Runtime performance}
 
 
-Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computation times for different maximum budgets $B$. The query times are measured as the average of 1000 random $s,t$ pairs, were the task is to recover $\dist(s,t|b)$ for every $b=0,1,\ldots,B$, i.e., the entire efficient frontier.  The column for $B=0$ represents the original graph (without augmentation). For each maximum budget level $B$, we consider compare two cases: i) $B-f$ that computes the entire solution frontier for all budgets $b\leq B$ on a fully pruned graph (as given in Definition~\ref{def:pruned_aug_graph}, and ii) $B-s$ that computes the solution only for the specified budget level on partially pruned graph 
+Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computation times for different maximum budgets $B$. The query times are measured as the average of 1000 random $s,t$ pairs, were the task is to recover $\dist(s,t|b)$ for every $b=0,1,\ldots,B$, i.e., the entire efficient frontier.  The column for $B=0$ represents the original graph (without augmentation). For each maximum budget level $B$, we consider compare two cases: i) $B-f$ that computes the entire solution frontier for all budgets $b\leq B$ on a fully pruned graph (as given in Definition~\ref{def:pruned_aug_graph}, and ii) $B-s$ that computes the solution only for the specified budget level on the fully pruned graph with XXX (\todo{Alberto to connect with previous section}). As can be seen in the experimental results, our method finds the constrained shortest path solution on average four orders of magnitude faster than running Dijkstra's algorithm on the augmented graph. Finding the solution frontier takes longer, but results in a more compact set of hub labels since at each budget level the problem only needs to consider paths that ... \todo{needs to be completed}. 
 
-\begin{table}
+\begin{table*}
+\begin{subtable}{.5\textwidth}
 \begin{center}
 \begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.2cm} | p{1.2cm} | }
 \hline
 	B & Preproc [m] & Avg F Size & Avg B Size & Query Dij [ms] & Query HL [ms] \\ \hline \hline
+	0 & 0 & 0 & 0 & 0 & 0.000 \\ \hline
 5-f  & 5  & 17 & 28 & 74.71  & 0.02  \\
 5-s  & 5  & 57 & 28 & 32.67  & 0.009 \\\hline
 10-f & 13 & 17 & 28 & 183.18 & 0.03  \\
@@ -100,12 +102,10 @@ Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computati
 30-f & 37 & 17 & 28 & 648.17 & 0.04  \\
 30-s & 32 & 84 & 28 & 161.99 & 0.01  \\\hline
 \end{tabular}
-\caption{Results for San Francisco. Specify the parameters. }\label{tab:sf_results}
+\caption{San Francisco network.}\label{tab:sf_results}
 \end{center}
-\end{table}
-
-
-\begin{table}
+\end{subtable}
+\begin{subtable}{.5\textwidth}
 \begin{center}
 \begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.2cm} | p{1.2cm} |}
 \hline
@@ -124,10 +124,11 @@ Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computati
 	30-f & 101 & 14& 19 & 1144.07 & 0.032 \\ 
 	30-p & 93 & 62 & 19 & 272.40 & 0.010 \\ \hline
 \end{tabular}
-\caption{Results for Luxembourg City. Specify the parameters.}\label{tab:lu4k_results}
+\caption{Luxembourg City network}\label{tab:lu4k_results}
 \end{center}
-\end{table}
-
+\end{subtable}
+\caption{Experimental results with 1000 random $s,t$ pairs for each network and multiple maximum budget levels $B$. Results on rows $B-f$ correspond to computing the solution frontier for all budget levels $b\leq B$ while the results on rows $B-s$ correspond to computing the solution for the budget level $b$.}\label{tab:performance_results}
+\end{table*}
 
 \begin{figure}
 \begin{center}
@@ -138,9 +139,7 @@ Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computati
 \end{figure}
 
 
-\subsubsection{Clustering}
-
-As explained in Section XXX, creating the hub-labels efficiently requires storing all pairs shortest path distances during the preprocessing stage. In many cases, this can impose a prohibitive memory requirement. However, as can be seen in Figures~\ref{fig:clusters_sf} and~\ref{fig:clusters_lu}, the clustering approach from Section XXX provides a very good approximation of the hubs with even a relatively small number of clusters. 
+\remark{\todo{move figures to Appendix} As explained in Section XXX, creating the hub-labels efficiently requires storing all pairs shortest path distances during the preprocessing stage. In many cases, this can impose a prohibitive memory requirement. However, as can be seen in Figures~\ref{fig:clusters_sf} and~\ref{fig:clusters_lu}, the clustering approach from Section XXX provides a very good approximation of the hubs with even a relatively small number of clusters.}
 
 \begin{figure}
 \hfill
