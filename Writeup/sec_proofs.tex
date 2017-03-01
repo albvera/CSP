@@ -6,7 +6,7 @@
 		\Ensure Forward hubs $Lf(\pp{s,b})$ for $b=0,\ldots,B$ and a marked node $v_P$ for every path.
 		\State Order each $\PE_{s,t}$ by increasing cost and remove paths consuming more than $B$.
 		\For{$t\in V\setminus s$}
-		\For{$P\in\calP_{s,t}^E$}
+		\For{$P\in\Pst^E$}
 		\State $b\gets c(P)$, $b'\gets c(P')$, where $P'$ is the next path in the list ($b'=B$ if no such path).
 		\State Find the largest $i$ such that $P$ is $2^{i-1}$-efficient.
 		\State Find $v\in C_i$ hitting $P$ and mark $v$ as $v_P$.
@@ -20,15 +20,15 @@
 \end{algorithm}
 
 \begin{algorithm}[!ht]
-	\caption{Construction of backward hub}
-	\label{alg:backwardhub}
+	\caption{Construction of reverse hub}
+	\label{alg:reversehub}
 	\begin{algorithmic}[1]
-		\Require Node $t\in V$, efficient paths $\calP_{s,t}^E\,\forall\,s$, marked nodes and EPHS $C_i$.
+		\Require Node $t\in V$, efficient paths $\Pst^E\,\forall\,s$, marked nodes and EPHS $C_i$.
 		\Ensure Backward hub $\Lb(\pp{t,0})$.
-		\State Order each $\calP_{s,t}^E$ by increasing cost and remove paths consuming more than $B$.
+		\State Order each $\Pst^E$ by increasing cost and remove paths consuming more than $B$.
 		\State $\Lb(\pp{t,0})\gets \varnothing$
 		\For{$s\in V\setminus t$}
-		\For{$P\in\calP_{s,t}^E$}
+		\For{$P\in\Pst^E$}
 		\State Find the largest $i$ such that $P$ is $2^{i-1}$-efficient.
 		\State Take $v$ as the marked node $v_P$.
 		\State Add $\pp{v,c(P[v,t])}$ to $\Lb(\pp{t,0})$ with distance $\ell(P[v,t])$.
@@ -38,7 +38,7 @@
 \end{algorithm}
 
 \begin{proof}[of Theorem \ref{thm:markedhubs}]
-	To get this stronger bound, we need to modify the hub label construction. The algorithm for forward hub construction is given in Algorithm~\ref{alg:forwardhub}, and for reverse hubs in Algorithm~\ref{alg:backwardhub}. Note that the two must be run sequentially, as the latter uses the nodes marked in the former.
+	To get this stronger bound, we need to modify the hub label construction. The algorithm for forward hub construction is given in Algorithm~\ref{alg:forwardhub}, and for reverse hubs in Algorithm~\ref{alg:reversehub}. Note that the two must be run sequentially, as the latter uses the nodes marked in the former.
 	
 	
 	We make the forward hubs $\Lf(\pp{v,b})$ slightly bigger by storing, for each node the distance from $\pp{v,b}$ and also the \emph{budget surplus}.

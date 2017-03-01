@@ -98,7 +98,7 @@ When scanning a vertex $v$, the forward search has a label $\dist(s,v)'$.
 The labels always satisfy $\dist(s,v)'\geq\dist(s,v)$, but, since the algorithm only goes to higher ranks, equality is not guaranteed.
 
 We add a pruning rule analogous to the non-directed case: when the forward search scans a node $v$, if $(v,w)\in E\cup E^+$ and $w\in Q_i$, then $w$ is added to the priority queue only if $\text{rank}(w)>\text{rank}(v)$ and $\dist(s,v)'+\ell(v,w)\leq 2^i$.
-For the backward search, the condition is the analogous $\dist(v,t)'+\ell(w,v)\leq 2^i$ when $(w,v)\in  E\cup E^+$.
+For the reverse search, the condition is the analogous $\dist(v,t)'+\ell(w,v)\leq 2^i$ when $(w,v)\in  E\cup E^+$.
 
 \begin{proposition}
 	The query with additional pruning returns the correct distance.

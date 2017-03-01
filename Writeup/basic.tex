@@ -6,7 +6,7 @@ Finally, we define the \emph{maximum degree} $\Delta = \max_v\Delta(v)$.
 
 
 A simple \emph{path} $P$ in $G$ is an acyclic sequence of nodes  $\crl*{u_1u_2u_3\ldots u_k}$ with $(u_i,u_{i+1})\in E$.
-For any source-terminal pair $s,t\in V$, we denote by $\calP_{s,t}$ the set of all simple paths from $s$ to $t$.
+For any source-terminal pair $s,t\in V$, we denote by $\Pst$ the set of all simple paths from $s$ to $t$.
 Throughout this work, we only consider simple paths, which for brevity, we henceforth refer to as paths.
 
 The length $\ell(P)$ is the sum of edge lengths in $P$. Note also that any path $P$ with more than one node has length at least $1$ (since $\ell:E\to \N_+$).
@@ -20,16 +20,16 @@ Finally, we define $D=\max_{P\in\calP}\ell(P)$ to be the diameter of $G$.
 Analogous to length, we define the cost $c(P)$ as the sum of edge costs on path $P$. 
 Our goal is to develop a data-structure that can solve the following \emph{Constrained Shortest-Path} (CSP) problem: Given a source-terminal pair $s,t$ and a budget $b$, we want to return a path $P$ that solves
 \begin{align*}
-\min_{P \in \calP_{s,t}}  \quad \ell(P) \quad
+\min_{P \in \Pst}  \quad \ell(P) \quad
 \text{s.t. } \quad  c(P) \leq b 
 \end{align*}
 We define $\dist(s,t|b)$ to be the minimum of this problem; if there is no feasible solution, we define $\dist(s,t|b)=\infty$.
 Note that the CSP problem may have multiple solutions (with different feasible costs), as there could be several paths with the same length and cost lower than $b$.
 To limit these solutions to those with minimal cost, we require that the path also be \emph{efficient}. 
 \begin{definition}
-\textbf{(Efficient Path)} A path $P\in \calP_{s,t}$ is called \emph{efficient} if there is no other path $P'\in \calP_{s,t}$ such that $\ell(P')\leq \ell(P)$ and $c(P')\leq c(P)$ with at least one inequality strict.
+\textbf{(Efficient Path)} A path $P\in \Pst$ is called \emph{efficient} if there is no other path $P'\in \Pst$ such that $\ell(P')\leq \ell(P)$ and $c(P')\leq c(P)$ with at least one inequality strict.
 \end{definition}
-We denote the set of all efficient paths as $\PE$, and define the \emph{Pareto frontier} from $s$ to $t$ as $\calP_{s,t}\cap\PE$.
+We denote the set of all efficient paths as $\PE$, and define the \emph{Pareto frontier} from $s$ to $t$ as $\Pst\cap\PE$.
 Observe that every subpath of an efficient path is also efficient (if not, we could improve the path by replacing the subpath).
 
 

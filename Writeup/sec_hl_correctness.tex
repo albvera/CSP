@@ -5,7 +5,7 @@ We now explain the construction for HL for directed graphs; for the construction
 HL was also shown to admit the best query-time guarantees in~\cite{highway2013}; consequently, we adapt the HL technique for scaling CSP computations in Section \ref{sec:chd}.
 
 The basic HL technique is as follows:
-Every node $v$ is associated with a \emph{hub labels}, $L(v) = \crl*{\Lf(v),\Lb(v)}$, comprising of a set of forward hubs $\Lf(v)$ and backward hubs $\Lb(v)$.
+Every node $v$ is associated with a \emph{hub labels}, $L(v) = \crl*{\Lf(v),\Lb(v)}$, comprising of a set of forward hubs $\Lf(v)$ and reverse hubs $\Lb(v)$.
 We also store $\dist(v,w),\dist(u,v)$ for every $w\in\Lf(v),u\in\Lb(v)$.
 The hub labels are said to satisfy the \emph{cover property} if, for any $s\neq t\in V$, $\Lf(s)\cap\Lb(t)$ contains at least one node in $P(s,t)$.
 In the case that $t$ is not reachable from $s$, it must be that $\Lf(s)\cap\Lb(t)=\varnothing$.

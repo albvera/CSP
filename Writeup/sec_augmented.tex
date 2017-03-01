@@ -68,17 +68,17 @@ In contrast, we allow edge costs to be zero, and therefore, our augmented graph 
 
 The above result now allows us to relate EPHS of the original graph to LSHS in the augmented graph.
 Note that in $G^B$, we are interested only in shortest paths ending in sink nodes (since these project to efficient paths). 
-Let $\calP^B$ be the path-system comprising all shortest paths in $G^B$ ending in a sink node.
-A hitting set for $\PE$ can be used to obtain a hitting set for $\calP^B$, but, since the augmented graph has more nodes, the sparsity increases.
+Let $\PB$ be the path-system comprising all shortest paths in $G^B$ ending in a sink node.
+A hitting set for $\PE$ can be used to obtain a hitting set for $\PB$, but, since the augmented graph has more nodes, the sparsity increases.
  
 \begin{proposition}
-If the path-system $\PE$ admits $(\hc,r)$-EPHS, then $\calP^B$ admits $(\hc B,r)$-LSHS.
+If the path-system $\PE$ admits $(\hc,r)$-EPHS, then $\PB$ admits $(\hc B,r)$-LSHS.
 \end{proposition}
 \begin{proof}
-%We define a set $C^B$ and prove that hits $\calP_r^B$ and that it is locally sparse.
+%We define a set $C^B$ and prove that hits $\PB_r$ and that it is locally sparse.
 Given $C$, an $(\hc,r)$-EPHS for $\PE$, define
 \begin{equation}\label{eq:hitset}
-C^B\defeq \{\pp{v,b}: v\in C, v \text{ hits }\bar P\in\calP_r^B, c(\bar P)=b\leq B \}.
+C^B\defeq \{\pp{v,b}: v\in C, v \text{ hits }\bar P\in\PB_r, c(\bar P)=b\leq B \}.
 \end{equation}
 
 By Proposition~\ref{prop:shorteffic}, we know that shortest paths are efficient, hence $C^B$ hits all the desired paths.
@@ -99,19 +99,19 @@ This is key for our subsequent query time guarantees.
 %\end{remark}
 %The last result shows how LSHS translate to the augmented graph.
 %Since the notion of HD is stronger, it is not always possible to make the analogous between two path systems. Surprisingly, in this case we are able to relate the HD of both path systems.
-Moreover, we can also relate the highway dimensions of the path-systems $\PE$ and $\calP^B$ (Note: this does not follow from above, since the HD is a stronger notion than existence of locally-sparse hitting sets).
+Moreover, we can also relate the highway dimensions of the path-systems $\PE$ and $\PB$ (Note: this does not follow from above, since the HD is a stronger notion than existence of locally-sparse hitting sets).
 \begin{proposition}\label{prop:HDaugmented}
-If the HD of the system $\PE$ is $h_c$, then the HD of the system $\calP^B$ is $Bh_c$.
+If the HD of the system $\PE$ is $h_c$, then the HD of the system $\PB$ is $Bh_c$.
 \end{proposition}
 \begin{proof}
 Fix $r>0$ and $\pp{v,b}\in V^B$ .
 Let $H_{v,r}\subseteq V$ be the set hitting $S_r(v,\PE)$ and define $H\defeq H_{v,r}\times\{0,1,\ldots,B\}$.
-We show that $H$ hits $\Sf_r(\pp{v,b},\calP^B)$.
+We show that $H$ hits $\Sf_r(\pp{v,b},\PB)$.
 
-Take $P\in\Sf_r(\pp{v,b},\calP^B)$.
+Take $P\in\Sf_r(\pp{v,b},\PB)$.
 Since $\dist(\pp{v,b},P)\leq 2r$, it holds $\dist(v,\bar P)\leq 2r$, therefore $\bar P\in \Sf_r(v,\PE)$.
 Finally, $H_{v,r}$ hits $\bar P$, thus $H$ hits $P$.
-A similar argument shows that $H$ hits $\Sb_r(\pp{v,b},\calP^B)$.
+A similar argument shows that $H$ hits $\Sb_r(\pp{v,b},\PB)$.
 \end{proof}
 
 In the next section, we discuss how the above augmented graph can be used to construct hub labels for answering CSP queries. We note however that this technique is primarily a theoretical proof-of-concept, that shows that the CHD (and in fact, the HD of $G$ under an additional condition; cf. Section \ref{ssec:hdvschd}) is a good parametrization for the complexity of HL construction. In practice (cf. Section \ref{ssec:practical}), we use a similar idea of an augmented graph, but with a construction more amenable for implementation.

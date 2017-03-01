@@ -50,7 +50,7 @@ Then, given an $(h,r)$-LSHS for any $r>0$, we can construct (in polynomial time)
 \end{theorem}
 
 \begin{proof}
-For any $r$, we need to construct a hitting set $C^E$ for $\calP_r^E$.
+For any $r$, we need to construct a hitting set $C^E$ for $\PE_r$.
 Assume first $r\geq \frac{\log(\alpha^\beta h)}{2\log\Delta}$.
 Take $C$ as the hitting set for $\calP_{2^{-\beta}r}$, which is guaranteed to be sparse with respect to balls of radius $2^{-\beta+1}r$.
 Define the desired set by
@@ -62,7 +62,7 @@ Since $\calP$ is a $2^{-\beta}$-witness for $\PE_r$, $C^E$ is indeed a hitting s
 We are only left to prove the sparsity.
 Take some $u\in V$, by doubling dimension we can cover $\Bf_{2r}(u)$ by at most $\alpha^\beta$ balls of radius $2^{-\beta+1}r$.
 Each of these balls contains at most $h$ elements of $C$, therefore the sparsity is as claimed.
-The argument for backward balls is identical.
+The argument for reverse balls is identical.
 
 Now we analyse the case $r< \frac{\log(\alpha^\beta h)}{2\log\Delta}$.
 It is no longer true that the efficient paths are witnessed, but now the neigborhoods are small.
