@@ -1,5 +1,11 @@
 	%!TEX root = main_vldb.tex
 
+
+We consider the problem of computing constrained shortest paths at scale, motivated primarily by the requirements of modern transportation platforms. 
+In recent years, the use of preprocessing techniques and network augmentation has led to dramatic improvements in the speed and scalability of shortest path (SP) computations in road networks.
+These techniques however do not extend to constrained shortest-path (CSP) computations, which are necessary in order to provide accurate and robust routing and travel-time estimates, which incorporate uncertainties in travel times.
+
+
 Assume each arc has, besides a certain length, an associated cost. 
 The problem of computing the shortest path, with cost at most a given value, is known to be NP-Hard.
 A dynamic programming approach can compute the shortest path in pseudo-polynomial time, which is the best bound known so far \todo{add reference}.
