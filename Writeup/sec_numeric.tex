@@ -77,9 +77,11 @@ We evaluated the performance of our algorithms with real-world test networks: a 
 In our experiments, we use the mean travel times for our length function and the following cost structure. The 10\% edges with the highest variance are assigned cost 1 and the rest cost 0.
 
 \subsubsection{Runtime performance}
+
+
 Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computation times for different maximum budgets $B$. The query times are measured as the average of 1000 random $s,t$ pairs, were the task is to recover $\dist(s,t|b)$ for every $b=0,1,\ldots,B$, i.e., the entire efficient frontier.  The column for $B=0$ represents the original graph (without augmentation).
 
-\begin{table}[h]
+\begin{table}
 \begin{center}
 \begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.2cm} | p{1.2cm} | }
 \hline
@@ -106,8 +108,9 @@ Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computati
 \caption{Results for San Francisco. Specify the parameters. }\label{tab:sf_results}
 \end{center}
 \end{table}
- 
-\begin{table}[h]
+
+
+\begin{table}
 \begin{center}
 \begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.2cm} | p{1.2cm} |}
 \hline
@@ -131,7 +134,7 @@ Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computati
 \end{table}
 
 
-\begin{figure}[h]
+\begin{figure}
 \begin{center}
 \includegraphics[clip, trim=0.6cm 0.3cm 1.2cm 0.8cm,scale=0.3]{TexImg/SF_query_dij_B25.pdf}
 \includegraphics[clip, trim=0.9cm 0.3cm 1.1cm 0.8cm,scale=0.3]{TexImg/SF_query_hl_B25.pdf}
@@ -144,13 +147,13 @@ Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computati
 
 As explained in Section XXX, creating the hub-labels efficiently requires storing all pairs shortest path distances during the preprocessing stage. In many cases, this can impose a prohibitive memory requirement. However, as can be seen in Figures~\ref{fig:clusters_sf} and~\ref{fig:clusters_lu}, the clustering approach from Section XXX provides a very good approximation of the hubs with even a relatively small number of clusters. 
 
-\begin{figure}[h]
+\begin{figure}
 \hfill
 \input{TexImg/plot_clusters_sf.tex}
 \caption{San Francisco with different clusters}\label{fig:clusters_sf}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}
 \hfill
 \input{TexImg/plot_clusters_lu.tex}
 \caption{Luxembourg City with different clusters}\label{fig:clusters_lu}
@@ -159,14 +162,14 @@ As explained in Section XXX, creating the hub-labels efficiently requires storin
 
 \subsubsection{Hub sizes and node significance}
 
-\begin{figure}[h]
+\begin{figure}
 \begin{center}
 \includegraphics[scale=0.37]{TexImg/map_LU_sig.png}
 \end{center}
 \caption{Significance in Luxembourg City, frontier, $B=25$}\label{fig:map_LU} 
 \end{figure}
 
-\begin{figure}[h] 
+\begin{figure} 
 \begin{center}
 \includegraphics[scale=0.5]{TexImg/SF_bwd_hub_size.pdf}
 \end{center}
@@ -174,7 +177,7 @@ As explained in Section XXX, creating the hub-labels efficiently requires storin
 \end{figure}
 
 
-\begin{figure}[h] 
+\begin{figure}
 \begin{center}
 \includegraphics[clip, trim=1.7cm 2.2cm 4.7cm 1.7cm,scale=0.8]{TexImg/SF_hub_sizes.pdf}
 \includegraphics[clip, trim=13cm 0cm 1.1cm 0cm,scale=0.45]{TexImg/SF_hub_sizes.pdf}
