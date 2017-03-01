@@ -55,9 +55,9 @@ def plot_node_attributes(G,sizes,name=None,big_nodes=None):
 	for u in G.nodes():
 		colors.append(sizes[u])
 		if big_nodes!=None and u in big_nodes:
-			node_size.append(20)
+			node_size.append(30)
 		else:
-			node_size.append(5)
+			node_size.append(10)
 	cmap=plt.cm.Reds
 	pos = nx.get_node_attributes(G,'XY')
 	nx.draw(G, pos,node_size=node_size,node_color=colors,cmap=cmap,vmin=vmin,vmax=vmax,with_labels=False,linewidths=0.1,arrows=False,width=0.1) 
@@ -68,19 +68,23 @@ def plot_node_attributes(G,sizes,name=None,big_nodes=None):
 		pylab.savefig('{}.pdf'.format(name),bbox_inches='tight')
 	plt.show()
 	
-
-#Plot histogram of list or dictionary
+"""
+Plot histogram of list or dictionary
+n_bins is the number of bins to construct the histogram
+xticks and yticks are the number of ticks for each axis
+"""
 import numpy as np
-def plot_hist(data,n_bins=30,title="",xlabel="",ylabel="",name=None,nticks=4):
+def plot_hist(data,n_bins=30,title="",xlabel="",ylabel="",name=None,xticks=4,yticks=4):
 	if isinstance(data,dict):
 		data = data.values()
 	plt.hist(data,n_bins,alpha=0.5)
 	plt.title(title)
 	plt.xlabel(xlabel)
 	plt.ylabel(ylabel)
-	plt.locator_params(tight=True, nbins=nticks)
+	plt.locator_params(tight=True, nbins=xticks,axis='x')
+	plt.locator_params(tight=True, nbins=yticks,axis='y')
 	plt.rcParams["font.family"] = "serif"
-	plt.rcParams.update({'font.size': 20})
+	plt.rcParams.update({'font.size': 30})
 	if name!=None:
 		pylab.savefig('{}.pdf'.format(name),bbox_inches='tight')
 	plt.show()
