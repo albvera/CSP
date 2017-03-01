@@ -2,8 +2,16 @@ There are two essential parts in the definition of HD.
 First, we stated that a path is $r$-significant if it is long enough.
 Second, we defined the path neighbourhood of a node $v$ to be the set of paths intersecting a ball around $v$.
 These are weaker notions than the ones used in \cite{highway2013}. 
+The stronger version defines a path $P$ to be $r$-significant if, by adding at most one hop at each end, we get a shortest path $P'$ longer than $r$.
+The path $P'$ is called an $r$-witness for $P$.
+Intuitively, a path is significant if it represents a long path.
+Observe that, if $P\in\PS$ is such that $\ell(P)>r$, then $P$ is $r$-significant by definition.
+We remark also that a path can have many $r$-witnesses.
 
-\todo{finish this}. 
+Finally, the path neighborhood must also be strengthen.
+The path $P\in\PS$ belongs to $\Sf_r(v)$ if, $P$ has some $r$-witness $P'$ such that $\dist(v,P')\leq 2r$.
+The reverse neighborhood $\Sb_r(v)$ is defined analogously.
+With this modified versions of $r$-significant and neighborhood, the notions of LSHS and HD are the same as our previous definitions.
 
 \begin{proposition}\label{prop:treelike}
 For any $h$, we can construct a family of networks such that the sparsity of LSHS is $h$ and that of EPHS is arbitrarily worse than $h$.

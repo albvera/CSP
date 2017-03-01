@@ -26,12 +26,12 @@ L(u^-)^-  &\defeq \bigcup_{i=1}^{\log D} C_i^B\cap \Bb_{2^i}(u^-).
 \end{align*}
 The cover property is proved in an identical manner as in Proposition~\ref{theo:construct_hl}; we now bound the hub size.
 For forward hubs, the size follows from observing that $ \card{C_i^B\cap \Bf_{2^i}(\pp{v,b})}\leq bh_c$.
-For a reverse hub we use that \todo{check this}
+For a reverse hub we use that
 \begin{align*}
-\Bb_{2^i}(u^-) &= \{\pp{v,x}: \exists P\in \calP_{v,u}, c(P)=x, \ell(P)\leq 2^i\}\\
-&\subseteq \Bb_{2^i}(u)\times \{0,1,\ldots,B\}.
+\Bb_{2^i}(t^-) &= \{\pp{s,x}: \exists P\in \Pst, c(P)=x, \ell(P)\leq 2^i\}\\
+&\subseteq \Bb_{2^i}(t)\times \{0,1,\ldots,B\}.
 \end{align*}
-Thus, $\Bb_{2^i}(u^-)\cap C_i^B\leq Bh_c$.
+Thus, $\Bb_{2^i}(t^-)\cap C_i^B\leq Bh_c$.
 \end{proof}
 
 This immediately gives us the following corollary for the storage and query time.

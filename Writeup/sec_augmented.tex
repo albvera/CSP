@@ -83,12 +83,12 @@ C^B\defeq \{\pp{v,b}: v\in C, v \text{ hits }\bar P\in\PB_r, c(\bar P)=b\leq B \
 
 By Proposition~\ref{prop:shorteffic}, we know that shortest paths are efficient, hence $C^B$ hits all the desired paths.
 Finally, we prove local sparsity.
-Take any node $\pp{u,b}$ and observe that \todo{check this}
+Take any node $\pp{s,b}$ and observe that
 \begin{align*}
-\Bf_{2r}(\pp{u,b}) &= \{\pp{v,x}: \exists P\in\calP_{u,v}, \ell(P)\leq 2r, c(P)=b-x\} \\
-&\subseteq \{\pp{v,x}: v\in \Bf_{2r}(u), x\leq b\} .
+\Bf_{2r}(\pp{s,b}) &= \{\pp{t,x}: \exists P\in\Pst, \ell(P)\leq 2r, c(P)=b-x\} \\
+&\subseteq \{\pp{t,x}: t\in \Bf_{2r}(s), x\leq b\} .
 \end{align*}
-We know that $\card{\Bf_{2r}(u)\cap C}\leq \hc$, therefore $\card{\Bf_{2r}(\pp{u,b})\cap C^B}\leq\hc b\leq \hc B$.
+We know that $\card{\Bf_{2r}(s)\cap C}\leq \hc$, therefore $\card{\Bf_{2r}(\pp{s,b})\cap C^B}\leq\hc b\leq \hc B$.
 A similar argument shows the sparsity for the reverse ball.
 \end{proof}
 
