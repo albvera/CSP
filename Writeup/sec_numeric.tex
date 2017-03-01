@@ -72,17 +72,14 @@ All the experiments were performed on a 64-bit desktop computer with a 3.40GHz I
 The entire code is written in Python 2.7. We use the library Networkx for the graph representation and Dijkstra's algorithm.
 To compute the SP cover we follow the exhibition in \cite{hubimplem}.
 
-We evaluated the performance of our algorithms with real-world test networks: a small San Francisco network with 2643 nodes and 6588 edges for which real-world travel-time data was available as a Gaussian mixture model \cite{sf_data}, and a second (relatively larger) Luxembourg network with 30647 nodes and 71655 edges for which travel-time distributions were synthesized from road speed limits \cite{niknami2016tractable}, as real-world data was unavailable.
-Additionally, we tested on the subgraph corresponding to Luxembourg City with 4026 nodes and 9282 edges.
-
+We evaluated the performance of our algorithms with real-world test networks: a small San Francisco network with 2643 nodes and 6588 edges for which real-world travel-time data was available as a Gaussian mixture model \cite{sf_data}, and a second (slightly larger) Luxembourg City network with 4026 nodes and 9282 edges for which travel-time distributions were synthesized from road speed limits \cite{niknami2016tractable}, as real-world data was unavailable.
+ 
 In our experiments, we use the mean travel times for our length function and the following cost structure. The 10\% edges with the highest variance are assigned cost 1 and the rest cost 0.
 
 \subsubsection{Runtime performance}
-On Table~\ref{tab:sf_results} we present the results for different maximum budgets $B$.
-The column for $B=0$ represents the original graph (without augmentation).
-The query times are measured as the average of 1000 random $s,t$ pairs, were the task is to recover $\dist(s,t|b)$ for every $b=0,1,\ldots,B$, i.e., the entire efficient frontier.
+Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computation times for different maximum budgets $B$. The query times are measured as the average of 1000 random $s,t$ pairs, were the task is to recover $\dist(s,t|b)$ for every $b=0,1,\ldots,B$, i.e., the entire efficient frontier.  The column for $B=0$ represents the original graph (without augmentation).
 
-\begin{table}[htb]
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.2cm} | p{1.2cm} | }
 \hline
@@ -110,7 +107,7 @@ The query times are measured as the average of 1000 random $s,t$ pairs, were the
 \end{center}
 \end{table}
  
-\begin{table}[htb]
+\begin{table}[h]
 \begin{center}
 \begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.2cm} | p{1.2cm} |}
 \hline
@@ -134,7 +131,7 @@ The query times are measured as the average of 1000 random $s,t$ pairs, were the
 \end{table}
 
 
-\begin{figure}[htb]
+\begin{figure}[h]
 \begin{center}
 \includegraphics[clip, trim=0.6cm 0.3cm 1.2cm 0.8cm,scale=0.3]{TexImg/SF_query_dij_B25.pdf}
 \includegraphics[clip, trim=0.9cm 0.3cm 1.1cm 0.8cm,scale=0.3]{TexImg/SF_query_hl_B25.pdf}
@@ -145,28 +142,31 @@ The query times are measured as the average of 1000 random $s,t$ pairs, were the
 
 \subsubsection{Clustering}
 
-\begin{figure}[htb]
-\hfill
-\input{TexImg/plot_clusters_lu.tex}
-\caption{Luxembourg City with different clusters}\label{fig:clusters_lu}
-\end{figure}
+As explained in Section XXX, creating the hub-labels efficiently requires storing all pairs shortest path distances during the preprocessing stage. In many cases, this can impose a prohibitive memory requirement. However, as can be seen in Figures~\ref{fig:clusters_sf} and~\ref{fig:clusters_lu}, the clustering approach from Section XXX provides a very good approximation of the hubs with even a relatively small number of clusters. 
 
-\begin{figure}[htb]
+\begin{figure}[h]
 \hfill
 \input{TexImg/plot_clusters_sf.tex}
 \caption{San Francisco with different clusters}\label{fig:clusters_sf}
 \end{figure}
 
+\begin{figure}[h]
+\hfill
+\input{TexImg/plot_clusters_lu.tex}
+\caption{Luxembourg City with different clusters}\label{fig:clusters_lu}
+\end{figure}
+
+
 \subsubsection{Hub sizes and node significance}
 
-\begin{figure}[htb]
+\begin{figure}[h]
 \begin{center}
 \includegraphics[scale=0.37]{TexImg/map_LU_sig.png}
 \end{center}
 \caption{Significance in Luxembourg City, frontier, $B=25$}\label{fig:map_LU} 
 \end{figure}
 
-\begin{figure}[htb] 
+\begin{figure}[h] 
 \begin{center}
 \includegraphics[scale=0.5]{TexImg/SF_bwd_hub_size.pdf}
 \end{center}
@@ -174,7 +174,7 @@ The query times are measured as the average of 1000 random $s,t$ pairs, were the
 \end{figure}
 
 
-\begin{figure}[htb] 
+\begin{figure}[h] 
 \begin{center}
 \includegraphics[clip, trim=1.7cm 2.2cm 4.7cm 1.7cm,scale=0.8]{TexImg/SF_hub_sizes.pdf}
 \includegraphics[clip, trim=13cm 0cm 1.1cm 0cm,scale=0.45]{TexImg/SF_hub_sizes.pdf}
