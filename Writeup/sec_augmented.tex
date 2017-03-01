@@ -114,8 +114,4 @@ Finally, $H_{v,r}$ hits $\bar P$, thus $H$ hits $P$.
 A similar argument shows that $H$ hits $\Sb_r(\pp{v,b},\calP^B)$.
 \end{proof}
 
-\sbedit{
-It is interesting that, assuming doubling dimension $\alpha$ and $\beta$-witness, we obtain sparsity of $\alpha^{\beta} hB$ and thus query times of $O(\alpha^{\beta} hB\log D)$ \anote{now the witness is defined later}. This is much better than the $O(Bn\Delta)$ of dynamic programming, but it is still pseudo-polynomial. We observe that the query time can be made strongly polynomial if and only if the Pareto frontier contains at most a poly-logarithmic number of points. See Section~\ref{sec:frontier} for a further discussion on this.
-
-
-Pointer to practical augmented graph.}
+In the next section, we discuss how the above augmented graph can be used to construct hub labels for answering CSP queries. We note however that this technique is primarily a theoretical proof-of-concept, that shows that the CHD (and in fact, the HD of $G$ under an additional condition; cf. Section \ref{ssec:hdvschd}) is a good parametrization for the complexity of HL construction. In practice (cf. Section \ref{ssec:practical}), we use a similar idea of an augmented graph, but with a construction more amenable for implementation.

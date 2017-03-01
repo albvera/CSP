@@ -12,8 +12,5 @@ To this end, we have
 Note that every shortest path is efficient, and thus $h_c\geq h$ (where $h$ is the HD of $G$ under shortest paths).
 
 
-We now have two main issues with this definition: First, it is unclear how this can be used to get hub labels, and second, it is unclear how the corresponding hub labels compare with those for shortest-path computations. 
-
-
-
+We now have two main issues with this definition: First, it is unclear how this can be used to get hub labels, and second, it is unclear how the corresponding hub labels compare with those for shortest-path computations. To circumvent this, we first convert efficient paths in $G$ to shortest paths in a larger \emph{augmented graph}. In Section \ref{ssec:hlcsp}, we use this to construct hub labels for CSP queries whose storage and query complexity can be bounded as $Bh_c$ (which can be strengthened further to $g(b)h_c$, where $g(b)$ is measure of the size of the Pareto frontier; cf. Section~\ref{sec:frontier}.). Finally, in Section \ref{ssec:hdvschd}, we show that the hub labels for CSP queries can in fact be related to the hub labels for SP queries under an additional natural condition on the efficient paths.
 

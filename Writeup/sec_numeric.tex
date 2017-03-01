@@ -1,5 +1,7 @@
 % !TEX root = main_vldb.tex
 \subsection{Practical algorithm}
+\label{ssec:practical}
+
 The augmented graph defined in section \ref{sec:augmented} may contain a lot of redundant information relative to the minimal representation.
 For example, the same efficient path $uv$ can be repeated many times in the form $\pp{u,1}\pp{v,0}$, $\pp{u,2}\pp{v,1}$ and so on.
 By encoding this information more efficiently, we can reduce the size of the augmented graph and obtain considerable improvements both in query time and in data storage.
