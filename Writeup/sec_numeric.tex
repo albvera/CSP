@@ -16,6 +16,7 @@ The pruned augmented graph is defined by $\Gp^B=(\Vp^B,\Ep^B)$, where
 &\qquad vv'\in P, b=c(P[v,t]), b'=c(P[v',t])  \}.
 \end{align*}
 In $\Gp^B$ all the lengths are preserved.
+\label{def:pruned_aug_graph}
 \end{definition}
 Note that in $\Gp^B$ there are no sink nodes, hence it has at least $n$ nodes and $nB$ arcs fewer compared to $G^B$.
 
@@ -79,31 +80,25 @@ In our experiments, we use the mean travel times for our length function and the
 \subsubsection{Runtime performance}
 
 
-Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computation times for different maximum budgets $B$. The query times are measured as the average of 1000 random $s,t$ pairs, were the task is to recover $\dist(s,t|b)$ for every $b=0,1,\ldots,B$, i.e., the entire efficient frontier.  The column for $B=0$ represents the original graph (without augmentation).
+Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computation times for different maximum budgets $B$. The query times are measured as the average of 1000 random $s,t$ pairs, were the task is to recover $\dist(s,t|b)$ for every $b=0,1,\ldots,B$, i.e., the entire efficient frontier.  The column for $B=0$ represents the original graph (without augmentation). For each maximum budget level $B$, we consider compare two cases: i) $B-f$ that computes the entire solution frontier for all budgets $b\leq B$ on a fully pruned graph (as given in Definition~\ref{def:pruned_aug_graph}, and ii) $B-s$ that computes the solution only for the specified budget level on partially pruned graph 
 
 \begin{table}
 \begin{center}
 \begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.2cm} | p{1.2cm} | }
 \hline
 	B & Preproc [m] & Avg F Size & Avg B Size & Query Dij [ms] & Query HL [ms] \\ \hline \hline
-5  & 5  & 17 & 28 & 74.71  & 0.02  \\
-5-f  & 9  & 49 & 28 & 30.57  & 0.008 \\
-5-p  & 5  & 57 & 28 & 32.67  & 0.009 \\\hline
-10 & 13 & 17 & 28 & 183.18 & 0.03  \\
-10-f & 18 & 58 & 28 & 54.53  & 0.01  \\
-10-p & 10 & 68 & 28 & 56.56  & 0.01  \\\hline
-15 & 14 & 17 & 28 & 250    & 0.03  \\
-15-f & 28 & 63 & 28 & 77.22  & 0.009 \\
-15-p & 15 & 73 & 28 & 81.48  & 0.01  \\\hline
-20 & 21 & 17 & 28 & 489.74 & 0.04  \\
-20-f & 39 & 67 & 28 & 97.83  & 0.01  \\
-20-p & 21 & 77 & 28 & 103.72 & 0.01  \\\hline
-25 & 22 & 17 & 28 & 467.84 & 0.04  \\
-25-f & 47 & 70 & 28 & 127.22 & 0.01  \\
-25-p & 24 & 80 & 28 & 122.57 & 0.01  \\\hline
-30 & 37 & 17 & 28 & 648.17 & 0.04  \\
-30-f & 63 & 73 & 28 & 151.27 & 0.01  \\
-30-p & 32 & 84 & 28 & 161.99 & 0.01  \\\hline
+5-f  & 5  & 17 & 28 & 74.71  & 0.02  \\
+5-s  & 5  & 57 & 28 & 32.67  & 0.009 \\\hline
+10-f & 13 & 17 & 28 & 183.18 & 0.03  \\
+10-s & 10 & 68 & 28 & 56.56  & 0.01  \\\hline
+15-f & 14 & 17 & 28 & 250    & 0.03  \\
+15-s & 15 & 73 & 28 & 81.48  & 0.01  \\\hline
+20-f & 21 & 17 & 28 & 489.74 & 0.04  \\
+20-s & 21 & 77 & 28 & 103.72 & 0.01  \\\hline
+25-f & 22 & 17 & 28 & 467.84 & 0.04  \\
+25-s & 24 & 80 & 28 & 122.57 & 0.01  \\\hline
+30-f & 37 & 17 & 28 & 648.17 & 0.04  \\
+30-s & 32 & 84 & 28 & 161.99 & 0.01  \\\hline
 \end{tabular}
 \caption{Results for San Francisco. Specify the parameters. }\label{tab:sf_results}
 \end{center}
@@ -116,17 +111,17 @@ Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computati
 \hline
 	B & Preproc  [m] & Avg F Size & Avg B Size & Query Dij [ms] & Query HL [ms] \\ \hline \hline
 	0 & 6 & 18 & 18 & 16.35 & 0.004 \\ \hline
-	5 & 23 & 14& 19 & 151.91 & 0.019 \\ 
+	5-f & 23 & 14& 19 & 151.91 & 0.019 \\ 
 	5-p & 21 & 43 &19 & 72.03 & 0.008 \\ \hline
-	10 & 36 & 14 & 19 & 305.33 & 0.021 \\ 
+	10-f & 36 & 14 & 19 & 305.33 & 0.021 \\ 
 10-p & 35 & 49 & 19 & 102.52 & 0.008 \\ \hline
-	15 & 51 & 14& 19 & 490.75 & 0.024 \\ 
+	15v & 51 & 14& 19 & 490.75 & 0.024 \\ 
 	15-p & 46 & 53 & 19 & 140.80 & 0.008 \\ \hline
-	20 & 69 & 14 & 19 & 808.90 & 0.030 \\ 
+	20-f & 69 & 14 & 19 & 808.90 & 0.030 \\ 
 	20-p & 60 & 57 & 19 & 183.10 & 0.009 \\ \hline
-	25 & 89 & 14 & 19 & 1016.71 & 0.034 \\ 
+	25-f & 89 & 14 & 19 & 1016.71 & 0.034 \\ 
 	25-p & 77 & 60 & 19 & 227.16 & 0.009 \\ \hline
-	30 & 101 & 14& 19 & 1144.07 & 0.032 \\ 
+	30-f & 101 & 14& 19 & 1144.07 & 0.032 \\ 
 	30-p & 93 & 62 & 19 & 272.40 & 0.010 \\ \hline
 \end{tabular}
 \caption{Results for Luxembourg City. Specify the parameters.}\label{tab:lu4k_results}
