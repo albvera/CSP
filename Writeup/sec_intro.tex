@@ -11,42 +11,44 @@ These techniques however do not extend to constrained shortest-path (CSP) comput
 The SP and CSP problems can be summarized as follows: We are given a graph $G$, where each edge has an associated \emph{length} and \emph{cost}. 
 Now, given any two nodes $s,t$, the SP problem requires finding an  $s\rightarrow t$ path of minimum length; the CSP problem takes in a further input of a budget $b$, and requires finding a minimum length $s\rightarrow t$ path \emph{which moreover has a total cost less than $b$}.
 The two problems, though similar, have very different basic complexity: SP computation admits a polynomial-time algorithm (in particular, the famous Dijkstra's algorithm), while the problem of CSP computation is known to be NP-Hard~\cite{csp_survey}.
-A dynamic programming approach can compute the shortest path in pseudo-polynomial time, which is the best bound known so far \todo{add reference}.
+That said, a standard dynamic programming approach allows CSP computation in pseudo-polynomial time (in particular, polynomial in the maximum budget), and also admits a natural scaling-based FPTAS (akin to the knapsack FPTAS).
 
 
-Our interest in CSP computation is motivated primarily by the requirements of modern transportation platforms. 
-which are necessary in order to provide accurate and robust routing and travel-time estimates, which incorporate uncertainties in travel times.
+Although there is a rich literature on CSP problems (cf. \cite{csp_survey} for a survey), there is little work on studying ways of using preprocessing and graph augmentation to speed up CSP computation. Our work here aims to address this gap, motivated by the success of similar approaches for SP computation. Moreover, we believe that there is a need for such techniques in several modern applications, as we discuss next. 
 
 
+\paragraph*{Applications of large-scale CSP computation}
 
-In the face of uncertainty, a natural problem is to compute the shortest path subject to a reliability constraint.
-We want to estimate how much time it will take to travel from $s$ to $t$, but, for the answer to be robust, we ask that the path exceeds the estimate with small probability.
-Formally, given $s,t$ and parameters $p,\delta$, the goal is to find an $(s,t)$-path $P$ minimizing $\E(\ell(P))$, but satisfying $\Pr(\ell(P)>\E(\ell(P))+\delta)\leq p$.
-This is a variant of the stochastic on time arrival (SOTA) problem \cite{fan2005arriving}.
-We propose an approximate solution, which respects the reliability, but may not be optimal.
-Observe that, using Chebyshov's Inequality, $\Pr(X>\E(X)+\delta)\leq \Var(X)/\delta^2$, hence we can solve
-the problem 
+Our interest in CSP computation is motivated primarily by the requirements of transportation platforms like Lyft, Uber, Waze etc., for accurate routing and travel-time estimates.
+Fast routing and trip-time estimation, driven by fast SP engines (for example, OSRM~\cite{OSRM}), have provided impetus to the increasing use of mobile maps.
+These techniques however do not make full use of available real-time traffic information; in particular, SP queries are unable to incorporate uncertainties in travel times, and hence often give inaccurate trip-time estimates in settings with high traffic uncertainty.
+
+
+A natural way to incorporate travel-time uncertainty is to compute the shortest path subject to a reliability constraint.
+In particular, in many settings, we want \emph{robust} travel time estimates: formally, we require that given $s,t$ and parameters $p,\delta$, a routing algorithm returns an $(s,t)$-path $P$ minimizing $\E[\ell(P)]$, subject to $\Pr[\ell(P)>\E[\ell(P)]+\delta]\leq p$.
+Even assuming that travel times on different road segments are independent, computing this exactly for general distributions is expensive due to the need for computing convolutions of distributions. However, for uncorrelated travel-times, we have $\Pr[\sum_eT_e>\E[\sum_eT_e])+\delta]\leq \sum_e\Var(T_e)/\delta^2$ by Chebyshev's inequality; using this, we can replace the robust trip-time estimation problem with the following
 \[
 \min_{ P\in\calP_{s,t}}\sum_{i\in P}\mu_i \qquad \text{s.t.}\qquad \sum_{i\in P}\sigma^2_i\leq \delta^2p.
 \]
+This is now a CSP problem. Note that the solution, though not necessarily optimal, always respects the reliability constraint -- this is often more critical for practical applications.
 
 
-The CSP can also capture other natural problems in transit networks.
-Consider the case where each edge has a probability $p_e$ of triggering a bad event, which results in a fee of $F$.
-In this case the agents want to minimize the travel cost and the expected fee.
-For example, \citet{fareevasion} consider a model for fare evasion where $p_e$ is the probability of encountering an inspector.
-In this case, assuming independence, the natural object is to minimize $\ell(P)+F\cdot\Pr(\text{trigger bad event})$, i.e.,
+Another natural problem that can be modeled as a CSP is that of finding shortest paths satisfying some \emph{reliability constraint}.
+Consider the case where each edge has a probability $q_e$ of triggering a bad event, with resulting penalty $p$ (for example, slowdowns due to accidents).
+In this case, we want to minimize the travel time as well as the expected penalty.
+In this case, assuming independence, we have the following natural problem
 \[
-\min_{P\in\calP_{s,t}} \ell(P)+F\Bigl(1-\prod_{e\in P}(1-p_e)\Bigr).
+\min_{P\in\calP_{s,t}} \ell(P)+p\Bigl(1-\prod_{e\in P}(1-q_e)\Bigr).
 \]
-In \citep{fareevasion} it is suggested to use a CSP to solve this problem.
-Indeed, after taking logarithms, the non-linear part of the objective function becomes a linear constraint.
+This model is considered in \citet{fareevasion} consider (for routing with fare evasion, where $q_e$ is the probability of encountering an inspector, and $p$ the penalty), where the authors suggest using a CSP formulation, wherein the non-linear objective is replaced by a linear constraint by taking logarithms.
+
+
+
+\subsection{Our Contributions}
 
 The concept of Highway Dimension (HD) \cite{highway2010,highway2013} allows to prove the efficiency of shortest path computations in undirected graphs.
 We will see that directed graphs are fundamental for the analysis of constrained paths.
 As a first step, we extend the notions of HD to directed graphs.
-
-\subsection{Our Contributions}
 
 
 \subsection{Related work}
@@ -69,5 +71,7 @@ For a restricted language, it is possible to use CH for the problem \cite{rice_c
 Skeleton dimension \cite{skeleton}
 
 Survey on CSP \cite{csp_survey}
+
+This objective is closely related to the stochastic on time arrival (SOTA) problem \cite{fan2005arriving}.
 
 SOTA problem with gaussian travel times solved by exhaustive search \cite{nikolova_gaussian}, optimal policy \cite{samaranayake2012speedup}, pre-processing \cite{sabran2014precomputation} anb solved with discretization for directed acyclic graphs \cite{nikolova_discretization}
