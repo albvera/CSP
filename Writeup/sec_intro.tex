@@ -1,4 +1,4 @@
-We consider the problem of fast computation of constrained shortest paths in large-scale graphs, using preprocessing and graph augmentation techniques.
+We consider the fast computation of constrained shortest paths in large-scale graphs, using preprocessing and graph augmentation techniques.
 The Shortest-path (SP) problem is one of the canonical algorithm design problems.
 In recent years, however, it has been revolutionized both in terms of academic research as well as real-world applications (cf.~\cite{goldberg_survey,dimacs09} for surveys).
 In particular, the use of preprocessing techniques and network augmentation has led to dramatic improvements in the speed and scalability of SP computation in road networks.
@@ -22,9 +22,9 @@ These techniques however do not make full use of available real-time traffic inf
 A natural way to incorporate travel-time uncertainty is to compute the shortest path subject to a reliability constraint.
 In particular, in many settings, we want \emph{robust} travel time estimates: formally, we require that given $s,t$ and parameters $p,\delta$, a routing algorithm returns an $(s,t)$-path $P$ minimizing $\E[\ell(P)]$, subject to $\Pr[\ell(P)>\E[\ell(P)]+\delta]\leq p$.
 Even assuming that travel times on different road segments are independent, computing this exactly for general distributions is expensive due to the need for computing convolutions of distributions. However, for uncorrelated travel-times, we have $\Pr[\sum_eT_e>\E[\sum_eT_e])+\delta]\leq \sum_e\Var(T_e)/\delta^2$ by Chebyshev's inequality; using this, we can replace the robust trip-time estimation problem with the following
-\[
-\min_{ P\in\calP_{s,t}}\sum_{i\in P}\mu_i \qquad \text{s.t.}\qquad \sum_{i\in P}\sigma^2_i\leq \delta^2p.
-\]
+\begin{center}
+$\min_{ P\in\calP_{s,t}}\sum_{i\in P}\mu_i \qquad \text{s.t.}\qquad \sum_{i\in P}\sigma^2_i\leq \delta^2p.$
+\end{center}
 This is now a CSP problem. Note that the solution, though not necessarily optimal, always respects the reliability constraint -- this is often more critical for practical applications.
 
 
@@ -32,12 +32,12 @@ Another problem that can be modeled as a CSP is that of finding \emph{reliable s
 Consider the case where each edge has a probability $q_e$ of triggering a bad event, with resulting penalty $p$ (for example, slowdowns due to accidents).
 In this case, we want to minimize the travel time as well as the expected penalty.
 In this case, assuming independence, we have the following natural problem
-\[
-\min_{P\in\calP_{s,t}} \ell(P)+p\Bigl(1-\prod_{e\in P}(1-q_e)\Bigr).
-\]
+\begin{center}
+$\min_{P\in\calP_{s,t}} \ell(P)+p\prn*{1-\prod_{e\in P}(1-q_e)}.$
+\end{center}
 This model is considered in \citet{fareevasion} (for routing with fare evasion, where $q_e$ is the probability of encountering an inspector, and $p$ the penalty), where the authors suggest using a CSP formulation, wherein the non-linear objective is replaced by a linear constraint by taking logarithms.
 
-Finally, another class of problems which is related to the CSP is that of routing under \emph{label constraints} \cite{language_csp,rice_csp}, wherein we want shortest routes which satisfy certain properties (for example, those that avoid toll roads). Although different in formulation, the main idea in such problems, as in the CSP, is to use an appropriate augmented graph that converts feasible shortest paths to shortest paths. Our results extend to these applications as well.
+Finally, another class of problems which is related to the CSP is that of routing under \emph{label constraints} \cite{language_csp,rice_csp}, wherein we want shortest routes which satisfy certain properties (for example, those that avoid toll roads). The main idea in such problems (as in the CSP) is to use an appropriate augmented graph that converts feasible shortest paths to shortest paths. Our results extend to these applications as well.
 
 \subsection{Our Contributions}
 
@@ -51,11 +51,11 @@ In the case of SP problem, there was significant initial development on the firs
 Abraham et al.~\cite{highway2010,highway2013} then proposed the \emph{Highway Dimension} (HD), a graph structural metric, which they showed could parametrize the preprocessing, storage and query time of sevelral of these heuristics (hub labels, contraction hierarchies, etc.).
 Our work adopts a similar program to provide partial answers for the above questions; in particular, our contributions are as follows:
 \begin{itemize}[nosep,leftmargin=*]
-\item \textbf{Theoretical contributions}: We adapt existing preprocessing techniques for fast SP queries (hub labels and contraction hierarchies) to handle CSP queries. More importantly, we extend the idea of \emph{highway-dimension}, a proposed measure of the complexity of SP speedup techniques, to an analogous \emph{constrained highway dimension} for CSP queries.
-	We also show that the two notions can be related under an additional partial witness condition, which we argue is natural for road networks.
-\item \textbf{Practical contributions}: We develop a practical algorithm for fast CSP queries, which combines the hub labels technique for SP computations with an augmented graph that encodes efficient paths for the CSP problem. We evaluate our algorithm on datasets with detailed travel-time information for San Francisco and Luxembourg, and show that our algorithms support query times which are orders of magnitude than existing techniques (without preprocessing), have small per-node storage requirements, and good preprocessing times even on a single machine. 
+\item \textbf{Theoretical contributions}: 
+We extend the HD to directed graphs and general path systems (Section \ref{ssec:hddef}), and define an analogous notion of a \emph{constrained highway dimension} (CHD) for Pareto efficient paths (cf. Section \ref{sec:chd}). We then construct an augmented graph (Section \ref{ssec:aug} under which efficient paths are mapped to shortest paths, and use it to develop hub labels for CSP queries, whose complexity is parameterized by the CHD (Section \ref{ssec:hlcsp}).
+Finally, we show that although the CHD can be much bigger than the HD in general, the two can be related under an additional \emph{partial witness condition} (Section \ref{ssec:hdvschd}). This provides some justification for the use of preprocessing techniques for CSP, as it suggests that they should work well in settings where SP computation admits good speedup techniques.
+\item \textbf{Practical contributions}: Although the theoretical results justify the use of preprocessing techniques for CSP, they are impractical for using in real networks. To this end, we show how we can adapt the theoretical ideas to develop a practical construction technique for hub labels that support CSP queries (Section \ref{sec:numeric}). We then evaluate our algorithm on datasets with detailed travel-time information for San Francisco and Luxembourg (Section \ref{ssec:expt}. Our experiments show that our hub labels support query times which are orders of magnitude than existing techniques (without preprocessing), have small per-node storage requirements, and good preprocessing times even on a single machine. 
 \end{itemize}	
-\todo{add references to results here}
 
 \subsection{Related work}
 
