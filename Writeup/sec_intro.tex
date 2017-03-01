@@ -42,20 +42,20 @@ Finally, another class of problems which is related to the CSP is that of routin
 
 \subsection{Our Contributions}
 
-\noindent There are two natural questions re fast CSP computation:
+\noindent We aim to address the following overarching questions:
 \begin{enumerate}[nosep,leftmargin=*]
-\item How can we use preprocessing and graph augmentation techniques to speed up CSP computation 
-\item How can we give preprocessing/storage/query time guarantees for such techniques
+\item How can we use preprocessing and graph augmentation techniques to speed up CSP computation. 
+\item How can we give preprocessing/storage/query time guarantees for such techniques.
 \end{enumerate}
 
-In the case of SP problem, there was significant initial development on the first question, leading to many different techniques~\cite{dimacs09}, which worked well in practice, but had no performance guarantees.
-Abraham et al.~\cite{highway2013, highway2010} then proposed the \emph{Highway Dimension} (HD), a graph structural metric, which they showed could parametrize the preprocessing, storage and query time of sevelral of these heuristics (hub labels, contraction hierarchies, etc.).
-Our work adopts a similar program to provide partial answers for the above questions; in particular, our contributions are as follows:
+For the SP problem, there was significant initial development on the first question, leading to many different techniques~\cite{dimacs09}, which worked well in practice, but had no performance guarantees.
+Abraham et al.~\cite{highway2013, highway2010} then proposed the \emph{Highway Dimension} (HD), a graph structural metric, which they showed could parametrize the preprocessing, storage and query time of several of these heuristics (hub labels, contraction hierarchies, etc.).
+Our work adopts a similar program; in particular, our contributions are as follows:
 \begin{itemize}[nosep,leftmargin=*]
 \item \textbf{Theoretical contributions}: 
-We extend the HD to directed graphs and general path systems (Section~\ref{ssec:hddef}), and define an analogous notion of a \emph{constrained highway dimension} (CHD) for Pareto efficient paths (cf. Section~\ref{sec:chd}). We then construct an augmented graph (Section~\ref{ssec:aug} under which efficient paths are mapped to shortest paths, and use it to develop hub labels for CSP queries, whose complexity is parameterized by the CHD (Section~\ref{ssec:hlcsp}).
+We extend the HD to directed graphs and general path systems (Section~\ref{ssec:hddef}), and define an analogous notion of a \emph{constrained highway dimension} (CHD) for Pareto efficient paths (Section~\ref{sec:chd}). We then construct an augmented graph (Section~\ref{ssec:aug}) under which efficient paths are mapped to shortest paths, and use it to develop hub labels for CSP queries, whose complexity is parameterized by the CHD (Section~\ref{ssec:hlcsp}).
 Finally, we show that although the CHD can be much bigger than the HD in general, the two can be related under an additional \emph{partial witness condition} (Section~\ref{ssec:hdvschd}). This provides some justification for the use of preprocessing techniques for CSP, as it suggests that they should work well in settings where SP computation admits good speedup techniques.
-\item \textbf{Practical contributions}: Although the theoretical results justify the use of preprocessing techniques for CSP, they are impractical for using in real networks. To this end, we show how we can adapt the theoretical ideas to develop a practical construction technique for hub labels that support CSP queries (Section~\ref{sec:numeric}). We then evaluate our algorithm on datasets with detailed travel-time information for San Francisco and Luxembourg (Section~\ref{sec:exp}). Our experiments show that our hub labels support query times which are orders of magnitude than existing techniques (without preprocessing), have small per-node storage requirements, and good preprocessing times even on a single machine. 
+\item \textbf{Practical contributions}: Although the theoretical results justify the use of preprocessing techniques for CSP, they are impractical for real networks. We show how we can adapt our theoretical ideas to develop a practical construction technique for hub labels that support CSP queries (Section~\ref{sec:numeric}). We then evaluate our algorithm on datasets with detailed travel-time information for San Francisco and Luxembourg (Section~\ref{sec:exp}). Our experiments show that our hub labels support query times which are orders of magnitude faster than existing techniques (without preprocessing), have small per-node storage requirements, and good preprocessing times even on a single machine. 
 \end{itemize}	
 
 \subsection{Related work}
@@ -64,7 +64,7 @@ As we mention before, our work is inspired by the recent developments (both theo
 
 
 The problem of finding robust shortest paths is closely related to the stochastic on-time arrival (SOTA) problem~\cite{fan2005arriving}.
-The SOTA problem with Gaussian travel times was solved via exhaustive search~\cite{nikolova_gaussian}. The optimal policy under discrete distributions was given in~\cite{samaranayake2012speedup}, and pre-processing policies were considered in~\cite{sabran2014precomputation}. Finally, ~\cite{nikolova_discretization} provide an approximation technique based on discretization for DAGs.
+The SOTA problem with Gaussian travel times was solved via exhaustive search~\cite{nikolova_gaussian}. The optimal policy under discrete distributions was given in~\cite{samaranayake2012speedup}, and pre-processing policies were considered in~\cite{sabran2014precomputation}. Finally, ~\cite{nikolova_discretization} provides an approximation technique based on discretization for DAGs.
 
 The primary speedup technique we use in our work is that of hub labels (HL). This was introduced first in~\cite{cohen_definition_hl}. More recently, HL was shown to admit the best query time bounds in low HD graphs~\cite{highway2013,highway2010}, and this observation was experimentally confirmed in~\cite{hubimplem} (see also Figure 7 in~\cite{goldberg_survey}).  
 Finally, the HD-based bounds for hub labels was shown to be tight in~\cite{babenko_hl_complexity,white_complexity_hd}, and it was also shown that finding optimal hub labels is NP hard.
