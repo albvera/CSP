@@ -1,10 +1,7 @@
-%\anote{maybe not a subsection of CSP? it applies to any path system (e.g. shortest paths)}
 Next, we show how the preprocessing requirements for HL construction can be parameterized in terms of $h_c$. For this, we need to modify similar arguments for shortest paths in \cite{highway2013} to handle efficient paths.
 
 The critical observation in \cite{highway2013} is that the set system of \emph{unique} shortest paths has a VC-dimension of $2$.~\footnote{
 Formally, paths $v_1v_2\ldots v_k$ are mapped to sets $\{v_1,\ldots,v_k\}$; note if $G$ is undirected, each subset represents exactly two paths, the $(s,t)$-path and $(t,s)$-path. Therefore, a hitting set for this set system corresponds to a hitting set for $\calP$.}
-%Recall that we assume uniqueness of shortest paths.
-%It is easy to see that the VC-dimension of the previous set system is 2.
 To see this, note that if the shortest path between $a$ and $c$ either passes through $b$ or not -- hence $\{a,b,c\}$ and $\{a,c\}$ can not be in the system and hence $\{a,b,c\}$ cannot be shattered.
 This does not hold in directed graph, as both paths $abc$ and $ca$ may be shortest paths. However, we can overcome this by considering the ground set as $E$ instead of $V$, and mapping a path $e_1e_2\ldots e_k$ to $\{e_1,e_2,\ldots,e_k\}$.
 Note that each $\{e_1,e_2,\ldots,e_k\}$ corresponds uniquely to one path (since we consider acyclic paths).
@@ -13,7 +10,6 @@ Let $\pi(Q)$ denote the set of edges in a path $Q$.
 Given a path-system $\calQ$, the corresponding set system $(E,\{\pi(Q):Q\in\calQ\})$ has VC-dimension 2.
 \end{proposition}
 Note that this argument also can be used for shortest paths in undirected graphs to remove the uniqueness requirement.
-%We now establish how to obtain polynomial time preprocessing. Specifically, the algorithms we use are based on the existence of $(h,2^i)$-LSHS. Assuming a system has HD $h$, we can obtain an approximation of these set, where the sparsity increases by the maximum degree $\Delta$.
 Finally, polynomial-time preprocessing now follows from a similar argument as Theorem 8.2 in \cite{highway2013}; we defer the proof to Appendix~\ref{sec:proofs}.
 
 \begin{proposition}\label{prop:poly_lshs}

@@ -1,16 +1,18 @@
-% !TEX root = main_vldb.tex
 \subsection{Practical algorithm}
 \label{ssec:practical}
 
-The augmented graph defined in section \ref{sec:augmented} may contain a lot of redundant information relative to the minimal representation.
+We start by defining a similar structure as the augmented graph, but more amenable to practical purposes.
+The graph $G^B$ defined in section \ref{sec:augmented} may contain a lot of redundant information, hence it is not a minimal representation.
 For example, the same efficient path $uv$ can be repeated many times in the form $\pp{u,1}\pp{v,0}$, $\pp{u,2}\pp{v,1}$ and so on.
 By encoding this information more efficiently, we can reduce the size of the augmented graph and obtain considerable improvements both in query time and in data storage.
 
-We can construct an augmented graph without this duplicated information as follows.
-The nodes are, as before, pairs $\pp{v,b}$, but an edge $(\pp{v,b},\pp{v',b'})$ is placed only if the minimal set of efficient paths uses it.
-If we let $\calP_{s,t}^E$ be the set of all efficient paths from $s$ to $t$, we take every $P\in \calP_{s,t}^E$ with cost $b\leq B$ and trace it in the augmented graph only if it ends at $\pp{t,0}$. In other words, all efficient paths $P\in \calP_{s,t}^E$ can be represented by a set a set of efficient paths ending at $\pp{t,0}$. 
+We construct an augmented graph without this duplicated information as follows.
+The nodes are, as before, pairs $\pp{v,b}$, but an edge $\pp{v,b},\pp{v',b'}$ is placed only if it is essential for some efficient path, i.e., removing said edge changes the correctness of a query.
+If we let $\calP_{s,t}^E$ be the set of all efficient paths from $s$ to $t$, we take every $P\in \calP_{s,t}^E$ with cost $b\leq B$ and trace it in the augmented graph.
+The tracing is such that the augmented path is forced to end at $\pp{t,0}$.
+In other words, all efficient paths $P\in \calP_{s,t}^E$ can be represented by a set a set of efficient paths ending at $\pp{t,0}$. 
 
-\begin{definition}
+\begin{definition}\label{def:pruned_aug_graph}
 The pruned augmented graph is defined by $\Gp^B=(\Vp^B,\Ep^B)$, where
 \begin{align*}
 \Vp^B &:=\{\pp{v,b}: v\in V, b=0,1,\ldots,B\},\\
@@ -18,14 +20,16 @@ The pruned augmented graph is defined by $\Gp^B=(\Vp^B,\Ep^B)$, where
 &\qquad vv'\in P, b=c(P[v,t]), b'=c(P[v',t])  \}.
 \end{align*}
 In $\Gp^B$ all the lengths are preserved.
-\label{def:pruned_aug_graph}
 \end{definition}
 Note that in $\Gp^B$ there are no sink nodes, hence it has at least $n$ nodes and $nB$ arcs fewer compared to $G^B$.
+In the worst case, those $nB$ arcs are the only gain by doing this process.
+Nevertheless, in practice this graph can be up to 40\% smaller than $G^B$.
+Observe that, by running Dijkstra in $G^B$, $\Gp^B$ can be computed in time $\Or(n^2B\log(nB))$.
 
 \subsubsection{HD of the pruned augmented graph}
 
 A shortest path in $\Gp$ does not necessarily project to an efficient path, even if the path ends in a node of the form $\pp{t,0}$.
-On the other hand, if $P$ projects to an efficient path, then necessarily $P$ is shortest. 
+In contrast, if $P$ projects to an efficient path, then necessarily $P$ is shortest. 
 To bound the HD, the correct system to study is
 \[
 \tilde\calP^B:=\{P: P\text{ ends in a node }\pp{t,0}, \bar P\in \PE, c(\bar P)\leq B \}.
@@ -35,6 +39,8 @@ We omit the proof since it is identical as the one in Proposition~\ref{prop:HDau
 \begin{proposition}
 The HD of $\tilde\calP^B$ is $Bh_c$, where $h_c$ is the HD of $\PE$.
 \end{proposition}
+
+\subsubsection{Description of the practical algorithm}
 
 We use techniques described in \cite{hubimplem} combined with an approach tailored for augmented graphs.
 The main idea is to first use contraction hierarchies to get a node ranking and then define the forward hubs of a node as the nodes visited during a contraction-based forward search.
@@ -47,21 +53,21 @@ Start with a cover $C=\varnothing$ and compute the set of all shortest paths $\c
 Take a node $v\notin C$ hitting most paths in $\calP$, then remove all those paths from $\calP$, add $v$ to $C$ and iterate.
 The rank is defined as $n$ for the first node added to $C$, $n-1$ for the second and so on.
 
-We work with the pruned augmented graph, i.e.\ $\tilde G_B$, which takes some time to compute, but yields considerably better hubs. 
+We work with the pruned augmented graph $\tilde G_B$, which takes some time to compute, but yields considerably better hubs. 
 Recall that in $\tilde G_B$ there are no sink-nodes nor ``replicated information'', since efficient paths are stored just once.
 Given a rank for nodes in $G$, we contract $\tilde G_B$ as follows.
 Say that $V$ is ordered according to the rank, so node $1$ is the least important and $n$ the most important.
-In $\tilde G_B$, for $b=B,\ldots,0$, we contract the nodes $(1,b)$ first, then the nodes $(2,b)$ and so on till the nodes $(n,b)$ are the last to contract. 
+In $\tilde G_B$, we first contract the nodes $\pp{1,b}$ for $b=B,\ldots,0$, then the nodes $\pp{2,b}$ and so on till the nodes $\pp{n,b}$ are the last to contract. 
 
 To obtain better hubs we prune the results obtained by contraction-based searches.
 If $w$ is in the forward search of $v$ with distance $d$, it might be that $\dist(v,w)<d$, this occurs because the search goes only to higher rank nodes and the discovered path is missing some node.
 When $\dist(v,w)<d$, we can safely remove $w$ from the hub of $v$, since the highest ranked node in a shortest path will have the correct distance.
-We describe now the process in the following steps.
+The entire process can be summarized in the following steps.
 
 \begin{enumerate}[nosep]
-\item Compute the shortest paths in $G$ and obtain a cover $C$
+\item Compute the shortest paths in $G$ and use a greedy approach to obtain a cover $C$
 \item Compute the pruned augmented graph $\tilde G_B$
-\item Contract $\tilde G_B$ using the rank given by $C$
+\item Contract $\tilde G_B$ using the rank induced by $C$
 \item Create hubs $\Lf(v),\Lb(v)$ using CH
 \item Prune the hubs by running HL queries between $v$ and nodes in $\Lf(v)$. 
 Run a similar process for $\Lb(v)$.
