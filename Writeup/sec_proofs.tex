@@ -1,10 +1,7 @@
 % !TEX root = main_vldb.tex
 
 \begin{proof}[of Theorem \ref{thm:markedhubs}]
-	To get this stronger bound, we need to modify the HL construction. The algorithm for forward hub construction is given in Algorithm~\ref{alg:forwardhub}, and for reverse hubs in Algorithm~\ref{alg:reversehub}. Note that the two must be run sequentially, as the latter uses the nodes marked in the former.
-	
-	
-	We make the forward hubs $\Lf(\pp{v,b})$ slightly bigger by storing, for each node the distance from $\pp{v,b}$ and also the \emph{budget surplus}.
+	To get this stronger bound, we need to modify the HL construction. The algorithm for forward hub construction is given in Algorithm~\ref{alg:forwardhub}, and for reverse hubs in Algorithm~\ref{alg:reversehub}. Note that the two must be run sequentially, as the latter uses the nodes marked in the former. We make the forward hubs $\Lf(\pp{v,b})$ slightly bigger by storing, for each node the distance from $\pp{v,b}$ and also the \emph{budget surplus}.
 	Let $C_i$ be the $(h_c,2^{i-1})$-EPHS and $\PE_{s,t}$ the efficient paths from $s$ to $t$.
 	
 	Observe that, whenever a node $v\in C_i$ is added, $v\in \Bf_{2^i}(s)$ guarantees that at most $h_c$ such points are needed for the whole process.
