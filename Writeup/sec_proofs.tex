@@ -1,3 +1,23 @@
+% !TEX root = main_vldb.tex
+
+\begin{proof}[of Theorem \ref{thm:markedhubs}]
+	To get this stronger bound, we need to modify the HL construction. The algorithm for forward hub construction is given in Algorithm~\ref{alg:forwardhub}, and for reverse hubs in Algorithm~\ref{alg:reversehub}. Note that the two must be run sequentially, as the latter uses the nodes marked in the former.
+	
+	
+	We make the forward hubs $\Lf(\pp{v,b})$ slightly bigger by storing, for each node the distance from $\pp{v,b}$ and also the \emph{budget surplus}.
+	Let $C_i$ be the $(h_c,2^{i-1})$-EPHS and $\PE_{s,t}$ the efficient paths from $s$ to $t$.
+	
+	Observe that, whenever a node $v\in C_i$ is added, $v\in \Bf_{2^i}(s)$ guarantees that at most $h_c$ such points are needed for the whole process.
+	Additionally, every such $v$ is added at most $g(b)$ times in the hub of $\pp{s,b}$.
+	The data requirement guarantee follows.
+	
+	The bound for data requirements is $g(B) h_c\log D$, the argument is analogous to the forward case.
+	Finally, we need to prove the cover property.
+	Take any query $SP(\pp{s,b},t^-)$ and let $P$ be the solution.
+	In $Lf(\pp{s,b})$ there is a node $v_P$ added by Algorithm~\ref{alg:forwardhub}.
+	By construction, the same node $v_P$ was added to $\Lb(\pp{d,0})$. The result follows.
+\end{proof}
+
 \begin{algorithm}[!ht]
 	\small
 	\caption{Construction of forward hub}
@@ -20,7 +40,7 @@
 	\end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}[!ht]
+\begin{algorithm}[h]
 	\small
 	\caption{Construction of reverse hub}
 	\label{alg:reversehub}
@@ -39,23 +59,6 @@
 	\end{algorithmic}
 \end{algorithm}
 
-\begin{proof}[of Theorem \ref{thm:markedhubs}]
-	To get this stronger bound, we need to modify the HL construction. The algorithm for forward hub construction is given in Algorithm~\ref{alg:forwardhub}, and for reverse hubs in Algorithm~\ref{alg:reversehub}. Note that the two must be run sequentially, as the latter uses the nodes marked in the former.
-	
-	
-	We make the forward hubs $\Lf(\pp{v,b})$ slightly bigger by storing, for each node the distance from $\pp{v,b}$ and also the \emph{budget surplus}.
-	Let $C_i$ be the $(h_c,2^{i-1})$-EPHS and $\PE_{s,t}$ the efficient paths from $s$ to $t$.
-	
-	Observe that, whenever a node $v\in C_i$ is added, $v\in \Bf_{2^i}(s)$ guarantees that at most $h_c$ such points are needed for the whole process.
-	Additionally, every such $v$ is added at most $g(b)$ times in the hub of $\pp{s,b}$.
-	The data requirement guarantee follows.
-	
-	The bound for data requirements is $g(B) h_c\log D$, the argument is analogous to the forward case.
-	Finally, we need to prove the cover property.
-	Take any query $SP(\pp{s,b},t^-)$ and let $P$ be the solution.
-	In $Lf(\pp{s,b})$ there is a node $v_P$ added by Algorithm~\ref{alg:forwardhub}.
-	By construction, the same node $v_P$ was added to $\Lb(\pp{d,0})$. The result follows.
-\end{proof}
 
 \begin{proof}[of Proposition~\ref{prop:poly_lshs}]
 Denote $S_r(v):=\Sf_r(v,\calQ)\cup\Sb_r(v,\calQ)$. 
@@ -68,7 +71,6 @@ In particular, we can use the algorithm to obtain a set $\tilde F_{v,r}\subseteq
 
 Consider the set $F_{v,r}\subseteq V$ that contains all the endpoints of edges in $\tilde F_{v,r}$.
 It follows that $F_{v,r}\subseteq V$ can be obtained in polynomial time and is a hitting set for $S_r(v)$ of size $\card{F_{v,r}}\leq 2h'$.
-
 Assume for now that we know the value of $h$.
 Note that the value $h'$ can be computed from $h$ and the guarantee given by the oracle, i.e., the constant inside the big-O.
 We construct the $(2h',r)$-LSHS iteratively.
@@ -88,3 +90,5 @@ Since $F_{v,r}$ hits $S_r(v)$, the proof is completed.
 If we do not know the value of $h$, we can do a doubling search for $h'$. 
 Indeed, if the guess of $h'$ is low, then at some point it could be that $\card{F_{v,r}}>2h'$, then we double $h'$ and restart the process.
 \end{proof}
+
+
