@@ -1,16 +1,16 @@
-We now describe how to use the augmented graph $G^B$ to get hub-labels that allow us to find efficient paths for any query $SP(\pp{s,b},t^-)$.
-This is similar to HL construction for shortest-paths (cf. Section \ref{ssec:hldef}); a subtle difference however is that we are only interested in paths ending in a sink node.
-%Afterwards we show how to use the previous to reconstruct the desired path in linear time.
+We now describe how to use the augmented graph $G^B$ to get hub labels that allow us to find efficient paths for any query $SP(\pp{s,b},t^-)$.
+This is similar to HL construction for shortest-paths (cf. Section \ref{ssec:hldef}).
+A subtle difference is that we are only interested in paths ending in a sink node.
 
-We associate each node $\pp{v,b}$ with a forward hub-label $\Lf(\pp{v,b})\subseteq V^B$, and \emph{only sink nodes} $u^-$ with a reverse hub $\Lb(u^-)\subseteq V^B$.
-The required cover property is now as follows: for every pair $(\pp{s,b},t^-)$, there exists a node in $\pp{u,x}\in L(\pp{s,b})^+\cap L(t^-)^-$ such that $\pp{u,x}$ is in the shortest path from $\pp{s,b}$ to $t^-$.
-If $L(\pp{s,b})^+\cap L(t^-)^-=\emptyset$, then is no feasible path, i.e., $\dist(s,t|b)=\infty$; if the intersection contains multiple nodes, we take the one minimizing $\dist(\pp{s,b},\pp{u,x})+\dist(\pp{u,x},t^-)$.
-Finally, we can augment the hub-labels with the next-hop node, and compute the entire path recursively.
+We associate each node $\pp{v,b}$ with a forward hub label $\Lf(\pp{v,b})\subseteq V^B$, and \emph{only sink nodes} $u^-$ with a reverse hub $\Lb(u^-)\subseteq V^B$.
+The cover property is as described in Section~\ref{ssec:hldef}.
+Finally, we can augment the hub labels with the next-hop node, and compute the entire path recursively.
+To reconstruct the path, we can proceed similarly as in Section~\ref{ssec:hldef}.
 
 %The algorithm to construct the path is very simple if, as discussed in \todo{reference}, we also store the first hop to every node in the hub. Assume we can answer queries of the form $SP(\pp{s,b},t^-)$ and output either ``not possible'' or a node $\pp{v,x}$ in the SP and the budget consumed. Consider the case when all the budget was used. We can find a node in the SP from $\pp{s,b}$ to $\pp{v,x}$ by running a query $SP(\pp{s,b-x},v^-)$. This process can be repeated until the path is recovered. In the other hand, if there was a surplus of budget, we adjust $b$ to the smaller quantity; the adjustment is necessary only in the very first query, the subsequent queries will always consume all the budget.
 
 \subsubsection{Query Time and Data Requirements}
-Putting things together, we now show how we can construct hub-labels for answering CSP queries, such that their preprocessing time and storage is parameterized by the constrained HD $h_c$.
+Putting things together, we now show how we can construct hub labels for answering CSP queries, such that their preprocessing time and storage is parameterized by the constrained HD $h_c$.
 Note that we use the augmented graph primarily as a theoretical construction; from a computational point of view, we can obtain the HL using only an EPHS of the original graph.
 %Nevertheless, the augmented graph allows us to prove that all the pieces fit together.
 
