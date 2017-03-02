@@ -1,0 +1,52 @@
+% !TEX root = main_vldb.tex
+
+So far we have only used the structure of shortest paths in $G$, which, naturally, does not capture all the information in the network.
+It is natural to think that there is structure if we look, for example, only free edges.
+
+Let $G_0$ be obtained from $G$ by removing all the edges with cost.
+The networks $G$ and $G_0$ define two hierarchies of roads; shortest paths in $G_0$ are free, but not as fast as the ones in $G$.
+Our main hypothesis now is that an efficient path $P$ does not alternate between these two hierarchies.
+For example, a path that enters and exits multiple times a highway is not desirable because of turning costs.
+
+\begin{proposition}
+Let $\calQ,\calQ'$ be two path systems with HD $h$ and $h'$ respectively.
+The HD of the system $\calQ\cup\calQ'$ is at most $h+h'$.
+\end{proposition}
+\begin{proof}
+Given $v\in V$, the union of $H_{v,r}$ and $H_{v,r}'$ hits all the paths in $S_r(v,\calQ)\cup S_r(v,\calQ')$.
+\end{proof}
+
+We now relax the assumption that a system witnesses another.
+It could be that the efficient paths are sometimes witnessed by free paths and sometimes by shortest paths.
+
+\begin{theorem}
+Assume that $G$ has doubling dimension $\alpha$ and $\calQ,\calQ'$ are systems with HD $h,h'$ respectively. 
+Moreover, suppose $\PE$ does not alternate between $\calQ$ and $\calQ'$, that is, for some $\beta,\beta'>0$, each path $P\in\PE$ is either $\beta$-witnessed by some $Q\in\calQ$ or $\beta'$-witnessed by $Q'\in\calQ'$. Then $G$ admits  $(\alpha^{\beta}h+\alpha^{\beta'}h',r)$-EPHS.
+\end{theorem}
+
+
+\subsection{Correlated Costs}
+We have studied so far the case where $c(P)$ is just the sum of individual edge costs.
+In practice it could be that the cost depends on combinations of arcs.
+Think of a turn in a road network; we can turn right quickly, but turning left means waiting for a green arrow in most cases.
+Another example is minimizing expectation subject to bounded variance.
+If there is no independence, the variance of a path is not the sum of individual variances.
+
+We explain now how to deal with more general cases using the same framework.
+Assume the cost function $c_2:E\times E\to \N\cup \{0\}$ depends on pairs of edges, so if a path is $P=e_0e_1\ldots e_k$, then the cost would be $c_2(P)=\sum_{i=1}^{k}c_2(e_{i-1},e_i)$.
+The nodes in the augmented graph will be triplets $\pp{u,v,b}$, where $v$ is the current state, $u$ is the previous state and $b$ is the available budget.
+The arcs are given by
+\[
+(\pp{u,v,b},\pp{v,w,b'}), \quad uv,vw\in E, b'=b-c_2(u,v,2).
+\]
+
+Define analogously the concept of efficient paths.
+It is easy to see that, as in the previous case, shortest paths in the augmented graph are efficient paths.
+The system $\tilde\PE$ of such paths may also allow for a $\beta$-witness.
+With the previous properties we can construct the hub labels in the same fashion to prove the following result.
+
+\begin{theorem}
+Assume the system $\tilde\PE$ has HD $\tilde h$.
+Then, there exists HL such that, queries $s,t,b$ can be answered in time $\Or(b\tilde h\log D)$ and the space requirement is $\Or(Bn\Delta\cdot B\tilde h\log D)$.
+In particular, if $\PS$ is a $\beta$-witness for $\tilde \PE$, then $\tilde h\leq h2^{\log_2\beta}$. 
+\end{theorem}
