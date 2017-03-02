@@ -1,5 +1,5 @@
+% !TEX root = main_vldb.tex
 
-We start by comparing the HD of the union of two systems.
 So far we have only used the structure of shortest paths in $G$, which, naturally, does not capture all the information in the network.
 It is natural to think that there is structure if we look, for example, only free edges.
 
@@ -19,13 +19,9 @@ Given $v\in V$, the union of $H_{v,r}$ and $H_{v,r}'$ hits all the paths in $S_r
 We now relax the assumption that a system witnesses another.
 It could be that the efficient paths are sometimes witnessed by free paths and sometimes by shortest paths.
 
-\begin{definition}
-We say that $\PE$ does not alternate between $\calQ$ and $\calQ'$ if, for some $\beta,\beta'>0$, each path $P\in\PE$ is either $\beta$-witnessed by some $Q\in\calQ$ or $\beta'$-witnessed by $Q'\in\calQ'$.
-\end{definition}
-
 \begin{theorem}
-Assume that $G$ has doubling dimension $\alpha$ and $\calQ,\calQ'$ are systems with HD $h,h'$ respectively.
-If $\PE$ does not alternate, then it admits $(\alpha^{\log\beta}h+\alpha^{\log\beta'}h',r)$-EPHS.
+Assume that $G$ has doubling dimension $\alpha$ and $\calQ,\calQ'$ are systems with HD $h,h'$ respectively. 
+Moreover, suppose $\PE$ does not alternate between $\calQ$ and $\calQ'$, that is, for some $\beta,\beta'>0$, each path $P\in\PE$ is either $\beta$-witnessed by some $Q\in\calQ$ or $\beta'$-witnessed by $Q'\in\calQ'$. Then $G$ admits  $(\alpha^{\beta}h+\alpha^{\beta'}h',r)$-EPHS.
 \end{theorem}
 
 

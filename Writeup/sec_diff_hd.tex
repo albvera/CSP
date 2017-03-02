@@ -1,15 +1,14 @@
 % !TEX root = main_vldb.tex
-There are two essential parts in the definition of HD.
-First, we stated that a path is $r$-significant if it is long enough.
-Second, we defined the path neighbourhood of a node $v$ to be the set of paths intersecting a ball around $v$.
-These are weaker notions than the ones used in \cite{highway2013}. 
+The definition of HD that we use is tailored for HL note, however, that it is the ones used in \cite{highway2013}. 
+We now discuss how our results extend to the stronger definition.
+
 The stronger version defines a path $P$ to be $r$-significant if, by adding at most one hop at each end, we get a shortest path $P'$ longer than $r$.
 The path $P'$ is called an $r$-witness for $P$.
 Intuitively, a path is significant if it represents a long path.
 Observe that, if $P\in\PS$ is such that $\ell(P)>r$, then $P$ is $r$-significant by definition.
 We remark also that a path can have many $r$-witnesses.
 
-Finally, the path neighborhood must also be strengthen.
+Finally, the path neighborhood must also be strengthened.
 The path $P\in\PS$ belongs to $\Sf_r(v)$ if, $P$ has some $r$-witness $P'$ such that $\dist(v,P')\leq 2r$.
 The reverse neighborhood $\Sb_r(v)$ is defined analogously.
 With this modified versions of $r$-significant and neighborhood, the notions of LSHS and HD are the same as our previous definitions.
@@ -49,7 +48,7 @@ Connect the root of $T$ to the root of $T'$ and the leafs of both trees are shar
 Observe that the number of nodes is 
 \begin{align*}
 n &=[\text{$k$-level $h$-ary tree}] + [\text{$(k-1)$-level $h$-ary tree}]\\
-&= \frac{h^{k+1}-1}{h-1} + \frac{h^k-1}{h-1},
+&= ({h^{k+1}-1})/({h-1}) + ({h^k-1})/({h-1}),
 \end{align*}
 therefore the sparsity is $\Theta(n)$, the worst possible.
 \end{proof}
