@@ -64,6 +64,7 @@ where the last expression is exactly $\ell(P)$.
 We note that the augmented graph is similar to existing techniques for solving CSP via dynamic programming~\cite{alex_bicriteria}.
 Such an approach, however, requires that all costs are non-zero, thus the augmented graph is a DAG.
 In contrast, we allow edge costs to be zero, and therefore, our augmented graph may contain cycles. 
+The following construction will depend on LSHS for the system $\PE$, we call such object an efficient path hitting set (EPHS).
 
 The above result now allows us to relate EPHS of the original graph to LSHS in the augmented graph.
 Note that in $G^B$ we are interested only in shortest paths ending in sink nodes (since these project to efficient paths). 
