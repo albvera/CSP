@@ -2,14 +2,14 @@ We now describe how to use the augmented graph $G^B$ to get hub labels that allo
 This is similar to HL construction for shortest-paths (cf. Section \ref{ssec:hldef}).
 A subtle difference is that we are only interested in paths ending in a sink node.
 
-We associate each node $\pp{v,b}$ with a forward hub label $\Lf(\pp{v,b})\subseteq V^B$, and \emph{only sink nodes} $u^-$ with a reverse hub $\Lb(u^-)\subseteq V^B$.
+Each node $\pp{v,b}$ has a forward hub label $\Lf(\pp{v,b})\subseteq V^B$, and \emph{only sink nodes} $u^-$ have a reverse hub $\Lb(u^-)\subseteq V^B$.
 The cover property must be satisfied for every $\pp{s,b}$ and $t^-$.
-Finally, we can augment the hub labels with the next-hop node, and compute the entire path recursively.
-To reconstruct the path, we can proceed similarly as in Section~\ref{ssec:hldef}.
+Finally, if we want to reconstruct the path, we can proceed similarly as in Section~\ref{ssec:hldef}; we can augment the hub labels with the next-hop node, and compute the entire path recursively.
 
 \subsubsection{Query Time and Data Requirements}
 Putting things together, we now show how we can construct hub labels for answering CSP queries, such that their preprocessing time and storage is parameterized by the CHD $h_c$.
-Note that we use the augmented graph primarily as a theoretical construction; from a computational point of view, we can obtain the HL using only an EPHS of the original graph.
+Note that we use the augmented graph primarily as a theoretical construction.
+From a computational point of view, we can obtain the HL using only an EPHS of the original graph.
 
 \begin{theorem}
 \label{theo:HLeff}
@@ -21,7 +21,7 @@ Create $C_i^B$ as in Equation~\eqref{eq:hitset} and define
 L(\pp{v,b})^+ &\defeq \bigcup_{i=1}^{\log D} C_i^B\cap \Bf_{2^i}(\pp{v,b})\\
 L(u^-)^-  &\defeq \bigcup_{i=1}^{\log D} C_i^B\cap \Bb_{2^i}(u^-).
 \end{align*}
-The cover property is proved in an identical manner as in Proposition~\ref{theo:construct_hl}; we now bound the hub size.
+The cover property is proved similarly as in Proposition~\ref{theo:construct_hl}; we are left to bound the hub size.
 For a reverse hub we use that
 \begin{align*}
 \Bb_{2^i}(t^-) &= \{\pp{s,x}: \exists P\in \Pst, c(P)=x, \ell(P)\leq 2^i\}\\
@@ -34,11 +34,5 @@ For forward hubs, the size follows from observing that $ \card{C_i^B\cap \Bf_{2^
 This immediately gives us the following corollary for the storage and query time.
 \begin{corollary}
 Using the HL given by Theorem~\ref{theo:HLeff}, we can implement queries for $s,t,b$ in time $O(b h_c\log D)$.
-The total space requirement is $O(nB \cdot Bh_c\log D)$.
+The total space requirement is $\Or(nB \cdot Bh_c\log D)$.
 \end{corollary}
-
-%\begin{proof}
-%The reverse hub for a sink $u^-$ has at most $Bh_c\log D$ nodes. For each such node $\pp{v,b}\in\Lb(u^-)$ we store: the distance to the sink $\dist(v,u|b)$ and the efficient cost, i.e., we know how much surplus there is. In the case of forward hub for a node $\pp{u,b}$ we store only distances.
-
-%To perform a query for $s,t,b$, we look only for nodes $\pp{u,x}$ with $x\leq b$ in the reverse hub of $t^-$ \anote{this requires a data structure to know the level of each node, but I guess it's clear from the context}. As we compare two ordered lists of size at most $h_cb\log D$, the result follows.
-%\end{proof}

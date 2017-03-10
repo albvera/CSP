@@ -1,75 +1,17 @@
 % !TEX root = main_vldb.tex
 \label{sec:frontier}
 
-The linear dependence on $B$ in the bound on HL sizes (cf. Theorem \ref{theo:HLeff}) is somewhat weak -- essentially, this corresponds to a worst-case setting where the efficient paths between any pair of nodes is different for each value of budget. In most practical settings, changing the budget does not change the paths too much, and ideally the hub label sizes should reflect this fact. This is achieved via a more careful construction of hub labels, resulting in the following bound. 
-\begin{theorem}
-\label{thm:markedhubs}
-Suppose $(G,\ell,c)$ admits a function $g:\N\to \N$ that satisfies for every $s,t\in V$, $b\in \N$,
+The linear dependence on $B$ in the bound on HL sizes (cf. Theorem \ref{theo:HLeff}) is somewhat weak. Essentially, this corresponds to a worst-case setting where the efficient paths between any pair of nodes is different for each budget level. 
+In most practical settings, changing the budget does not change the paths too much, and ideally the hub label sizes should reflect this fact. 
+This is achieved via a more careful construction of hub labels, resulting in the following bound. 
+\begin{theorem}\label{thm:markedhubs}
+Let $(G,\ell,c)$ as in Theorem~\ref{theo:HLeff} and $g:\N\to \N$ be such that, for every $s,t\in V$, $b\in \N$,
 \[
 \abs*{\crl*{P\in\Pst^E: c(P)\leq b}} \leq g(b).
 \]
 Then, we can construct hub labels of size $O(g(B)h_c\log D)$, and answer queries with budget $b$ in time $O(g(b)h_c\log D)$.
 \end{theorem}
 
+Note that there always exists such function $g$ and the worst case is $g(b)=b$.
 The proof depends on a different technique for constructing HL (refer Algorithms \ref{alg:forwardhub} and \ref{alg:reversehub} in Appendix \ref{sec:proofs}). The main idea is to sort the efficient paths for each source node $s$ by cost, and then carefully mark nodes when they are added to forward HL; these marked nodes are then used to construct the reverse HL.
 For brevity, the complete algorithmic details and proof are deferred to Appendix \ref{sec:proofs}.
-
-
-\begin{comment}
-\begin{proof}
-To get this stronger bound, we need to modify the hub label construction. The algorithm for forward hub construction is given in Algorithm~\ref{alg:forwardhub}, and for reverse hubs in Algorithm~\ref{alg:reversehub}. Note that the two must be run sequentially, as the latter uses the nodes marked in the former.
-
-
-We make the forward hubs $\Lf(\pp{v,b})$ slightly bigger by storing, for each node the distance from $\pp{v,b}$ and also the \emph{budget surplus}.
-Let $C_i$ be the $(h_c,2^{i-1})$-EPHS and $\PE_{s,t}$ the efficient paths from $s$ to $t$.
-
-Observe that, whenever a node $v\in C_i$ is added, $v\in \Bf_{2^i}(s)$ guarantees that at most $h_c$ such points are needed for the whole process.
-Additionally, every such $v$ is added at most $g(b)$ times in the hub of $\pp{s,b}$.
-The data requirement guarantee follows.
-
-The bound for data requirements is $g(B) h_c\log D$, the argument is analogous to the forward case.
-Finally, we need to prove the cover property.
-Take any query $SP(\pp{s,b},t^-)$ and let $P$ be the solution.
-In $Lf(\pp{s,b})$ there is a node $v_P$ added by Algorithm~\ref{alg:forwardhub}.
-By construction, the same node $v_P$ was added to $\Lb(\pp{d,0})$. The result follows.
-
-
-\begin{algorithm}
-\caption{Construction of forward hub}
-\label{alg:forwardhub}
-\begin{algorithmic}[1]
-\Require Node $s\in V$, efficient paths $\PE_{s,t}\,\forall\,t$, EPHS $\crl*{C_i}$.
-\Ensure Forward hubs $Lf(\pp{s,b})$ for $b=0,\ldots,B$ and a marked node $v_P$ for every path.
-\State Order each $\PE_{s,t}$ by increasing cost and remove paths consuming more than $B$.
-\For{$t\in V\setminus s$}
-	\For{$P\in\Pst^E$}
-		\State $b\gets c(P)$, $b'\gets c(P')$, where $P'$ is the next path in the list ($b'=B$ if no such path).
-		\State Find the largest $i$ such that $P$ is $2^{i-1}$-efficient.
-		\State Find $v\in C_i$ hitting $P$ and mark $v$ as $v_P$.
-		\State Add $\pp{v,c(P[v,t])}$ to $L(\pp{s,b})^+$  with distance $\ell(P[s,v])$ and surplus zero.
-		\For{$x$ between $b$ and $b'$}
-			\State Add $\pp{v,c(P[v,t])}$ to $L(\pp{s,x})^+$  with distance $\ell(P[s,v])$ and surplus $x-b$.
-		\EndFor
-	\EndFor
-\EndFor
-\end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}
-\caption{Construction of reverse hub}\label{alg:reversehub}
-\begin{algorithmic}[1]
-\Require Node $t\in V$, efficient paths $\Pst^E\,\forall\,s$, marked nodes and EPHS $C_i$.
-\Ensure Backward hub $\Lb(\pp{t,0})$.
-\State Order each $\Pst^E$ by increasing cost and remove paths consuming more than $B$.
-\State $\Lb(\pp{t,0})\gets \varnothing$
-\For{$s\in V\setminus t$}
-	\For{$P\in\Pst^E$}
-		\State Find the largest $i$ such that $P$ is $2^{i-1}$-efficient.
-		\State Take $v$ as the marked node $v_P$.
-		\State Add $\pp{v,c(P[v,t])}$ to $\Lb(\pp{t,0})$ with distance $\ell(P[v,t])$.
-	\EndFor
-\EndFor
-\end{algorithmic}
-\end{algorithm}
-\end{proof}
-\end{comment}

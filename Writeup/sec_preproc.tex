@@ -1,8 +1,9 @@
 Next, we show how the preprocessing requirements for HL construction can be parameterized in terms of $h_c$. For this, we need to modify similar arguments for shortest paths in \cite{highway2013} to handle efficient paths.
+\anote{should we define VC-dimension and the algorithm for hitting sets?}
 
 The critical observation in \cite{highway2013} is that the set system of \emph{unique} shortest paths has a VC-dimension of $2$.~\footnote{
-Formally, paths $v_1v_2\ldots v_k$ are mapped to sets $\{v_1,\ldots,v_k\}$; note if $G$ is undirected, each subset represents exactly two paths, the $(s,t)$-path and $(t,s)$-path. Therefore, a hitting set for this set system corresponds to a hitting set for $\PS$.}
-To see this, note that if the shortest path between $a$ and $c$ either passes through $b$ or not -- hence $\{a,b,c\}$ and $\{a,c\}$ can not be in the system and hence $\{a,b,c\}$ cannot be shattered.
+Formally, paths $v_1v_2\ldots v_k$ are mapped to sets $\{v_1,\ldots,v_k\}$. If $G$ is undirected, each subset represents exactly two paths, the $(s,t)$-path and $(t,s)$-path. Therefore, a hitting set for this set system corresponds to a hitting set for $\PS$.}
+To see this, take the shortest path $abc$, represented by $\{a,b,c\}$. Because the paths are unique, $ac$ will not be a shortest path, hence $\{a,c\}$ can not be in the system and thus $\{a,b,c\}$ cannot be shattered.
 This does not hold in directed graph, as both paths $abc$ and $ca$ may be shortest paths. However, we can overcome this by considering the ground set as $E$ instead of $V$, and mapping a path $e_1e_2\ldots e_k$ to $\{e_1,e_2,\ldots,e_k\}$.
 Note that each $\{e_1,e_2,\ldots,e_k\}$ corresponds uniquely to one path (since we consider acyclic paths).
 Let $\pi(Q)$ denote the set of edges in a path $Q$.
@@ -10,7 +11,8 @@ Let $\pi(Q)$ denote the set of edges in a path $Q$.
 Given a path system $\calQ$, the corresponding set system $(E,\{\pi(Q):Q\in\calQ\})$ has VC-dimension 2.
 \end{proposition}
 Note that this argument also can be used for shortest paths in undirected graphs to remove the uniqueness requirement.
-Finally, polynomial-time preprocessing now follows from a similar argument as Theorem 8.2 in \cite{highway2013}; we defer the proof to Appendix~\ref{sec:proofs}.
+Finally, polynomial-time preprocessing now follows from extending a similar argument as Theorem 8.2 in \cite{highway2013}.
+We defer the proof to Appendix~\ref{sec:proofs}.
 
 \begin{proposition}\label{prop:poly_lshs}
 If $\calQ$ has HD $h$, then in polynomial time we can obtain a $(h',r)$-LSHS, where $h'=\Or(h\Delta\log(h\Delta))$.	
