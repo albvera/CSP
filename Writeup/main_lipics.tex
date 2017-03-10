@@ -1,6 +1,12 @@
-\documentclass{vldb}
+\documentclass[a4paper,UKenglish]{lipics-v2016}
+%for A4 paper format use option "a4paper", for US-letter use option "letterpaper"
+%for british hyphenation rules use option "UKenglish", for american hyphenation rules use option "USenglish"
+% for section-numbered lemmas etc., use "numberwithinsect"
+ 
+\usepackage{microtype}%if unwanted, comment out or use option "draft"
+\bibliographystyle{plainurl}% the recommended bibstyle
 
-\usepackage{balance}  % for  \balance command ON LAST PAGE  (only there!)
+%-------------- Personal commands begin --------------
 \usepackage{dsfont,amssymb,amsfonts,enumitem}
 \usepackage{graphicx,xcolor,tikz,comment}
 
@@ -14,7 +20,6 @@
 \usepackage{algorithm,algpseudocode}
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
-\usepackage[colorlinks]{hyperref} 
 
 \usepackage{mathtools}
 \DeclarePairedDelimiter{\abs}{\lvert}{\rvert} %
@@ -27,30 +32,26 @@
 
 
 %Useful commands
+\newcommand{\anote}[1]{{\color{red}Alberto: #1}}		%to leave notes
+\newcommand{\sbnote}[1]{{\color{blue}Sid: #1}}			
+\newcommand{\sbedit}[1]{{\color{blue} #1}}				%to leave notes
+\newcommand{\todo}[1]{{\color{green}TODO: #1}}		    %to leave notes
+
 \newcommand{\E}{\mathbb{E}} 							%expectation
 \newcommand{\Var}{\mathbb{V}\textnormal{ar}} 			%variance
 \newcommand{\In}[1]{\mathds{1}_{\left\{ #1 \right\}}} 	%indicator
 \newcommand{\R}{\mathbb{R}}								%reals
 \newcommand{\N}{\mathbb{N}}								%naturals					
 \renewcommand{\Pr}{\mathbb{P}}							%probability
-\newcommand{\anote}[1]{{\color{red}Alberto: #1}}		%to leave notes
-\newcommand{\sbnote}[1]{{\color{blue}Sid: #1}}			\newcommand{\sbedit}[1]{{\color{blue} #1}}			%to leave notes
-\newcommand{\todo}[1]{{\color{green}TODO: #1}}		    %to leave notes
 \newcommand{\norm}[1]{\lvert\lvert#1\rvert\rvert}		%norm	
 \newcommand{\card}[1]{\lvert#1\rvert}					%cardinal of a set
 \newcommand{\ceil}[1]{\lceil#1\rceil}					%ceiling function
 \newcommand{\Or}{O}
-
-\newcommand{\defeq}{\coloneqq}
-
-
+\newcommand{\defeq}{\coloneqq}							%symbol :=
 
 %Additional commands
-\newcommand{\calP}{\mathcal{P}}							%Set of paths
+\newcommand{\calP}{\mathcal{P}}							
 \newcommand{\calQ}{\mathcal{Q}}							
-\newcommand{\Nf}{\mathcal{N}^+}							%forward neighborhood
-\newcommand{\Nb}{\mathcal{N}^-}							%reverse neighborhood
-
 \newcommand{\Bf}{B^+}									%forward ball
 \newcommand{\Bb}{B^-}									%reverse ball
 \newcommand{\Sf}{S^+}
@@ -58,59 +59,62 @@
 \newcommand{\Lf}{L^+}									%forward hub
 \newcommand{\Lb}{L^-}									
 \newcommand{\dist}{\mbox{dist}}							%distance
-\newcommand{\pp}[1]{\langle#1\rangle}					%to denote a path
+\newcommand{\pp}[1]{\langle#1\rangle}					%to denote pairs of nodes
 \newcommand{\PE}{\mathcal{P}^E}							%efficient paths
 \newcommand{\PB}{\mathcal{P}^B}							%shortest in G^B
 \newcommand{\Pst}{\mathcal{P}_{s,t}}					%all paths s-t
-\newcommand{\PS}{\mathcal{P}^*}							%shortest
+\newcommand{\PS}{\mathcal{P}^*}							%shortest paths
 \newcommand{\Gp}{\tilde G}								%pruned augmented graph
-\newcommand{\Ep}{\tilde E}								
-\newcommand{\Vp}{\tilde V}			
-\newcommand{\hc}{h_c}				
+\newcommand{\Ep}{\tilde E}								%edges of pruned augmented
+\newcommand{\Vp}{\tilde V}								%vertices of pruned augmented
+\newcommand{\hc}{h_c}									%chd
 \newcommand{\Lm}{L_{\mathrm{max}}}
+\newtheorem{proposition}[theorem]{Proposition}
 
-\newtheorem{theorem}{Theorem}
-\newtheorem{proposition}{Proposition}
-\newtheorem{corollary}{Corollary}
-\newtheorem{lemma}{Lemma}
-\newdef{definition}{Definition}
-\newdef{remark}{Remark}
+%-------------- Personal commands end --------------
 
-\newenvironment{proofof}[1]{\begin{proof}[{\rm\sc of #1}]}{\end{proof}}
+
+% Author macros
+\title{Computing Constrained Shortest-Paths at Scale}
+%% Please provide for each author the \author and \affil macro, even when authors have the same affiliation, i.e. for each author there needs to be the  \author and \affil macros
+\author[1]{Alberto Vera}
+\author[2]{Siddhartha Banerjee}
+\author[3]{Samitha Samaranayake}
+\affil[1]{Cornell University\\
+  \texttt{aav39@cornell.edu}}
+\affil[2]{Cornell University\\
+  \texttt{sbanerjee@cornell.edu}}
+\affil[3]{Cornell University\\
+  \texttt{samitha@cornell.edu}}
+\authorrunning{A. Vera, S. Banerjee and S. Samaranayake} %mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et. al.'
+
+\Copyright{Alberto Vera, Siddhartha Banerjee and Samitha Samaranayake}%mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
+
+\subjclass{Dummy classification -- please refer to \url{http://www.acm.org/about/class/ccs98-html}}% mandatory: Please choose ACM 1998 classifications from http://www.acm.org/about/class/ccs98-html . E.g., cite as "F.1.1 Models of Computation". 
+\keywords{keyword1, keyword2, keyword3}% mandatory: Please provide 1-5 keywords
+
+
+%Editor-only macros:: begin (do not touch as author)%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\EventEditors{John Q. Open and Joan R. Acces}
+\EventNoEds{2}
+\EventLongTitle{42nd Conference on Very Important Topics (CVIT 2016)}
+\EventShortTitle{CVIT 2016}
+\EventAcronym{CVIT}
+\EventYear{2016}
+\EventDate{December 24--27, 2016}
+\EventLocation{Little Whinging, United Kingdom}
+\EventLogo{}
+\SeriesVolume{42}
+\ArticleNo{23}
+% Editor-only macros::end %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
-
-% ****************** TITLE ****************************************
-
-\title{Computing Constrained Shortest-Paths at Scale}
-
-
-% ****************** AUTHORS **************************************
-
-\numberofauthors{3} 
-
-\author{
-\alignauthor
-Alberto Vera\\
-\affaddr{Cornell University}\\
-\email{aav39@cornell.edu}
-% 2nd. author
-\alignauthor
-Siddhartha Banerjee
-\affaddr{Cornell University}\\
-\email{sbanerjee@cornell.edu}
-% 3rd. author
-\alignauthor
-Samitha Samaranayake          \\               
-\affaddr{Cornell University}\\
-\email{samitha@cornell.edu}
-}
 
 \maketitle
 
 \begin{abstract}
-\input{sec_abstract.tex}	
-\end{abstract}
+\input{sec_abstract.tex}
+ \end{abstract}
 
 \section{Introduction}
 \input{sec_intro.tex}
@@ -131,7 +135,6 @@ Samitha Samaranayake          \\
 \input{sec_hl_correctness.tex}
 
 \section{Scalable CSP Algorithms:\texorpdfstring{\\}{ } Theoretical Guarantees}
-%\section{Constrained HD}
 \label{sec:chd}
 \input{sec_chd.tex}
 
@@ -158,36 +161,29 @@ Samitha Samaranayake          \\
 \label{sec:numeric}
 \input{sec_numeric.tex}
 
-% ensure same length columns on last page (might need two sub-sequent latex runs)
-\balance
 
-%ACKNOWLEDGMENTS are optional
-\section{Acknowledgments}
-
+\subparagraph*{Acknowledgements.}
 The authors would like to thank Moritz Kobitzsch for sharing sanitized versions of the San Francisco and Luxembourg road networks.
 
-\bibliographystyle{abbrv}
-\bibliography{biblio} 
 
-
-\begin{appendix}
-
+\appendix
 \section{Different notions of HD}
 \label{app:generalhd}
 \input{sec_diff_hd.tex}
 
-% \section{Contraction Hierarchies}
-% \input{sec_ch.tex}
+\section{Contraction Hierarchies}
+\input{sec_ch.tex}
 
 \section{CHD vs. HD: Extensions}
 \label{app:extn}
-\input{sec_extensions.tex}
+\input{sec_extensions_full.tex}
 
 
  \section{Additional Proofs}
 \label{sec:proofs}
 \input{sec_proofs.tex}
 
-\end{appendix}
+%% Bibliography
+\bibliography{biblio}
 
 \end{document}
