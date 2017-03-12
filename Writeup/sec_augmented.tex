@@ -16,8 +16,7 @@ The following definition formalizes this.
 Given a network $(G,\ell)$ and $B\in\N$, the augmented version $G^B=(V^B,E^B,\ell)$ is defined by
 \begin{align*}
 V^B &\defeq\crl*{\pp{v,b}: v\in V, b=0,1,\ldots,B}\cup\crl*{v^-:v\in V},\\
-E^B &\defeq\crl*{(\pp{v,b},\pp{v',b'}) : vv'\in E, b'=b-c_{vv'}, b'\geq 0}\cup E^{B}_{-},\\
-E^{B}_{-} &\defeq \crl*{(\pp{v,b},v^-): v\in V, B\geq b\geq 0}
+E^B &\defeq\crl*{\pp{v,b}\pp{v',b'} : vv'\in E, b'=b-c_{vv'}, b'\geq 0}\cup \crl*{\pp{v,b}v^-: v\in V, B\geq b\geq 0}.
 \end{align*}
 and with length function $\ell(\cdot)$,
 \begin{align*}
@@ -84,10 +83,10 @@ C^B\defeq \{\pp{v,b}: v\in C, v \text{ hits }\bar P\in\PB_r, c(\bar P)=b\leq B \
 By Proposition~\ref{prop:shorteffic}, we know that shortest paths are efficient, hence $C^B$ hits all the desired paths.
 Finally, we prove local sparsity.
 Take any node $\pp{s,b}$ and observe that
-\begin{align*}
-\Bf_{2r}(\pp{s,b}) &= \{\pp{t,x}: \exists P\in\Pst, \ell(P)\leq 2r, c(P)=b-x\} \\
-&\subseteq \{\pp{t,x}: t\in \Bf_{2r}(s), x\leq b\} .
-\end{align*}
+\[
+\Bf_{2r}(\pp{s,b}) = \{\pp{t,x}: \exists P\in\Pst, \ell(P)\leq 2r, c(P)=b-x\} 
+\subseteq \{\pp{t,x}: t\in \Bf_{2r}(s), x\leq b\} .
+\]
 We know that $\card{\Bf_{2r}(s)\cap C}\leq \hc$, therefore $\card{\Bf_{2r}(\pp{s,b})\cap C^B}\leq\hc b\leq \hc B$.
 A similar argument shows the sparsity for the reverse ball.
 \end{proof}

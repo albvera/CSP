@@ -1,5 +1,8 @@
-Next, we show how the preprocessing requirements for HL construction can be parameterized in terms of $h_c$. For this, we need to modify similar arguments for shortest paths in \cite{highway2013} to handle efficient paths.
-\anote{should we define VC-dimension and the algorithm for hitting sets?}
+We show how the preprocessing requirements for HL construction can be parameterized in terms of $h_c$. For this, we need to modify similar arguments for shortest paths in \cite{highway2013} to handle efficient paths.
+We recall the concept of VC-dimension and latter explain how this notion allows to obtain hitting sets.
+A set system $(X,\calX)$ is a ground set $X$ together with a family $\calX\subseteq 2^X$.
+A set $Y\in \calX$ is shattered if $\{Z\cap Y:Z\in\calX\}=2^Y$.
+If $d$ is the smallest integer such that no $Y\in\calX$ with $\card{Y}=d+1$ can be shattered, then this number $d$ is the VC-dimension of $(X,\calX)$.
 
 The critical observation in \cite{highway2013} is that the set system of \emph{unique} shortest paths has a VC-dimension of $2$.~\footnote{
 Formally, paths $v_1v_2\ldots v_k$ are mapped to sets $\{v_1,\ldots,v_k\}$. If $G$ is undirected, each subset represents exactly two paths, the $(s,t)$-path and $(t,s)$-path. Therefore, a hitting set for this set system corresponds to a hitting set for $\PS$.}

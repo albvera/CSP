@@ -28,10 +28,10 @@ For $(G,\ell)$, given a multi-scale LSHS collection $\crl*{C_i:i=1,\ldots,\log D
 \end{proposition}
 \begin{proof}
 For each node $v$, we define the hub label $L(v)$ as
-\begin{align*}
-\Lf(v)\defeq  \bigcup_{i=1}^{\log D}C_i\cap \Bf_{2^i}(v)\;,\;
+\[
+\Lf(v)\defeq  \bigcup_{i=1}^{\log D}C_i\cap \Bf_{2^i}(v) \quad\text{ and }\quad
 \Lb(v)\defeq \bigcup_{i=1}^{\log D}C_i\cap \Bb_{2^i}(v).
-\end{align*}
+\]
 Since each $C_i$ is an $(h,2^{i-1})$-LSHS which we intersect with balls of radius $2\cdot 2^{i-1}$, every set in the union contributes at most $h$ elements and the maximum size is as claimed.
 
 To prove the cover property, we note that, if $t$ is not reachable from $s$, by definition $\Lf(s)\cap\Lb(t)=\varnothing$.

@@ -17,8 +17,8 @@ In other words, all efficient paths $P\in \Pst^E$ can be represented by a set a 
 The pruned augmented graph is defined by $\Gp^B=(\Vp^B,\Ep^B)$, where
 \begin{align*}
 \Vp^B &:=\{\pp{v,b}: v\in V, b=0,1,\ldots,B\},\\
-\Ep^B &:=\{\pp{v,b}\pp{v',b'} : \exists s,t\in V, P\in\PE_{s,t}, c(P)\leq B, \\
-&\qquad vv'\in P, b=c(P[v,t]), b'=c(P[v',t])  \}.
+\Ep^B &:=\{\pp{v,b}\pp{v',b'} : \exists s,t\in V, P\in\PE_{s,t}, c(P)\leq B, 
+ vv'\in P, b=c(P[v,t]), b'=c(P[v',t])  \}.
 \end{align*}
 In $\Gp^B$ all the lengths are preserved.
 \end{definition}
@@ -89,35 +89,27 @@ When $\dist(v,w)<d$, we can safely remove $w$ from the hub of $v$, since the hig
 For frontier queries, we can also prune away a node $w$ if the $(v,w)$-path has a surplus of budget.
 The entire process can be summarized in the following steps.
 
-\begin{table*}[h]
-\small
-\begin{subtable}{.5\textwidth}
-\centering
+\begin{table*}
+
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.2cm} | p{1.2cm} | }
 \hline
 	B & Preproc [m] & Avg F Size & Avg B Size & Query Dij [ms] & Query HL [ms] \\ \hline \hline
-	0 & 0 & 0 & 0 & 0 & 0.005 \\ \hline
-5-f  & 5  & 17 & 28 & 80.10  & 0.02 \\
+	0 & 1 & 23 & 22 & 10.71 & 0.005 \\ \hline
+5-f  & 5  & 16 & 28 & 80.10  & 0.02 \\
 5-s  & 5  & 57 & 28 & 31.75  & 0.01 \\ \hline
-10-f & 9  & 17 & 28 & 168.11 & 0.03 \\
+10-f & 9  & 9 & 28 & 168.11 & 0.03 \\
 10-s & 10 & 68 & 28 & 56.19  & 0.01 \\ \hline
-15-f & 12 & 17 & 28 & 237.64 & 0.03 \\
+15-f & 12 & 6 & 28 & 237.64 & 0.03 \\
 15-s & 16 & 73 & 28 & 77.59  & 0.01 \\ \hline
-20-f & 17 & 17 & 28 & 342.47 & 0.03 \\
+20-f & 17 & 5 & 28 & 342.47 & 0.03 \\
 20-s & 20 & 77 & 28 & 100.26 & 0.01 \\ \hline
-25-f & 22 & 17 & 28 & 460.95 & 0.03 \\
+25-f & 22 & 4 & 28 & 460.95 & 0.03 \\
 25-s & 25 & 80 & 28 & 126.52 & 0.01 \\ \hline
-30-f & 26 & 17 & 28 & 569.13 & 0.03 \\
+30-f & 26 & 3 & 28 & 569.13 & 0.03 \\
 30-s & 31 & 84 & 28 & 152.75 & 0.01 \\ \hline
 \end{tabular}
-}
-\caption{San Francisco network.}\label{tab:sf_results}
-
-\end{subtable}
-\begin{subtable}{.5\textwidth}
-\centering
-\resizebox{\columnwidth}{!}{%
+\quad
 \begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.2cm} | p{1.2cm} |}
 \hline
 	B & Preproc  [m] & Avg F Size & Avg B Size & Query Dij [ms] & Query HL [ms] \\ \hline \hline
@@ -136,9 +128,8 @@ The entire process can be summarized in the following steps.
 30-s & 93 & 62.3 & 18.7 & 272.41  & 0.01 \\ \hline
 \end{tabular}
 }
-\caption{Luxembourg City network}\label{tab:lu4k_results}
-\end{subtable}
-\caption{Experimental results with 1000 random $s,t$ pairs for each network and multiple maximum budget levels $B$. Results on rows $B-f$ correspond to computing the solution frontier for all budget levels $b\leq B$ while the results on rows $B-s$ correspond to computing the solution for the budget level $b$.}\label{tab:performance_results}
+
+\caption{Experimental results for San Francisco (left) and Luxembourg City (right). Query times are measured with 1000 random $s,t$ pairs for each network and multiple maximum budget levels $B$. Results on rows $B-f$ correspond to computing the solution frontier for all budget levels $b\leq B$ while the results on rows $B-s$ correspond to computing the solution for the budget level $b$.}\label{tab:performance_results}
 \end{table*}
 
 
@@ -154,14 +145,18 @@ Recall that, for some instances, we skip step 2 and contract $G^B$ instead.
 Note that in the last step we bootstrap HL to improve it.
 This works because the fact that some nodes have incorrect distance labels does not impact the correctness of a HL query; a node minimizing the distance is returned and such node must have a correct label.
 
-\begin{figure}[b]
+\begin{figure}
+\begin{minipage}{0.5\textwidth}
+\centering
 \input{TexImg/plot_clusters_sf.tex}
-\includegraphics[clip, trim=14cm 3cm 3cm 3cm,scale=0.1]{TexImg/SF_hub_sizes.pdf}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\centering
 \input{TexImg/plot_clusters_lu.tex}
+\end{minipage}
 \caption{Performance of clustering for San Francisco (left) and Luxembourg (right). 
 In the $y$-axis the quantities are normalized by the best greedy cover, i.e., using $k=n$.
-Note that, while the number of short-cuts is an indicator of performance, it is not perfectly correlated with the hub size.
-}
+Note that, while the number of short-cuts is an indicator of performance, it is not perfectly correlated with the hub size.}
 \label{fig:clusters}
 \end{figure}
 
@@ -183,42 +178,45 @@ We use the library Networkx for the graph representation and Dijkstra's algorith
 Although all the steps can be parallelized, we did not implement this.
 The code is available at \url{github.com/albvera/HHL_CSP}.
 
-We evaluated the performance of our algorithms with real-world test networks: a downtown San Francisco network with 2643 nodes and 6588 edges for which real-world travel-time data was available as a Gaussian mixture model \cite{sf_data}, and a Luxembourg City network with 4026 nodes and 9282 edges for which travel-time distributions were synthesized from speed limits \cite{niknami2016tractable}, as real-world data was unavailable.
+We evaluated the performance of our algorithms with real-world test networks: a downtown San Francisco network with 2139 nodes and 5697 edges for which real-world travel-time data was available as a Gaussian mixture model \cite{sf_data}, and a Luxembourg City network with 4026 nodes and 9282 edges for which travel-time distributions were synthesized from speed limits \cite{niknami2016tractable}, as real-world data was unavailable.
  
 In our experiments, we use the mean travel times for our length function and the following cost structure; the top 10\% of edges with the highest variance are assigned cost 1 and the rest cost 0.
 This is a measure of risk, since edges with high variance are prone to cause a delay in the travel time.
 
 
-\begin{figure}[!t]
-\begin{center}
-\includegraphics[clip, trim=0.2cm 0.3cm 0.2cm 0.2cm,scale=0.26]{TexImg/SF_query_dij_B25.pdf}
-\includegraphics[clip, trim=1.3cm 0.3cm 0.2cm 0.2cm,scale=0.26]{TexImg/SF_query_hl_B25.pdf}
-\end{center}
-\caption{Histogram frontier queries in San Francisco augmented with $B=25$. Dijkstra (left) and HL (right).}
+\begin{figure}
+\begin{minipage}[t]{.47\textwidth}
+\centering
+\includegraphics[clip, trim=0.2cm 0.3cm 0.2cm 0.2cm,scale=0.3]{TexImg/SF_query_dij_B25.pdf}
+\includegraphics[clip, trim=0.2cm 0.3cm 0.2cm 0.2cm,scale=0.3]{TexImg/SF_query_hl_B25.pdf}
+\caption{Histogram frontier queries for Dijkstra (top) and HL (bottom). Times are 1000 random pairs in San Francisco augmented with $B=25$. }
 \label{fig:SF_query}
-\end{figure}
-
-\begin{figure}[!h]
-\includegraphics[clip, trim = 0.1cm 0.3cm 0cm 0cm,scale=0.27]{TexImg/SF_bwd_hub_size.pdf}
-\includegraphics[clip, trim = 1.3cm 0.3cm 0cm 0cm,scale=0.27]{TexImg/significance.pdf}
-\caption{Size of reverse hubs (left) and significance (right) for frontier queries in San Francisco augmented with $B=25$.}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{.47\textwidth}
+\centering
+\includegraphics[clip, trim = 0.1cm 0.3cm 0cm 0cm,scale=0.3]{TexImg/SF_bwd_hub_size.pdf}
+\includegraphics[clip, trim = 0.1cm 0.3cm 0cm 0cm,scale=0.3]{TexImg/significance.pdf}
+\caption{Size of reverse hubs (top) and significance (bottom) for frontier queries in San Francisco augmented with $B=25$.}
 \label{fig:SF_bwd_size}
+\end{minipage}
 \end{figure}
-
 
 \subsubsection{Query-time performance}
 
 
-Tables~\ref{tab:sf_results} and \ref{tab:lu4k_results} present the CSP computation times for different maximum budgets $B$. 
+Table~\ref{tab:performance_results} presents the CSP computation times for different maximum budgets $B$. 
 For frontier queries, labelled as `f', the query times are measured as the average of 1000 random $s,t$.
 For specific queries, labelled as `s', the times are measured as 1000 random triplets $s,t,b$.
 The column for $B=0$ represents the original graph (without augmentation). 
 As can be seen in the experimental results, our method finds the constrained shortest path solution on average four orders of magnitude faster than running Dijkstra's algorithm on the augmented graph. 
-Preprocessing for frontier queries results in a more compact set of hub labels, since a node $\pp{s,b}$ needs to store information for paths with budget exactly equal to $b$.
+Preprocessing for frontier queries results in a more compact set of hub labels, since a node $\pp{s,b}$ needs to store information for paths with budget exactly equal to $b$ (in case the path is efficient, otherwise it is not stored).
 On the other hand, for specific queries, $\pp{s,b}$ needs to store information for all budgets up to $b$.
+The preprocessing time does not include the cover computation, since this is a flat cost of at most the time to preprocess the instance $B=0$.
+
 Note that preprocessing frontier queries in Luxembourg is faster, despite the network being bigger, this can be explained by the structural properties.
 For example, in Luxembourg there are more highways and fast roads.
-
+Observe that the \emph{average hub size decreases} in San Francisco, this is because in this instance we use $\Gp$, which prunes away most of the nodes, thus many nodes $\pp{v,b}$ are isolated and have empty hubs.
 The longer preprocessing time for frontier queries can be explained as follows.
 There are many cases when two nodes are not reachable, to detect this requires Dijkstra to explore the entire graph.
 In contrast, for specific queries we add extra edges $\pp{s,b}\pp{s,b-1}$, hence a reachability test ends, in average, earlier.
@@ -236,24 +234,24 @@ Figure~\ref{fig:SF_bwd_size} shows a histogram of these metrics.
 
 	
 \begin{figure}
-\begin{center}
-\includegraphics[clip, trim=4.5cm 4.8cm 4.7cm 3cm,scale=0.8]{TexImg/SF_hub_sizes.pdf}
+\begin{minipage}[t]{.51\textwidth}
+\centering
+\includegraphics[clip, trim=4.5cm 4.8cm 4.7cm 3cm,height=4.5cm]{TexImg/SF_hub_sizes.pdf}
 \includegraphics[clip, trim=15.8cm 0cm 0.4cm 1cm,scale=0.3]{TexImg/SF_hub_sizes.pdf}
-\end{center}
-\caption{Heat map of hub size for frontier queries in San Francisco augmented with $B=25$.}\label{fig:SF_hub_size_map}
-\end{figure}
-
-\begin{figure} 
-\begin{center}
-\includegraphics[clip, trim=3.7cm 2.9cm 4.2cm 3cm,scale=0.8]{TexImg/sig_colapse.pdf}
-\includegraphics[clip, trim=15cm 1.5cm 0.1cm 0.8cm,scale=0.45]{TexImg/sig_colapse.pdf}
+\caption{Heat map of hub size for frontier queries in San Francisco augmented with $B=25$.
+Note that the size is not homogeneous, but rather we can observe clusters and neighborhoods tend to be similar.}\label{fig:SF_hub_size_map}
+\end{minipage}
+\hfill
+\begin{minipage}[t]{.46\textwidth}
+\centering
+\includegraphics[clip, trim=3.7cm 2.9cm 4.2cm 3cm,height=4.5cm]{TexImg/sig_colapse.pdf}
+%\includegraphics[clip, trim=15cm 1.5cm 0.1cm 0.8cm,scale=0.45]{TexImg/sig_colapse.pdf}
 \caption{Heat map of significance for frontier queries in San Francisco augmented with $B=25$.
 The most significant nodes have been drawn bigger.
 The top 3 most significant correspond to Geary Blvd \& Gough St, Franklin St \& O'Farrel St and Market St \& Polk St.}
 \label{fig:sig_colapse}
-\end{center}
+\end{minipage}
 \end{figure}
-
 
 Figures \ref{fig:SF_hub_size_map} and \ref{fig:sig_colapse} show the spatial relationships between the hub size and significance in the San Francisco network. 
 We observe that highly significant nodes tend to have small hub size.
@@ -261,10 +259,18 @@ The intuition is simple, if most hubs contain $s$, then is easier for $s$ to sat
 Note also that the hub size resembles an harmonic function; nodes are mostly similar to their neighbors.
 
 \begin{figure}
-\begin{center}
-\includegraphics[scale=0.30]{TexImg/map_LU_sig.png}
-\end{center}
+\begin{minipage}[t]{.53\textwidth}
+\centering
+\includegraphics[scale=0.3]{TexImg/map_LU_sig.png}
 \caption{Heat map of significance for frontier queries in Luxembourg City augmented with $B=25$.
 Notice how the highly significant nodes are in main road crossings.}
 \label{fig:map_LU} 
+\end{minipage}
+\hfil
+\begin{minipage}[t]{.43\textwidth}
+\includegraphics[scale=0.35]{TexImg/significance_LU.pdf}
+\caption{Histogram of significance in Luxembourg City augmented with $B=25$.
+The top 10\% most significant nodes were out of scaled and have been collapsed for exposition purposes.}
+\label{fig:sig_LU} 
+\end{minipage}
 \end{figure}

@@ -12,12 +12,14 @@
 %-------------- Personal commands begin --------------
 \usepackage{dsfont,amssymb,amsfonts,enumitem}
 \usepackage{graphicx,xcolor,tikz,comment}
-\usepackage{subcaption}
 	
 %pgfplots configuration
 \usepackage{pgfplots}
 \pgfplotsset{compat=newest}
 \pgfplotsset{ table/search path={TexImg/} }
+
+\usepackage{caption}
+\usepackage{subcaption}
 
 \usepackage{algorithm,algpseudocode}
 \renewcommand{\algorithmicrequire}{\textbf{Input:}}
@@ -49,6 +51,7 @@
 \newcommand{\defeq}{\coloneqq}							%symbol :=
 
 %Additional commands
+\newcommand{\calX}{\mathcal{X}}
 \newcommand{\calP}{\mathcal{P}}							
 \newcommand{\calQ}{\mathcal{Q}}							
 \newcommand{\Bf}{B^+}									%forward ball
@@ -146,7 +149,7 @@
 \input{sec_numeric.tex}
 
 
-\subparagraph*{Acknowledgements.}
+\section*{Acknowledgements.}
 The authors would like to thank Moritz Kobitzsch for sharing sanitized versions of the San Francisco and Luxembourg road networks.
 
 
@@ -163,7 +166,7 @@ The authors would like to thank Moritz Kobitzsch for sharing sanitized versions 
 \input{sec_extensions_full.tex}
 
 
- \section{Additional Proofs}
+\section{Additional Proofs}
 \label{sec:proofs}
 \input{sec_proofs.tex}
 

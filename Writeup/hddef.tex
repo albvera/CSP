@@ -25,10 +25,10 @@ To address this, Abraham et al.~\cite{highway2013} introduced the notion of the 
 
 To define the highway dimension, we first need two additional definitions:
 for $v\in V, r>0$, we define the \emph{forward and reverse path-neighborhoods} with respect to path system $\calQ$ as: 
-\begin{align*}
-S_r^+(v,\calQ) &\defeq\crl*{Q\in\calQ_r: \dist(v,Q)\leq 2r}, \\  
-S_r^-(v,\calQ) &\defeq\crl*{Q\in\calQ_r: \dist(Q,v)\leq 2r}.
-\end{align*}
+\[
+S_r^+(v,\calQ) \defeq\crl*{Q\in\calQ_r: \dist(v,Q)\leq 2r} \quad\text{ and }\quad
+S_r^-(v,\calQ) \defeq\crl*{Q\in\calQ_r: \dist(Q,v)\leq 2r}.
+\]
 As before, we have $S_r(v,\calQ) = S_r^+(v,\calQ)\cup S_r^-(v,\calQ)$. Now we can define the highway dimension (HD) of a path system $\calQ$. Essentially, the HD re-orders the sequence of qualifiers in the definition of $(h,r)$-LSHS: it requires the existence of a small hitting set for each individual neighborhood, rather than a single hitting set which is locally sparse. 
 \begin{definition}
 \label{def:hddef}
