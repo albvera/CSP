@@ -43,16 +43,17 @@ As a consequence, a node hitting numerous paths in $\PS$, should also hit many p
 Note also that asking for the witness property to hold for all lengths is too extreme, as this essentially requires that all single-hop paths with 0 costs are shortest paths.
 Thus, we want this property only for `long-enough' paths. 
 
-We now show that if, for some $\beta$, the network indeed has the partial witness property (for long-enough paths), then we can relate the HL sizes for the two problems in terms of $\beta$ and the doubling dimension $\alpha$. 
+We now show that if, for some $\beta$, the network indeed has the partial witness property for paths longer than some $r_\beta$, then we can relate the HL sizes for the two problems in terms of $\beta$ and the doubling dimension $\alpha$. 
 Note that the doubling dimension depends on $G$ and $\ell$; the partial witness property depends on the interplay between $G$, $c$ and $\ell$.
+Observe also that, if $\alpha$ is a constant, then the requirement in Theorem~\ref{theo:witness_doubling} is for paths longer than $r_\beta\sim h\alpha^{\beta-2}$.
 \begin{theorem}\label{theo:witness_doubling}
-Assume that $G$ is $\alpha$-doubling and $\PS$ is a $\beta$-witness for $\PE_r$ for every $r\geq \frac{\log(\alpha^\beta h)}{2\log\Delta}$. 
+Assume that $G$ is $\alpha$-doubling and $\PS$ is a $\beta$-witness for $\PE_r$ for every $r\geq r_\beta$, where $r_\beta=2^{\log_\alpha(\alpha^{\beta-2} h)}$. 
 Then, for any $r>0$, given an $(h,r)$-LSHS, we can construct, in polynomial time, an $(\alpha^{\beta} h,r)$-EPHS for $(G,\ell,c)$. 
 \end{theorem}
 
 \begin{proof}
 For any $r$, we need to construct a hitting set $C^E$ for $\PE_r$.
-Assume first $r\geq \frac{\log(\alpha^\beta h)}{2\log\Delta}$.
+Assume first $r\geq r_\beta$.
 Take $C$ as the hitting set for $\PS_{2^{-\beta}r}$, which is guaranteed to be sparse with respect to balls of radius $2^{-\beta+1}r$.
 Define the desired set by
 \[
@@ -65,25 +66,33 @@ Take some $u\in V$, by doubling dimension we can cover $\Bf_{2r}(u)$ by at most 
 Each of these balls contains at most $h$ elements of $C$, therefore the sparsity is as claimed.
 The argument for reverse balls is identical.
 
-Now we analyse the case $r< \frac{\log(\alpha^\beta h)}{2\log\Delta}$.
-It is no longer true that the efficient paths are witnessed, but now the neigborhoods are small.
-Take $C=V$ as the EPHS.
+Now we analyse the case $r< r_\beta$.
+It is no longer true that efficient paths are witnessed, but now the neigborhoods are small.
+We first claim that, for any $v\in V$ and $r>0$, $\abs{B_{r}(v)}\leq \alpha^{\log_2r+1}$.
+Indeed, using the doubling property $\log_2r+1$ times, we can cover $B_r(v)$ with balls of radii $1/2$.
+Since the minimum edge length is $1$, all of these balls must be singletons and the claim follows.
+Now we can take $C=V$ as the EPHS.
 Clearly $C$ hits all the paths and the local sparsity is at most the size of the ball.
-Using our assumption on $r$ and the fact that the lengths are integers, it follows that $\card{B_{2r}(v)}\leq\Delta^{2r}\leq\alpha^\beta h$. 
+Using our assumption on $r_\beta$, a simple computation shows that $\card{B_{2r}(v)}\leq \alpha^{\log_2r_\beta+2}\leq h\alpha^\beta$. 
 \end{proof}
 \begin{remark}
 The existence of a $\beta$-witness is not enough to bound the CHD. Nevertheless, as we discuss in Section~\ref{ssec:hldef}, the existence of $(h,r)$-LSHS already allows the construction of HL. Moreover, the above argument does indeed give a bound for a weaker definition of the highway dimension~\cite{highway2010}.
 \end{remark}
 \begin{remark}
-We state the above result in terms of $\alpha, \Delta$ and $h$, in order to make it more transparent. The three quantities are however somewhat related -- in particular, it can be shown that $\alpha\leq 2h\Delta+1$ (cf.~\cite{skeleton}).
+In order to make it more transparent, we state the above result in terms of $\alpha$ and $h$. 
+However, these quantities are somewhat related; it can be shown that $\alpha\leq 2h\Delta+1$ (cf.~\cite{skeleton}).
 \end{remark}
 
-We finish by observing that the $\beta$-witness property can be relaxed further if we assume something about neighborhoods' growth rate.
-We used the crude bound $\card{B_r(u)}\leq \Delta^r$, but some networks exhibit a much different behaviour.
-For example, a grid satisfies  $\card{B_r(u)}=\Or(r^2)$, so the bound we used could have an exponential gap.
-This implies that we need a witness only for very long paths.
-
-\begin{corollary}
-Let $f$ be a function such that, for every $u\in V, r\geq 0$, $\card{B_r(u)}\leq f(r)$ .
-Then, assuming only that $\PE_r$ is $\beta$-witnessed for $r\geq f^{-1}(\alpha^\beta h)$,we can get the same guarantee as in Theorem~\ref{theo:witness_doubling}.
-\end{corollary}
+%We finish by observing that the $\beta$-witness property can be relaxed further if we assume something about neighborhoods' growth rate.
+%We used a crude bound and took the entire ball $B_{2r}(u)$ as a hitting set, whereas the boundary $\partial B_{2r}(u)$ almost suffices.
+%For example, a grid satisfies  $\card{B_r(u)}=\Theta(r^2)$ and $\card{\partial B_r(u)}=\Theta(r)$, so the next results allows to take $r_\beta^2$ instead of $r_\beta$.
+%
+%\begin{corollary}
+%Let $f$ be a non-decreasing function such that, for every $u\in V$ and $r\geq 0$, $\partial\card{B_r(u)}\leq f(r)$.
+%Then, assuming only that $\PE_r$ is $\beta$-witnessed for $r\geq \frac{1}{2}f^{-1}(\frac{\alpha^\beta h}{1+\alpha^2})$, we can get the same guarantee as in Theorem~\ref{theo:witness_doubling}.
+%\end{corollary}
+%\begin{proof}
+%Denote $r_\beta=\frac{1}{2}f^{-1}(\frac{\alpha^\beta h}{1+\alpha^2})$ and let $r\leq r_\beta$.
+%First we claim that, for every $v$, we can construct a hitting set $H_{v,r}$ for $S_r(\PS)$ of size at most $f(2r)+\alpha^2f(r/2)$.
+%Indeed, 
+%\end{proof}

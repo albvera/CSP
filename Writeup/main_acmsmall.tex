@@ -1,10 +1,11 @@
-\documentclass[format=acmsmall, review=false, screen=true]{acmart}
+\documentclass[format=acmsmall, screen=true]{acmart}
 
 %-------------- Customization of acmsmall package begins ----------------
-\settopmatter{printacmref=false} % Removes citation information below abstract
+\settopmatter{printacmref=false}%removes citation information below abstract
 \renewcommand\footnotetextcopyrightpermission[1]{} % removes footnote with conference information in first column
-\renewcommand\footrule[2]{}	%removes footer with publication date and article number
-\makeatletter				%removes the black rectangle with article number
+\fancyfoot[LE,RO]{}				%removes footer with publication date and article number
+\fancyhead[LE,RO]{\thepage}		%removes article number from header and leaves only page number
+\makeatletter					%removes the black rectangle with article number
 \renewcommand\@folioblob{}
 \makeatother
 %-------------- Customization of acmsmall package ends ----------------
@@ -81,7 +82,7 @@
 %\acmDOI{0000001.0000001}
 
 \begin{document}
-\title{Computing Constrained Shortest-Path at Scale}  
+\title{Computing Constrained Shortest-Paths at Scale}  
 \author{Alberto Vera}
 \affiliation{%
   \institution{Cornell University}
@@ -95,7 +96,7 @@
   \institution{Cornell University}
 }
 
-\keywords{keyword1, keyword2, keyword3.}
+\keywords{Distance Oracles, Highway Dimension, Provable Guarantees.}
 \begin{abstract}
 \input{sec_abstract.tex}
 \end{abstract}
@@ -111,11 +112,11 @@
 
 \subsection{Basic Setting}
 \label{ssec:basic}
-\input{basic.tex}
+\input{sec_basic.tex}
 
 \subsection{Hitting sets and the highway dimension}
 \label{ssec:hddef}
-\input{hddef.tex}
+\input{sec_hddef.tex}
 
 \subsection{Shortest-Paths via Hub Labels}
 \label{ssec:hldef}
@@ -163,7 +164,7 @@ The authors would like to thank Moritz Kobitzsch for sharing sanitized versions 
 
 \section{CHD vs. HD: Extensions}
 \label{app:extn}
-\input{sec_extensions_full.tex}
+\input{sec_extensions.tex}
 
 
 \section{Additional Proofs}

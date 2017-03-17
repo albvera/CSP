@@ -92,9 +92,9 @@ The entire process can be summarized in the following steps.
 \begin{table*}
 
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.2cm} | p{1.2cm} | }
+\begin{tabular}{| l | p{1cm} | p{1cm} | p{1cm} | p{1.2cm} | p{1.2cm} | }
 \hline
-	B & Preproc [m] & Avg F Size & Avg B Size & Query Dij [ms] & Query HL [ms] \\ \hline \hline
+	B & Prepro [m] & Avg F Size & Avg B Size & Query Dij [ms] & Query HL [ms] \\ \hline \hline
 	0 & 1 & 23 & 22 & 10.71 & 0.005 \\ \hline
 5-f  & 5  & 16 & 28 & 80.10  & 0.02 \\
 5-s  & 5  & 57 & 28 & 31.75  & 0.01 \\ \hline
@@ -112,7 +112,7 @@ The entire process can be summarized in the following steps.
 \quad
 \begin{tabular}{ | l | p{1cm} | p{1cm} | p{1cm} | p{1.2cm} | p{1.2cm} |}
 \hline
-	B & Preproc  [m] & Avg F Size & Avg B Size & Query Dij [ms] & Query HL [ms] \\ \hline \hline
+	B & Prepro  [m] & Avg F Size & Avg B Size & Query Dij [ms] & Query HL [ms] \\ \hline \hline
 	0 & 6 & 18 & 18 & 16.35 & 0.004 \\ \hline
 5-f  & 1  & 18.0 & 18.0 & 175.04  & 0.02 \\
 5-s  & 21 & 42.9 & 18.7 & 72.03   & 0.01 \\ \hline
@@ -126,7 +126,7 @@ The entire process can be summarized in the following steps.
 25-s & 77 & 59.5 & 18.7 & 227.17  & 0.01 \\ \hline
 30-f & 7  & 18   & 18   & 1247.72 & 0.10 \\
 30-s & 93 & 62.3 & 18.7 & 272.41  & 0.01 \\ \hline
-\end{tabular}
+\end{tabular}%
 }
 
 \caption{Experimental results for San Francisco (left) and Luxembourg City (right). Query times are measured with 1000 random $s,t$ pairs for each network and multiple maximum budget levels $B$. Results on rows $B-f$ correspond to computing the solution frontier for all budget levels $b\leq B$ while the results on rows $B-s$ correspond to computing the solution for the budget level $b$.}\label{tab:performance_results}
