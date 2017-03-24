@@ -16,9 +16,9 @@ In other words, all efficient paths $P\in \Pst^E$ can be represented by a set a 
 \begin{definition}\label{def:pruned_aug_graph}
 The pruned augmented graph is defined by $\Gp^B=(\Vp^B,\Ep^B)$, where
 \begin{align*}
-\Vp^B &:=\{\pp{v,b}: v\in V, b=0,1,\ldots,B\},\\
-\Ep^B &:=\{\pp{v,b}\pp{v',b'} : \exists s,t\in V, P\in\PE_{s,t}, c(P)\leq B, 
- vv'\in P, b=c(P[v,t]), b'=c(P[v',t])  \}.
+\Vp^B &:=\crl{\pp{v,b}: v\in V, b=0,1,\ldots,B},\\
+\Ep^B &:=\crl{\pp{v,b}\pp{u,x} : \exists s,t\in V, P\in\PE_{s,t}, c(P)\leq B, 
+ vu\in P, b=c(P[v,t]), x=c(P[u,t]) }.
 \end{align*}
 In $\Gp^B$ all the lengths are preserved.
 \end{definition}
@@ -33,7 +33,7 @@ A shortest path in $\Gp$ does not necessarily project to an efficient path, even
 In contrast, if $P$ projects to an efficient path, then necessarily $P$ is shortest. 
 To bound the HD, the correct system to study is
 \[
-\tilde\PB:=\{P: P\text{ ends in a node }\pp{t,0}, \bar P\in \PE, c(\bar P)\leq B \}.
+\tilde\PB:=\crl{P: P\text{ ends in a node }\pp{t,0}, \bar P\in \PE, c(\bar P)\leq B }.
 \]
 The following result shows how the HD of this system relates to that of $\PE$.
 We omit the proof since it is identical as the one in Proposition~\ref{prop:HDaugmented}.

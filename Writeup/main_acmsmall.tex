@@ -10,72 +10,9 @@
 \makeatother
 %-------------- Customization of acmsmall package ends ----------------
 
-%-------------- Personal commands begin --------------
-\usepackage{dsfont,amssymb,amsfonts,enumitem}
-\usepackage{graphicx,xcolor,tikz,comment}
-	
-%pgfplots configuration
-\usepackage{pgfplots}
-\pgfplotsset{compat=newest}
-\pgfplotsset{ table/search path={TexImg/} }
-
-\usepackage{caption}
-\usepackage{subcaption}
-
-\usepackage{algorithm,algpseudocode}
-\renewcommand{\algorithmicrequire}{\textbf{Input:}}
-\renewcommand{\algorithmicensure}{\textbf{Output:}}
-
-\usepackage{mathtools}
-\DeclarePairedDelimiter{\abs}{\lvert}{\rvert} %
-\DeclarePairedDelimiter{\brk}{[}{]}
-\DeclarePairedDelimiter{\crl}{\{}{\}}
-\DeclarePairedDelimiter{\prn}{(}{)}
-
-
-%Useful commands
-\newcommand{\anote}[1]{{\color{red}Alberto: #1}}		%to leave notes
-\newcommand{\sbnote}[1]{{\color{blue}Sid: #1}}			
-\newcommand{\sbedit}[1]{{\color{blue} #1}}				%to leave notes
-\newcommand{\todo}[1]{{\color{green}TODO: #1}}		    %to leave notes
-
-\newcommand{\E}{\mathbb{E}} 							%expectation
-\newcommand{\Var}{\mathbb{V}\textnormal{ar}} 			%variance
-\newcommand{\In}[1]{\mathds{1}_{\left\{ #1 \right\}}} 	%indicator
-\newcommand{\R}{\mathbb{R}}								%reals
-\newcommand{\N}{\mathbb{N}}								%naturals					
-\renewcommand{\Pr}{\mathbb{P}}							%probability
-\newcommand{\norm}[1]{\lvert\lvert#1\rvert\rvert}		%norm	
-\newcommand{\card}[1]{\lvert#1\rvert}					%cardinal of a set
-\newcommand{\ceil}[1]{\lceil#1\rceil}					%ceiling function
-\newcommand{\Or}{O}
-\newcommand{\defeq}{\coloneqq}							%symbol :=
-
-%Additional commands
-\newcommand{\calX}{\mathcal{X}}
-\newcommand{\calP}{\mathcal{P}}							
-\newcommand{\calQ}{\mathcal{Q}}							
-\newcommand{\Bf}{B^+}									%forward ball
-\newcommand{\Bb}{B^-}									%reverse ball
-\newcommand{\Sf}{S^+}
-\newcommand{\Sb}{S^-}
-\newcommand{\Lf}{L^+}									%forward hub
-\newcommand{\Lb}{L^-}									
-\newcommand{\dist}{\mbox{dist}}							%distance
-\newcommand{\pp}[1]{\langle#1\rangle}					%to denote pairs of nodes
-\newcommand{\PE}{\mathcal{P}^E}							%efficient paths
-\newcommand{\PB}{\mathcal{P}^B}							%shortest in G^B
-\newcommand{\Pst}{\mathcal{P}_{s,t}}					%all paths s-t
-\newcommand{\PS}{\mathcal{P}^*}							%shortest paths
-\newcommand{\Gp}{\tilde G}								%pruned augmented graph
-\newcommand{\Ep}{\tilde E}								%edges of pruned augmented
-\newcommand{\Vp}{\tilde V}								%vertices of pruned augmented
-\newcommand{\hc}{h_c}									%chd
-\newcommand{\Lm}{L_{\mathrm{max}}}
-
 \newtheorem{remark}[theorem]{Remark}
-
-%-------------- Personal commands end --------------
+%Import personal commands 
+\usepackage{commandscsp}
 
 
 % DOI
