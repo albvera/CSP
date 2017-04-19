@@ -1,11 +1,11 @@
 \documentclass[letterpaper,11pt]{article}
-%Document configuration begins
+%--------------Document configuration begins--------------
 \usepackage{fullpage}
 \usepackage[numbers]{natbib} 	%\citet{jon90} --> Jones et al. [21], \citep{jon90} --> [21]
 \usepackage{amsthm}
 \usepackage[colorlinks]{hyperref}
 \usepackage[capitalise]{cleveref}
-%Document configuration ends
+%--------------Document configuration ends--------------
 
 %Theorems, lemmas, proofs, etc
 \theoremstyle{plain}
@@ -15,8 +15,7 @@
 \theoremstyle{definition}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{remark}[theorem]{Remark}
-\let\oldproofname=\proofname
-\renewcommand{\proofname}{{\sc\oldproofname}}
+\renewcommand{\proofname}{{\sc Proof}}
 
 %Import personal commands 
 \usepackage{commandscsp}		
