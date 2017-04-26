@@ -1,0 +1,109 @@
+\documentclass{article}
+
+\PassOptionsToPackage{numbers}{natbib}
+\usepackage[final]{nips_2017}
+
+
+%--------------Document configuration begins--------------
+\usepackage{amsthm}
+\usepackage[colorlinks]{hyperref}
+\usepackage[capitalise]{cleveref}
+%--------------Document configuration ends--------------
+
+%Theorems, lemmas, proofs, etc
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{corollary}[theorem]{Corollary}
+\renewcommand{\proofname}{{\sc Proof}}
+
+
+%Import personal commands 
+\usepackage{commandscsp}
+
+\title{Computing Constrained Shortest-Paths at Scale}
+\author{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+	\input{sec_abstract.tex}
+\end{abstract}
+
+\section{Introduction}
+\input{sec_intro.tex}
+
+\section{Preliminaries}
+\label{sec:prelim}
+
+\subsection{Basic Setting}
+\label{ssec:basic}
+\input{sec_basic.tex}
+
+\subsection{Hitting sets and the highway dimension}
+\label{ssec:hddef}
+\input{sec_hddef.tex}
+
+\subsection{Shortest-Paths via Hub Labels}
+\label{ssec:hldef}
+\input{sec_hl_correctness.tex}
+
+\section{Scalable CSP Algorithms:\texorpdfstring{\\}{ } Theoretical Guarantees}
+\label{sec:chd}
+\input{sec_chd.tex}
+
+\subsection{Augmented Graph}
+\label{ssec:aug}
+\input{sec_augmented.tex}
+
+\subsection{Hub Labels For CSP}
+\label{ssec:hlcsp}
+\input{sec_constrained_hl.tex}
+
+\subsubsection{Preprocessing}
+\label{sec:preproc}
+\input{sec_preproc.tex}
+
+\subsubsection{Using the size of the Pareto Frontier}
+\input{sec_frontier_size.tex}
+
+\subsection{Comparing HD and CHD}
+\label{ssec:hdvschd}
+\input{sec_hdvschd.tex}
+
+\section{Scalable CSP Algorithms: \texorpdfstring{\\}{ } Practical Implementation}
+\label{sec:numeric}
+\input{sec_numeric.tex}
+
+\section*{References}
+\bibliographystyle{plainnat}
+\bibliography{biblio}
+
+\appendix
+\section{Different notions of HD}
+\label{app:generalhd}
+\input{sec_diff_hd.tex}
+
+\section{Contraction Hierarchies}
+\input{sec_ch.tex}
+
+\section{CHD vs. HD: Extensions}
+\label{app:extn}
+\input{sec_extensions.tex}
+
+
+\section{Additional Proofs}
+\label{sec:proofs}
+\input{sec_proofs.tex}
+
+
+
+
+
+\end{document}
