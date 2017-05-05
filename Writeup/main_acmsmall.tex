@@ -1,0 +1,178 @@
+\documentclass[format=acmsmall, screen=true]{acmart}
+
+%-------------- Customization of acmsmall package begins ----------------
+\settopmatter{printacmref=false}%removes citation information below abstract
+\renewcommand\footnotetextcopyrightpermission[1]{} % removes footnote with conference information in first column
+\fancyfoot[LE,RO]{}				%removes footer with publication date and article number
+\fancyhead[LE,RO]{\thepage}		%removes article number from header and leaves only page number
+\makeatletter					%removes the black rectangle with article number
+\renewcommand\@folioblob{}
+\makeatother
+%-------------- Customization of acmsmall package ends ----------------
+
+%-------------- Personal commands begin --------------
+\usepackage{dsfont,amssymb,amsfonts,enumitem}
+\usepackage{graphicx,xcolor,tikz,comment}
+	
+%pgfplots configuration
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\pgfplotsset{ table/search path={TexImg/} }
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+\usepackage{algorithm,algpseudocode}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\abs}{\lvert}{\rvert} %
+\DeclarePairedDelimiter{\brk}{[}{]}
+\DeclarePairedDelimiter{\crl}{\{}{\}}
+\DeclarePairedDelimiter{\prn}{(}{)}
+
+
+%Useful commands
+\newcommand{\anote}[1]{{\color{red}Alberto: #1}}		%to leave notes
+\newcommand{\sbnote}[1]{{\color{blue}Sid: #1}}			
+\newcommand{\sbedit}[1]{{\color{blue} #1}}				%to leave notes
+\newcommand{\todo}[1]{{\color{green}TODO: #1}}		    %to leave notes
+
+\newcommand{\E}{\mathbb{E}} 							%expectation
+\newcommand{\Var}{\mathbb{V}\textnormal{ar}} 			%variance
+\newcommand{\In}[1]{\mathds{1}_{\left\{ #1 \right\}}} 	%indicator
+\newcommand{\R}{\mathbb{R}}								%reals
+\newcommand{\N}{\mathbb{N}}								%naturals					
+\renewcommand{\Pr}{\mathbb{P}}							%probability
+\newcommand{\norm}[1]{\lvert\lvert#1\rvert\rvert}		%norm	
+\newcommand{\card}[1]{\lvert#1\rvert}					%cardinal of a set
+\newcommand{\ceil}[1]{\lceil#1\rceil}					%ceiling function
+\newcommand{\Or}{O}
+\newcommand{\defeq}{\coloneqq}							%symbol :=
+
+%Additional commands
+\newcommand{\calX}{\mathcal{X}}
+\newcommand{\calP}{\mathcal{P}}							
+\newcommand{\calQ}{\mathcal{Q}}							
+\newcommand{\Bf}{B^+}									%forward ball
+\newcommand{\Bb}{B^-}									%reverse ball
+\newcommand{\Sf}{S^+}
+\newcommand{\Sb}{S^-}
+\newcommand{\Lf}{L^+}									%forward hub
+\newcommand{\Lb}{L^-}									
+\newcommand{\dist}{\mbox{dist}}							%distance
+\newcommand{\pp}[1]{\langle#1\rangle}					%to denote pairs of nodes
+\newcommand{\PE}{\mathcal{P}^E}							%efficient paths
+\newcommand{\PB}{\mathcal{P}^B}							%shortest in G^B
+\newcommand{\Pst}{\mathcal{P}_{s,t}}					%all paths s-t
+\newcommand{\PS}{\mathcal{P}^*}							%shortest paths
+\newcommand{\Gp}{\tilde G}								%pruned augmented graph
+\newcommand{\Ep}{\tilde E}								%edges of pruned augmented
+\newcommand{\Vp}{\tilde V}								%vertices of pruned augmented
+\newcommand{\hc}{h_c}									%chd
+\newcommand{\Lm}{L_{\mathrm{max}}}
+
+\newtheorem{remark}[theorem]{Remark}
+
+%-------------- Personal commands end --------------
+
+
+% DOI
+%\acmDOI{0000001.0000001}
+
+\begin{document}
+\title{Computing Constrained Shortest-Paths at Scale}  
+\author{Alberto Vera}
+\affiliation{%
+  \institution{Cornell University}
+}
+\author{Siddhartha Banerjee}
+\affiliation{%
+  \institution{Cornell University}
+}
+\author{Samitha Samaranayake}
+\affiliation{%
+  \institution{Cornell University}
+}
+
+\keywords{Constrained shortest-path queries, Distance Oracles, Highway Dimension.}
+\begin{abstract}
+\input{sec_abstract.tex}
+\end{abstract}
+
+\maketitle
+
+
+\section{Introduction}
+\input{sec_intro.tex}
+
+\section{Preliminaries}
+\label{sec:prelim}
+
+\subsection{Basic Setting}
+\label{ssec:basic}
+\input{sec_basic.tex}
+
+\subsection{Hitting sets and the highway dimension}
+\label{ssec:hddef}
+\input{sec_hddef.tex}
+
+\subsection{Shortest-Paths via Hub Labels}
+\label{ssec:hldef}
+\input{sec_hl_correctness.tex}
+
+\section{Scalable CSP Algorithms: Theoretical Guarantees}
+\label{sec:chd}
+\input{sec_chd.tex}
+
+\subsection{Augmented Graph}
+\label{ssec:aug}
+\input{sec_augmented.tex}
+
+\subsection{Hub Labels For CSP}
+\label{ssec:hlcsp}
+\input{sec_constrained_hl.tex}
+
+\subsubsection{Preprocessing}
+\label{sec:preproc}
+\input{sec_preproc.tex}
+
+\subsubsection{Using the size of the Pareto Frontier}
+\input{sec_frontier_size.tex}
+
+\subsection{Comparing HD and CHD}
+\label{ssec:hdvschd}
+\input{sec_hdvschd.tex}
+
+\section{Scalable CSP Algorithms: Practical Implementation}
+\label{sec:numeric}
+\input{sec_numeric.tex}
+
+
+\section*{Acknowledgements.}
+The authors would like to thank Moritz Kobitzsch for sharing sanitized versions of the San Francisco and Luxembourg road networks.
+
+
+\appendix
+\section{Different notions of HD}
+\label{app:generalhd}
+\input{sec_diff_hd.tex}
+
+\section{Contraction Hierarchies}
+\input{sec_ch.tex}
+
+\section{CHD vs. HD: Extensions}
+\label{app:extn}
+\input{sec_extensions.tex}
+
+
+\section{Additional Proofs}
+\label{sec:proofs}
+\input{sec_proofs.tex}
+
+%% Bibliography
+\bibliographystyle{plain}
+\bibliography{biblio}
+
+\end{document}

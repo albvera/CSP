@@ -30,3 +30,7 @@ Writeup/main_vldb.fls
 Writeup/main_vldb.pdf
 
 *.~*
+
+*.pdf
+
+*.vtc
