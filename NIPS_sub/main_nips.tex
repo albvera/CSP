@@ -23,7 +23,7 @@
 
 
 %Import personal commands 
-\usepackage{commandscsp}
+\usepackage{commandscsp,comment}
 
 \title{Computing Constrained Shortest-Paths at Scale}
 \author{}
@@ -33,12 +33,35 @@
 \maketitle
 
 \begin{abstract}
-	\input{sec_abstract.tex}
+	\input{sec_abstract_NIPS.tex}
 \end{abstract}
 
 \section{Introduction}
 \input{sec_intro_NIPS.tex}
-%\input{sec_intro.tex}
+
+\section{Preliminaries}
+\label{sec:prelim}
+
+\input{defns_NIPS.tex}
+
+\section{Scalable CSP Algorithms:\texorpdfstring{\\}{ } Theoretical Guarantees}
+\label{sec:chd}
+
+\input{sec_chd_NIPS.tex}
+
+\section{Scalable CSP Algorithms: \texorpdfstring{\\}{ } Practical Implementation}
+\label{sec:numeric}
+\input{sec_numeric_NIPS.tex}
+
+%\section*{References}
+\bibliographystyle{plainnat}
+\bibliography{biblio}
+
+
+
+\begin{comment}
+\section{Introduction}
+\input{sec_intro.tex}
 
 \section{Preliminaries}
 \label{sec:prelim}
@@ -57,6 +80,7 @@
 
 \section{Scalable CSP Algorithms:\texorpdfstring{\\}{ } Theoretical Guarantees}
 \label{sec:chd}
+
 \input{sec_chd.tex}
 
 \subsection{Augmented Graph}
@@ -85,6 +109,8 @@
 %\section*{References}
 \bibliographystyle{plainnat}
 \bibliography{biblio}
+\end{comment}
+
 
 \appendix
 \section{Different notions of HD}
