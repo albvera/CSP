@@ -85,7 +85,7 @@ This correspond to the intuition that, a few bad efficient paths should not comp
 
 \begin{definition}[Weak Partial Witness]
 Let $\beta\in\N\cup\crl{0}$.
-We say that a path system $\calQ'$ is a weak $\beta$-witness of the path system $\calQ$ if, for every $r>0$, $\exists D_r\subseteq V$ such that, $\forall Q\in \calQ'$ either (1) $Q$ is $2^{-\beta}$-witnessed by $\calQ$ or (2) $Q$ is hit by $D_r$.
+We say that a path system $\calQ'$ is a weak $\beta$-witness of the path system $\calQ$ if, for every $r>0$, $\exists D_r\subseteq V$ such that, $\forall Q\in \calQ'_r$ either (1) $Q$ is $2^{-\beta}$-witnessed by $\calQ$ or (2) $Q$ is hit by $D_r$.
 \end{definition} 
 \anote{need to define what ``$2^{-\beta}$-witnessed by $\calQ$'' means before this.}
 
@@ -114,38 +114,36 @@ An algorithm for CSP has stretch $\St\geq 1$ if, for every $s,t\in V$ and $b\leq
 
 Now we describe a realistic setting where the weak witness property is obeyed.
 We need few overpasses, which are free edges connecting long free paths around a costly zone.
-Denote $E_1=\crl{e\in E:c_e>0}$.
+Denote $E_1=\crl{e\in E:c_e>0}$ and $E_0=\crl{e\in E:c_e=0}$.
 
 \begin{definition}[Overpass]
-For $r>0$, an edge $e=(u,v)$ is an $r$-overpass if it satisfies: (1) $c_e=0$, (2) $u$ and $v$ are endpoints of paths in $\PS_{r/2\St}$, (3) $\min(\dist(e,E_1),\dist(E_1,e))\leq 3r/4$ and (4) $e$ belongs to a path $Q\in\PE_r\setminus\PS$.
+For $r>0$, an edge $e=(u,v)$ is an $r$-overpass if: (1) one of $u$ or $v$ is the endpoint of a path in $\PS_{r/\St}$, (2) $\min(\dist(e,E_1),\dist(E_1,e))\leq 3r/2$ and (3) $e$ belongs to a path $Q\in\PE_{2r}\setminus\PS$.
 \end{definition} 
-\anote{Condition (4) is the less natural, but it can be removed without hurting the analysis.}
+\anote{Condition (3) is the less natural, but it can be removed without hurting the analysis.}
 
 
-For every scale $r>0$, we ask that (1) the number of costly edges hitting paths in $\PS_r$ and $r$-overpasses is bounded by a decreasing function of $r$ and (2) in every neighbourhood $B_r(v)$, costs on long shortest paths are contiguous.
-Formally, the properties are
-\begin{enumerate}
-\item Bounded growth: for every $r>0$, $\abs{\crl{e\in E_1: e \text{ hits } \PS_r}}\leq g(r)$ and $\abs{\crl{e\in E: e \text{ is an $r$-overpass}}}\leq g(r)$
-\item Contiguous costs: for every $r>0, v\in V$, the set $\crl{e\in E: \exists P\in\PS_{r/\St}, P\subseteq B_{2r}(v), c(e)>0}$ is a shortest path
-\end{enumerate}
+For every scale $r>0$, we ask for a \emph{bounded growth} condition controlling the number of $r$-overpasses.
+Formally, we need $\abs{\crl{e\in E: e \text{ is an $r$-overpass}}}\leq g(r)$.
+We also assume that edges are shortest paths between its endpoints, this property is clearly obeyed by road networks.
 
 \begin{proposition}
-With conditions (1) and (2), the network has the weak $\frac{1}{2}$-witness property.
+With bounded growth, the network has the weak $\frac{1}{2}$-witness property.
 \end{proposition}
 \begin{proof}
-For fixed $r>0$ we need to exhibit a lay witness $D_r\subseteq V$ such that every path in $\PE_r$ is either witnessed by $\PS_{r/2}$ or it is hit by $D_r$.
-Fix $Q\in\PE_r$ and call its endpoints $s,t$.
+Let $Q\in\PE$, call its endpoints $s,t$ and set $\ell(Q)=r$.
+We will show how to obtain a vertex for the lay witness set in case $Q$ is not witnessed and then we bound the size of the set.
 Assume that $Q\neq P(s,t)$, otherwise the path is trivially witnessed.
-Let $(u,v)\in Q$ be such that $\ell(Q[s,v]),\ell(Q[u,t])\geq \frac{r}{2}$.
-We have two cases, either $P(s,v)\cup P(u,t)$ is a shortest path or it is not.
+Let $(u,v)\in Q$ be such that $\ell(Q[s,v]),\ell(Q[u,t])\geq \frac{r}{2}$. 
+If either $Q[s,v]$ or $Q[u,t]$ is a shortest path or $\ell_{uv}>r/2$, then $Q$ is witnessed, so we assume that all of these fail.
 
-In the case where $P(s,v)\cup P(u,t)$ is a shortest path, it must be that $P(s,t)=P(s,v)\cup P(u,t)$.
-What happens here is that the shortest path $P(u,v)$ is costly, therefore $Q$ goes around it with the edge $(u,v)$.
-We add $u$ to the lay  witness set $D_r$ and observe that, by bounded growth, the number of times this case occurs is at most $g(r)$.
-\anote{TODO}
-
-For the other case, if $P(s,v)\cup P(u,t)$ is not a shortest path, then, by contiguous costs, one of those paths is free.
-Changing either $Q[s,v]$ by $P(s,v)$ or $Q[u,t]$ by $P(u,t)$ would be a path no worse than $Q$ \anote{It looks like here the lack of uniqueness is hurting us.}
+We claim that $uv$ is a $\frac{r}{2}$-overpass.
+Indeed, it must be that $Q[s,v]$ or $Q[u,t]$ have stretch at most $\St$, otherwise $Q$ would have stretch larger than $\St$.
+It follows that one of $P(s,v)$ or $P(u,t)$ belong to $\PS_{\frac{r}{2\St}}$ (property 1 of overpass).
+Finally, we have $\ell(Q[s,v])+\ell(Q[u,t])=r+\ell_{uv}$ and since $\ell_{uv}<r/2$, one of $Q[s,v]$ or $Q[u,t]$ has length at most $3r/4$.
+Since neither of these paths is shortest, it most be that both $P(s,v),P(u,t)$ have costly edges and thus one of $u,v$ is closer than $3r/4$ to $E_1$ (property 2 of overpass).
+In this case we add $u$ to the lay witness set.
+Now, for a fixed $r>0$, we need to add as many $g(r/2)$ nodes to $D_r$ to cover all the efficient paths that are not witnessed. 
+The result follows.
 \end{proof}
 
 \section{Examples}

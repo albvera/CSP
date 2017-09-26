@@ -1,0 +1,34 @@
+% \usepackage[usenames,dvipsnames]{pstricks}
+% \usepackage{epsfig}
+% \usepackage{pst-grad} % For gradients
+% \usepackage{pst-plot} % For axes
+% \usepackage[space]{grffile} % For spaces in paths
+% \usepackage{etoolbox} % For spaces in paths
+% \makeatletter % For spaces in paths
+% \patchcmd\Gread@eps{\@inputcheck#1 }{\@inputcheck"#1"\relax}{}{}
+% \makeatother
+% 
+\psscalebox{1.0 1.0} % Change this value to rescale the drawing.
+{
+\begin{pspicture}(0,-1.841803)(9.78,1.841803)
+\definecolor{colour0}{rgb}{1.0,0.0,0.023529412}
+\definecolor{colour1}{rgb}{0.007843138,0.9764706,0.03529412}
+\rput[bl](0.0,-0.5569006){$s$}
+\rput[bl](6.0,1.4430994){$v$}
+\rput[bl](2.8,-1.7569007){$u$}
+\rput[bl](9.2,-0.5569006){$t$}
+\psline[linecolor=colour0, linewidth=0.04, linestyle=dashed, dash=0.17638889cm 0.10583334cm, arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.0]{->}(0.6666667,0.19710653)(3.3333333,-1.1362268)(5.6666665,1.3637732)(9.166667,0.19710653)
+\psline[linecolor=black, linewidth=0.02, arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.0]{->}(0.5188679,0.19502603)(5.5,1.4025732)
+\psline[linecolor=black, linewidth=0.02, arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.0]{->}(3.3867924,-1.0324532)(9.122642,0.17509395)
+\rput[bl](3.6962264,0.17509395){$Q$}
+\rput[bl](1.6811321,0.77886754){$P(s,v)$}
+\rput[bl](6.7981133,-0.73056644){$P(u,t)$}
+\psline[linecolor=colour1, linewidth=0.04, arrowsize=0.05291667cm 2.0,arrowlength=1.4,arrowinset=0.0]{->}(3.2358491,1.8354713)(3.537736,0.92981094)(4.745283,1.2316977)(5.5,-0.57962304)(6.254717,-0.42867965)(6.8584905,-1.4852834)
+\rput[bl](2.9867926,1.5864147){$\tilde P$}
+\psellipse[linecolor=black, linewidth=0.002, fillstyle=solid,fillcolor=black, dimen=outer](0.5,0.1637732)(0.2,0.2)
+\psellipse[linecolor=black, linewidth=0.002, fillstyle=solid,fillcolor=black, dimen=outer](3.3,-1.0362267)(0.2,0.2)
+\psellipse[linecolor=black, linewidth=0.002, fillstyle=solid,fillcolor=black, dimen=outer](5.7,1.3637732)(0.2,0.2)
+\psellipse[linecolor=black, linewidth=0.002, fillstyle=solid,fillcolor=black, dimen=outer](9.3,0.1637732)(0.2,0.2)
+\end{pspicture}
+}
+
