@@ -84,14 +84,16 @@ We now allow for an additional \emph{lay witness set} $D$ such that, whenever a 
 This correspond to the intuition that, a few bad efficient paths should not completely ruin the algorithm. 
 
 \begin{definition}[Weak Partial Witness]
-Let $\beta\in\N\cup\crl{0}$.
-We say that a path system $\calQ'$ is a weak $\beta$-witness of the path system $\calQ$ if, for every $r>0$, $\exists D_r\subseteq V$ such that, $\forall Q\in \calQ'_r$ either (1) $Q$ is $2^{-\beta}$-witnessed by $\calQ$ or (2) $Q$ is hit by $D_r$.
+Let $\beta\geq 0$.
+We say that a path system $\calQ'$ is a weak $\beta$-witness for the path system $\calQ$ if, for every $r>0$, $\exists D_r\subseteq V$ such that, $\forall Q\in \calQ_r$ either (1) $Q$ is $\beta$-witnessed by $\calQ'$ or (2) $Q$ is hit by $D_r$.
+Additionally we require $\abs{D_r}\leq \phi(r)$.
 \end{definition} 
-\anote{need to define what ``$2^{-\beta}$-witnessed by $\calQ$'' means before this.}
+\anote{ The ``right'' function is $\phi(r)=nh\alpha^{\beta-2-\log_2r}$ or big-O of that if we want any constant.}
+\anote{ ``$Q$ is $\beta$-witnessed by $\calQ'$'' means $\exists Q'\in\calQ'$, $Q'\subset Q$, $\ell(Q')\geq 2^{-\beta}\ell(Q)$. Must place this definition before.}
 
 \begin{proposition}
 Assume that $G$ is $\alpha$-doubling and let $\calQ'$ be weakly $2^{-\beta}$-witnessed by $\calQ$.
-If the HD of $\calQ$ is $h$, then the average HD of $\calQ'$ is $h'\leq \alpha^{\beta}h+STUFF$
+If the HD of $\calQ$ is $h$, then the average HD of $\calQ'$ is $h'\leq 2\alpha^{\beta}h$
 \end{proposition}
 \begin{proof}
 Let $r>0$, and $C$ be an $(h,2^{-\beta}r)$-SPHS for $\calQ$.
@@ -105,7 +107,14 @@ h'\leq \frac{1}{n}\sum_{v\in V} \abs{B_{2r}(v)\cap (C\cup D_r)}
 \end{align*}
 In the second line we used that $C$ is sparse with respect to balls of radius $2^{-\beta+1}r$ and that $\sum_{v\in V} \abs{B_{2r}(v)\cap D_r}=\sum_{v\in D_r} \abs{B_{2r}(v)}$ by symmetry of the bi-directional balls.
 In the last line we used that, by doubling dimension, balls of radius $r$ have at most $\alpha^{\log_2r+1}$ elements.
+Since $\abs{D_r}\leq \phi(r)$, the result follows.
 \end{proof}
+
+We now define a desirable property for a CSP algorithm.
+Users do not want to be presented solutions which are far away from the optimum, even if it saves them budget.
+The \emph{stretch} of a path is its comparison to the shortest option.
+Note that subpaths of a path with small stretch do not necessarily have small stretch.
+Formally, we have the following property of an algorithm.
 
 \begin{definition}[Stretch]
 An algorithm for CSP has stretch $\St\geq 1$ if, for every $s,t\in V$ and $b\leq B$, either outputs $\dist(s,t|b)$ when $\dist(s,t|b)\leq \St\dist(s,t)$ or outputs ``infeasible'' when $\dist(s,t|b)>\St\dist(s,t)$.
@@ -113,36 +122,49 @@ An algorithm for CSP has stretch $\St\geq 1$ if, for every $s,t\in V$ and $b\leq
 
 
 Now we describe a realistic setting where the weak witness property is obeyed.
-We need few overpasses, which are free edges connecting long free paths around a costly zone.
-Denote $E_1=\crl{e\in E:c_e>0}$ and $E_0=\crl{e\in E:c_e=0}$.
+We need few overpasses, which are edges connecting long free paths around a costly zone.
+Recall that we denote $E_1=\crl{e\in E:c_e>0}$.
+
+\begin{definition}[Overpass Simplified]
+In case the stretch of our algorithm is $\St=4/3$.
+For $r>0$, an edge $e=(u,v)$ is an $r$-overpass if: (1) one of $u$ or $v$ is the endpoint of a path in $\PS_{r/2}$, (2) $\min(\dist(e,E_1),\dist(E_1,e))\leq 3r/2$ and (3) $e$ belongs to a path $Q\in\PE_{2r}\setminus\PS$.
+\end{definition} 
+
 
 \begin{definition}[Overpass]
-For $r>0$, an edge $e=(u,v)$ is an $r$-overpass if: (1) one of $u$ or $v$ is the endpoint of a path in $\PS_{r/\St}$, (2) $\min(\dist(e,E_1),\dist(E_1,e))\leq 3r/2$ and (3) $e$ belongs to a path $Q\in\PE_{2r}\setminus\PS$.
+For $r>0$, an edge $e=(u,v)$ is an $r$-overpass if: (1) one of $u$ or $v$ is the endpoint of a path in $\PS_{r(2-\St)/\St}$, (2) $\min(\dist(e,E_1),\dist(E_1,e))\leq 3r/2$ and (3) $e$ belongs to a path $Q\in\PE_{2r}\setminus\PS$.
 \end{definition} 
 \anote{Condition (3) is the less natural, but it can be removed without hurting the analysis.}
 
 
 For every scale $r>0$, we ask for a \emph{bounded growth} condition controlling the number of $r$-overpasses.
-Formally, we need $\abs{\crl{e\in E: e \text{ is an $r$-overpass}}}\leq g(r)$.
+Formally, we need $\abs{\crl{u\in V: \exists v, uv \text{ is an $r$-overpass}}}\leq \phi(2r)$.
 We also assume that edges are shortest paths between its endpoints, this property is clearly obeyed by road networks.
 
 \begin{proposition}
-With bounded growth, the network has the weak $\frac{1}{2}$-witness property.
+With bounded growth, $\PS$ is a weak $1$-witness for $\PE$.
 \end{proposition}
 \begin{proof}
-Let $Q\in\PE$, call its endpoints $s,t$ and set $\ell(Q)=r$.
+Let $Q\in\PE$, call its endpoints $s,t$ and set $\ell(Q)=2r$.
 We will show how to obtain a vertex for the lay witness set in case $Q$ is not witnessed and then we bound the size of the set.
 Assume that $Q\neq P(s,t)$, otherwise the path is trivially witnessed.
-Let $(u,v)\in Q$ be such that $\ell(Q[s,v]),\ell(Q[u,t])\geq \frac{r}{2}$. 
-If either $Q[s,v]$ or $Q[u,t]$ is a shortest path or $\ell_{uv}>r/2$, then $Q$ is witnessed, so we assume that all of these fail.
+Let $(u,v)\in Q$ be such that $\ell(Q[s,v]),\ell(Q[u,t])\geq r$. 
+If either $Q[s,v]$ or $Q[u,t]$ is a shortest path or $\ell_{uv}\geq r$, then $Q$ is witnessed, so we assume that all of these fail.
 
-We claim that $uv$ is a $\frac{r}{2}$-overpass.
-Indeed, it must be that $Q[s,v]$ or $Q[u,t]$ have stretch at most $\St$, otherwise $Q$ would have stretch larger than $\St$.
-It follows that one of $P(s,v)$ or $P(u,t)$ belong to $\PS_{\frac{r}{2\St}}$ (property 1 of overpass).
-Finally, we have $\ell(Q[s,v])+\ell(Q[u,t])=r+\ell_{uv}$ and since $\ell_{uv}<r/2$, one of $Q[s,v]$ or $Q[u,t]$ has length at most $3r/4$.
-Since neither of these paths is shortest, it most be that both $P(s,v),P(u,t)$ have costly edges and thus one of $u,v$ is closer than $3r/4$ to $E_1$ (property 2 of overpass).
-In this case we add $u$ to the lay witness set.
-Now, for a fixed $r>0$, we need to add as many $g(r/2)$ nodes to $D_r$ to cover all the efficient paths that are not witnessed. 
+We claim that $uv$ is a $r$-overpass.
+We show first that condition 1 of an overpass is satisfied because either $Q[s,v]$ or $Q[u,t]$ have stretch at most $\frac{2-\St}{\St}$.
+To see this, note that both $P(s,v)|Q[v,t]$ and $Q[s,u]|P(u,t)$ are no shorter than $P(s,t)$, thus 
+\[
+\ell(Q) \leq \St( \ell(P(s,v)) + \ell(Q[v,t])) \quad \text{ and }\quad
+\ell(Q) \leq \St( \ell(Q[s,u]) + \ell(P(u,t))).
+\]
+Adding the two inequalities we get $(2-\St)\ell(Q) \leq \St(\ell(P(s,v))+\ell(P(u,t))-\ell_{uv})$.
+This implies that one of the shortest paths has length at least $\frac{2-\St}{2\St}\ell(Q)=\frac{2-\St}{\St}r$, hence condition 1 follows.
+Finally, to show condition 2, we have $\ell(Q[s,v])+\ell(Q[u,t])=r+\ell_{uv}$ and since $\ell_{uv}<r/2$, one of $Q[s,v]$ or $Q[u,t]$ has length at most $3r/4$.
+Since neither of these paths is shortest, it most be that both $P(s,v),P(u,t)$ have costly edges and thus one of $u,v$ is closer than $3r/4$ to $E_1$ and the condition is satisfied.
+
+For every path of length $2r$, we can either exhibit a witness or show that it contains an overpass and add use the tail of the edge as a lay witness.
+For a fixed $r>0$, we need to add as many $\phi(r)$ nodes to $D_r$ to cover all the efficient paths. 
 The result follows.
 \end{proof}
 
