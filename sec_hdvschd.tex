@@ -1,20 +1,18 @@
-% !TEX root = main_vldb.tex
 The previous sections show that we can construct hub labels for solving CSP whose preprocessing time, storage and query time can all be parameterized in terms of the constrained highway dimension $h_c$. 
 This, however, still does not give a sense of how much worse the hub labels for the CSP problem can be in comparison with those for finding shortest paths. 
 We now try to understand this question.
-
-Comparing the size of the \emph{optimal} hub labels for SP and CSP is infeasible as even finding the optimal hub labels for SP is NP-hard~\cite{babenko_hl_complexity}. However, since we can parametrize the complexity of HL construction for SP in terms of the HD, a natural question is whether graphs with small HD also have a small CHD. Note that the answer to this depends on both the graph and the costs.
+Comparing the size of the \emph{optimal} hub labels for SP and CSP is infeasible as even finding the optimal hub labels for SP is NP-hard~\cite{babenko_hl_complexity}. 
+However, since we can parametrize the complexity of HL construction for SP in terms of the HD, a natural question is whether graphs with small HD also have a small CHD. 
+Note that the answer to this depends on both the graph and the costs.
 We now show that the CHD and, moreover, the sparsity of any EPHS, can be \emph{arbitrarily worse} than the HD. 
-\begin{proposition}
-There are networks with HD $1$ where the CHD, and also the sparsity of an EPHS, is $n$.
-\end{proposition}
-
 \begin{figure}
 \input{TexImg/big_chd.tex}
 \caption{Graph with small HD but large CHD: The graph comprises $2n+1$ nodes, with the edge labels representing the lengths. Note that the shortest paths in the graph are of the form $sv_i$, $u_is$ and $u_isv_j$ (for all combinations $i,j$). Thus, the HD is $1$ as $H_{v,r}=\crl{s}$ is a hitting set for all these paths. On the other hand, if we have costs such that $c(u_iv_i)=0\,\forall\,i$, while all other edges have cost $1$, then we have $n$ parallel efficient paths $u_iv_i$, which must all be hit by any EPHS.}
 \label{fig:big_chd}
 \end{figure}
-
+\begin{proposition}\label[proposition]{prop:example_bad_chd}
+There are networks with HD $1$ where the CHD, and also the sparsity of an EPHS, is $n$.
+\end{proposition}
 \begin{proof}
 Consider the directed graph $G$ defined in Figure~\ref{fig:big_chd}.
 It is easy to see that $H_{v,r}=\crl{s}$ is a shortest-path hitting set for every $r>0$ and $v\in V(G)$; hence the HD is $1$.
@@ -24,9 +22,9 @@ Therefore, the hitting set $H_{s,1}$ must contain at least $n$ elements. Moreove
 \end{proof}
 
 \begin{remark}
-One criticism of the graph in Figure~\ref{fig:big_chd} is that it has a maximum degree of $n$.
+One criticism of the graph in \cref{fig:big_chd} is that it has a maximum degree of $n$.
 However, the result continues to hold even for bounded degree graphs.
-In Appendix~\ref{app:generalhd}, where we discuss alternative notions of HD, we give a more involved example with bounded degrees that exhibits the same separation between LSHS and EPHS for even stronger notions of HD.
+In \cref{app:generalhd}, where we discuss alternative notions of HD, we give a more involved example with bounded degrees that exhibits the same separation between LSHS and EPHS for even stronger notions of HD.
 \end{remark}
 
 Intuitively, the separation between HD and CHD (or more particularly, the hub labels for computing SPs and CSPs) occurs due to the fact that, for arbitrary graphs and cost functions, the shortest and efficient paths may be completely unrelated. 
@@ -35,7 +33,7 @@ In particular, intuition suggests that efficient paths largely comprise of segme
 This notion can be formalized via the following definition of a \emph{partial witness} 
 \begin{definition}[Partial Witness]
 Let $\beta\geq 0$.
-We say that a path system $\calQ'$ is a $\beta$-witness of the path system $\calQ$ if, for every $Q\in\calQ$, there exists some $Q'\in\calQ'$ such that $Q'\subseteq Q$ and $\ell(Q')\geq 2^{-\beta}\ell(Q)$.
+We say that a path system $\calQ$ is $\beta$-witnessed by the path system $\calQ'$ if, for every $Q\in\calQ$, $\exists Q'\in\calQ'$ such that $Q'\subseteq Q$ and $\ell(Q')\geq 2^{-\beta}\ell(Q)$.
 \end{definition}
 We can now ask if the hub labels for computing SPs and CSPs can be related in settings where the shortest-path system $\PS$ is a partial witness for the efficient path system $\PE$.
 At an intuitive level, the partial witness property says that efficient and shortest paths are not completely different, i.e., if $Q$ is efficient, a fraction $2^{-\beta}$ of $Q$ is a shortest path.
@@ -45,9 +43,9 @@ Thus, we want this property only for `long-enough' paths.
 
 We now show that if, for some $\beta$, the network indeed has the partial witness property for paths longer than some $r_\beta$, then we can relate the HL sizes for the two problems in terms of $\beta$ and the doubling dimension $\alpha$. 
 Note that the doubling dimension depends on $G$ and $\ell$; the partial witness property depends on the interplay between $G$, $c$ and $\ell$.
-Observe also that, if $\alpha$ is a constant, then the requirement in Theorem~\ref{theo:witness_doubling} is for paths longer than $r_\beta\sim h\alpha^{\beta-2}$.
+Observe also that, if $\alpha$ is a constant, then the requirement in \cref{theo:witness_doubling} is for paths longer than $r_\beta\sim h\alpha^{\beta-2}$.
 \begin{theorem}\label{theo:witness_doubling}
-Assume that $G$ is $\alpha$-doubling and $\PS$ is a $\beta$-witness for $\PE_r$ for every $r\geq r_\beta$, where $r_\beta=2^{\log_\alpha(\alpha^{\beta-2} h)}$. 
+Assume that $G$ is $\alpha$-doubling and $\PE_r$ is $\beta$-witnessed by $\PS$ for every $r\geq r_\beta$, where $r_\beta=2^{\log_\alpha(\alpha^{\beta-2} h)}$. 
 Then, for any $r>0$, given an $(h,r)$-LSHS, we can construct, in polynomial time, an $(\alpha^{\beta} h,r)$-EPHS for $(G,\ell,c)$. 
 \end{theorem}
 

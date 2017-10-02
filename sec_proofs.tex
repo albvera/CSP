@@ -1,6 +1,4 @@
-% !TEX root = main_vldb.tex
-
-\begin{proof}[Proof of Theorem \ref{thm:markedhubs}]
+\begin{proofof}{\cref{thm:markedhubs}}
 	To get this stronger bound, we need to modify the HL construction. The algorithm for forward hub construction is given in Algorithm~\ref{alg:forwardhub}, and for reverse hubs in Algorithm~\ref{alg:reversehub}. Note that the two must be run sequentially, as the latter uses the nodes marked in the former. We make the forward hubs $\Lf(\pp{v,b})$ slightly bigger by storing, for each node the distance from $\pp{v,b}$ and also the \emph{budget surplus}.
 	Let $C_i$ be the $(h_c,2^{i-1})$-EPHS and $\PE_{s,t}$ the efficient paths from $s$ to $t$.
 	
@@ -13,7 +11,7 @@
 	Take any query $SP(\pp{s,b},t^-)$ and let $P$ be the solution.
 	In $Lf(\pp{s,b})$ there is a node $v_P$ added by Algorithm~\ref{alg:forwardhub}.
 	By construction, the same node $v_P$ was added to $\Lb(\pp{d,0})$. The result follows.
-\end{proof}
+\end{proofof}
 
 \begin{algorithm}
 	\small
@@ -57,7 +55,8 @@
 \end{algorithm}
 
 
-\begin{proof}[Proof of Proposition~\ref{prop:poly_lshs}]
+\begin{proofof}{\cref{prop:poly_lshs}}
+We extend some arguments from \cite[Theorem 8.2]{highway2013}.
 Denote $S_r(v):=\Sf_r(v,\calQ)\cup\Sb_r(v,\calQ)$. 
 Observe that, for fixed $v\in V$, the set system $(E,\{\pi(Q):Q \in S_r(v)\})$ admits a hitting set of size $h\Delta$.
 Indeed, we know that exists $H_{v,r}\subseteq V$, $\card{H_{v,r}}\leq h$, hitting every path in $\Sf_r(v,\calQ)$ and in $\Sb_r(v,\calQ)$.
@@ -78,14 +77,14 @@ Let $B_{2r}(v):=\Bf_{2r}(v)\cup \Bb_{2r}(v)$.
 Assume $v\in V$ is such that $\card{B_{2r}(v)\cap C_i}>2h'$ and let $C_{i+1}:=(C_i\setminus B_{2r}(v))\cup F_{v,r} $.
 The cardinality strictly decreases and we only need to check the invariant.
 Consider the paths hit by nodes removed in $C_i$, this set is
-\[
-\hspace{-1cm}\{Q\in\calQ_r: Q\cap C_i\cap B_{2r}(v)\neq \varnothing\}\\
-\subseteq \{Q\in\calQ_r: Q\cap B_{2r}(v)\neq \varnothing\} \subseteq S_r(v).
-\]
+\begin{align*}
+&\hspace{-1cm}\{Q\in\calQ_r: Q\cap C_i\cap B_{2r}(v)\neq \varnothing\}\\
+&\subseteq \{Q\in\calQ_r: Q\cap B_{2r}(v)\neq \varnothing\} \subseteq S_r(v).
+\end{align*}
 Since $F_{v,r}$ hits $S_r(v)$, the proof is completed.
 
 If we do not know the value of $h$, we can do a doubling search for $h'$. 
 Indeed, if the guess of $h'$ is low, then at some point it could be that $\card{F_{v,r}}>2h'$, then we double $h'$ and restart the process.
-\end{proof}
+\end{proofof}
 
 

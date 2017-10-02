@@ -1,28 +1,14 @@
-% !TEX root = main_vldb.tex
-\label{sec:augmented}
-In order to link the constrained highway dimension to hub labels, we first convert the original graph $G$ (with length and cost functions) into an \emph{augmented graph} $G^B$ with only edge lengths, such that the \emph{efficient paths of $G$ are in bijection with the shortest paths of $G^B$}, i.e. it satisfies
-\begin{enumerate}[nosep]
-\item All paths starting from a given node are feasible, i.e., they satisfy the budget constraint in $G$.
-\item Efficient paths become shortest paths.
-\item Inefficient paths are not shortest paths.
-\end{enumerate}
+In order to link the constrained highway dimension to hub labels, we first convert the original graph $G$ (with length and cost functions) into an \emph{augmented graph} $G^B$ with only edge lengths, such that the \emph{efficient paths of $G$ are in bijection with the shortest paths of $G^B$}.
 We achieve this as follows: Each node in $G^B$ is of the form $\pp{v,b}$, which encodes the information of the remaining budget $b\geq 0$ and location $v\in V$.
 A node is connected to neighbors (according to $E$) as long as the remaining budget of that transition is non-negative.
 Finally, we create $n$ sink nodes, denoted $v^-$, and connect node $\pp{v,b}$ to $v^-$ with length $1/(b+1)$.
 An illustration of the construction is presented in Figure~\ref{fig:augmented}.
 The following definition formalizes this. 
 
-\begin{definition}
-Given a network $(G,\ell)$ and $B\in\N$, the augmented version $G^B=(V^B,E^B,\ell)$ is defined by
-\begin{align*}
-V^B &\defeq\crl*{\pp{v,b}: v\in V, b=0,1,\ldots,B}\cup\crl*{v^-:v\in V},\\
-E^B &\defeq\crl*{\pp{v,b}\pp{v',b'} : vv'\in E, b'=b-c_{vv'}, b'\geq 0}\cup \crl*{\pp{v,b}v^-: v\in V, B\geq b\geq 0}.
-\end{align*}
-and with length function $\ell(\cdot)$,
-\begin{align*}
-\ell(\pp{v,b},v^-) \defeq \frac{1}{b+1}\;,\;
-\ell(\pp{v,b},\pp{v',b'}) \defeq \ell(vv').
-\end{align*}
+\begin{definition}[Augmented Graph]
+Given $(G,\ell,c)$ and $B\in\N$, the augmented version $G^B$ has vertex set\\
+$V^B \defeq\crl*{\pp{v,b}: v\in V, b=0,1,\ldots,B}\cup\crl*{v^-:v\in V}$, the edge set $E^B$ contains $\crl*{\pp{v,b}\pp{w,x} : vw\in E, x=b-c_{vw}, x\geq 0}$ with the additional $\crl*{\pp{v,b}v^-: v\in V, 0\leq b\leq B}$.
+The length function in $G^B$ is $\ell(\pp{v,b},v^-) \defeq \frac{1}{b+1}$ and $\ell(\pp{v,b},\pp{w,x}) \defeq \ell(vv')$.
 \end{definition}
 
 \begin{figure}
@@ -33,11 +19,12 @@ and with length function $\ell(\cdot)$,
 \end{figure}
 
 Paths in $G^B$ are mapped to paths in $G$ in the intuitive way, by removing the budget labels and sink nodes.
-\begin{definition}
-Let $P$ be a path in $G^B$.
-If $P$ is of the form $\pp{v_1,b_1}\ldots\pp{v_k,b_k}$, then the projection of $P$, denoted $\bar P$, is the path $\bar P\defeq v_1v_2\ldots v_k$.
-Analogously, if $P$ is of the form $\pp{v_1,b_1}\ldots\pp{v_k,b_k}v_{k}^-$, then $\bar P\defeq v_1\ldots v_{k}$. 
-\end{definition}
+We call this mapping the \emph{projection} of a path.
+%\begin{definition}
+%Let $P$ be a path in $G^B$.
+%If $P$ is of the form $\pp{v_1,b_1}\ldots\pp{v_k,b_k}$, then the projection of $P$, denoted $\bar P$, is the path $\bar P\defeq v_1v_2\ldots v_k$.
+%Analogously, if $P$ is of the form $\pp{v_1,b_1}\ldots\pp{v_k,b_k}v_{k}^-$, then $\bar P\defeq v_1\ldots v_{k}$. 
+%\end{definition}
 
 
 \begin{proposition}\label{prop:shorteffic}
@@ -62,43 +49,42 @@ where the last expression is exactly $\ell(P)$.
 
 We note that the augmented graph is similar to existing techniques for solving CSP via dynamic programming~\cite{alex_bicriteria}.
 Such an approach, however, requires that all costs are non-zero, thus the augmented graph is a DAG.
-In contrast, we allow edge costs to be zero, and therefore, our augmented graph may contain cycles. 
+In contrast, we allow edge costs to be zero, therefore our augmented graph may contain cycles. 
 The following construction will depend on LSHS for the system $\PE$, we call such object an efficient path hitting set (EPHS).
 
-The above result now allows us to relate EPHS of the original graph to LSHS in the augmented graph.
-Note that in $G^B$ we are interested only in shortest paths ending in sink nodes (since these project to efficient paths). 
+The next result allows us to relate EPHS of the original graph to LSHS in the augmented graph.
+Note that in $G^B$ we are interested only in shortest paths ending in sink nodes (since these map to efficient paths). 
 Let $\PB$ be the path system comprising all shortest paths in $G^B$ ending in a sink node.
-A hitting set for $\PE$ can be used to obtain a hitting set for $\PB$, but, since the augmented graph has more nodes, the sparsity increases.
+A hitting set for $\PE$ can be used to obtain a hitting set for $\PB$, but, since the augmented graph has more information, the sparsity increases.
+Surprisingly, in this case we can also relate the highway dimensions of the path systems $\PE$ and $\PB$.
+Note that this does not follow from \cref{prop:lshsaug}, since the HD is a stronger notion than existence of locally-sparse hitting sets.
  
-\begin{proposition}
+\begin{proposition}\label{prop:lshsaug}
 If the path system $\PE$ admits $(\hc,r)$-EPHS, then $\PB$ admits $(\hc B,r)$-LSHS.
 \end{proposition}
 \begin{proof}
-%We define a set $C^B$ and prove that hits $\PB_r$ and that it is locally sparse.
+%We define a set .
 Given $C$, an $(\hc,r)$-EPHS for $\PE$, define
 \begin{equation}\label{eq:hitset}
 C^B\defeq \{\pp{v,b}: v\in C, v \text{ hits }\bar P\in\PB_r, c(\bar P)=b\leq B \}.
 \end{equation}
-
+We prove that $C^B$ hits $\PB_r$ and is locally sparse
 By Proposition~\ref{prop:shorteffic}, we know that shortest paths are efficient, hence $C^B$ hits all the desired paths.
 Finally, we prove local sparsity.
 Take any node $\pp{s,b}$ and observe that
-\[
-\Bf_{2r}(\pp{s,b}) = \{\pp{t,x}: \exists P\in\Pst, \ell(P)\leq 2r, c(P)=b-x\} 
-\subseteq \{\pp{t,x}: t\in \Bf_{2r}(s), x\leq b\} .
-\]
+\begin{align}
+\Bf_{2r}(\pp{s,b}) &= \{\pp{t,x}: \exists P\in\Pst, \ell(P)\leq 2r, c(P)=b-x\} \nonumber\\ 
+&\subseteq \{\pp{t,x}: t\in \Bf_{2r}(s), x\leq b\} . \label{eq:local_sparsity}
+\end{align}
 We know that $\card{\Bf_{2r}(s)\cap C}\leq \hc$, therefore $\card{\Bf_{2r}(\pp{s,b})\cap C^B}\leq\hc b\leq \hc B$.
 A similar argument shows the sparsity for the reverse ball.
 \end{proof}
 
-%\begin{remark}
 The proof above shows a stronger result:
-In Equation~\eqref{eq:hitset} we see that the sparsity around the node $\pp{u,b}$ is $\hc b$.
+In \cref{eq:local_sparsity} we see that the sparsity around the node $\pp{u,b}$ is $\hc b$.
 This is key for our subsequent query time guarantees.
-%\end{remark}
-%The last result shows how LSHS translate to the augmented graph.
-%Since the notion of HD is stronger, it is not always possible to make the analogous between two path systems. Surprisingly, in this case we are able to relate the HD of both path systems.
-Moreover, we can also relate the highway dimensions of the path systems $\PE$ and $\PB$ (Note: this does not follow from above, since the HD is a stronger notion than existence of locally-sparse hitting sets).
+
+We can also relate the highway dimensions of the path systems $\PE$ and $\PB$. This does not follow from above, since the HD is a stronger notion than existence of locally-sparse hitting sets.
 \begin{proposition}\label{prop:HDaugmented}
 If the HD of the system $\PE$ is $h_c$, then the HD of the system $\PB$ is $Bh_c$.
 \end{proposition}
@@ -113,6 +99,6 @@ Finally, $H_{v,r}$ hits $\bar P$, thus $H$ hits $P$.
 A similar argument shows that $H$ hits $\Sb_r(\pp{v,b},\PB)$.
 \end{proof}
 
-In the next section, we discuss how the above augmented graph can be used to construct hub labels for answering CSP queries. 
-We note, however, that this technique is primarily a theoretical proof-of-concept, that shows the CHD (and in fact, the HD of $G$ under an additional condition (cf. Section \ref{ssec:hdvschd}) to be a good parametrization for the complexity of HL construction.
-In practice (cf. Section \ref{ssec:practical}), we use a similar idea of an augmented graph, but with a construction more amenable for implementation.
+%In the next section, we discuss how the above augmented graph can be used to construct hub labels for answering CSP queries. 
+%We note, however, that this technique is primarily a theoretical proof-of-concept, that shows the CHD (and in fact, the HD of $G$ under an additional condition (cf. Section \ref{ssec:hdvschd}) to be a good parametrization for the complexity of HL construction.
+%In practice (cf. Section \ref{ssec:practical}), we use a similar idea of an augmented graph, but with a construction more amenable for implementation.

@@ -1,29 +1,27 @@
 Two of the most successful data-structures enabling fast shortest path queries at scale are \emph{contraction hierarchies} (CH)~\cite{geisberger_ch_definition} and \emph{hub labels} (HL)~\cite{cohen_definition_hl}.
-These are general techniques which always guarantee correct SP computation, but have no uniform storage/query-time bounds for all graphs.
-However, Abraham et al.~\cite{highway2013} show that for a graph with HD $\leq h$, the preprocessing time, storage requirements and query time of particular implementations of the CH and HL algorithms can be bounded solely in terms of $h$, the maximum degree $\Delta$ and the diameter $D$. 
-We now explain the construction for HL for directed graphs; for the construction of CH refer to our technical report~\cite{TechReport}.
-HL was also shown to admit the best query-time guarantees in~\cite{highway2013}, consequently, we adapt the HL technique for scaling CSP computations in Section \ref{sec:chd}.
+These are general techniques which always guarantee correct SP computation, but have no uniform storage/query-time bounds for all graphs. 
+We now explain the construction for HL; for the construction and results of CH refer to Appendix~\ref{sec:ch}.
 
-The basic HL technique is as follows:
-Every node $v$ is associated with \emph{hub labels}, $L(v) = \crl*{\Lf(v),\Lb(v)}$, comprising of a set of forward hubs $\Lf(v)$ and reverse hubs $\Lb(v)$.
-We also store $\dist(v,w),\dist(u,v)$ for every $w\in\Lf(v),u\in\Lb(v)$.
+The basic HL technique for SP computations is as follows:
+Every node $v$ is associated with a hub label $L(v) = \crl*{\Lf(v),\Lb(v)}$, comprising of a set of forward hubs $\Lf(v)$ and reverse hubs $\Lb(v)$.
+We also store $\dist(v,w) \,\forall\, w\in\Lf(v)$ and $\dist(u,v)\,\forall\,u\in\Lb(v)$.
 The hub labels are said to satisfy the \emph{cover property} if, for any $s\neq t\in V$, $\Lf(s)\cap\Lb(t)$ contains at least one node in $P(s,t)$.
 In the case that $t$ is not reachable from $s$, it must be that $\Lf(s)\cap\Lb(t)=\varnothing$.
 
 With the aid of the cover property, we can obtain $\dist(s,t)$ by searching for the minimum value of $\dist(s,w)+\dist(w,t)$ over all nodes $w\in\Lf(s)\cap\Lb(t)$.
 If the hubs are sorted by ID, this can be done in time $\Or(\card{\Lf(s)}+\card{\Lb(t)})$ via a single sweep.
-Moreover, by storing the second node in $P(s,w)$ for each $w\in \Lf(s)$, and the second-last node in $P(w,t)$ for each $w\in \Lb(t)$, we can also recover the shortest path.
-Now, each time we run a HL query, at least one new node $w\in P(s,t)$, $w\neq s,t$, is returned; we can then recurse to find subpaths $P(s,w)$ and $P(w,t)$.
-Note that we need to store this extra information, as otherwise, we could have $\Lf(s)\cap\Lb(t)=\{s\}$.
-Let $\Lm \defeq \max_v\abs*{L(v)}$ be the size of the maximum HL.
+Moreover, by storing the second node in $P(s,w)$ for each $w\in \Lf(s)$, and the penultimate node in $P(w,t)$ for each $w\in \Lb(t)$, we can also recover the shortest path recursively, as each HL query returns at least one new node $w\in P(s,t)$.
+Note that we need to store this extra information, otherwise we could have $\Lf(s)\cap\Lb(t)=\crl{s}$.
+Let $\Lm \defeq \max_v\abs*{\Lf(v)}+\max_v\abs*{\Lb(v)}$ be the size of the maximum HL.
 The per-node storage requirement is $\Or(\Lm)$, while the query time is $\Or(\Lm\ell(P(s,t)))$.
 
+Although hub labels always exist (in particular, we can always choose $\Lf(s)$ to be the set of nodes reachable from $v$, and $\Lb(s)$ the set of nodes that can reach $v$), finding \emph{optimal} hub-labels (in terms of storage/query-time bounds) is known to be NP-hard~\cite{babenko_hl_complexity}.
 To construct hub labels with guarantees on preprocessing time and $\Lm$, we need the additional notion of a \emph{multi-scale LSHS}. 
 We assume that graph $(G,\ell)$ admits a collection of sets $\crl*{C_i: i=1,\ldots,\log D}$, such that each $C_i$ is an $(h,2^{i-1})$-LSHS.
 Given such a collection, we can now obtain small HL.
-We outline this construction for directed graphs, closely following the construction in \cite{highway2013} (Theorem 5.1) for the undirected case.
+We outline this construction for directed graphs, closely following the construction in \cite[Theorem 5.1]{highway2013} for the undirected case.
 \begin{proposition}
-\label{theo:construct_hl}
+\label[proposition]{theo:construct_hl}
 For $(G,\ell)$, given a multi-scale LSHS collection $\crl*{C_i:i=1,\ldots,\log D}$, where each $C_i$ is an $(h,2^{i-1})$-LSHS, we can construct hub labels of size at most $h\log D$.
 \end{proposition}
 \begin{proof}

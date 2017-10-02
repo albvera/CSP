@@ -1,11 +1,3 @@
-*.pyc
-SF_results
-LU_results
-Data
-*.xlsx
-script2.py
-script3.py
-script4.py
 *.aux
 *.bbl
 *.blg
@@ -13,22 +5,12 @@ script4.py
 *.fdb_latexmk
 *.out
 build
+NIPS_sub
 *.synctex.gz
 *.lb
 *.fls
-
-Writeup/main_vldb.pdf
-
 *.lb
-
 *.fls
-.ipynb*
-Writeup/.main_vldb.lb
-
-Writeup/main_vldb.fls
-
-Writeup/main_vldb.pdf
-
 *.~*
 
 *.pdf

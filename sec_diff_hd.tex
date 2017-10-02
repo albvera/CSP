@@ -44,9 +44,9 @@ The general case works in the same fashion.
 We make the sparsity grow to $h^k$ by creating two complete, $k$-level, $h$-ary trees $T$ and $T'$.
 Connect the root of $T$ to the root of $T'$ and the leafs of both trees are shared.
 Observe that the number of nodes is 
-\[
-n =[\text{$k$-level $h$-ary tree}] + [\text{$(k-1)$-level $h$-ary tree}]\\
-= ({h^{k+1}-1})/({h-1}) + ({h^k-1})/({h-1}),
-\]
+\begin{align*}
+n &=[\text{$k$-level $h$-ary tree}] + [\text{$(k-1)$-level $h$-ary tree}]\\
+&= ({h^{k+1}-1})/({h-1}) + ({h^k-1})/({h-1}),
+\end{align*}
 therefore the sparsity is $\Theta(n)$, the worst possible.
 \end{proof}
