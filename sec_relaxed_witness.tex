@@ -13,10 +13,20 @@ With these assumptions we obtain the following.
 
 \begin{theorem}\label{theo:overpasses}
 Let $(G,\ell,c)$ be a network with HD $h$.
-If the bounded growth is satisfied, we can obtain HL, in polynomial time, for the CSP to answer queries in average time $\Or(b\alpha h\log D)$ and with total storage $\Or(nB\cdot B\alpha h\log D)$.
+If the bounded growth is satisfied, we can obtain HL, in polynomial time, for the CSP to answer queries in average time $\Or((b+1)\alpha h'\log D)$ and with total storage $\Or(nB\cdot B\alpha h'\log D)$.
+\anote{Since we want poly time, we need to change the $h$ by $\Or(\Delta h\log(hn\Delta)$ or something like that.}
 \end{theorem}
 
+\begin{figure}
+\includegraphics[scale=0.7]{TexImg/overpass.pdf}
+\caption{There is a contiguous path $\tilde P$ (solid green) with cost. 
+The efficient path $Q$ (dashed red) uses edge $uv$, but avoids both the shortest paths $P(s,v)$ and $P(u,t)$.
+Edge $uv$ is an overpass, because their endpoints meet long shortest paths around a costly zone.}
+\label{fig:overpass}
+\end{figure}
+
 \anote{Explanations of overpasses here? Do we want pictures?}
+If costs are contiguous, for example tolls in highways or traffic jumps, then the notion of overpass corresponds to the intuitive concept, see \cref{fig:overpass} for an explanation.
 
 We refer to the average HD of $\PE$ as average CHD.
 We discussed that average HD is enough to obtain good preprocessing algorithms, therefore an average CHD should intuitively suffice.
@@ -63,6 +73,7 @@ We will show how to obtain a vertex for the lay witness set in case $Q$ is not w
 Assume that $Q\neq P(s,t)$, otherwise the path is trivially witnessed.
 Let $(u,v)\in Q$ be such that $\ell(Q[s,v]),\ell(Q[u,t])\geq r$. 
 If either $Q[s,v]$ or $Q[u,t]$ is a shortest path or $\ell_{uv}\geq r$, then $Q$ is witnessed, so we assume that all of these fail.
+See \cref{fig:overpass} for a diagram.
 
 We claim that $uv$ is a $r$-overpass.
 Condition 1 of an overpass is satisfied because either $Q[s,v]$ or $Q[u,t]$ have stretch at most $\frac{2-\St}{\St}$.
@@ -81,7 +92,7 @@ The last piece is the following result, whose proof is far from trivial, but we 
 The arguments mimics those in \cref{theo:HLeff,theo:preproc_avg}.
 
 \begin{theorem}
-If the average HD of $\PE$ is $h_c$, then we can obtain, in polynomial time, HL to answer queries with budget $b$ in average time $\Or(bh_c'\log D)$ and the space requirements are $\Or(nB\cdot Bh_c'\log D)$.
+If the average HD of $\PE$ is $h_c$, then we can obtain, in polynomial time, HL to answer queries with budget $b$ in average time $\Or((b+1)h_c'\log D)$ and the space requirements are $\Or(nB\cdot Bh_c'\log D)$.
 \end{theorem}
 
 Finally, we are ready to prove that bounded growth allows to solve the CSP.

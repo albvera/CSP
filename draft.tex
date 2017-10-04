@@ -27,6 +27,46 @@
 
 \input{sec_relaxed_witness.tex}
 
+\section{Generalization to general constraint}
+
+We have dealt with cost constraints so far, but our approach can be applied to more general settings.
+Consider when edges have capacity instead of cost and we want the shortest path given a minimum capacity.
+Another example is when edges have labels, e.g. if it is a carpool lane or not, if it is a main street, etc.
+In the last example, we would like a shortest path avoiding certain labels, e.g. avoiding carpool lanes if the user travels alone.
+We need to abstract the problem to obtain the connection between all these scenarios.
+
+Given a path system $\calQ$, we want to find the shortest path among those in $\calQ$.
+We assume that queries are in the form $(s,t,\calQ')$, where $s,t\in V$ and $\calQ'\subseteq\calQ$.
+For example, the CSP has $\calQ=\PE$ and $\calQ'$ is the set of efficient paths with cost at most $b$.
+The problem to solve is then $\min \ell(P) \text{ s.t. } P\in\Pst\cap\calQ'$ for an input $(s,t,\calQ')$.
+We do not ask to solve for any input $\calQ'\subseteq \calQ$, but for \emph{admissible inputs}, which are defined by the designer.
+For example, admissible inputs for the CSP are ``paths with cost at most $b$'', but ``paths with cost between $b_1$ and $b_2$'' are not.  
+
+\begin{definition}[Integer Embedded Constraints]
+Let $\calQ$ be any path system.
+If there is a function $\psi:\calQ\to\Z^d$ such that, for any admissible input $\calQ'\subseteq \calQ$, $\exists b\in \Z^d$ with the property $P\in \calQ'\Leftrightarrow \psi(P)\leq b$, then we say that $\psi$ is an integer embedding of the problem.
+\end{definition}
+
+\begin{proposition}
+The following are integer embedded constraints \anote{the definition of efficient depends on the problem}
+\begin{enumerate}
+\item CSP, with $\calQ=\crl{P\in \PE: c(P)\leq B}$ for a given $B$. 
+The function is $\psi(P)=c(P)$ and $b$ is the natural choice.
+\item Capacity constraints, with $\calQ=\crl{P\in \PE: \text{cap}(P)\leq B}$ for a given $B$.
+The function is $\psi(P)=\min_{e\in P}\text{cap}(P)$ and $b$ is the minimum capacity.
+\item Label constraints with $\calQ=\crl{P\in \PE: \text{labels}(P) \in B}$ for a given $B\subseteq 2^{\text{Labels}}$.
+In this case the dimension is $\abs{\crl{l:l\text{ is in an element of }B}}$ and $\psi(P)_l = \In{P \text{ has label }l}$.
+\item CSP with pairwise correlated costs. In this case the dimension is two \anote{ to do }
+\end{enumerate}
+\end{proposition}
+
+
+\begin{proposition}
+If $\calQ$ has HD $h$ and has an integer embedding $\psi:\calQ\to\Z^d$, let $M=\max_i\max\crl{\psi(P)_i:P \text{ is admissible}}$.
+Then, we can construct HL to answer queries in time $\Or(bh\log D)$.
+The total space requirement is $\Or(nM\cdot Mh\log D)$.
+\end{proposition}
+
 \section{Examples}
 
 An important notion is that, if efficient paths oscillate too much between free and tolled edges, then it is very unlikely to observe partial witnesses.

@@ -9,7 +9,7 @@ Putting things together, we now show how we can construct hub labels for answeri
 
 \begin{theorem}
 \label{theo:HLeff}
-For a network $(G,\ell,c)$, given a multi-scale EPHS $\crl*{C_i:i=0,1,\ldots,\log D}$, where $C_i$ is an $(h_c,2^{i-1})$-EPHS, we can construct hub labels for answering CSP queries such that, for every $u\in V$ and $b\geq 0$, $\card{L(\pp{u,b})^+}\leq bh_c\log D$ and $\card{L(u^-)^-}\leq Bh_c\log D$. 
+For a network $(G,\ell,c)$, given a multi-scale EPHS $\crl*{C_i:i=0,1,\ldots,\log D}$, where $C_i$ is an $(h_c,2^{i-1})$-EPHS, we can construct hub labels for answering CSP queries such that, for every $u\in V$ and $b\geq 0$, $\card{L(\pp{u,b})^+}\leq (b+1)h_c(1+\log D)$ and $\card{L(u^-)^-}\leq (B+1)h_c(1+\log D)$. 
 \end{theorem}
 \begin{proof}
 Create $C_i^B$ as in \cref{eq:hitset}.
@@ -17,12 +17,12 @@ Define $L(\pp{v,b})^+ \defeq \bigcup_{i=1}^{\log D} C_i^B\cap \Bf_{2^i}(\pp{v,b}
 The cover property is proved similarly as in \cref{theo:construct_hl}; we are left to bound the hub size.
 For a reverse hub we use that $\Bb_{2^i}(t^-) = \{\pp{s,x}: \exists P\in \Pst, c(P)=x, \ell(P)\leq 2^i\}
 \subseteq \Bb_{2^i}(t)\times \{0,1,\ldots,B\}$.
-Thus, $\Bb_{2^i}(t^-)\cap C_i^B\leq Bh_c$.
-For forward hubs, the size follows from observing that $ \card{C_i^B\cap \Bf_{2^i}(\pp{v,b})}\leq bh_c$.
+Thus, $\Bb_{2^i}(t^-)\cap C_i^B\leq (B+1)h_c$.
+For forward hubs, the size follows from observing that $ \card{C_i^B\cap \Bf_{2^i}(\pp{v,b})}\leq (b+1)h_c$.
 \end{proof}
 
 This immediately gives us the following corollary for the storage and query time.
 \begin{corollary}
-Using the HL given by \cref{theo:HLeff}, we can implement queries for $s,t,b$ in time $O(b h_c\log D)$.
+Using the HL given by \cref{theo:HLeff}, we can implement queries for $s,t,b$ in time $O((b+1) h_c\log D)$.
 The total space requirement is $\Or(nB \cdot Bh_c\log D)$.
 \end{corollary}

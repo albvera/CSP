@@ -22,13 +22,13 @@ Given such a collection, we can now obtain small HL.
 We outline this construction for directed graphs, closely following the construction in \cite[Theorem 5.1]{highway2013} for the undirected case.
 \begin{proposition}
 \label[proposition]{theo:construct_hl}
-For $(G,\ell)$, given a multi-scale LSHS collection $\crl*{C_i:i=1,\ldots,\log D}$, where each $C_i$ is an $(h,2^{i-1})$-LSHS, we can construct hub labels of size at most $h\log D$.
+For $(G,\ell)$, given a multi-scale LSHS collection $\crl*{C_i:i=0,\ldots,\log D}$, where each $C_i$ is an $(h,2^{i-1})$-LSHS, we can construct hub labels of size at most $h(1+\log D)$.
 \end{proposition}
 \begin{proof}
 For each node $v$, we define the hub label $L(v)$ as
 \[
-\Lf(v)\defeq  \bigcup_{i=1}^{\log D}C_i\cap \Bf_{2^i}(v) \quad\text{ and }\quad
-\Lb(v)\defeq \bigcup_{i=1}^{\log D}C_i\cap \Bb_{2^i}(v).
+\Lf(v)\defeq  \bigcup_{i=0}^{\log D}C_i\cap \Bf_{2^i}(v) \quad\text{ and }\quad
+\Lb(v)\defeq \bigcup_{i=0}^{\log D}C_i\cap \Bb_{2^i}(v).
 \]
 Since each $C_i$ is an $(h,2^{i-1})$-LSHS which we intersect with balls of radius $2\cdot 2^{i-1}$, every set in the union contributes at most $h$ elements and the maximum size is as claimed.
 
