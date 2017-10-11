@@ -1,13 +1,14 @@
 We now define some additional network primitives, which we need to parametrize the performance of our CSP algorithms. 
-In particular, we use the \emph{highway dimension}, introduced by Abraham et al.~\cite{highway2013,highway2010} to parametrize shortest-path computations in undirected graphs. As a first step, we need to extend the definitions to directed graphs and to general sets of paths, not necessarily shortest.
-
+In particular, we use the \emph{highway dimension}, introduced by \citet{highway2013,highway2010} to parametrize shortest-path computations in undirected graphs. 
+A few of our results are generalizations of those in \citep{highway2013}; the technical challenges of these extensions may not be clear to a non-expert reader, thus we differ all discussions on the matter to \cite{TechReport}. 
+Very broadly speaking, \cite{highway2013} deals only with undirected graphs and shortest paths, whereas our approach covers directed graphs and general sets of paths.
 
 We define a \emph{path system} $\calQ$ as any collection of paths.
 We say that a set $C\subseteq V$ \emph{hits} any given path $Q$ if some node in $Q$ belongs to $C$. Moreover, we say that $C$ is a \emph{hitting set for a path system} $\calQ$ if it hits every $Q\in\calQ$. 
 For any $r>0$, we say a path $Q$ is $r$-significant if $\ell(Q)>r$. 
 For a given path system $\calQ$, we denote $\calQ_r$ as the set of all $r$-significant paths in $\calQ$.
-Hitting sets are measured with respect to the sparsity and the ability to hit significant paths, formally we desire the following.
-%Hitting sets are useful for compressing path systems. In particular, even if the hitting set is large, the extent to which a path system can be compressed depends on the \emph{local sparsity} of hitting sets with respect to \emph{significant paths} of $\calQ$.
+Hitting sets are useful for compressing path systems. 
+In particular, even if the hitting set is large, the extent to which a path system can be compressed depends on the \emph{local sparsity} of hitting sets with respect to \emph{significant paths} of $\calQ$.
 
 \begin{definition}[Locally-Sparse Hitting Sets]\label{def:lshs}
 Given a path system $\calQ$ and $r>0$, an $(h,r)$ locally-sparse hitting set (or $(h,r)$-LSHS) is a set $C\subseteq V$ with two properties: 
@@ -20,28 +21,26 @@ Given a path system $\calQ$ and $r>0$, an $(h,r)$ locally-sparse hitting set (or
 
 As we discuss in \cref{ssec:hldef}, the existence of $(h,r)$-LSHS immediately enables the compression of path system $\calQ$ via the construction of \emph{hub labels}. 
 However, the existence of LSHS does not guarantee the ability to efficiently compute these objects. 
-To address this, it was shown that the \emph{highway dimension} is a property that ensures both existence and efficient computation of LSHS \cite{highway2013}. 
-To define the highway dimension, we first need two additional definitions:
-for $v\in V, r>0$, we define the \emph{forward and reverse path-neighborhoods} with respect to path system $\calQ$ as: $
-S_r^+(v,\calQ) \defeq\crl*{Q\in\calQ_r: \dist(v,Q)\leq 2r}$ and  $S_r^-(v,\calQ) \defeq\crl*{Q\in\calQ_r: \dist(Q,v)\leq 2r}$.
-As before, we have $S_r(v,\calQ) \defeq S_r^+(v,\calQ)\cup S_r^-(v,\calQ)$. Now we can define the highway dimension (HD) of a path system $\calQ$. Essentially, the HD re-orders the sequence of qualifiers in the definition of $(h,r)$-LSHS: it requires the existence of a small hitting set for each individual neighborhood, rather than a single hitting set which is locally sparse. 
+To address this we need a stronger notion, the \emph{highway dimension} is a property that ensures both existence and efficient computation of LSHS.
+%it was shown that the \emph{highway dimension} is a property that ensures both existence and efficient computation of LSHS \cite{highway2013}. 
+To define the highway dimension (HD), we first need two additional definitions:
+for $v\in V, r>0$, we define the \emph{forward path-neighbourhood} with respect to a path system $\calQ$ as $
+S_r^+(v,\calQ) \defeq\crl*{Q\in\calQ_r: \dist(v,Q)\leq 2r}$ and similarly $S_r^-(v,\calQ) \defeq\crl*{Q\in\calQ_r: \dist(Q,v)\leq 2r}$ is the reverse neighbourhood.
+As before, we have $S_r(v,\calQ) \defeq S_r^+(v,\calQ)\cup S_r^-(v,\calQ)$. 
+Now we can define the HD of a path system $\calQ$. 
+Essentially, the HD re-orders the sequence of qualifiers in the definition of $(h,r)$-LSHS: it requires the existence of a small hitting set for each individual neighborhood, rather than a single hitting set which is locally sparse. 
 \begin{definition}[Highway Dimension]	\label{def:hddef}
 	A path system $\calQ$ has HD $h$ if, $\forall r>0,v\in V$, there exists a set $H_{v,r}\subseteq V$ such that $\card{H_{v,r}}\leq h$ and $H_{v,r}$ is a hitting set for $S_r(v,\calQ)$.
 \end{definition}
 
-The HD was defined in \cite{highway2013} for undirected graphs and the shortest-path system $\PS$; the above definition is the natural analog for directed graphs and general path systems.
 As shorthand, we refer to the HD of $(G,\ell)$ as that of $\PS$. 
 Note that $HD\leq h$ is a more stringent requirement than the existence of an $(h,r)$-LSHS $C$, since $C\cap B_{2r}(v)$ need not hit all the paths in $S_r(v,\calQ)$. 
-However, if $G$ has $HD \leq h$, then this guarantees the existence of a $(h,r)$-LSHS.
+However, if $G$ has $HD \leq h$, then this guarantees the existence of a $(h,r)$-LSHS according to the following result.
 \begin{proposition}\label{prop:equiv}
 If the path system $\calQ$ has HD $h$, then, $\forall\,r>0$, there exists an $(h,r)$-LSHS.
 \end{proposition}
 
-
-This fact follows by adapting the proof from \cite[Theorem 4.2]{highway2013} to our general case.
-More importantly, as we discuss in Section~\ref{sec:preproc}, if $G$ has $HD \leq h$, then this permits efficient computation of locally-sparse hitting sets.
-In particular, for any $r$, a simple greedy algorithm gives an $(\Or(h\log n),r)$-LSHS, and a more complex algorithm (which is still poly-time) gives an $(\Or(h\Delta\log h\Delta),r)$-LSHS.
-Finally, we briefly note that Definition~\ref{def:hddef} modifies the original definition of~\cite{highway2013} in two ways: $(i)$ we consider a less restrictive definition of path neighborhoods, that is appropriate for our needs, and $(ii)$ we generalize the notion to directed graphs and general path systems.
-For $\PS$, a consequence of considering less-restrictive path-neighborhoods is that the highway dimension returned by our definition is smaller than that of \cite{highway2013}.
-In particular, unlike \cite{highway2013}, the HD of $G$ as per our definition is not an upper bound to the maximum degree $\Delta$ or the doubling dimension $\alpha$.
-We discuss the relation between the two definitions in detail in Appendix~\ref{app:generalhd}
+This fact follows by adapting the proof from \cite[Theorem 4.2]{highway2013} to our general case, for details see \cite{TechReport}.
+More importantly, note that the result is about existence and does not touch on computability.
+As we discuss in Section~\ref{sec:preproc}, if $G$ has $HD \leq h$, then this permits efficient computation of LSHS.
+%In particular, for any $r$, a simple greedy algorithm gives an $(\Or(h\log n),r)$-LSHS, and a more complex algorithm (which is still poly-time) gives an $(\Or(h\Delta\log h\Delta),r)$-LSHS.

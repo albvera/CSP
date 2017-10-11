@@ -12,6 +12,9 @@
   \end{proof}%
 }
 
+\renewcommand{\paragraph}[1]{\smallskip\noindent\textbf{#1}}
+\setlength{\belowcaptionskip}{-12pt}
+
 % Copyright
 %\setcopyright{none}
 %\setcopyright{acmcopyright}
@@ -103,7 +106,7 @@
 \section{Preliminaries}
 \label{sec:prelim}
 
-\subsection{Basic Setting}
+%\subsection{Basic Setting}
 \label{ssec:basic}
 \input{sec_basic.tex}
 
@@ -119,15 +122,15 @@
 \label{sec:chd}
 \input{sec_chd.tex}
 
-\subsection{Augmented Graph}
+%\subsection{Augmented Graph}
+\subsection{Hub Labels For CSP}
 \label{ssec:aug}
 \input{sec_augmented.tex}
 
-\subsection{Hub Labels For CSP}
 \label{ssec:hlcsp}
 \input{sec_constrained_hl.tex}
 
-\subsubsection{Preprocessing}
+\subsubsection{Obtaining LSHS In Polynomial Time}
 \label{sec:preproc}
 \input{sec_preproc.tex}
 
@@ -152,28 +155,29 @@
 
 
 
-\section*{Acknowledgements.}
-The authors would like to thank Moritz Kobitzsch for sharing sanitized versions of the San Francisco and Luxembourg road networks.
+%\section*{Acknowledgements.}
+%The authors would like to thank Moritz Kobitzsch for sharing sanitized versions of the San Francisco and Luxembourg road networks.
 
+\clearpage
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{biblio} 
 
-\appendix
-\section{Different notions of HD}
-\label{app:generalhd}
-\input{sec_diff_hd.tex}
-
-\section{Contraction Hierarchies}
-\input{sec_ch.tex}
-
-\section{CHD vs. HD: Extensions}
-\label{app:extn}
-\input{sec_extensions.tex}
-
-
-\section{Additional Proofs}
-\label{sec:proofs}
-\input{sec_proofs.tex}
+%\appendix
+%\section{Different notions of HD}
+%\label{app:generalhd}
+%\input{sec_diff_hd.tex}
+%
+%\section{Contraction Hierarchies}
+%\input{sec_ch.tex}
+%
+%\section{CHD vs. HD: Extensions}
+%\label{app:extn}
+%\input{sec_extensions.tex}
+%
+%
+%\section{Additional Proofs}
+%\label{sec:proofs}
+%\input{sec_proofs.tex}
 
 
 \end{document}

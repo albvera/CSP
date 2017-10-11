@@ -1,7 +1,9 @@
 When building systems to answer queries, the essential metric is the average performance; worst case analysis is too pessimistic and not relevant.
 To capture the average performance, we relax the definition of HD in two ways.
 First, a LSHS needs to be locally sparse just ``in average''.
-Second, we forget the strong limitation of hitting $S_r(v,\calQ)$ and ask only for the existence of a multiscale LSHS.
+Second, we forget the strong limitation of hitting $S_r(v,\calQ)$ and ask only for the existence of LSHS.
+Observe that the latter is a big change, since, as discussed before, the existence of LSHS does not allow for their efficient computation.
+We overcome this issue in \cref{theo:preproc_avg}.
 
 \begin{definition}[Average LSHS]
 Given $r>0$ and a system $\calQ$, a set $C\subseteq V$ is an average $(h,r)$-LSHS if it hits $\calQ_r$ and is locally sparse in average, i.e.,
@@ -17,32 +19,25 @@ Nevertheless, this is enough to parametrize the average behaviour of HL.
 Notice that, since query time depends linearly on the hub size, the next result implies both storage and performance bounds.
 
 \begin{theorem}\label{theo:preproc_avg}
-If $\PS$ has average HD $h$, then we can obtain, in polynomial time, HL such that 
-\[
-\frac{1}{n}\sum_{v\in V} \abs{\Lf(v)} \leq h'\log D \quad \text{ and }\quad
-\frac{1}{n}\sum_{v\in V} \abs{\Lb(v)} \leq h'\log D,
-\]
+If $\PS$ has average HD $h$, then we can obtain, in polynomial time, HL with average size 
+$\frac{1}{n}\sum_{v\in V} \abs{\Lf(v)} \leq h'\log D$ and 
+$\frac{1}{n}\sum_{v\in V} \abs{\Lb(v)} \leq h'\log D$,
 where $h'=\Or(\Delta h\log (hn\Delta))$.
 \end{theorem}
 \begin{proof}
 We only go over the preprocessing, since the construction does not change and the bound for the size easily follows. 
 The objective is to obtain a set $C_i$ which is an average $(h',2^i)$-LSHS.
-This is a minimum cost hitting set problem.
+This turns out to be a minimum cost hitting set problem.
 Indeed, we want to solve
 \[
 \min_{C\subseteq V} \sum_{v\in V}\abs{B_{2r}(v)\cap C}  \quad \text{ s.t. } \quad C \text{ hits } \PS_r.
 \]
-To see the equivalence, we assign to each node $u$ the cost $c(u)=\abs{\crl{v\in V: u\in B_{2r}(v)}}$.
-Given a minimum cost hitting set problem with optimum value $\tau$, if the set system has VC-dimension $d$, the algorithm in \cite{vc_dim_hitting} finds a solution, in polynomial time, with cost at most $\Or(d\tau\log(d\tau))$.
+To see the equivalence, we assign to each node $u$ the cost $c(u)=\abs{\crl{v\in V: u\in B_{2r}(v)}}$ and use symmetry arguments.
+On the other hand, given a minimum cost hitting set problem with optimum value $\tau$, if the set system has VC-dimension $d$, the algorithm in \cite{vc_dim_hitting} finds a solution, in polynomial time, with cost at most $\Or(d\tau\log(d\tau))$.
 
 By assumption, the minimum of the problem is at most $hn$.
-Now we do the same mapping as before, where the ground set is changed to $E$, hence the VC-dimension is 2 and now the minimum is at most $h\Delta n$.
+Now we perform a mapping, where the ground set is changed to $E$ and paths are sequences of edges instead of nodes.
+It can be argued that the VC-dimension is 2 and now the minimum is at most $h\Delta n$.
 We apply the algorithm in \cite{vc_dim_hitting} and obtain a solution $C_i$ with cost at most $\Or(h\Delta n\log(h\Delta n))$.
 We have obtained an average $(h',r)$-LSHS as desired.
 \end{proof}
-
-\begin{remark}
-The algorithm in \cref{theo:preproc_avg} makes one call to the VC-dimension solver for each $C_i$.
-On the other hand, the algorithm in \cite{highway2013} calls up to $n$ times the solver for each $C_i$.
-Finally, there is an extra $\log n$ factor in the approximation guarantee, but now the value of $h$ can be much smaller.
-\end{remark}

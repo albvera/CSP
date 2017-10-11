@@ -1,25 +1,28 @@
-Computing hitting sets is difficult in general, but it becomes tractable when the underlying set has small VC-dimension \cite{vc_dim_hitting}.
-The critical observation in \cite{highway2013} is that the set system of \emph{unique} shortest paths has a VC-dimension of $2$.
-Directed or non-shortest paths break the arguments in \cite{highway2013}, so we need a different formulation of the set system.
-We recall the concept of VC-dimension.
-A set system $(X,\calX)$ is a ground set $X$ together with a family $\calX\subseteq 2^X$.
-A set $Y\in \calX$ is shattered if $\{Z\cap Y:Z\in\calX\}=2^Y$.
-If $d$ is the smallest integer such that no $Y\in\calX$ with $\card{Y}=d+1$ can be shattered, then this number $d$ is the VC-dimension of $(X,\calX)$.
+%Computing hitting sets is difficult in general, but it becomes tractable when the underlying set has small VC-dimension \cite{vc_dim_hitting}.
+%The critical observation in \cite{highway2013} is that the set system of \emph{unique} shortest paths has a VC-dimension of $2$.
+%Directed or non-shortest paths break the arguments in \cite{highway2013}, so we need a different formulation of the set system.
+%We recall the concept of VC-dimension.
+%A set system $(X,\calX)$ is a ground set $X$ together with a family $\calX\subseteq 2^X$.
+%A set $Y\in \calX$ is shattered if $\{Z\cap Y:Z\in\calX\}=2^Y$.
+%If $d$ is the smallest integer such that no $Y\in\calX$ with $\card{Y}=d+1$ can be shattered, then this number $d$ is the VC-dimension of $(X,\calX)$.
 
 %The critical observation in \cite{highway2013} is that the set system of \emph{unique} shortest paths has a VC-dimension of $2$.~\footnote{
 %Formally, paths $v_1v_2\ldots v_k$ are mapped to sets $\{v_1,\ldots,v_k\}$. If $G$ is undirected, each subset represents exactly two paths, the $(s,t)$-path and $(t,s)$-path. Therefore, a hitting set for this set system corresponds to a hitting set for $\PS$.}
 %To see this, take the shortest path $abc$, represented by $\{a,b,c\}$. Because the paths are unique, $ac$ will not be a shortest path, hence $\{a,c\}$ can not be in the system and thus $\{a,b,c\}$ cannot be shattered.
 %This does not hold in directed graph, as both paths $abc$ and $ca$ may be shortest paths. 
-Let $\calQ$ be any path system.
-We can obtain a set system with small VC-dimension by considering the ground set as $E$ (instead of the usual choice of $V$), and mapping a path $Q=e_1e_2\ldots e_k$ to $\pi(Q)=\crl{e_1,e_2,\ldots,e_k}$.
-Note that, since path systems contain no cycles, each set $\crl{e_1,e_2,\ldots,e_k}$ corresponds uniquely to one path.
-\begin{proposition}\label[proposition]{prop:vc_dim}
-Given a path system $\calQ$, the corresponding set system $(E,\{\pi(Q):Q\in\calQ\})$ has VC-dimension 2.
-\end{proposition}
-Note that this argument also can be used for shortest paths in undirected graphs to remove the uniqueness requirement.
-Finally, polynomial-time preprocessing now follows from combining \cref{prop:vc_dim} and \cite{vc_dim_hitting}.
-The desired result is stated in \cref{prop:poly_lshs}, we defer the proof to Appendix~\ref{sec:proofs}.
 
+Computing hitting sets is difficult in general, but it becomes tractable when the underlying set has small VC-dimension \cite{vc_dim_hitting}.
+Let $\calQ$ be any path system.
+We can map $\calQ$ to a set system and show that it has VC-dimension $2$, hence we can compute approximate LSHS in polynomial time.
+Formally, we obtain the following result (for the details see \cite{TechReport}).
+%We can obtain a set system with small VC-dimension by considering the ground set as $E$ (instead of the usual choice of $V$), and mapping a path $Q=e_1e_2\ldots e_k$ to $\pi(Q)=\crl{e_1,e_2,\ldots,e_k}$.
+%Note that, since path systems contain no cycles, each set $\crl{e_1,e_2,\ldots,e_k}$ corresponds uniquely to one path.
+%\begin{proposition}\label[proposition]{prop:vc_dim}
+%Given a path system $\calQ$, the corresponding set system $(E,\{\pi(Q):Q\in\calQ\})$ has VC-dimension 2.
+%\end{proposition}
+%Note that this argument also can be used for shortest paths in undirected graphs to remove the uniqueness requirement.
+%Finally, polynomial-time preprocessing now follows from combining \cref{prop:vc_dim} and \cite{vc_dim_hitting}.
+%The desired result is stated in \cref{prop:poly_lshs}, we defer the proof to Appendix~\ref{sec:proofs}.
 \begin{proposition}\label[proposition]{prop:poly_lshs}
-If a path system $\calQ$ has HD $h$, then in polynomial time we can obtain a $(h',r)$-LSHS, where $h'=\Or(h\Delta\log(h\Delta))$.	
+If a path system $\calQ$ has HD $h$, then, for any $r>0$, we can obtain in polynomial time a $(h',r)$-LSHS, where $h'=\Or(h\Delta\log(h\Delta))$.	
 \end{proposition}

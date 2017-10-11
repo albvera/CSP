@@ -13,7 +13,7 @@ To this end, we study \emph{preprocessing and network augmentation for speeding 
 Our work thus contributes to a growing line of research on developing algorithms for large-scale problems (non-convex methods, sketching techniques, etc.), with poor worst-case performance, but which are provably efficient for practically relevant settings.
 
 
-\noindent\textbf{Applications of large-scale CSP computation:}
+\paragraph{Applications of large-scale CSP computation:}
 Our primary motivation for scaling CSP comes from the requirements of modern transportation platforms (Lyft, Uber, Waze etc.) for accurate routing and travel-time estimates.
 \anote{Maybe use tolls or physical costs as primary motivation? Reviewers got really fixed on the independence thing}
 Modern SP engines like Google Maps and OSRM do not make full use of available traffic information.
@@ -34,8 +34,7 @@ This model is considered in \cite{fareevasion} for routing with fare evasion, wh
 
 %Finally, another class of problems which is related to the CSP is that of routing under \emph{label constraints} \cite{language_csp,rice_csp}, wherein we want shortest routes which satisfy certain properties (for example, those that avoid toll roads). The main idea in such problems (as in the CSP) is to use an appropriate augmented graph that converts feasible shortest paths to shortest paths. Our results extend to these applications as well.
 
-\subsection{Our Contributions}
-
+\paragraph{Our Contributions}
 Our work aims to address the following overarching questions:\\
 \noindent $1.$ How can we use preprocessing and graph augmentation techniques to speed up CSP computation. \\
 \noindent $2.$ How can we give preprocessing/storage/query time guarantees for such techniques.
@@ -59,8 +58,7 @@ We evaluate our algorithm on datasets with detailed travel-time information for 
 Our experiments show that our hub labels support query times which are orders of magnitude faster than existing techniques (without preprocessing), have small storage requirements, and good preprocessing times even on a single machine. 
 
 
-\subsection{Related work}
-
+\paragraph{Related work}
 CSP problems have an extensive literature, surveyed in~\cite{csp_survey}. 
 More recently, there has been significant interest in robust SP problems, as well as the related stochastic on-time arrival (SOTA) problem~\cite{fan2005arriving}; recent works have proposed both optimal and approximate policies~\cite{sabran2014precomputation,nikolova_discretization}. 
 Existing approaches for these problems, however, do not exploit preprocessing and augmentation techniques, and consequently do not support the latencies required for mapping applications.

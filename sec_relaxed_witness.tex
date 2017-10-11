@@ -1,9 +1,9 @@
 Now we describe a realistic setting where we can obtain HL for the CSP which are small in average.
 We need few overpasses, which are edges connecting long free paths around a costly zone.
-Let us denote $E_1\defeq\crl{e\in E:c_e>0}$ and recall that $\St$ denotes the desired stretch of the algorithm.
+Let us denote the costly edges as $\Ec\defeq\crl{e\in E:c_e>0}$ and recall that $\St$ denotes the desired stretch of the algorithm.
 
 \begin{definition}[Overpass]
-For $r>0$, an edge $e=(u,v)$ is an $r$-overpass if: (1) both $u$ and $v$ are endpoints of paths in $\PS_{r(2-\St)/\St}$, (2) $\min(\dist(e,E_1),\dist(E_1,e))\leq 3r/2$ and (3) $e$ belongs to a path $Q\in\PE_{2r}\setminus\PS$.
+For $r>0$, an edge $e=(u,v)$ is an $r$-overpass if: (1) both $u$ and $v$ are endpoints of paths in $\PS_{r(2-\St)/\St}$, (2) $\min(\dist(e,\Ec),\dist(\Ec,e))\leq 3r/2$ and (3) $e$ belongs to a path $Q\in\PE_{2r}\setminus\PS$.
 \end{definition} 
 
 For every scale $r>0$, we ask for a \emph{bounded growth} condition controlling the number of $r$-overpasses.
@@ -11,23 +11,21 @@ Formally, we need $\abs{\crl{u\in V: \exists v, uv \text{ is an $r$-overpass}}}\
 We also assume that edges are shortest paths between its endpoints, this property is clearly obeyed by road networks.
 With these assumptions we obtain the following.
 
-\begin{theorem}\label{theo:overpasses}
-Let $(G,\ell,c)$ be a network with HD $h$.
-If the bounded growth is satisfied, we can obtain HL, in polynomial time, for the CSP to answer queries in average time $\Or((b+1)\alpha h'\log D)$ and with total storage $\Or(nB\cdot B\alpha h'\log D)$.
-\anote{Since we want poly time, we need to change the $h$ by $\Or(\Delta h\log(hn\Delta)$ or something like that.}
-\end{theorem}
-
 \begin{figure}
-\includegraphics[scale=0.7]{TexImg/overpass.png}
-%\includegraphics[scale=0.7]{TexImg/overpass.pdf}
+\includegraphics[scale=0.7]{TexImg/overpass.pdf}
 \caption{There is a contiguous path $\tilde P$ (solid green) with cost. 
 The efficient path $Q$ (dashed red) uses edge $uv$, but avoids both the shortest paths $P(s,v)$ and $P(u,t)$.
-Edge $uv$ is an overpass, because their endpoints meet long shortest paths around a costly zone.}
+Edge $uv$ is an overpass, because their endpoints meet long shortest paths around a costly zone.} 
 \label{fig:overpass}
+\vspace{-20pt}
 \end{figure}
+\begin{theorem}\label{theo:overpasses}
+Let $(G,\ell,c)$ be a network with HD $h$.
+If the bounded growth is satisfied, we can obtain, in polynomial time, HL for the CSP to answer queries in average time $\Or((b+1)\alpha h'\log D)$ and with total storage $\Or(nB\cdot B\alpha h'\log D)$, where $h'=\Or(\Delta h\log(hn\Delta))$.
+\end{theorem}
 
-\anote{Explanations of overpasses here? Do we want pictures?}
-If costs are contiguous, for example tolls in highways or traffic jumps, then the notion of overpass corresponds to the intuitive concept, see \cref{fig:overpass} for an explanation.
+Before proving \cref{theo:overpasses}, we give an intuition on overpasses.
+If costs are contiguous, i.e.\ they lay on a shortest path, such as the case of tolls in highways or traffic jumps, then the notion of overpass corresponds to the intuitive concept, see \cref{fig:overpass} for an explanation.
 
 We refer to the average HD of $\PE$ as average CHD.
 We discussed that average HD is enough to obtain good preprocessing algorithms, therefore an average CHD should intuitively suffice.
@@ -89,17 +87,17 @@ For a fixed $r>0$, we need to add as many $\phi(r)$ nodes to $D_r$ to cover all 
 The result follows.
 \end{proof}
 
-The last piece is the following result, whose proof is far from trivial, but we already gave the construction with the augmented graph.
-The arguments mimics those in \cref{theo:HLeff,theo:preproc_avg}.
+We are almost ready to prove that bounded growth allows to solve the CSP.
+The last piece is \cref{theo:avg_chd}, whose proof is far from trivial, but we already gave the construction with the augmented graph.
+The arguments mimic those in \cref{theo:HLeff,theo:preproc_avg}.
 
-\begin{theorem}
+\begin{theorem}\label{theo:avg_chd}
 If the average HD of $\PE$ is $h_c$, then we can obtain, in polynomial time, HL to answer queries with budget $b$ in average time $\Or((b+1)h_c'\log D)$ and the space requirements are $\Or(nB\cdot Bh_c'\log D)$.
 \end{theorem}
-
-Finally, we are ready to prove that bounded growth allows to solve the CSP.
 
 \begin{proofof}{\cref{theo:overpasses}}
 We argue that the average CHD is $h_c\leq 2\alpha h$.
 By \cref{prop:1witness}, $\PE$ is weakly $1$-witnessed by $\PS$.
 It follows by \cref{prop:lay_witness} that the average CHD is at most $2\alpha h$ as needed.
+Applying \cref{theo:avg_chd} yields the result.
 \end{proofof}

@@ -12,6 +12,4 @@ build
 *.fls
 *.~*
 
-*.pdf
-
 *.vtc
