@@ -125,6 +125,7 @@ The entire process can be summarized in the following steps.
 30-s & 93 & 62.3 & 18.7 & 272.41  & 0.01 \\ \hline
 \end{tabular}%
 }
+\vspace{13pt}
 \caption{Experimental results for San Francisco (left) and Luxembourg City (right). Query times are measured with 1000 random $s,t$ pairs for each network and multiple maximum budget levels $B$. Results on rows $B-f$ correspond to computing the solution frontier for all budget levels $b\leq B$ while the results on rows $B-s$ correspond to computing the solution for the budget level $b$.}
 \label{tab:performance_results}
 \end{table*}
@@ -181,23 +182,35 @@ In our experiments, we use the mean travel times for our length function and the
 This is a measure of risk, since edges with high variance are prone to cause a delay in the travel time.
 
 
-\begin{figure}
-\begin{minipage}[t]{.47\textwidth}
+\begin{figure*}
+\resizebox{\textwidth}{!}{%
+\begin{minipage}[t]{.29\textwidth}
 \centering
-\includegraphics[clip, trim=0.2cm 0.3cm 0.2cm 0.2cm,scale=0.3]{TexImg/SF_query_dij_B25.pdf}
-\includegraphics[clip, trim=0.2cm 0.3cm 0.2cm 0.2cm,scale=0.3]{TexImg/SF_query_hl_B25.pdf}
-\caption{Histogram frontier queries for Dijkstra (top) and HL (bottom). Times are 1000 random pairs in San Francisco augmented with $B=25$. }
+\includegraphics[clip, trim=0.2cm 0.3cm 0.4cm 0.2cm,scale=0.3]{TexImg/SF_query_dij_B25.pdf}
+(a)
+\end{minipage}
+\begin{minipage}[t]{.25\textwidth}
+\centering
+\includegraphics[clip, trim=1.3cm 0.3cm 0.2cm 0.2cm,scale=0.3]{TexImg/SF_query_hl_B25.pdf}
+(b)
+\end{minipage}
+\begin{minipage}[t]{.25\textwidth}
+\centering
+\includegraphics[clip, trim = 1.3cm 0.3cm 0cm 0cm,scale=0.3]{TexImg/SF_bwd_hub_size.pdf}
+(c)
+\end{minipage}
+\begin{minipage}[t]{.25\textwidth}
+\centering
+\includegraphics[clip, trim = 1.3cm 0.3cm 0cm 0cm,scale=0.3]{TexImg/significance.pdf}
+(d)
+\end{minipage}
+}
+\caption{ Histogram frontier queries for Dijkstra (a) and HL (b). Times are 1000 random pairs in San Francisco augmented with $B=25$.
+Size of reverse hubs (c) and significance (d) for frontier queries in San Francisco augmented with $B=25$.
+}
 \label{fig:SF_query}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{.47\textwidth}
-\centering
-\includegraphics[clip, trim = 0.1cm 0.3cm 0cm 0cm,scale=0.3]{TexImg/SF_bwd_hub_size.pdf}
-\includegraphics[clip, trim = 0.1cm 0.3cm 0cm 0cm,scale=0.3]{TexImg/significance.pdf}
-\caption{Size of reverse hubs (top) and significance (bottom) for frontier queries in San Francisco augmented with $B=25$.}
 \label{fig:SF_bwd_size}
-\end{minipage}
-\end{figure}
+\end{figure*}
 
 \subsubsection{Query-time performance}
 
