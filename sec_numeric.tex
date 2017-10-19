@@ -1,17 +1,13 @@
-%\subsection{Practical HL construction}
 \label{ssec:practical}
 
-We start by defining a similar structure as the augmented graph, but more amenable to practical purposes.
-The graph $G^B$ defined in Section \ref{ssec:aug} may contain a lot of redundant information, hence it is not a minimal representation.
+We start by defining a more scalable construction of $G^B$.
+The augmented graph $G^B$ defined in \cref{ssec:aug} is not a minimal representation as it may contain a lot of redundant information.
 For example, the same efficient path $uv$ can be repeated many times in the form $\pp{u,1}\pp{v,0}$, $\pp{u,2}\pp{v,1}$ and so on.
-By encoding this information more efficiently, we can reduce the size of the augmented graph and obtain considerable improvements both in query time and in data storage.
+By encoding this information more efficiently, we get considerable improvements both in query time and in data storage.
 
-We construct an augmented graph without this duplicated information as follows.
-The nodes are, as before, pairs $\pp{v,b}$, but an edge $\pp{v,b},\pp{v',b'}$ is placed only if it is essential for some efficient path, i.e., removing said edge changes the correctness of a query.
-If we let $\Pst^E$ be the set of all efficient paths from $s$ to $t$, we take every $P\in \Pst^E$ with cost $b\leq B$ and trace it in the augmented graph.
-The tracing is such that the augmented path is forced to end at $\pp{t,0}$.
-In other words, all efficient paths $P\in \Pst^E$ can be represented by a set a set of efficient paths ending at $\pp{t,0}$. 
-For details see \cite{TechReport}.
+We construct our \emph{pruned} augmented graph $\Gp^B$ as follows:
+As before, nodes are pairs $\pp{v,b}$, but now we add an edge $\pp{v,b}\pp{v',b'}$ only if it is essential for some efficient path, i.e., removing said edge changes the correctness of a query.
+If we let $\Pst^E$ be the set of all efficient paths from $s$ to $t$, we take every $P\in \Pst^E$ with cost $b\leq B$ and trace it in the augmented graph such that it terminates at $\pp{t,0}$.
 %
 %\begin{definition}\label{def:pruned_aug_graph}
 %The pruned augmented graph is defined by $\Gp^B=(\Vp^B,\Ep^B)$, where
@@ -22,9 +18,11 @@ For details see \cite{TechReport}.
 %\end{align*}
 %In $\Gp^B$ all the lengths are preserved.
 %\end{definition}
-Note that in $\Gp^B$ there are no sink nodes, hence it has at least $n$ nodes and $nB$ arcs fewer compared to $G^B$.
-In the worst case, those $nB$ arcs are the only gain by doing this process.
-Nevertheless, in our experiments $\Gp^B$ is up to 60\% smaller than $G^B$.
+%Note that in $\Gp^B$ there are no sink nodes, hence it has at least $n$ nodes and $nB$ arcs fewer compared to $G^B$.
+%In the worst case, those $nB$ arcs are the only gain by doing this process.
+%Nevertheless, in our experiments $\Gp^B$ is up to 60\% smaller than $G^B$.
+In our experiments $\Gp^B$ is up to 60\% smaller than $G^B$.
+For details see \cite{TechReport}.
 %Observe that, by running Dijkstra in $G^B$, $\Gp^B$ can be computed in time $\Or(n^2B\log(nB))$.
 
 %\subsubsection{HD of the pruned augmented graph}
@@ -59,29 +57,33 @@ The second is called a specific query, for given $s,t,b$ we return $\dist(s,t|b)
 
 \paragraph{HL construction via Contraction Hierarchies}
 We use some techniques described in \cite{hubimplem} combined with an approach tailored for augmented graphs.
+First we give a brief description of Contraction Hierarchies (CH).
+Given a ranking of the nodes, which is just a permutation, the CH algorithm proceeds by removing nodes from the lowest rank first.
+Whenever a node is removed, we add new edges, called shortcuts, if they are needed to preserve the shortest paths.
+Once we have a graph with shortcuts, a CH search is a special variant of Dijkstra; only higher rank nodes are explored, i.e., we never take an edge $uv$ if rank$(u)>\text{rank}(v)$. 
+
 The main idea is to first use contraction hierarchies to get a node ranking and then define the forward hubs of $v$ as the nodes visited during a contraction-based forward search starting at $v$.
 The reverse hub is defined analogously.
 These are valid hubs, since the highest rank node in a path is guaranteed to be in both hubs.
 
 The most important parameter in CH is the rank; results vary greatly from one choice of ranks to another.
-We obtain a rank in $G$ by running a greedy shortest-path cover, defined as follows.
-Start with a cover $C=\varnothing$ and compute the set of all shortest paths $\PS$.
-Take a node $v\notin C$ hitting most paths in $\PS$, then remove all those paths from $\PS$, add $v$ to $C$ and iterate.
-The rank is defined as $n$ for the first node added to $C$, $n-1$ for the second and so on.
-To implement the SP cover we follow the algorithm in \cite{hubimplem}.
+We obtain a rank in $G$ by running a greedy shortest-path cover, which selects the highest rank node as the one covering most uncovered paths in $\PS$ and continues greedily.
+%Formally, start with a cover $C=\varnothing$ and compute the set of all shortest paths $\PS$.
+%Take a node $v\notin C$ hitting most paths in $\PS$, then remove all those paths from $\PS$, add $v$ to $C$ and iterate.
+%The rank is defined as $n$ for the first node added to $C$, $n-1$ for the second and so on.
+%To implement the SP cover we follow the algorithm in \cite{hubimplem}.
 We stress that this is just an easy way to get a ranking; more sophisticated heuristics that decide on-line the next node to contract usually work well in practice \cite{goldberg_survey,rice_csp}.
 Using another contraction scheme may expedite our algorithms and reduce the hub size.
 
 For some instances we work with $G^B$ and for others with $\Gp^B$.
 Even though $\Gp^B$ takes some time to compute, it can speed up the overall process and yield considerably better hubs. 
-Recall that in $\Gp^B$ there are no sink-nodes nor replicated information, since efficient paths are stored just once.
 Given a rank for nodes in $G$, we contract $\Gp^B$ as follows.
 Say that $V$ is ordered according to the rank, so node~$1$ is the least important and $n$ the most important.
 In $\Gp^B$, we first contract the nodes $\pp{1,b}$ for $b=B,\ldots,0$, then the nodes $\pp{2,b}$ and so on till the nodes $\pp{n,b}$ are the last to contract. 
-Finally, when contracting a node $v$, if $u$ is a predecessor and $w$ a successor of $v$, one should add the short-cut $uw$ only, if by removing $v$, the distance from $u$ to $w$ is altered.
+Finally, when contracting a node $v$, if $u$ is a predecessor and $w$ a successor of $v$, one should add the short-cut $uw$ only if, by removing $v$, the distance from $u$ to $w$ is altered.
 We can go even further; the short-cut $uw$ is unnecessary if the shortest path is not efficient, even if the distance changes.
 
-To obtain better hubs we prune the results obtained by contraction-based searches.
+To obtain better hubs we prune the results obtained by CH.
 If $w$ is in the forward search of $v$ with distance $d$, it might be that $\dist(v,w)<d$, this occurs because the search goes only to higher rank nodes and the discovered path is missing some node.
 When $\dist(v,w)<d$, we can safely remove $w$ from the hub of $v$, since the highest ranked node in a shortest path will have the correct distance.
 For frontier queries, we can also prune away a node $w$ if the $(v,w)$-path has a surplus of budget.
@@ -174,7 +176,7 @@ All our experiments were performed on a 64-bit desktop computer with a 3.40GHz I
 Our code is written in Python 2.7.
 We use the library Networkx for the graph representation and Dijkstra's algorithm.
 Although all the steps can be parallelized, we did not implement this.
-The code is available at \url{github.com/albvera/HHL_CSP}.
+The code is available at (hidden for anonymity).%\url{github.com/albvera/HHL_CSP}.
 
 We evaluated the performance of our algorithms with real-world test networks: a downtown San Francisco network with 2139 nodes and 5697 edges for which real-world travel-time data was available as a Gaussian mixture model \cite{sf_data}, and a Luxembourg City network with 4026 nodes and 9282 edges for which travel-time distributions were synthesized from speed limits \cite{niknami2016tractable}, as real-world data was unavailable.
  
@@ -212,9 +214,7 @@ Size of reverse hubs (c) and significance (d) for frontier queries in San Franci
 \label{fig:SF_bwd_size}
 \end{figure*}
 
-\subsubsection{Query-time performance}
-
-
+\paragraph{Query-time performance}
 Table~\ref{tab:performance_results} presents the CSP computation times for different maximum budgets $B$. 
 For frontier queries, labelled as `f', the query times are measured as the average of 1000 random $s,t$.
 For specific queries, labelled as `s', the times are measured as 1000 random triplets $s,t,b$.
@@ -233,8 +233,7 @@ In contrast, for specific queries we add extra edges $\pp{s,b}\pp{s,b-1}$, hence
 In the contraction step, we want to remove a node without altering the shortest path, a process that requires many reachability tests.
 
 
-\subsubsection{Hub sizes and node significance}
-
+\paragraph{Hub sizes and node significance}
 We focus the analysis on two meaningful quantities.
 The first is hub size, which is well captured by  $\card{\Lb(\pp{t,0})}$ for $t\in V$.
 Indeed, for frontier queries the reverse hub is bounding the space requirements; for specific queries the same is true up to a constant factor.
