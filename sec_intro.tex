@@ -37,15 +37,26 @@ This model is considered in \cite{fareevasion} for routing with fare evasion, wh
 %Finally, another class of problems which is related to the CSP is that of routing under \emph{label constraints} \cite{language_csp,rice_csp}, wherein we want shortest routes which satisfy certain properties (for example, those that avoid toll roads). The main idea in such problems (as in the CSP) is to use an appropriate augmented graph that converts feasible shortest paths to shortest paths. Our results extend to these applications as well.
 
 \paragraph{Our Contributions}
-Our work aims to address the following overarching questions:\\
-\noindent $1.$ How can we use preprocessing and graph augmentation techniques to speed up CSP computation. \\
-\noindent $2.$ How can we give preprocessing/storage/query time guarantees for such techniques.
+We consider the problem of computing constrained shortest paths on large networks, with fixed-sized budgets and integer edge-costs. For fixed source and destination, the CSP admits a natural dynamic-programming algorithm; our focus however is on developing data-structures that support arbitrary source-destination-budget queries. In particular, our work addresses the following questions:\\
+\noindent $1.$ How can we use preprocessing and network augmentation techniques to speed up CSP computation? \\
+\noindent $2.$ How do we obtain preprocessing/storage/query time guarantees for such techniques?
 
-For the SP problem, there was significant initial development on the first question, leading to many different techniques~\cite{dimacs09}, which worked well in practice, but had no performance guarantees.
-Abraham et al.~\cite{highway2013, highway2010} then proposed the \emph{Highway Dimension} (HD), a graph structural metric, which they showed could parametrize the preprocessing, storage and query time of several of these heuristics.
-Our work adopts a similar program; in particular, our contributions are as follows:
+For the SP problem, there were several known heuristics which worked well in practice~\cite{dimacs09}, but had no performance guarantees.
+These were unified by Abraham et al.~\cite{highway2013, highway2010} via the \emph{Highway Dimension} (HD), a graph structural metric, which they showed could parametrize the preprocessing, storage and query time of these heuristics.
+Our work adopts a similar program for the CSP; in particular, our contributions are summarized as follows:
 
-\textbf{Theoretical contributions}: 
+\noindent\textbf{Theoretical contributions}: 
+Analogous to the role of the Highway Dimension for the set of shortest paths, we define the \emph{constrained highway dimension} (CHD) for set of {\em efficient paths} (i.e., minimal solutions to the CSP; cf. \ref{def:effpath}). We show how the CHD can be used to parametrize the performance of CSP algorithms via a reduction from a CSP problem to an SP problem on an appropriate \emph{augmented graph}, a directed graph that jointly encodes the cost and length constraints. The problem however is that the CHD can be much bigger than the HD in general -- our main theoretical contribution is in showing that the \emph{HD and CHD an be related under an additional partial witness condition}. 
+This provides a justification for our proposed CSP algorithms, as it shows they are efficient in settings where SP computation is scalable. We also study the  average performance and obtain stronger results. 
+In particular, we show how a small average CHD can be explained by physical overpasses in road networks.
+
+\noindent\textbf{Practical contributions}: 
+Although our theoretical results justify the use of hub labels for CSP, they are impractical for real networks. 
+In \cref{sec:numeric}, we show how to adapt our ideas to develop practical hub label constructions for CSP queries. 
+We evaluate our algorithm on datasets with detailed travel-time information for San Francisco and Luxembourg.
+Our experiments show that our hub labels support query times which are orders of magnitude faster than existing techniques (without preprocessing), have small storage requirements, and good preprocessing times even on a single machine. 
+
+\noindent\textbf{Paper outline}:
 In \cref{sec:prelim}, after introducing the problem, we extend the notion of the HD (as defined in \cite{highway2013}) to directed graphs and general path systems. Then, in \cref{sec:chd}, we define an analogous notion of a \emph{constrained highway dimension} (CHD) for constrained shortest paths. 
 We then propose a construction of hub labels for CSP queries, whose complexity is parameterized by the CHD. 
 We show that, although the CHD can be much bigger than the HD in general, the two can be related under an additional \emph{partial witness condition}. 
@@ -53,14 +64,8 @@ This provides a justification for our proposed CSP hub labels, as it suggests th
 Finally, we study average performance and obtain stronger results. 
 In particular, we show how a small average CHD can be explained by physical overpasses in road networks.
 
-\textbf{Practical contributions}: 
-Although our theoretical results justify the use of hub labels for CSP, they are impractical for real networks. 
-In \cref{sec:numeric}, we show how to adapt our ideas to develop practical hub label constructions for CSP queries. 
-We evaluate our algorithm on datasets with detailed travel-time information for San Francisco and Luxembourg.
-Our experiments show that our hub labels support query times which are orders of magnitude faster than existing techniques (without preprocessing), have small storage requirements, and good preprocessing times even on a single machine. 
 
-
-\paragraph{Related work}
+\noindent\textbf{Related work}:
 CSP problems have an extensive literature, surveyed in~\cite{csp_survey}. 
 More recently, there has been significant interest in robust SP problems, as well as the related stochastic on-time arrival (SOTA) problem~\cite{fan2005arriving}; recent works have proposed both optimal and approximate policies~\cite{sabran2014precomputation,nikolova_discretization}. 
 Existing approaches for these problems, however, do not exploit preprocessing and augmentation techniques, and consequently do not support the latencies required for mapping applications.

@@ -1,3 +1,4 @@
+\subsection{Practical CSP Algorithms} 
 \label{ssec:practical}
 
 We start by defining a more scalable construction of $G^B$.
@@ -95,16 +96,16 @@ The entire process can be summarized in the following steps.
 \hline
 	B & Prepro [m] & Avg F Size & Avg B Size & Query Dij [ms] & Query HL [ms] \\ \hline \hline
 	0 & 1 & 23 & 22 & 10.71 & 0.005 \\ \hline
-5-f  & 5  & 16 & 28 & 80.10  & 0.02 \\
-5-s  & 5  & 57 & 28 & 31.75  & 0.01 \\ \hline
+%5-f  & 5  & 16 & 28 & 80.10  & 0.02 \\
+%5-s  & 5  & 57 & 28 & 31.75  & 0.01 \\ \hline
 10-f & 9  & 9 & 28 & 168.11 & 0.03 \\
 10-s & 10 & 68 & 28 & 56.19  & 0.01 \\ \hline
-15-f & 12 & 6 & 28 & 237.64 & 0.03 \\
-15-s & 16 & 73 & 28 & 77.59  & 0.01 \\ \hline
+%15-f & 12 & 6 & 28 & 237.64 & 0.03 \\
+%15-s & 16 & 73 & 28 & 77.59  & 0.01 \\ \hline
 20-f & 17 & 5 & 28 & 342.47 & 0.03 \\
 20-s & 20 & 77 & 28 & 100.26 & 0.01 \\ \hline
-25-f & 22 & 4 & 28 & 460.95 & 0.03 \\
-25-s & 25 & 80 & 28 & 126.52 & 0.01 \\ \hline
+%25-f & 22 & 4 & 28 & 460.95 & 0.03 \\
+%25-s & 25 & 80 & 28 & 126.52 & 0.01 \\ \hline
 30-f & 26 & 3 & 28 & 569.13 & 0.03 \\
 30-s & 31 & 84 & 28 & 152.75 & 0.01 \\ \hline
 \end{tabular}
@@ -113,16 +114,16 @@ The entire process can be summarized in the following steps.
 \hline
 	B & Prepro  [m] & Avg F Size & Avg B Size & Query Dij [ms] & Query HL [ms] \\ \hline \hline
 	0 & 6 & 18 & 18 & 16.35 & 0.004 \\ \hline
-5-f  & 1  & 18.0 & 18.0 & 175.04  & 0.02 \\
-5-s  & 21 & 42.9 & 18.7 & 72.03   & 0.01 \\ \hline
+%5-f  & 1  & 18.0 & 18.0 & 175.04  & 0.02 \\
+%5-s  & 21 & 42.9 & 18.7 & 72.03   & 0.01 \\ \hline
 10-f & 2  & 18.0 & 18.0 & 361.15  & 0.04 \\
 10-s & 35 & 49.3 & 18.7 & 102.52  & 0.01 \\ \hline
-15-f & 3  & 18.0 & 18.0 & 577.89  & 0.06 \\
-15-s & 46 & 53.3 & 18.7 & 140.80  & 0.01 \\ \hline
+%15-f & 3  & 18.0 & 18.0 & 577.89  & 0.06 \\
+%15-s & 46 & 53.3 & 18.7 & 140.80  & 0.01 \\ \hline
 20-f & 4  & 18.0 & 18.0 & 821.94  & 0.07 \\
 20-s & 60 & 56.5 & 18.7 & 183.11  & 0.01 \\ \hline
-25-f & 5  & 18.0 & 18.0 & 974.84  & 0.09 \\
-25-s & 77 & 59.5 & 18.7 & 227.17  & 0.01 \\ \hline
+%25-f & 5  & 18.0 & 18.0 & 974.84  & 0.09 \\
+%25-s & 77 & 59.5 & 18.7 & 227.17  & 0.01 \\ \hline
 30-f & 7  & 18   & 18   & 1247.72 & 0.10 \\
 30-s & 93 & 62.3 & 18.7 & 272.41  & 0.01 \\ \hline
 \end{tabular}%
@@ -146,11 +147,11 @@ Note that in the last step we bootstrap HL to improve it.
 This works because the fact that some nodes have incorrect distance labels does not impact the correctness of a HL query; a node minimizing the distance is returned and such node must have a correct label.
 
 \begin{figure}
-\begin{minipage}{0.5\textwidth}
+\begin{minipage}{0.25\textwidth}
 \centering
 \input{TexImg/plot_clusters_sf.tex}
 \end{minipage}%
-\begin{minipage}{0.5\textwidth}
+\begin{minipage}{0.25\textwidth}
 \centering
 \input{TexImg/plot_clusters_lu.tex}
 \end{minipage}
@@ -171,7 +172,9 @@ We use an off-the-shelf clustering method to obtain $k$ cluster centers, from wh
 As shown in Figure~\ref{fig:clusters}, the clustering approach provides a very good approximation of the hubs with even a small $k$.
 \end{remark}
 
-\subsection{Experiments} \label{sec:exp}
+\subsection{Experiments} 
+\label{sec:exp}
+
 All our experiments were performed on a 64-bit desktop computer with a 3.40GHz Intel Core i7-6700 processor and 16GB RAM running Ubuntu 16.04.
 Our code is written in Python 2.7.
 We use the library Networkx for the graph representation and Dijkstra's algorithm.
@@ -242,25 +245,25 @@ Intuitively, a node is highly significant if belongs to many efficient paths.
 Figure~\ref{fig:SF_bwd_size} shows a histogram of these metrics. 
 
 	
-\begin{figure}
-\begin{minipage}[t]{.51\textwidth}
-\centering
-\includegraphics[clip, trim=4.5cm 4.8cm 4.7cm 3cm,height=4.5cm]{TexImg/SF_hub_sizes.pdf}
-\includegraphics[clip, trim=15.8cm 0cm 0.4cm 1cm,scale=0.3]{TexImg/SF_hub_sizes.pdf}
-\caption{Heat map of hub size for frontier queries in San Francisco augmented with $B=25$.
-Note that the size is not homogeneous, but rather we can observe clusters and neighborhoods tend to be similar.}\label{fig:SF_hub_size_map}
-\end{minipage}
-\hfill
-\begin{minipage}[t]{.46\textwidth}
-\centering
-\includegraphics[clip, trim=3.7cm 2.9cm 4.2cm 3cm,height=4.5cm]{TexImg/sig_colapse.pdf}
-%\includegraphics[clip, trim=15cm 1.5cm 0.1cm 0.8cm,scale=0.45]{TexImg/sig_colapse.pdf}
-\caption{Heat map of significance for frontier queries in San Francisco augmented with $B=25$.
-The most significant nodes have been drawn bigger.
-The top 3 most significant correspond to Geary Blvd \& Gough St, Franklin St \& O'Farrel St and Market St \& Polk St.}
-\label{fig:sig_colapse}
-\end{minipage}
-\end{figure}
+%\begin{figure}
+%\begin{minipage}[t]{.51\textwidth}
+%\centering
+%\includegraphics[clip, trim=4.5cm 4.8cm 4.7cm 3cm,height=4.5cm]{TexImg/SF_hub_sizes.pdf}
+%\includegraphics[clip, trim=15.8cm 0cm 0.4cm 1cm,scale=0.3]{TexImg/SF_hub_sizes.pdf}
+%\caption{Heat map of hub size for frontier queries in San Francisco augmented with $B=25$.
+%Note that the size is not homogeneous, but rather we can observe clusters and neighborhoods tend to be similar.}\label{fig:SF_hub_size_map}
+%\end{minipage}
+%\hfill
+%\begin{minipage}[t]{.46\textwidth}
+%\centering
+%\includegraphics[clip, trim=3.7cm 2.9cm 4.2cm 3cm,height=4.5cm]{TexImg/sig_colapse.pdf}
+%%\includegraphics[clip, trim=15cm 1.5cm 0.1cm 0.8cm,scale=0.45]{TexImg/sig_colapse.pdf}
+%\caption{Heat map of significance for frontier queries in San Francisco augmented with $B=25$.
+%The most significant nodes have been drawn bigger.
+%The top 3 most significant correspond to Geary Blvd \& Gough St, Franklin St \& O'Farrel St and Market St \& Polk St.}
+%\label{fig:sig_colapse}
+%\end{minipage}
+%\end{figure}
 
 Figures \ref{fig:SF_hub_size_map} and \ref{fig:sig_colapse} show the spatial relationships between the hub size and significance in the San Francisco network. 
 We observe that highly significant nodes tend to have small hub size.
@@ -275,11 +278,11 @@ Note also that the hub size resembles an harmonic function; nodes are mostly sim
 Notice how the highly significant nodes are in main road crossings.}
 \label{fig:map_LU} 
 \end{minipage}
-\hfil
-\begin{minipage}[t]{.43\textwidth}
-\includegraphics[scale=0.35]{TexImg/significance_LU.pdf}
-\caption{Histogram of significance in Luxembourg City augmented with $B=25$.
-The top 10\% most significant nodes were out of scaled and have been collapsed for exposition purposes.}
-\label{fig:sig_LU} 
-\end{minipage}
+%\hfil
+%\begin{minipage}[t]{.43\textwidth}
+%\includegraphics[scale=0.35]{TexImg/significance_LU.pdf}
+%\caption{Histogram of significance in Luxembourg City augmented with $B=25$.
+%The top 10\% most significant nodes were out of scaled and have been collapsed for exposition purposes.}
+%\label{fig:sig_LU} 
+%\end{minipage}
 \end{figure}
