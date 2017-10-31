@@ -66,7 +66,7 @@ S_r^+(v,\calQ) \defeq\crl*{Q\in\calQ_r: \dist(v,Q)\leq 2r}$ (and similarly, the 
 
 As shorthand, we refer to the HD of $(G,\ell)$ as that of $\PS$. 
 Note that $HD\leq h$ is a more stringent requirement than the existence of an $(h,r)$-LSHS $C$, since $C\cap B_{2r}(v)$ need not hit all the paths in $S_r(v,\calQ)$. 
-However, if $G$ has $HD \leq h$, then this guarantees the existence of a $(h,r)$-LSHS according to the following result.
+However, if $G$ has $HD \leq h$, then this guarantees the existence of a $(h,r)$-LSHS:
 \begin{proposition}\label{prop:equiv}
 	If the path system $\calQ$ has HD $h$, then, $\forall\,r>0$, there exists an $(h,r)$-LSHS.
 \end{proposition}
@@ -97,13 +97,11 @@ Let $\Lm \defeq \max_v\abs*{\Lf(v)}+\max_v\abs*{\Lb(v)}$ be the size of the maxi
 Then the per-node storage requirement is $\Or(\Lm)$, while the query time is $\Or(\Lm\ell(P(s,t)))$.
 
 Although hub labels always exist (in particular, we can always choose $\Lf(s)$ to be the set of nodes reachable from $v$, and $\Lb(s)$ the set of nodes that can reach $v$), finding \emph{optimal} hub-labels (in terms of storage/query-time bounds) is known to be NP-hard~\cite{babenko_hl_complexity}.
-To construct hub labels with guarantees on preprocessing time and $\Lm$, we need the additional notion of a \emph{multi-scale LSHS}. 
-We assume that graph $(G,\ell)$ admits a collection of sets $\crl*{C_i: i=1,\ldots,\log D}$, such that each $C_i$ is an $(h,2^{i-1})$-LSHS.
-Given such a collection, we can now obtain small HL.
-We outline this construction for directed graphs, closely following the construction in \cite[Theorem 5.1]{highway2013} for the undirected case.
+The highway dimension and the notion of an $(h,r)$-LSHS allow us to construct hub labels with guarantees on preprocessing time and $\Lm$. For this, we need the additional notion of a \emph{multi-scale LSHS}, a collection of sets $\crl*{C_i: i=1,\ldots,\log D}$, such that each $C_i$ is an $(h,2^{i-1})$-LSHS.
+Given such a collection, we can now obtain small hub labels: we outline this construction for directed graphs, closely following the undirected graph construction in \cite[Theorem 5.1]{highway2013}.
 \begin{proposition}
-	\label[proposition]{theo:construct_hl}
-	For $(G,\ell)$, given a multi-scale LSHS collection $\crl*{C_i:i=0,\ldots,\log D}$, where each $C_i$ is an $(h,2^{i-1})$-LSHS, we can construct hub labels of size at most $h(1+\log D)$.
+\label[proposition]{theo:construct_hl}
+For graph $(G,\ell)$, given a multi-scale LSHS collection $\crl*{C_i:i=0,\ldots,\log D}$, where each $C_i$ is an $(h,2^{i-1})$-LSHS, we can construct hub labels of size at most $h(1+\log D)$.
 \end{proposition}
 \begin{proof}
 	For each node $v$, we define the hub label $L(v)$ as
@@ -119,10 +117,9 @@ We outline this construction for directed graphs, closely following the construc
 \end{proof}
 
 
-Finally, we need to compute the desired multi-scale LSHS in polynomial time.
+
 %As we mentioned before, a greedy algorithm returns a $\Or(h\log n)$ approximation to any $(h,r)$-LSHS, however, if the HD $\leq h$, this can be improved to obtain a $\Or(h\Delta\log(h\Delta))$ approximation.
 %This argument, which extends Corollary 7.3 in \cite{highway2013}, is presented in Section~\ref{sec:preproc}.
-In \cref{ssec:aug} we show that, if the HD is $h$, in polynomial time we can obtain sparsity $h'=\Or(h\Delta\log(h\Delta))$.
-In other words, the HL have size $h'(1+\log D)$ instead of $h(1+\log D)$ if we are not given the multi-scale LSHS and have to compute them in polynomial time.
-A more subtle point is that the resulting algorithm, even though polynomial, is impractical for large networks.
+In \cref{ssec:aug} we show how to compute the desired multi-scale LSHS in polynomial time. In particular, if graph $G$ has HD $h$, then in polynomial time we can obtain multi-scale LSHS with sparsity $h'=\Or(h\Delta\log(h\Delta))$ (i.e., the HL have size $h'(1+\log D)$ instead of $h(1+\log D)$).
+A more subtle point is that the theoretical algorithm, even though polynomial, is impractical for large networks.
 In \cref{sec:numeric}, we discuss heuristics that work better in practice.
