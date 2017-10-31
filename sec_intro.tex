@@ -3,7 +3,7 @@ In particular, the use of preprocessing techniques and network augmentation has 
 These techniques however do not extend to the CSP.
 %, and hence can not fully leverage the rich travel-time distribution data available today.
 
-The SP and CSP routing problems can be summarized as follows: Given a graph $G$ where each edge has associated \emph{length} and \emph{costladi}, the SP problem requires finding an $(s,t)$-path of minimum length for any given nodes $s$ and $t$. 
+The SP and CSP routing problems can be summarized as follows: Given a graph $G$ where each edge has associated \emph{length} and \emph{cost}, the SP problem requires finding an $(s,t)$-path of minimum length for any given nodes $s$ and $t$. 
 The CSP problem inputs an additional budget $b$, and requires finding a minimum length $(s,t)$-path \emph{with total cost less than $b$}.
 The two problems, though similar, have very different runtime complexity: SP queries admit polynomial-time algorithms (in particular, the famous Dijkstra's algorithm), while CSP computation is known to be NP-Hard~\cite{csp_survey}.
 That said, a standard dynamic program computes CSPs in pseudo-polynomial time for discrete costs~\cite{alex_bicriteria}, and gives a natural scaling-based FPTAS for continuous costs (as in the knapsack problem).
@@ -12,7 +12,7 @@ Though there is a rich literature on CSP (cf. \cite{csp_survey}), existing appro
 To this end, we study \emph{preprocessing and network augmentation for speeding up CSP computation}.
 Our work contributes to a growing field of algorithms for large-scale problems (non-convex methods, sketching techniques, etc.), with poor worst-case performance, but which are provably efficient for practically relevant settings.
 
-\smallskip
+%\smallskip
 \noindent\textbf{Applications of large-scale CSP computation:}
 Our primary motivation for scaling CSP comes from the requirements of modern transportation platforms (Lyft, Uber, Waze etc.) for accurate routing and travel-time estimates.
 %\anote{Maybe use tolls or physical costs as primary motivation? Reviewers got really fixed on the independence thing}
@@ -21,7 +21,7 @@ In particular, they do not incorporate uncertainties in travel times, leading to
 This can be addressed by computing shortest paths based on \emph{robust} travel-time estimates:
 given $s,t$ and parameters $p,\delta$, we want to find an $(s,t)$-path $P$ minimizing $\E[\ell(P)]$, subject to $\Pr(\ell(P)>\E[\ell(P)]+\delta)\leq p$.
 Computing this exactly for general distributions is expensive due to the need for computing convolutions of distributions. 
-However, if we condition on state variables (e.g. weather and traffic in key neighbourhoods),  we can approximate the distributions with uncorrelated travel-times across different road segments~\cite{woodard2017predicting}. 
+However, if we condition on state variables (e.g. weather and traffic in key neighborhoods),  we can approximate the distributions with uncorrelated travel-times across different road segments~\cite{woodard2017predicting}. 
 %\anote{some citations here to justify independence} 
 Thus, Chebyshev's inequality gives us that $\Pr(\sum_eT_e>\E[\sum_eT_e]+\delta)\leq \sum_e\Var(T_e)/\delta^2$. Using this, we can reformulate the robust trip-time estimation problem as 
 $\min_{ P\in\Pst}\sum_{i\in P}\mu_i \, \mbox{s.t.}\, \sum_{i\in P}\sigma^2_i\leq \delta^2p$, which is now a CSP problem. 
@@ -49,11 +49,7 @@ These were unified by Abraham et al.~\cite{highway2013, highway2010} via the \em
 Our work adopts a similar program for the CSP; in particular, our contributions are summarized as follows:
 
 \noindent\textbf{Theoretical contributions}: 
-<<<<<<< Updated upstream
-Analogous to the role of the Highway Dimension for the set of shortest paths, we define the \emph{constrained highway dimension} (CHD) for the set of {\em efficient paths} (i.e., minimal solutions to the CSP; cf. \cref{def:effpath}). We show how the CHD can be used to parametrize the performance of CSP algorithms via a reduction from CSP to an SP problem on a directed \emph{augmented graph} that jointly encodes edge costs and lengths. One hurdle however is that the CHD can be much bigger than the HD in general; our main theoretical contribution is in showing that the \emph{HD and CHD an be related under an additional partial witness condition}. 
-=======
-Analogous to the role of the Highway Dimension for the set of shortest paths, we define the \emph{constrained highway dimension} (CHD) for set of {\em efficient paths} (i.e., minimal solutions to the CSP; cf. Defn.~\ref{def:effpath}). We show how the CHD can be used to parametrize the performance of CSP algorithms via a reduction from CSP to an SP problem on a directed \emph{augmented graph} that jointly encodes edge costs and lengths (\cref{theo:HLeff}). One hurdle however is that the CHD can be much bigger than the HD in general; our main theoretical contribution is in showing that the \emph{HD and CHD an be related under an additional partial witness condition} (\cref{theo:witness_doubling}). 
->>>>>>> Stashed changes
+Analogous to the role of the Highway Dimension for the set of shortest paths, we define the \emph{constrained highway dimension} (CHD) for the set of {\em efficient paths} (i.e., minimal solutions to the CSP; cf. Defn.~\ref{def:effpath}). We show how the CHD can be used to parametrize the performance of CSP algorithms via a reduction from CSP to an SP problem on a directed \emph{augmented graph} that jointly encodes edge costs and lengths (\cref{theo:HLeff}). One hurdle however is that the CHD can be much bigger than the HD in general; our main theoretical contribution is in showing that the \emph{HD and CHD an be related under an additional partial witness condition} (\cref{def:witness_doubling}). 
 This justifies our proposed CSP algorithms, as it shows they are efficient in settings where SP computation is scalable. Moreover, we show that under \emph{average performance metrics} (as opposed to HD which is a worst-case notion), we can obtain an explicit condition for small gaps between the average HD and CHD, which can be interpreted in terms of having few physical overpasses in road networks.
 
 \noindent\textbf{Practical contributions}: 
