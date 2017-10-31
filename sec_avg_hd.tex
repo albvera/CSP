@@ -1,7 +1,10 @@
-When building systems to answer queries, the essential metric is the average performance; worst case analysis is too pessimistic and not relevant.
-To capture the average performance, we relax the definition of HD in two ways.
-First, a LSHS needs to be locally sparse just ``in average''.
-Second, we forget the strong limitation of hitting $S_r(v,\calQ)$ and ask only for the existence of LSHS.
+The partial-witness property and \cref{theo:witness_doubling} provide a nice link between the CHD and HD -- essentially, the result can be interpreted as showing that scaling CSP queries is of similar complexity to scaling SP queries as long as any efficient paths contains large segments which are shortest paths. As an example, consider a \emph{multimodal mapping service} which gives transit routes combining walking, buses and subway -- a natural constraint here is that routes have at most $k$ switch-overs. Now for $k=3$, each route has at most $4$ segments, which gives use the partial witness property with $\beta = 2$. Finally, assuming the road, bus and subway networks all have small HD, we get that the CHD is also small via \cref{theo:witness_doubling}.
+
+
+Converting the partial-witness condition to a more interpretable condition is difficult in general, as the structure of $\PS$ and $\PE$ may be complex. However, one way to get such a condition is by considering \emph{average-case} performance metrics.
+%When building systems to answer queries, the essential metric is the average performance; worst case analysis is too pessimistic and not relevant.
+To this end, we relax the definition of HD in two ways: $(i)$ we require LSHS to be locally sparse ``on average'' over all nodes, and
+$(ii)$ we only require the existence of LSHS (as opposed to a hitting set for $S_r(v,\calQ)$).
 Observe that the latter is a big change, since, as discussed before, the existence of LSHS does not allow for their efficient computation.
 We overcome this issue in \cref{theo:preproc_avg}.
 
