@@ -32,7 +32,8 @@ Consider the case where each edge has a probability $q_e$ of triggering a bad ev
 In this case, we want to minimize the travel time as well as the expected penalty.
 Assuming independence, we have the following natural problem:
 $\min_{P\in\Pst} \ell(P)+p\prn*{1-\prod_{e\in P}(1-q_e)}$.
-This model is considered in \cite{fareevasion} for routing with fare evasion, where $q_e$ is the probability of encountering an inspector, and $p$ the penalty; the authors suggest using a CSP formulation, wherein the non-linear objective is replaced by a linear constraint by taking logarithms.
+A similar model is considered in \cite{fareevasion} for routing with fare evasion, where $q_e$ is the probability of encountering an inspector, and $p$ the penalty.
+%; the authors suggest using a CSP formulation, wherein the non-linear objective is replaced by a linear constraint by taking logarithms.
 
 %Finally, another class of problems which is related to the CSP is that of routing under \emph{label constraints} \cite{language_csp,rice_csp}, wherein we want shortest routes which satisfy certain properties (for example, those that avoid toll roads). The main idea in such problems (as in the CSP) is to use an appropriate augmented graph that converts feasible shortest paths to shortest paths. Our results extend to these applications as well.
 
