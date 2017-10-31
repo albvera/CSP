@@ -11,7 +11,7 @@ For example, the same efficient path $uv$ can be repeated many times in the form
 By encoding this information more efficiently, we get considerable improvements both in query time and in data storage.
 
 We construct our \emph{pruned} augmented graph $\Gp^B$ as follows:
-As before, nodes are pairs $\pp{v,b}$, but now we add an edge $\pp{v,b}\pp{v',b'}$ only if it is essential for some efficient path, i.e., removing said edge changes the correctness of a query.
+As before, nodes are pairs $\pp{v,b}$, but now we add an edge $\pp{v,b}\pp{v',b'}$ only if it is essential for some efficient path, i.e., removing said edge impacts correctness.
 If we let $\Pst^E$ be the set of all efficient paths from $s$ to $t$, we take every $P\in \Pst^E$ with cost $b\leq B$ and trace it in the augmented graph such that it terminates at $\pp{t,0}$.
 %
 %\begin{definition}\label{def:pruned_aug_graph}
@@ -61,7 +61,7 @@ The second is called a specific query, for given $s,t,b$ we return $\dist(s,t|b)
 %A simple argument shows that with the added edges, the shortest path between $\pp{s,b}$ and $\pp{t,0}$ has length $\dist(s,t|b)$.
 
 \paragraph{HL construction via Contraction Hierarchies}
-We use some techniques described in \cite{hubimplem} combined with an approach tailored for augmented graphs.
+We use techniques described in \cite{hubimplem} combined with an approach tailored for augmented graphs.
 First we give a brief description of Contraction Hierarchies (CH).
 Given a ranking of the nodes, which is just a permutation, the CH algorithm proceeds by removing nodes from the lowest rank first.
 Whenever a node is removed, we add new edges, called shortcuts, if they are needed to preserve the shortest paths.
@@ -77,7 +77,7 @@ We obtain a rank in $G$ by running a greedy shortest-path cover, which selects t
 %Take a node $v\notin C$ hitting most paths in $\PS$, then remove all those paths from $\PS$, add $v$ to $C$ and iterate.
 %The rank is defined as $n$ for the first node added to $C$, $n-1$ for the second and so on.
 %To implement the SP cover we follow the algorithm in \cite{hubimplem}.
-We stress that this is just an easy way to get a ranking; more sophisticated heuristics that decide on-line the next node to contract usually work well in practice \cite{goldberg_survey,rice_csp}.
+We stress that this is just an easy way to get a ranking; more sophisticated heuristics that decide the next node to contract on-line usually work well in practice \cite{goldberg_survey,rice_csp}.
 Using another contraction scheme may expedite our algorithms and reduce the hub size.
 
 For some instances we work with $G^B$ and for others with $\Gp^B$.
@@ -187,7 +187,7 @@ We use the library Networkx for the graph representation and Dijkstra's algorith
 Although all the steps can be parallelized, we did not implement this.
 The code is available at (hidden for anonymity).%\url{github.com/albvera/HHL_CSP}.
 
-We evaluated the performance of our algorithms with real-world test networks: a downtown San Francisco network with 2139 nodes and 5697 edges for which real-world travel-time data was available as a Gaussian mixture model \cite{sf_data}, and a Luxembourg City network with 4026 nodes and 9282 edges for which travel-time distributions were synthesized from speed limits \cite{niknami2016tractable}, as real-world data was unavailable.
+We evaluated the performance of our algorithms with real-world test networks: downtown San Francisco with 2139 nodes and 5697 edges for which real-world travel-time data was available as a Gaussian mixture model \cite{sf_data}, and Luxembourg City network with 4026 nodes and 9282 edges for which travel-time distributions were synthesized from speed limits \cite{niknami2016tractable}, as real-world data was unavailable.
  
 In our experiments, we use the mean travel times for our length function and the following cost structure; the top 10\% of edges with the highest variance are assigned cost 1 and the rest cost 0.
 This is a measure of risk, since edges with high variance are prone to cause a delay in the travel time.
