@@ -158,6 +158,7 @@ Putting things together, we have the following (cf. \cite{TechReport} for detail
 %The total space requirement is $\Or(nB \cdot Bh_c\log D)$.
 %\end{corollary}
 
+
 \subsubsection{Constructing LSHS In Polynomial Time}
 \label{sec:preproc}
 
@@ -210,9 +211,11 @@ For brevity, the complete algorithmic details and proof are deferred to \cite{Te
 \subsection{Comparing HD and CHD}
 \label{ssec:hdvschd}
 
-The previous sections show that we can construct hub labels for solving CSP whose preprocessing time, storage and query time can all be parameterized in terms of the constrained highway dimension $h_c$. 
-This, however, still does not give a sense of how much worse the hub labels for the CSP problem can be in comparison with those for finding shortest paths. 
+The previous section shows how to construct hub labels for CSP queries whose preprocessing time, storage and query time can all be parameterized in terms of the constrained highway dimension $h_c$. 
+This, however, does not give a sense of how much worse the hub labels for the CSP problem can be in comparison with those for shortest path queries. 
 We now try to understand this question.
+
+
 Comparing the size of the \emph{optimal} hub labels for SP and CSP is infeasible as even finding the optimal hub labels for SP is NP-hard~\cite{babenko_hl_complexity}. 
 However, since we can parametrize the complexity of HL construction for SP in terms of the HD, a natural question is whether graphs with small HD also have a small CHD. 
 Note that the answer to this depends on both the graph and the costs.
