@@ -3,13 +3,13 @@ In particular, the use of preprocessing techniques and network augmentation has 
 These techniques however do not extend to the CSP.
 %, and hence can not fully leverage the rich travel-time distribution data available today.
 
-The SP and CSP problems can be summarized as follows: Given a graph $G$ where each edge has associated \emph{length} and \emph{costladi}, the SP problem requires finding an $(s,t)$-path of minimum length for any given nodes $s$ and $t$. 
+The SP and CSP routing problems can be summarized as follows: Given a graph $G$ where each edge has associated \emph{length} and \emph{costladi}, the SP problem requires finding an $(s,t)$-path of minimum length for any given nodes $s$ and $t$. 
 The CSP problem inputs an additional budget $b$, and requires finding a minimum length $(s,t)$-path \emph{with total cost less than $b$}.
 The two problems, though similar, have very different runtime complexity: SP queries admit polynomial-time algorithms (in particular, the famous Dijkstra's algorithm), while CSP computation is known to be NP-Hard~\cite{csp_survey}.
-That said, a standard dynamic programming computes CSPs in pseudo-polynomial time for discrete costs, and gives a natural scaling-based FPTAS for continuous costs (as in the knapsack problem).
+That said, a standard dynamic program computes CSPs in pseudo-polynomial time for discrete costs~\cite{alex_bicriteria}, and gives a natural scaling-based FPTAS for continuous costs (as in the knapsack problem).
 
 Though there is a rich literature on CSP (cf. \cite{csp_survey}), existing approaches do not scale to support modern applications. 
-To this end, we study \emph{preprocessing and network augmentation for speeding CSP computation}.
+To this end, we study \emph{preprocessing and network augmentation for speeding up CSP computation}.
 Our work contributes to a growing field of algorithms for large-scale problems (non-convex methods, sketching techniques, etc.), with poor worst-case performance, but which are provably efficient for practically relevant settings.
 
 \smallskip
@@ -18,10 +18,10 @@ Our primary motivation for scaling CSP comes from the requirements of modern tra
 %\anote{Maybe use tolls or physical costs as primary motivation? Reviewers got really fixed on the independence thing}
 Modern SP engines like Google Maps and OSRM do not make full use of available traffic information.
 In particular, they do not incorporate uncertainties in travel times, leading to inaccurate estimates in settings with high traffic variability.
-This can be corrected by computing shortest paths based on \emph{robust} travel-time estimates:
+This can be addressed by computing shortest paths based on \emph{robust} travel-time estimates:
 given $s,t$ and parameters $p,\delta$, we want to find an $(s,t)$-path $P$ minimizing $\E[\ell(P)]$, subject to $\Pr(\ell(P)>\E[\ell(P)]+\delta)\leq p$.
 Computing this exactly for general distributions is expensive due to the need for computing convolutions of distributions. 
-However, if we condition on state variables (e.g. weather and traffic in key neighbourhoods),  we can assume uncorrelated travel-times across different road segments~\cite{woodard2017predicting}. 
+However, if we condition on state variables (e.g. weather and traffic in key neighbourhoods),  we can approximate the distributions with uncorrelated travel-times across different road segments~\cite{woodard2017predicting}. 
 %\anote{some citations here to justify independence} 
 Thus, Chebyshev's inequality gives us that $\Pr(\sum_eT_e>\E[\sum_eT_e]+\delta)\leq \sum_e\Var(T_e)/\delta^2$. Using this, we can reformulate the robust trip-time estimation problem as 
 $\min_{ P\in\Pst}\sum_{i\in P}\mu_i \, \mbox{s.t.}\, \sum_{i\in P}\sigma^2_i\leq \delta^2p$, which is now a CSP problem. 
@@ -37,7 +37,7 @@ This model is considered in \cite{fareevasion} for routing with fare evasion, wh
 %Finally, another class of problems which is related to the CSP is that of routing under \emph{label constraints} \cite{language_csp,rice_csp}, wherein we want shortest routes which satisfy certain properties (for example, those that avoid toll roads). The main idea in such problems (as in the CSP) is to use an appropriate augmented graph that converts feasible shortest paths to shortest paths. Our results extend to these applications as well.
 
 \paragraph{Our Contributions}
-We consider the problem of computing constrained shortest paths on large networks, with bounded budgets and integer edge-costs. For fixed source, destination and budget, the CSP query admits a natural dynamic-programming algorithm; our focus however is on developing data-structures that support arbitrary source-destination-budget queries. In particular, our work addresses the following questions:
+We consider the problem of computing constrained shortest paths on large networks, with bounded budgets and integer edge-costs. For a fixed source, destination and budget, the CSP query admits a natural dynamic-programming algorithm; our focus however is on developing data-structures that support arbitrary source-destination-budget queries. In particular, our work addresses the following questions:
 \vspace{-0.1cm}
 \begin{center}
 \emph{How can we use preprocessing and network augmentation to speed up CSP computation, while providing preprocessing, storage and query time guarantees for our algorithms?}
@@ -49,7 +49,7 @@ These were unified by Abraham et al.~\cite{highway2013, highway2010} via the \em
 Our work adopts a similar program for the CSP; in particular, our contributions are summarized as follows:
 
 \noindent\textbf{Theoretical contributions}: 
-Analogous to the role of the Highway Dimension for the set of shortest paths, we define the \emph{constrained highway dimension} (CHD) for set of {\em efficient paths} (i.e., minimal solutions to the CSP; cf. \cref{def:effpath}). We show how the CHD can be used to parametrize the performance of CSP algorithms via a reduction from CSP to an SP problem on a directed \emph{augmented graph} that jointly encodes edge costs and lengths. One hurdle however is that the CHD can be much bigger than the HD in general; our main theoretical contribution is in showing that the \emph{HD and CHD an be related under an additional partial witness condition}. 
+Analogous to the role of the Highway Dimension for the set of shortest paths, we define the \emph{constrained highway dimension} (CHD) for the set of {\em efficient paths} (i.e., minimal solutions to the CSP; cf. \cref{def:effpath}). We show how the CHD can be used to parametrize the performance of CSP algorithms via a reduction from CSP to an SP problem on a directed \emph{augmented graph} that jointly encodes edge costs and lengths. One hurdle however is that the CHD can be much bigger than the HD in general; our main theoretical contribution is in showing that the \emph{HD and CHD an be related under an additional partial witness condition}. 
 This justifies our proposed CSP algorithms, as it shows they are efficient in settings where SP computation is scalable. Moreover, we show that under \emph{average performance metrics} (as opposed to HD which is a worst-case notion), we can obtain an explicit condition for small gaps between the average HD and CHD, which can be interpreted in terms of having few physical overpasses in road networks.
 
 \noindent\textbf{Practical contributions}: 
@@ -60,22 +60,22 @@ In experiments, our algorithms support query times which are orders of magnitude
 
 \noindent\textbf{Paper outline}:
 In \cref{sec:prelim}, we introduce the SP and CSP problems, and extend the notion of the HD (as defined in \cite{highway2013}) to directed graphs and general path systems; this allows us to define an analogous notion of a \emph{constrained highway dimension} (CHD) for constrained shortest paths in \cref{sec:chd}. 
-We show that, although the CHD can be much bigger than the HD in general, the two can be related under an additional \emph{partial witness condition} (\cref{ssec:hdvschd}). 
-In \cref{ssec:hdvschd}, we study average-case performance, and show how a small average CHD can be explained by physical overpasses in road networks. 
+We then show that the two can be related under an additional \emph{partial witness condition} (\cref{ssec:hdvschd}). 
+In \cref{sec:avg_hd}, we study average-case performance, and show how a small average CHD can be related to physical overpasses in road networks. 
 Finally, in \cref{sec:numeric}, we present our practical hub-label construction and our experiments on SF and Luxembourg data.
 
 
 \noindent\textbf{Related work}:
 CSP problems have an extensive literature, surveyed in~\cite{csp_survey}. 
 More recently, there has been significant interest in robust SP problems, as well as the related stochastic on-time arrival (SOTA) problem~\cite{fan2005arriving}; recent works have proposed both optimal and approximate policies~\cite{sabran2014precomputation,nikolova_discretization}. 
-Existing approaches for these problems, however, do not exploit preprocessing and augmentation techniques, and consequently do not support the latencies required for mapping applications.
+Existing approaches for these problems, however, are limited in their use of preprocessing and augmentation techniques, and consequently do not support the latencies required for mapping applications.
 %The SOTA problem with Gaussian travel times was solved via exhaustive search~\cite{nikolova_gaussian}. 
 %The optimal policy under discrete distributions was given in~\cite{samaranayake2012speedup}, and pre-processing policies were considered in~\cite{sabran2014precomputation}. 
 %Finally, ~\cite{nikolova_discretization} provides an approximation technique based on discretization for DAGs.
 
 As we mention before, our work is inspired by the recent developments in shortest path algorithms~\cite{highway2013,hubimplem,highway2010,dimacs09,geisberger_ch_definition,skeleton}; refer~\cite{goldberg_survey} for an excellent survey of these developments. 
 %Our graph augmentation technique is similar to that proposed in~\cite{alex_bicriteria}, which is based on a dynamic programming approach. 
-The pre-processing technique we use for speeding CSP computations is hub labels (HL), first introduced for SP computations in~\cite{cohen_definition_hl}. 
+The pre-processing technique we use for speeding up CSP computations is hub labels (HL), first introduced for SP computations in~\cite{cohen_definition_hl}. 
 More recently, HL was proved to have the best query-time bounds for SP computation in low HD graphs~\cite{highway2013,highway2010} (this was experimentally confirmed in~\cite{hubimplem}, \cite[Figure 7]{goldberg_survey}).  
 Finally, the HD-based bounds for hub labels was shown to be tight in~\cite{babenko_hl_complexity,white_complexity_hd}, and it was also shown that finding optimal hub labels is NP hard.
 
