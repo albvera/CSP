@@ -3,7 +3,7 @@ In particular, the use of preprocessing techniques and network augmentation has 
 These techniques however do not extend to the CSP.
 %, and hence can not fully leverage the rich travel-time distribution data available today.
 
-The SP and CSP problems can be summarized as follows: Given a graph $G$ where each edge has associated \emph{length} and \emph{cost}, the SP problem requires finding an $(s,t)$-path of minimum length for any given nodes $s$ and $t$. 
+The SP and CSP problems can be summarized as follows: Given a graph $G$ where each edge has associated \emph{length} and \emph{costladi}, the SP problem requires finding an $(s,t)$-path of minimum length for any given nodes $s$ and $t$. 
 The CSP problem inputs an additional budget $b$, and requires finding a minimum length $(s,t)$-path \emph{with total cost less than $b$}.
 The two problems, though similar, have very different runtime complexity: SP queries admit polynomial-time algorithms (in particular, the famous Dijkstra's algorithm), while CSP computation is known to be NP-Hard~\cite{csp_survey}.
 That said, a standard dynamic programming computes CSPs in pseudo-polynomial time for discrete costs, and gives a natural scaling-based FPTAS for continuous costs (as in the knapsack problem).
