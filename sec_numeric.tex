@@ -1,3 +1,7 @@
+Our theoretical algorithms need to be modified for applications.
+We first describe how some techniques can be adapted to this end.
+After that we discuss experimental results for two real world networks. 
+
 \subsection{Practical CSP Algorithms} 
 \label{ssec:practical}
 
@@ -146,6 +150,7 @@ To obtain better hubs we prune the results obtained by CH with additional techni
 %This works because the fact that some nodes have incorrect distance labels does not impact the correctness of a HL query; a node minimizing the distance is returned and such node must have a correct label.
 
 \begin{figure}
+\resizebox{\columnwidth}{!}{%
 \begin{minipage}{0.25\textwidth}
 \centering
 \input{TexImg/plot_clusters_sf.tex}
@@ -154,11 +159,13 @@ To obtain better hubs we prune the results obtained by CH with additional techni
 \centering
 \input{TexImg/plot_clusters_lu.tex}
 \end{minipage}
+}
 \caption{Performance of clustering for San Francisco (left) and Luxembourg (right). 
 In the $y$-axis the quantities are normalized by the best greedy cover, i.e., using $k=n$.
 Note that, while the number of short-cuts is an indicator of performance, it is not perfectly correlated with the hub size.}
 \label{fig:clusters}
 \end{figure}
+
 
 \vspace{-0.5em}
 \begin{remark}
@@ -188,24 +195,24 @@ This is a measure of risk, since edges with high variance are prone to cause a d
 
 \begin{figure*}
 \resizebox{\textwidth}{!}{%
-\begin{minipage}[t]{.29\textwidth}
+\begin{minipage}[t]{.28\textwidth}
 \centering
-\includegraphics[clip, trim=0.2cm 0.3cm 0.4cm 0.2cm,scale=0.3]{TexImg/SF_query_dij_B25.pdf}
+\includegraphics[clip, trim=0.2cm 0.3cm 0.4cm 0.2cm,scale=0.29]{TexImg/SF_query_dij_B25.pdf}
 (a)
-\end{minipage}
-\begin{minipage}[t]{.25\textwidth}
+\end{minipage}%
+\begin{minipage}[t]{.24\textwidth}
 \centering
-\includegraphics[clip, trim=1.3cm 0.3cm 0.2cm 0.2cm,scale=0.3]{TexImg/SF_query_hl_B25.pdf}
+\includegraphics[clip, trim=1.3cm 0.3cm 0.2cm 0.2cm,scale=0.28]{TexImg/SF_query_hl_B25.pdf}
 (b)
-\end{minipage}
-\begin{minipage}[t]{.25\textwidth}
+\end{minipage}%
+\begin{minipage}[t]{.24\textwidth}
 \centering
-\includegraphics[clip, trim = 1.3cm 0.3cm 0cm 0cm,scale=0.3]{TexImg/SF_bwd_hub_size.pdf}
+\includegraphics[clip, trim = 1.3cm 0.3cm 0cm 0cm,scale=0.28]{TexImg/SF_bwd_hub_size.pdf}
 (c)
-\end{minipage}
-\begin{minipage}[t]{.25\textwidth}
+\end{minipage}%
+\begin{minipage}[t]{.24\textwidth}
 \centering
-\includegraphics[clip, trim = 1.3cm 0.3cm 0cm 0cm,scale=0.3]{TexImg/significance.pdf}
+\includegraphics[clip, trim = 1.3cm 0.3cm 0cm 0cm,scale=0.28]{TexImg/significance.pdf}
 (d)
 \end{minipage}
 }
@@ -264,19 +271,18 @@ Figure~\ref{fig:SF_bwd_size} shows a histogram of these metrics.
 %\end{minipage}
 %\end{figure}
 
-Figures \ref{fig:SF_hub_size_map} and \ref{fig:sig_colapse} show the spatial relationships between the hub size and significance in the San Francisco network. 
+%Figures \ref{fig:SF_hub_size_map} and \ref{fig:sig_colapse} show the spatial relationships between the hub size and significance in the San Francisco network. 
+\cref{fig:map_LU} shows the spatial distribution of significance in the Luxembourg network.
 We observe that highly significant nodes tend to have small hub size.
 The intuition is simple, if most hubs contain $s$, then is easier for $s$ to satisfy the cover property with a small hub.
 Note also that the hub size resembles an harmonic function; nodes are mostly similar to their neighbors.
 
 \begin{figure}
-\begin{minipage}[t]{.53\textwidth}
 \centering
 \includegraphics[scale=0.3]{TexImg/map_LU_sig.png}
 \caption{Heat map of significance for frontier queries in Luxembourg City augmented with $B=25$.
 Notice how the highly significant nodes are in main road crossings.}
 \label{fig:map_LU} 
-\end{minipage}
 %\hfil
 %\begin{minipage}[t]{.43\textwidth}
 %\includegraphics[scale=0.35]{TexImg/significance_LU.pdf}

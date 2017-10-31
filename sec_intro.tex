@@ -21,9 +21,9 @@ In particular, they do not incorporate uncertainties in travel times, leading to
 This can be corrected by computing shortest paths based on \emph{robust} travel-time estimates:
 given $s,t$ and parameters $p,\delta$, we want to find an $(s,t)$-path $P$ minimizing $\E[\ell(P)]$, subject to $\Pr(\ell(P)>\E[\ell(P)]+\delta)\leq p$.
 Computing this exactly for general distributions is expensive due to the need for computing convolutions of distributions. 
-However, assuming uncorrelated travel-times across different road segments~\cite{woodard2017predicting} (\sbedit{Comment on conditional independence - cite Dawn}), 
+However, if we condition on state variables (e.g. weather and traffic in key neighbourhoods),  we can assume uncorrelated travel-times across different road segments~\cite{woodard2017predicting}. 
 %\anote{some citations here to justify independence} 
-Chebyshev's inequality gives us that $\Pr(\sum_eT_e>\E[\sum_eT_e]+\delta)\leq \sum_e\Var(T_e)/\delta^2$. Using this, we can reformulate the robust trip-time estimation problem as 
+Thus, Chebyshev's inequality gives us that $\Pr(\sum_eT_e>\E[\sum_eT_e]+\delta)\leq \sum_e\Var(T_e)/\delta^2$. Using this, we can reformulate the robust trip-time estimation problem as 
 $\min_{ P\in\Pst}\sum_{i\in P}\mu_i \, \mbox{s.t.}\, \sum_{i\in P}\sigma^2_i\leq \delta^2p$, which is now a CSP problem. 
 Note that though we relax the condition $\Pr(\ell(P)>\E[\ell(P)]+\delta)\leq p$, our solution always respects this constraint -- this is often more critical for practical applications, e.g., for ETA estimates accuracy is more important than optimality.
 
