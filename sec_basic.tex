@@ -1,10 +1,7 @@
 We consider a directed graph $G=(V,E)$ with \emph{length function} $\ell:E\to \N_+$, and \emph{cost function} $c:E\to \N_+\crl{0}$.
 For each node $v$, we denote its degree $\Delta(v)$ as the sum of the in-degree and out-degree, and define the \emph{maximum degree} $\Delta \defeq \max_v\Delta(v)$.
-For any source-terminal pair $s,t\in V$, we denote by $\Pst$ the set of all $(s,t)$-paths which are simple (i.e., without loops or cycles). 
+For any source-terminal pair $s,t\in V$, we denote by $\Pst$ the set of all simple $(s,t)$-paths (without loops or cycles). 
 Throughout this work, we only consider simple paths, which for brevity we refer to as paths.
-\todo{Move the following notation}
-For a path $Q$ and two vertices $u,v\in Q$ we denote $Q[u,v]\subseteq Q$ as the sub $(u,v)$-path.
-For two paths $P,Q$, we denote $P|Q$ as the concatenation, which is defined only when $P,Q$ share the correct endpoint.
 
 For any path $P$, we define its length $\ell(P)$ and cost $c(P)$ as the sum of edge lengths and edge costs in $P$. 
 Note that any path $P$ with more than one node has length at least $1$ (since we assume lengths are integers).
@@ -20,17 +17,6 @@ $\min_{P \in \Pst} \ell(P)$
 subject to $c(P) \leq b$.
 We define $\dist(s,t|b)$ to be the minimum of this problem.
 If there is no feasible solution, we define $\dist(s,t|b)=\infty$.
-Users do not want to be presented solutions which are far away from the optimum, even if it saves them budget.
-\todo{Move the stretch thing}
-The \emph{stretch} of a path is its comparison to the shortest option.
-Formally, we have the following desirable property of an algorithm.
-
-\begin{definition}[Stretch]
-An algorithm for CSP has stretch $\St\geq 1$ if, for every $s,t\in V$ and $b\leq B$, either outputs $\dist(s,t|b)$ when $\dist(s,t|b)\leq \St\dist(s,t)$ or outputs ``infeasible'' when $\dist(s,t|b)>\St\dist(s,t)$.
-\end{definition}
-
-We will take $\St$ as a given parameter or, equivalently, an extra constraint given by the application. 
-Most of our results are independent of the value $\St$.
 Note that the CSP problem may have multiple solutions as there could be several paths with the same length and cost lower than $b$.
 To limit these solutions to those with minimal cost, we require that the path also be \emph{efficient}. 
 \begin{definition}[Efficient Path]

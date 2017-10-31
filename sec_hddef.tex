@@ -21,12 +21,12 @@ Given a path system $\calQ$ and $r>0$, an $(h,r)$ locally-sparse hitting set (or
 
 As we discuss in \cref{ssec:hldef}, the existence of $(h,r)$-LSHS immediately enables the compression of path system $\calQ$ via the construction of \emph{hub labels}. 
 However, the existence of LSHS does not guarantee the ability to efficiently compute these objects. 
-To address this we need a stronger notion, the \emph{highway dimension} is a property that ensures both existence and efficient computation of LSHS.
+To address this, we need a stronger notion; the \emph{highway dimension} is a property that ensures both existence and efficient computation of LSHS.
 %it was shown that the \emph{highway dimension} is a property that ensures both existence and efficient computation of LSHS \cite{highway2013}. 
 To define the highway dimension (HD), we first need two additional definitions:
-for $v\in V, r>0$, we define the \emph{forward path-neighbourhood} with respect to a path system $\calQ$ as $
+for $v\in V, r>0$, the \emph{forward path-neighbourhood} with respect to a path system $\calQ$ is $
 S_r^+(v,\calQ) \defeq\crl*{Q\in\calQ_r: \dist(v,Q)\leq 2r}$ and similarly $S_r^-(v,\calQ) \defeq\crl*{Q\in\calQ_r: \dist(Q,v)\leq 2r}$ is the reverse neighbourhood.
-As before, we have $S_r(v,\calQ) \defeq S_r^+(v,\calQ)\cup S_r^-(v,\calQ)$. 
+As before, $S_r(v,\calQ) \defeq S_r^+(v,\calQ)\cup S_r^-(v,\calQ)$. 
 Now we can define the HD of a path system $\calQ$. 
 Essentially, the HD re-orders the sequence of qualifiers in the definition of $(h,r)$-LSHS: it requires the existence of a small hitting set for each individual neighborhood, rather than a single hitting set which is locally sparse. 
 \begin{definition}[Highway Dimension]	\label{def:hddef}

@@ -41,3 +41,13 @@ It can be argued that the VC-dimension is 2 and now the minimum is at most $h\De
 We apply the algorithm in \cite{vc_dim_hitting} and obtain a solution $C_i$ with cost at most $\Or(h\Delta n\log(h\Delta n))$.
 We have obtained an average $(h',r)$-LSHS as desired.
 \end{proof}
+
+A natural constraint in applications is that users do not want to be presented solutions which are far away from the optimum, even if it saves them budget.
+The \emph{stretch} of a path is its comparison to the shortest option and captures this.
+Formally, we have the following desirable property of an algorithm.
+
+\begin{definition}[Stretch]
+An algorithm for CSP has stretch $\St\geq 1$ if, $\forall s,t\in V$ and $b\leq B$, outputs $\dist(s,t|b)$ whenever $\dist(s,t|b)\leq \St\dist(s,t)$ and outputs ``infeasible'' when $\dist(s,t|b)>\St\dist(s,t)$.
+\end{definition}
+We will take $\St$ as a given parameter or, equivalently, an extra constraint given by the application. 
+Note that all our previous results hold with this extra constraint.

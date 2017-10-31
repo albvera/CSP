@@ -83,12 +83,11 @@ Say that $V$ is ordered according to the rank, so node~$1$ is the least importan
 In $\Gp^B$, we first contract the nodes $\pp{1,b}$ for $b=B,\ldots,0$, then the nodes $\pp{2,b}$ and so on till the nodes $\pp{n,b}$ are the last to contract. 
 Finally, when contracting a node $v$, if $u$ is a predecessor and $w$ a successor of $v$, one should add the short-cut $uw$ only if, by removing $v$, the distance from $u$ to $w$ is altered.
 We can go even further; the short-cut $uw$ is unnecessary if the shortest path is not efficient, even if the distance changes.
-
-To obtain better hubs we prune the results obtained by CH.
-If $w$ is in the forward search of $v$ with distance $d$, it might be that $\dist(v,w)<d$, this occurs because the search goes only to higher rank nodes and the discovered path is missing some node.
-When $\dist(v,w)<d$, we can safely remove $w$ from the hub of $v$, since the highest ranked node in a shortest path will have the correct distance.
-For frontier queries, we can also prune away a node $w$ if the $(v,w)$-path has a surplus of budget.
-The entire process can be summarized in the following steps.
+To obtain better hubs we prune the results obtained by CH with additional techniques, for details see \cite{TechReport}.
+%If $w$ is in the forward search of $v$ with distance $d$, it might be that $\dist(v,w)<d$, this occurs because the search goes only to higher rank nodes and the discovered path is missing some node.
+%When $\dist(v,w)<d$, we can safely remove $w$ from the hub of $v$, since the highest ranked node in a shortest path will have the correct distance.
+%For frontier queries, we can also prune away a node $w$ if the $(v,w)$-path has a surplus of budget.
+%The entire process can be summarized in the following steps.
 
 \begin{table*}
 \resizebox{\textwidth}{!}{%
@@ -134,17 +133,17 @@ The entire process can be summarized in the following steps.
 \end{table*}
 
 
-\begin{enumerate}[nosep]
-\item Compute the shortest paths in $G$ and use a greedy approach to obtain a cover $C$
-\item Compute the pruned augmented graph $\Gp^B$
-\item Contract $\Gp^B$ using the rank induced by $C$
-\item Create hubs $\Lf(v),\Lb(v)$ using CH
-\item Prune the hubs by running HL queries between $v$ and nodes in $\Lf(v)$. 
-Run a similar process for $\Lb(v)$.
-\end{enumerate}
-Recall that, for some instances, we skip step 2 and contract $G^B$ instead.
-Note that in the last step we bootstrap HL to improve it.
-This works because the fact that some nodes have incorrect distance labels does not impact the correctness of a HL query; a node minimizing the distance is returned and such node must have a correct label.
+%\begin{enumerate}[nosep]
+%\item Compute the shortest paths in $G$ and use a greedy approach to obtain a cover $C$
+%\item Compute the pruned augmented graph $\Gp^B$
+%\item Contract $\Gp^B$ using the rank induced by $C$
+%\item Create hubs $\Lf(v),\Lb(v)$ using CH
+%\item Prune the hubs by running HL queries between $v$ and nodes in $\Lf(v)$. 
+%Run a similar process for $\Lb(v)$.
+%\end{enumerate}
+%Recall that, for some instances, we skip step 2 and contract $G^B$ instead.
+%Note that in the last step we bootstrap HL to improve it.
+%This works because the fact that some nodes have incorrect distance labels does not impact the correctness of a HL query; a node minimizing the distance is returned and such node must have a correct label.
 
 \begin{figure}
 \begin{minipage}{0.25\textwidth}
@@ -163,7 +162,7 @@ Note that, while the number of short-cuts is an indicator of performance, it is 
 
 \vspace{-0.5em}
 \begin{remark}
-For the first step, a direct approach requires storing all the shortest paths in memory.
+To compute a shortest path cover, a direct approach requires storing all the shortest paths in memory.
 In many cases, this can impose a prohibitive memory requirement.
 There are two ways around this issue.
 We can compute the cover by processing one shortest path tree at a time, this translates to $\Omega(n^3\log n)$ running time, but $\Or(n)$ memory.

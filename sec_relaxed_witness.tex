@@ -1,6 +1,6 @@
 Now we describe a realistic setting where we can obtain HL for the CSP which are small in average.
-We need few overpasses, which are edges connecting long free paths around a costly zone.
-Let us denote the costly edges as $\Ec\defeq\crl{e\in E:c_e>0}$ and recall that $\St$ denotes the desired stretch of the algorithm.
+We need few overpasses, which are edges connecting long shortest paths around a costly zone.
+Let us denote the costly edges as $\Ec\defeq\crl{e\in E:c_e>0}$.
 
 \begin{definition}[Overpass]
 For $r>0$, an edge $e=(u,v)$ is an $r$-overpass if: (1) both $u$ and $v$ are endpoints of paths in $\PS_{r(2-\St)/\St}$, (2) $\min(\dist(e,\Ec),\dist(\Ec,e))\leq 3r/2$ and (3) $e$ belongs to a path $Q\in\PE_{2r}\setminus\PS$.
@@ -38,7 +38,7 @@ Let $\beta\geq 0$.
 We say that a path system  $\calQ$ is weakly $\beta$-witnessed by the path system $\calQ'$ if, for every $r>0$, $\exists D_r\subseteq V$ such that, $\forall Q\in \calQ_r$ either (1) $Q$ is $\beta$-witnessed by $\calQ'$ or (2) $Q$ is hit by $D_r$.
 Additionally we require $\abs{D_r}\leq \phi(r)$.
 \end{definition} 
-\anote{ The ``right'' function is $\phi(r)=nh\alpha^{\beta-2-\log_2r}$ or big-O of that if we want any constant. It's not a complicated expression, but maybe we can do something simpler?}
+\anote{ The function is $\phi(r)=nh\alpha^{\beta-2-\log_2r}$ or big-O, don't know where to define it }
 
 Intuitively, the lay witness set $D_r$ takes care of all the corner cases where $\calQ$ and $\calQ'$ differ too much.
 We now show that our requirement on $\abs{D_r}$ guarantees a bound on the average HD.
@@ -62,6 +62,9 @@ In the last inequality we used that, by doubling dimension, balls of radius $r$ 
 Since $\abs{D_r}\leq \phi(r)$, the result follows.
 \end{proof}
 
+To prove the next result, we will need the following notation.
+For a path $Q$ and two vertices $u,v\in Q$ we denote $Q[u,v]\subseteq Q$ as the sub $(u,v)$-path.
+For two paths $P,Q$, we denote $P|Q$ as the concatenation, which is defined only when $P,Q$ share the correct endpoint.
 
 \begin{proposition}\label[proposition]{prop:1witness}
 With bounded growth, $\PS$ is a weak $1$-witness for $\PE$.

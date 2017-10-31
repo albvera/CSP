@@ -79,6 +79,6 @@ The pre-processing technique we use for speeding CSP computations is hub labels 
 More recently, HL was proved to have the best query-time bounds for SP computation in low HD graphs~\cite{highway2013,highway2010} (this was experimentally confirmed in~\cite{hubimplem}, \cite[Figure 7]{goldberg_survey}).  
 Finally, the HD-based bounds for hub labels was shown to be tight in~\cite{babenko_hl_complexity,white_complexity_hd}, and it was also shown that finding optimal hub labels is NP hard.
 
-Finally, a related class of problems to CSP is that of shortest paths under label constraints~\cite{language_csp}, where the aim is to find shortest paths that avoided certain labels (e.g. toll roads, ferries, etc.). \cite{rice_csp} proposed preprocessing techniques (in particular, contraction hierarchies) for restricted class of such problems. 
+Finally, a related class of problems to CSP is that of SP under label constraints~\cite{language_csp}, where the aim is to find shortest paths that avoided certain labels (e.g. toll roads, ferries, etc.). \cite{rice_csp} proposed preprocessing techniques (in particular, contraction hierarchies) for restricted class of such problems. 
 Note however that label-constrained SP problem is essentially a concatenation of parallel SP problems, and involves only local constraints; in contrast, the CSP involves global constraints on paths, and consequently is known to be NP-hard. 
 Moreover, our results do in fact shed light on why contraction hierarchies work well for label-constrained SP queries.

@@ -37,16 +37,16 @@ Let $\beta\geq 0$.
 We say that a path system $\calQ$ is $\beta$-witnessed by the path system $\calQ'$ if, for every $Q\in\calQ$, $\exists Q'\in\calQ'$ such that $Q'\subseteq Q$ and $\ell(Q')\geq 2^{-\beta}\ell(Q)$.
 \end{definition}
 We can now ask if the hub labels for computing SPs and CSPs can be related in settings where the shortest-path system $\PS$ is a partial witness for the efficient path system $\PE$.
-At an intuitive level, the partial witness property says that efficient and shortest paths are not completely different, i.e., if $Q$ is efficient, a fraction $2^{-\beta}$ of $Q$ is a shortest path.
+At an intuitive level, the partial witness property says that efficient and shortest paths are not completely different, i.e., if $Q$ is efficient, a fraction $2^{-\beta}$ of $Q$ is a SP.
 As a consequence, a node hitting numerous paths in $\PS$, should also hit many paths in $\PE$.
-Note also that asking for the witness property to hold for all lengths is too extreme, as this essentially requires that all single-hop paths with 0 costs are shortest paths.
+Note that asking for the witness property to hold for all lengths is too extreme, as this essentially requires that all single-hop paths with 0 costs are shortest paths.
 Thus, we want this property only for `long-enough' paths. 
 
 We now show that if, for some $\beta$, the network indeed has the partial witness property for paths longer than some $r_\beta$, then we can relate the HL sizes for the two problems in terms of $\beta$ and the doubling dimension $\alpha$. 
 Note that the doubling dimension depends on $G$ and $\ell$; the partial witness property depends on the interplay between $G$, $c$ and $\ell$.
 Observe also that, if $\alpha$ is a constant, then the requirement in \cref{theo:witness_doubling} is for paths longer than $r_\beta\sim h\alpha^{\beta-2}$.
 \begin{theorem}\label{theo:witness_doubling}
-Assume that $G$ is $\alpha$-doubling and $\PE_r$ is $\beta$-witnessed by $\PS$ for every $r\geq r_\beta$, where $r_\beta=2^{\log_\alpha(\alpha^{\beta-2} h)}$. 
+Assume $G$ is $\alpha$-doubling and $\PE_r$ is $\beta$-witnessed by $\PS$ for every $r\geq r_\beta$, where $r_\beta=2^{\log_\alpha(\alpha^{\beta-2} h)}$. 
 Then, for any $r>0$, given an $(h,r)$-LSHS, we can construct, in polynomial time, an $(\alpha^{\beta} h,r)$-EPHS for $(G,\ell,c)$. 
 \end{theorem}
 
