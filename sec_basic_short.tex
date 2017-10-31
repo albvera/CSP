@@ -1,7 +1,7 @@
 We consider a directed graph $G=(V,E)$, where each edge $e\in E$ has an associated \emph{length} $\ell(e)\in\N_+$, and \emph{cost} $c(e)\in\N_+\crl{0}$.
 For each node $v$, we denote its degree $\Delta(v)$ as the sum of the in-degree and out-degree, and define the \emph{maximum degree} $\Delta \defeq \max_v\Delta(v)$.
 For any source-terminal pair $s,t\in V$, we denote by $\Pst$ the set of all simple $(s,t)$-paths (without loops or cycles). 
-Throughout this work, we only consider simple paths, which we refer to as paths for brevity.
+Throughout this work, we only consider simple paths, which we refer to as paths.
 
 For any path $P$, we define its length $\ell(P)$ and cost $c(P)$ as the sum of edge lengths and edge costs in $P$. 
 Note that any path $P$ with more than one node has length at least $1$ (since we assume lengths are integers).
@@ -20,7 +20,7 @@ If there is no feasible solution, we define $\dist(s,t|b)=\infty$.
 Note that the CSP problem may have multiple solutions as there could be several paths with the same length and cost lower than $b$.
 To limit these solutions to those with minimal cost, we require that the path also be \emph{efficient}. 
 \begin{definition}[Efficient Path]
-\label{def:effpath}
+\label[definition]{def:effpath}
 A path $P\in \Pst$ is called \emph{efficient} if there is no other path $P'\in \Pst$ such that $\ell(P')\leq \ell(P)$ and $c(P')\leq c(P)$ with at least one inequality strict.
 \end{definition}
 We denote the set of all efficient paths as $\PE$, and define the \emph{Pareto frontier} from $s$ to $t$ as $\Pst\cap\PE$.
@@ -31,7 +31,6 @@ Finally, a graph $G$ is said to have a \emph{doubling dimension} $\alpha$ if, fo
 
 \paragraph{Hitting Sets and the Highway Dimension}
 \label{ssec:hddef}
-
 To parametrize the performance of our CSP algorithms, we use the notion of the \emph{highway dimension}, introduced by \citet{highway2013,highway2010} to parametrize SP computations in undirected graphs. 
 Our treatment here generalizes the notions in \citep{highway2013} (which deals only with undirected graphs and shortest paths) to cover directed graphs and general sets of paths.
 These generalizations are not trivial, but due to lack of space, we defer technical details to \cite{TechReport}. 
@@ -43,7 +42,7 @@ For a given path system $\calQ$, we denote $\calQ_r$ as the set of all $r$-signi
 Hitting sets are useful for compressing path systems. 
 In particular, even if the hitting set is large, the extent to which a path system can be compressed depends on the \emph{local sparsity} of hitting sets with respect to \emph{significant paths} of $\calQ$.
 
-\begin{definition}[Locally-Sparse Hitting Sets]\label{def:lshs}
+\begin{definition}[Locally-Sparse Hitting Sets]\label[definition]{def:lshs}
 	Given a path system $\calQ$ and $r>0$, an $(h,r)$ locally-sparse hitting set (or $(h,r)$-LSHS) is a set $C\subseteq V$ with two properties: 
 	\begin{enumerate}[nosep]
 		\item Hitting: $C$ is a hitting set for $\calQ_r$.
@@ -60,7 +59,7 @@ for $v\in V, r>0$, we define the \emph{forward path-neighbourhoods} with respect
 S_r^+(v,\calQ) \defeq\crl*{Q\in\calQ_r: \dist(v,Q)\leq 2r}$ (and similarly, the reverse path-neighbourhood as $S_r^-(v,\calQ) \defeq\crl*{Q\in\calQ_r: \dist(Q,v)\leq 2r}$); we also define $S_r(v,\calQ) \defeq S_r^+(v,\calQ)\cup S_r^-(v,\calQ)$. Now we have:
 %Now we can define the HD of a path system $\calQ$. 
 %Essentially, the HD re-orders the sequence of qualifiers in the definition of $(h,r)$-LSHS: it requires the existence of a small hitting set for each individual neighborhood, rather than a single hitting set which is locally sparse. 
-\begin{definition}[Highway Dimension]	\label{def:hddef}
+\begin{definition}[Highway Dimension]	\label[definition]{def:hddef}
 	A path system $\calQ$ has HD $h$ if, $\forall r>0,v\in V$, there exists a set $H_{v,r}\subseteq V$ such that $\card{H_{v,r}}\leq h$ and $H_{v,r}$ is a hitting set for $S_r(v,\calQ)$.
 \end{definition}
 
@@ -78,10 +77,9 @@ Moreover, though this result does not touch on computability, we discuss in \cre
 
 \paragraph{Shortest-Paths via Hub Labels}
 \label{ssec:hldef}
-
 Two of the most successful data-structures enabling fast shortest path queries at scale are \emph{contraction hierarchies} (CH)~\cite{geisberger_ch_definition} and \emph{hub labels} (HL)~\cite{cohen_definition_hl}.
 These are general techniques which always guarantee correct SP computation, but have no uniform storage/query-time bounds for all graphs. 
-In this work, we focus only on HL; for analogous results for CH refer to \cite{TechReport}. % Appendix~\ref{sec:ch}.
+In this work, we focus only on HL; for analogous results for CH see \cite{TechReport}. % Appendix~\ref{sec:ch}.
 
 The basic HL technique for SP computations is as follows:
 Every node $v$ is associated with a hub label $L(v) = \crl*{\Lf(v),\Lb(v)}$, comprising of a set of forward hubs $\Lf(v)$ and reverse hubs $\Lb(v)$.

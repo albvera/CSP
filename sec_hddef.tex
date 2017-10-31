@@ -10,7 +10,7 @@ For a given path system $\calQ$, we denote $\calQ_r$ as the set of all $r$-signi
 Hitting sets are useful for compressing path systems. 
 In particular, even if the hitting set is large, the extent to which a path system can be compressed depends on the \emph{local sparsity} of hitting sets with respect to \emph{significant paths} of $\calQ$.
 
-\begin{definition}[Locally-Sparse Hitting Sets]\label{def:lshs}
+\begin{definition}[Locally-Sparse Hitting Sets]\label[definition]{def:lshs}
 Given a path system $\calQ$ and $r>0$, an $(h,r)$ locally-sparse hitting set (or $(h,r)$-LSHS) is a set $C\subseteq V$ with two properties: 
 \begin{enumerate}[nosep]
 \item Hitting: $C$ is a hitting set for $\calQ_r$.
@@ -29,7 +29,7 @@ S_r^+(v,\calQ) \defeq\crl*{Q\in\calQ_r: \dist(v,Q)\leq 2r}$ and similarly $S_r^-
 As before, $S_r(v,\calQ) \defeq S_r^+(v,\calQ)\cup S_r^-(v,\calQ)$. 
 Now we can define the HD of a path system $\calQ$. 
 Essentially, the HD re-orders the sequence of qualifiers in the definition of $(h,r)$-LSHS: it requires the existence of a small hitting set for each individual neighborhood, rather than a single hitting set which is locally sparse. 
-\begin{definition}[Highway Dimension]	\label{def:hddef}
+\begin{definition}[Highway Dimension]	\label[definition]{def:hddef}
 	A path system $\calQ$ has HD $h$ if, $\forall r>0,v\in V$, there exists a set $H_{v,r}\subseteq V$ such that $\card{H_{v,r}}\leq h$ and $H_{v,r}$ is a hitting set for $S_r(v,\calQ)$.
 \end{definition}
 

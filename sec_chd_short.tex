@@ -249,7 +249,7 @@ Intuitively, the separation between HD and CHD (or more particularly, the hub la
 For real-world networks, however, this appears unlikely.
 In particular, intuition suggests that efficient paths largely comprise of segments which are in fact shortest-paths in their own right. 
 This notion can be formalized via the following definition of a \emph{partial witness} 
-\begin{definition}[Partial Witness]
+\begin{definition}[Partial Witness]\label[definition]{def:partial_witness}
 	Let $\beta\geq 0$.
 	We say that a path system $\calQ$ is $\beta$-witnessed by the path system $\calQ'$ if, for every $Q\in\calQ$, $\exists Q'\in\calQ'$ such that $Q'\subseteq Q$ and $\ell(Q')\geq 2^{-\beta}\ell(Q)$.
 \end{definition}
@@ -272,14 +272,14 @@ Observe also that, if $\alpha$ is a constant, then the requirement in \cref{theo
 	Assume first $r\geq r_\beta$.
 	Take $C$ as the hitting set for $\PS_{2^{-\beta}r}$, which is guaranteed to be sparse with respect to balls of radius $2^{-\beta+1}r$.
 	Define the desired set by
-	\[
+	$
 	C^E\defeq\{v\in C: v \text{ is in some $r$-efficient path} \}.
-	\]
+	$
 	
 	Since $\PS$ is a $2^{-\beta}$-witness for $\PE_r$, $C^E$ is indeed a hitting set for $\PE_r$.
 	We are only left to prove the sparsity.
 	Take some $u\in V$, by doubling dimension we can cover $\Bf_{2r}(u)$ by at most $\alpha^\beta$ balls of radius $2^{-\beta+1}r$.
-	Each of these balls contains at most $h$ elements of $C$, therefore the sparsity is as claimed.
+	Each ball contains at most $h$ elements of $C$, therefore the sparsity is as claimed.
 	The argument for reverse balls is identical.
 	
 	Now we analyze the case $r< r_\beta$.
