@@ -46,7 +46,7 @@ If the bounded growth is satisfied, we can obtain, in polynomial time, hub label
 
 We henceforth refer to the average HD of $\PE$ as average CHD; since the average HD is enough to obtain good preprocessing algorithms (cf. \cref{theo:preproc_avg}), an average CHD should intuitively suffice.
 However, to prove \cref{theo:overpasses}, we need to show that it is possible to obtain small average CHD under even less restrictive assumptions than the partial-witness.
-To do this, we first allow for an additional \emph{circumstantial witness set} $D$ such that \emph{every efficient path is either witnessed by a shortest-path or hit by $D$}.
+To do this, we first allow for an additional \emph{supplementary witness set} $D$ such that \emph{every efficient path is either witnessed by a shortest-path or hit by $D$}.
 This corresponds to the intuition that a few bad efficient paths should not completely ruin the algorithm. 
 
 \begin{definition}[Weak Partial Witness]
@@ -54,7 +54,7 @@ Given $\beta\geq 0$, we say a path system  $\calQ$ is weakly $\beta$-witnessed b
 Additionally we require $\abs{D_r}\leq \phi(r)$.
 \end{definition} 
 
-Intuitively, the circumstantial witness set $D_r$ takes care of all the corner cases where $\calQ$ and $\calQ'$ differ too much.
+Intuitively, the supplementary witness set $D_r$ takes care of all the corner cases where $\calQ$ and $\calQ'$ differ too much.
 We now show that our requirement on $\abs{D_r}$ guarantees a bound on the average HD.
 
 \begin{proposition}\label[proposition]{prop:lay_witness}
@@ -85,7 +85,7 @@ We first need some additional notation:
 For a path $Q$ and two vertices $u,v\in Q$ we denote $Q[u,v]\subseteq Q$ as the sub $(u,v)$-path; for two paths $P,Q$ with a common endpoint, we denote $P|Q$ as their concatenation.
 
 Consider $Q\in\PE$ with endpoints $s,t$ and set $\ell(Q)=2r$.
-We will show how to obtain a vertex for the circumstantial witness set in case $Q$ is not witnessed and then we bound the size of the set.
+We will show how to obtain a vertex for the supplementary witness set in case $Q$ is not witnessed and then we bound the size of the set.
 Assume that $Q\neq P(s,t)$, otherwise the path is trivially witnessed.
 Let $(u,v)\in Q$ be such that $\ell(Q[s,v]),\ell(Q[u,t])\geq r$. 
 If either $Q[s,v]$ or $Q[u,t]$ is a shortest path or $\ell_{uv}\geq r$, then $Q$ is witnessed. Thus, we henceforth assume that all of the above conditions fail.
@@ -99,7 +99,7 @@ Since each path $Q[s,u],Q[v,t]$ has length less than $r$, it follows that both $
 Finally, to show condition 3, we have $\ell(Q[s,v])+\ell(Q[u,t])=r+\ell_{uv}$ and since $\ell_{uv}<r/2$, one of $Q[s,v]$ or $Q[u,t]$ has length at most $3r/4$.
 Since neither of these paths is shortest, it must be that both $P(s,v),P(u,t)$ have costly edges and thus one of $u,v$ is closer than $3r/4$ to $E_1$ and the condition is satisfied.
 
-For every path of length $2r$, we can thus either exhibit a witness or show that it contains an overpass and add use the tail of the edge as a circumstantial witness.
+For every path of length $2r$, we can thus either exhibit a witness or show that it contains an overpass and add use the tail of the edge as a supplementary witness.
 For a fixed $r>0$, we need to add at most $\phi(r)$ nodes to $D_r$ to cover all the efficient paths. 
 The result follows.
 \end{proof}
