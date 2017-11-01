@@ -1,32 +1,29 @@
-The partial-witness property and \cref{theo:witness_doubling} provide a nice link between the CHD and HD -- essentially, the result can be interpreted as showing that scaling CSP queries is of similar complexity to scaling SP queries as long as any efficient paths contains large segments which are shortest paths. As an example, consider a \emph{multimodal mapping service} which gives transit routes combining walking, buses and subway -- a natural constraint here is that routes have at most $k$ switch-overs. Now for $k=3$, each route has at most $4$ segments, which gives use the partial witness property with $\beta = 2$. Finally, assuming the road, bus and subway networks all have small HD, we get that the CHD is also small via \cref{theo:witness_doubling}.
+The partial-witness property and \cref{theo:witness_doubling} provide a nice link between the CHD and HD, essentially showing that scaling CSP queries is of similar complexity to scaling SP queries as long as any efficient path contains large shortest-path segments. As an example, consider a \emph{multimodal mapping service} which gives transit routes combining walking, bus and subway, while ensuring at most $k$ transfers. For $k=3$, each route has at most $4$ segments, which gives use the partial witness property with $\beta = 2$. Now if each individual network has small HD, then the CHD is also small.
+% via \cref{theo:witness_doubling}.
 
 
-Converting the partial-witness condition to a more interpretable condition is difficult in general, as the structure of $\PS$ and $\PE$ may be complex. However, one way to get such a condition is by considering \emph{average-case} performance metrics.
+Converting the partial-witness condition to a more interpretable condition is difficult in general, as the structure of $\PS$ and $\PE$ may be complex. One way to get such a condition, however, is by considering \emph{average-case} performance metrics.
 %When building systems to answer queries, the essential metric is the average performance; worst case analysis is too pessimistic and not relevant.
-To this end, we relax the definition of HD in two ways: $(i)$ we require LSHS to be locally sparse ``on average'' over all nodes, and
+For this, we relax the definition of HD in two ways: $(i)$ we require LSHS to be locally sparse ``on average'' over all nodes, and
 $(ii)$ we only require the existence of LSHS (as opposed to a hitting set for $S_r(v,\calQ)$).
-Observe that the latter is a big change, since, as discussed before, the existence of LSHS does not allow for their efficient computation.
-We overcome this issue in \cref{theo:preproc_avg}.
 
 \begin{definition}[Average LSHS]
 Given $r>0$ and a system $\calQ$, a set $C\subseteq V$ is an average $(h,r)$-LSHS if it hits $\calQ_r$ and is locally sparse in average, i.e.,
 $\frac{1}{n}\sum_{v\in V} \abs{B_{2r}(v)\cap C} \leq h$.
 \end{definition}
-
 \begin{definition}[Average HD]
 The system $\calQ$ has average HD $h$ if, for every $r>0$, there exists an average $(h,r)$-LSHS.
 \end{definition}
 
-From the definition is clear that average HD is a strictly weaker property than HD.
-Nevertheless, this is enough to parametrize the average behaviour of HL.
-Notice that, since query time depends linearly on the hub size, the next result implies both storage and performance bounds.
-
+From the definition is clear that average HD is a strictly weaker property than HD; in particular, as we discuss before, the existence of LSHS does not guarantee their efficient computation.
+Nevertheless, the above definition turns out to suffice to parametrize the average behavior of HL:
 \begin{theorem}\label{theo:preproc_avg}
 If $\PS$ has average HD $h$, then we can obtain, in polynomial time, HL with average size 
 $\frac{1}{n}\sum_{v\in V} \abs{\Lf(v)} \leq h'\log D$ and 
 $\frac{1}{n}\sum_{v\in V} \abs{\Lb(v)} \leq h'\log D$,
 where $h'=\Or(\Delta h\log (hn\Delta))$.
 \end{theorem}
+Note that since query time depends linearly on the hub size, the above result implies both storage and performance bounds.
 \begin{proof}
 We only go over the preprocessing, since the construction is the same as in \cref{theo:construct_hl} and the bound for the size easily follows. 
 The objective is to obtain a set $C_i$ which is an average $(h',2^i)$-LSHS.
@@ -43,13 +40,3 @@ Now we perform a mapping, where the ground set is changed to $E$ and paths are s
 This system still has VC-dimension 2, and now the minimum is at most $h\Delta n$.
 We apply the algorithm in \cite{vc_dim_hitting} and obtain a solution $C_i$ with cost at most $\Or(h\Delta n\log(h\Delta n))$; this gives the promised average $(h',r)$-LSHS.
 \end{proof}
-
-A natural constraint in applications is that users do not want to be presented solutions which are far away from the optimum, even if it saves them budget.
-The \emph{stretch} of a path is its comparison to the shortest option and captures this.
-Formally, we have the following desirable property of an algorithm.
-
-\begin{definition}[Stretch]
-An algorithm for CSP has stretch $\St\geq 1$ if, $\forall s,t\in V$ and $b\leq B$, outputs $\dist(s,t|b)$ whenever $\dist(s,t|b)\leq \St\dist(s,t)$ and outputs ``infeasible'' when $\dist(s,t|b)>\St\dist(s,t)$.
-\end{definition}
-We will take $\St$ as a given parameter or, equivalently, an extra constraint given by the application. 
-Note that all our previous results hold with this extra constraint.

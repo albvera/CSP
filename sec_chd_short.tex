@@ -238,12 +238,11 @@ We now show that the CHD and, in fact, the sparsity of any EPHS, can be \emph{ar
 	\label{fig:big_chd}
 \end{figure}
 
-\begin{remark}
-	One criticism of the graph in \cref{fig:big_chd} is that it has a maximum degree of $n$.
-	However, the result holds even for bounded degree graphs.
-	See \cite{TechReport} for a more involved example showing this.
-	%In \cref{app:generalhd}, where we discuss alternative notions of HD, we give a more involved example with bounded degrees that exhibits the same separation between LSHS and EPHS for even stronger notions of HD.
-\end{remark}
+%\begin{remark}
+One criticism of the network in \cref{fig:big_chd} is that it has a maximum degree of $n$.
+However, in \cite{TechReport}, we show via a more involved example that the result holds even for bounded degree graphs.
+%In \cref{app:generalhd}, where we discuss alternative notions of HD, we give a more involved example with bounded degrees that exhibits the same separation between LSHS and EPHS for even stronger notions of HD.
+%\end{remark}
 
 Intuitively, the separation between HD and CHD (or more particularly, the hub labels for computing SPs and CSPs) occurs due to the fact that, for arbitrary graphs and cost functions, the shortest and efficient paths may be completely unrelated. 
 For real-world networks, however, this appears unlikely.
@@ -291,12 +290,13 @@ Observe also that, if $\alpha$ is a constant, then the requirement in \cref{theo
 	Clearly $C$ hits all the paths and the local sparsity is at most the size of the ball.
 	Using our assumption on $r_\beta$, a simple computation shows that $\card{B_{2r}(v)}\leq \alpha^{\log_2r_\beta+2}\leq h\alpha^\beta$. 
 \end{proof}
-\begin{remark}
-\cref{theo:witness_doubling} immediately implies that the hardness of CSP and SP is comparable for a wide range of networks.
-Indeed, consider a public transit network, where users want to take at most $k$ transfers, then a fraction $1/k$ of the path will be shortest and the partial witness property is obeyed.
-\end{remark}
 %\begin{remark}
-Note that the existence of a $\beta$-witness is not enough to bound the CHD; however, as we discuss in \cref{ssec:hldef}, the existence of $(h,r)$-LSHS already allows the construction of HL. 
+%\cref{theo:witness_doubling} immediately implies that the hardness of CSP and SP is comparable for a wide range of networks.
+%Indeed, consider a public transit network, where users want to take at most $k$ transfers, then a fraction $1/k$ of the path will be shortest and the partial witness property is obeyed.
+%\end{remark}
+%\begin{remark}
+%Note that the existence of a $\beta$-witness is not enough to bound the CHD; however, as we discuss in \cref{ssec:hldef}, the existence of $(h,r)$-LSHS already allows the construction of HL. 
+
 %Moreover, the above argument does indeed give a bound for a weaker definition of HD (details in \cite{TechReport}).
 %\end{remark}
 %\begin{remark}
