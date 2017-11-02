@@ -1,42 +1,31 @@
-We consider a directed graph $G=(V,E)$ with \emph{length function} $\ell:E\to \N_+$, and \emph{cost function} $c:E\to \N_+\crl{0}$.
+We consider a directed graph $G=(V,E)$, where each edge $e\in E$ has an associated \emph{length} $\ell(e)\in\N_+$, and \emph{cost} $c(e)\in\N_+\crl{0}$.
 For each node $v$, we denote its degree $\Delta(v)$ as the sum of the in-degree and out-degree, and define the \emph{maximum degree} $\Delta \defeq \max_v\Delta(v)$.
-For any source-terminal pair $s,t\in V$, we denote by $\Pst$ the set of all $(s,t)$-paths which are simple (i.e., without loops or cycles). 
-Throughout this work, we only consider simple paths, which for brevity we refer to as paths.
-For a path $Q$ and two vertices $u,v\in Q$ we denote $Q[u,v]\subseteq Q$ as the sub $(u,v)$-path.
-For two paths $P,Q$, we denote $P|Q$ as the concatenation, which is defined only when $P,Q$ share the correct endpoint.
+For any source-terminal pair $s,t\in V$, we denote by $\Pst$ the set of all simple $(s,t)$-paths (without loops or cycles). 
+Throughout this work, we only consider simple paths, which we refer to as paths for brevity.
 
 For any path $P$, we define its length $\ell(P)$ and cost $c(P)$ as the sum of edge lengths and edge costs in $P$. 
 Note that any path $P$ with more than one node has length at least $1$ (since we assume lengths are integers).
 For $s,t\in V$, the distance from $s$ to $t$, denoted $\dist(s,t)$, is the smallest length among all paths $P\in\Pst$.
-The distance from a node $v$ to a path $P$, denoted $\dist(v,P)$, is measured as the minimum distance from $v$ to a node $w\in P$; the distance to $v$, $\dist(P,v)$, is defined analogously.
+For a node $v$ to a path $P$, we abuse notation to denote $\dist(v,P)$ as the minimum distance from $v$ to any node $w\in P$; the distance $\dist(P,v)$ from $P$ to $v$ is defined analogously.
 Note that  $\dist(P,v)$ and  $\dist(v,P)$ need not be the same as the graph is directed.
 We denote the shortest $(s,t)$-path (if it exists) as $P(s,t)$, and denote the set of all shortest paths in $G$ as $\PS$.
-Finally, we define $D=\max_{P\in\PS}\ell(P)$ to be the diameter of $G$.
+Finally, we define $D\defeq\max_{P\in\PS}\ell(P)$ to be the diameter of $G$.
 
-Our goal is to develop a data-structure that can answer \emph{Constrained Shortest-Path} (CSP) queries: Given a source-terminal pair $s,t$ and a budget $b$, we want to return a path $P$ that solves
+Our goal is to develop a data-structure to answer \emph{Constrained Shortest-Path} (CSP) queries: 
+Given a source-terminal pair $s,t$ and a budget $b$, we want to return a path $P$ solving
 \[
 \min_{P \in \Pst}  \, \ell(P) \,
 \text{ s.t. } \,  c(P) \leq b.
 \]
 We define $\dist(s,t|b)$ to be the minimum of this problem.
 If there is no feasible solution, we define $\dist(s,t|b)=\infty$.
-Users do not want to be presented solutions which are far away from the optimum, even if it saves them budget.
-\anote{I defined the stretch here. Maybe too early? Depends if we want to use this notion in more sections}
-The \emph{stretch} of a path is its comparison to the shortest option.
-Formally, we have the following desirable property of an algorithm.
-
-\begin{definition}[Stretch]
-An algorithm for CSP has stretch $\St\geq 1$ if, for every $s,t\in V$ and $b\leq B$, either outputs $\dist(s,t|b)$ when $\dist(s,t|b)\leq \St\dist(s,t)$ or outputs ``infeasible'' when $\dist(s,t|b)>\St\dist(s,t)$.
-\end{definition}
-
-We will take $\St$ as a given parameter or, equivalently, an extra constraint given by the application. 
-Most of our results are independent of the value $\St$.
 Note that the CSP problem may have multiple solutions as there could be several paths with the same length and cost lower than $b$.
 To limit these solutions to those with minimal cost, we require that the path also be \emph{efficient}. 
 \begin{definition}[Efficient Path]
+\label[definition]{def:effpath}
 A path $P\in \Pst$ is called \emph{efficient} if there is no other path $P'\in \Pst$ such that $\ell(P')\leq \ell(P)$ and $c(P')\leq c(P)$ with at least one inequality strict.
 \end{definition}
 We denote the set of all efficient paths as $\PE$, and define the \emph{Pareto frontier} from $s$ to $t$ as $\Pst\cap\PE$.
 Observe that every subpath of an efficient path is also efficient (if not, we could improve the path by replacing the subpath).
 For $r>0$ and $v\in V$, we define the \emph{forward and reverse balls of radius $r$} by $\Bf_r(v)\defeq\{u\in V: \dist(v,u)\leq r\}$ and $\Bb_r(v)\defeq\{u\in V: \dist(u,v)\leq r\}$, and also define $B_r(v)\defeq\Bf_r(v)\cup\Bb_r(v)$.
-Finally, a graph $G$ is said to have a \emph{doubling dimension} $\alpha$ if, for any node $v$ and any $r>0$, the ball $B_{2r}(v)$ can be covered by at most $\alpha$ balls of radius $r$. 
+Finally, a graph $G$ is said to have a \emph{doubling dimension} $\alpha$ if, for any node $v$ and any $r>0$, the ball $B_{2r}(v)$ can be covered by at most $\alpha$ balls of radius $r$.

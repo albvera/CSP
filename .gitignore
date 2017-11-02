@@ -11,7 +11,4 @@ build
 *.lb
 *.fls
 *.~*
-
-*.pdf
-
 *.vtc

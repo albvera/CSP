@@ -1,4 +1,18 @@
-% !TEX root = main_vldb.tex
+\anote{Review this, I just moved stuff here and haven't made it readable.}
+
+Finally, we briefly note that Definition~\ref{def:hddef} modifies the original definition of~\cite{highway2013} in two ways: $(i)$ we consider a less restrictive definition of path neighborhoods, that is appropriate for our needs, and $(ii)$ we generalize the notion to directed graphs and general path systems.
+For $\PS$, a consequence of considering less-restrictive path-neighborhoods is that the highway dimension returned by our definition is smaller than that of \cite{highway2013}.
+In particular, unlike \cite{highway2013}, the HD of $G$ as per our definition is not an upper bound to the maximum degree $\Delta$ or the doubling dimension $\alpha$.
+
+About \cref{theo:witness_doubling}: Moreover, the above argument does indeed give a bound for a weaker definition of the highway dimension~\cite{highway2010}. 
+
+
+\begin{remark}
+The algorithm in \cref{theo:preproc_avg} makes one call to the VC-dimension solver for each $C_i$.
+On the other hand, the algorithm in \cite{highway2013} calls up to $n$ times the solver for each $C_i$.
+Finally, there is an extra $\log n$ factor in the approximation guarantee, but now the value of $h$ can be much smaller.
+\end{remark}
+
 The definition of HD that we use is tailored for HL note, however, that it is the ones used in \cite{highway2013}. 
 We now discuss how our results extend to the stronger definition.
 

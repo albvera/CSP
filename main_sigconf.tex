@@ -1,4 +1,4 @@
-\documentclass[screen,sigconf,anonymous,review]{acmart}
+\documentclass[screen,sigconf]{acmart}
 
 \usepackage{booktabs} % For formal tables
 
@@ -12,6 +12,7 @@
   \end{proof}%
 }
 
+\renewcommand{\paragraph}[1]{\smallskip\noindent\textbf{#1}}
 % Copyright
 %\setcopyright{none}
 %\setcopyright{acmcopyright}
@@ -102,8 +103,6 @@
 
 \section{Preliminaries}
 \label{sec:prelim}
-
-\subsection{Basic Setting}
 \label{ssec:basic}
 \input{sec_basic.tex}
 
@@ -139,14 +138,14 @@
 \label{ssec:hdvschd}
 \input{sec_hdvschd.tex}
 
-\subsection{Average Performance}
+\subsection{Average-Case Performance Guarantees}
 \label{sec:avg_hd}
 \input{sec_avg_hd.tex}
 \subsubsection{Relaxed Witness}
 \label{sec:relaxed_witness}
 \input{sec_relaxed_witness.tex}
 
-\section{Scalable CSP Algorithms: \texorpdfstring{\\}{ } Practical Implementation}
+\section{Scalable CSP Algorithms:\texorpdfstring{\\}{ } Implementations and Experiments}
 \label{sec:numeric}
 \input{sec_numeric.tex}
 

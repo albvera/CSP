@@ -1,15 +1,17 @@
-The construction is similar to HL for shortest-paths (cf. \cref{ssec:hldef}).
+We present a construction similar to HL for shortest-paths (cf. \cref{ssec:hldef}).
 A subtle difference is that we are only interested in paths ending in a sink node.
 Each node $\pp{v,b}$ has a forward hub label $\Lf(\pp{v,b})\subseteq V^B$, and \emph{only sink nodes} $u^-$ have a reverse hub $\Lb(u^-)\subseteq V^B$.
 The cover property must be satisfied for every $\pp{s,b}$ and $t^-$.
 Finally, if we want to reconstruct the path, we can proceed similarly as in ~\cref{ssec:hldef}; we can augment the hub labels with the next-hop node, and compute the entire path recursively.
-Putting things together, we now show how we can construct hub labels for answering CSP queries, such that their preprocessing time and storage is parameterized by the CHD $h_c$.
+Putting things together, we can construct hub labels for answering CSP queries, such that their preprocessing time and storage is parameterized by the CHD $h_c$.
 
 \subsubsection{Query Time and Data Requirements}
 
 \begin{theorem}
 \label{theo:HLeff}
-For a network $(G,\ell,c)$, given a multi-scale EPHS $\crl*{C_i:i=0,1,\ldots,\log D}$, where $C_i$ is an $(h_c,2^{i-1})$-EPHS, we can construct hub labels for answering CSP queries such that, for every $u\in V$ and $b\geq 0$, $\card{L(\pp{u,b})^+}\leq (b+1)h_c(1+\log D)$ and $\card{L(u^-)^-}\leq (B+1)h_c(1+\log D)$. 
+For a network $(G,\ell,c)$, given a multi-scale EPHS $\crl*{C_i:i=0,1,\ldots,\log D}$, where $C_i$ is an $(h_c,2^{i-1})$-EPHS, we can construct hub labels 
+to answer queries for $s,t,b$ in time $O((b+1) h_c\log D)$.
+The total space requirement is $\Or(nB \cdot Bh_c\log D)$.
 \end{theorem}
 \begin{proof}
 Create $C_i^B$ as in \cref{eq:hitset}.
@@ -20,9 +22,3 @@ For a reverse hub we use that $\Bb_{2^i}(t^-) = \{\pp{s,x}: \exists P\in \Pst, c
 Thus, $\Bb_{2^i}(t^-)\cap C_i^B\leq (B+1)h_c$.
 For forward hubs, the size follows from observing that $ \card{C_i^B\cap \Bf_{2^i}(\pp{v,b})}\leq (b+1)h_c$.
 \end{proof}
-
-This immediately gives us the following corollary for the storage and query time.
-\begin{corollary}
-Using the HL given by \cref{theo:HLeff}, we can implement queries for $s,t,b$ in time $O((b+1) h_c\log D)$.
-The total space requirement is $\Or(nB \cdot Bh_c\log D)$.
-\end{corollary}
