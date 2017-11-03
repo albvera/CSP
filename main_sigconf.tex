@@ -1,6 +1,15 @@
 \documentclass[screen,sigconf]{acmart}
 
-\usepackage{booktabs} % For formal tables
+
+%-------------- Customization of acmsmall package begins ----------------
+\settopmatter{printacmref=false}%removes citation information below abstract
+\renewcommand\footnotetextcopyrightpermission[1]{} 	% removes footnote with conference information in first column
+\fancyfoot[LE,RO]{}									%removes footer with publication date
+\fancypagestyle{firstpagestyle}{\fancyhf{}}			%removes footer with publication date on first page
+\fancyhead[LE,RO]{\thepage}							%removes article number from header and leaves only page number
+\fancyhead[LO,RE]{}									%removes authors and title header
+%-------------- Customization of acmsmall package ends ----------------
+
 
 \newtheorem{remark}[theorem]{Remark}
 %Import personal commands 
