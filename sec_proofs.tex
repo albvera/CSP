@@ -77,10 +77,11 @@ Let $B_{2r}(v):=\Bf_{2r}(v)\cup \Bb_{2r}(v)$.
 Assume $v\in V$ is such that $\card{B_{2r}(v)\cap C_i}>2h'$ and let $C_{i+1}:=(C_i\setminus B_{2r}(v))\cup F_{v,r} $.
 The cardinality strictly decreases and we only need to check the invariant.
 Consider the paths hit by nodes removed in $C_i$, this set is
-\begin{align*}
-&\hspace{-1cm}\{Q\in\calQ_r: Q\cap C_i\cap B_{2r}(v)\neq \varnothing\}\\
-&\subseteq \{Q\in\calQ_r: Q\cap B_{2r}(v)\neq \varnothing\} \subseteq S_r(v).
-\end{align*}
+\[
+\crl{Q\in\calQ_r: Q\cap C_i\cap B_{2r}(v)\neq \varnothing}
+\subseteq \crl{Q\in\calQ_r: Q\cap B_{2r}(v)\neq \varnothing} 
+\subseteq S_r(v).
+\]
 Since $F_{v,r}$ hits $S_r(v)$, the proof is completed.
 
 If we do not know the value of $h$, we can do a doubling search for $h'$. 

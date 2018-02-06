@@ -6,8 +6,7 @@ An illustration of the construction is presented in Figure~\ref{fig:augmented}.
 The following definition formalizes this. 
 
 \begin{definition}[Augmented Graph]
-Given $(G,\ell,c)$ and $B\in\N$, the augmented version $G^B$ has vertex set\\
-$V^B \defeq\crl*{\pp{v,b}: v\in V, b=0,1,\ldots,B}\cup\crl*{v^-:v\in V}$, the edge set $E^B$ contains $\crl*{\pp{v,b}\pp{w,x} : vw\in E, x=b-c_{vw}, x\geq 0}$ with the additional $\crl*{\pp{v,b}v^-: v\in V, 0\leq b\leq B}$.
+Given $(G,\ell,c)$ and $B\in\N$, the augmented version $G^B$ has vertex set $V^B \defeq\crl*{\pp{v,b}: v\in V, b=0,1,\ldots,B}\cup\crl*{v^-:v\in V}$, the edge set $E^B$ is $\crl*{\pp{v,b}\pp{w,x} : vw\in E, x=b-c_{vw}, x\geq 0}\cup\crl*{\pp{v,b}v^-: v\in V, 0\leq b\leq B}$.
 The length function in $G^B$ is $\ell(\pp{v,b},v^-) \defeq \frac{1}{b+1}$ and $\ell(\pp{v,b},\pp{w,x}) \defeq \ell(vv')$.
 \end{definition}
 
@@ -68,10 +67,10 @@ We prove that $C^B$ hits $\PB_r$ and is locally sparse
 By Proposition~\ref{prop:shorteffic}, we know that shortest paths are efficient, hence $C^B$ hits all the desired paths.
 Finally, we prove local sparsity.
 Take any node $\pp{s,b}$ and observe that
-\begin{align}
-\Bf_{2r}(\pp{s,b}) &= \{\pp{t,x}: \exists P\in\Pst, \ell(P)\leq 2r, c(P)=b-x\} \nonumber\\ 
-&\subseteq \{\pp{t,x}: t\in \Bf_{2r}(s), x\leq b\} . \label{eq:local_sparsity}
-\end{align}
+\begin{equation}\label{eq:local_sparsity}
+\Bf_{2r}(\pp{s,b}) = \{\pp{t,x}: \exists P\in\Pst, \ell(P)\leq 2r, c(P)=b-x\} 
+\subseteq \{\pp{t,x}: t\in \Bf_{2r}(s), x\leq b\} . 
+\end{equation}
 We know that $\card{\Bf_{2r}(s)\cap C}\leq \hc$, therefore $\card{\Bf_{2r}(\pp{s,b})\cap C^B}\leq\hc b\leq \hc B$.
 A similar argument shows the sparsity for the reverse ball.
 \end{proof}
