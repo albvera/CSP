@@ -5,7 +5,8 @@ The cover property must be satisfied for every $\pp{s,b}$ and $t^-$.
 Finally, if we want to reconstruct the path, we can proceed similarly as in ~\cref{ssec:hldef}; we can augment the hub labels with the next-hop node, and compute the entire path recursively.
 Putting things together, we can construct hub labels for answering CSP queries, such that their preprocessing time and storage is parameterized by the CHD $h_c$.
 
-\subsubsection{Query Time and Data Requirements}
+\paragraph{Query Time and Data Requirements:}
+The performance  and space requirement of our algorithm is parametrized by $h_c$ as follows 
 
 \begin{theorem}
 \label{theo:HLeff}
@@ -13,12 +14,12 @@ For a network $(G,\ell,c)$, given a multi-scale EPHS $\crl*{C_i:i=0,1,\ldots,\lo
 to answer queries for $s,t,b$ in time $O((b+1) h_c\log D)$.
 The total space requirement is $\Or(nB \cdot Bh_c\log D)$.
 \end{theorem}
-\begin{proof}
-Create $C_i^B$ as in \cref{eq:hitset}.
-Define $L(\pp{v,b})^+ \defeq \bigcup_{i=1}^{\log D} C_i^B\cap \Bf_{2^i}(\pp{v,b})$ and $L(u^-)^-  \defeq \bigcup_{i=1}^{\log D} C_i^B\cap \Bb_{2^i}(u^-)$.
-The cover property is proved similarly as in \cref{theo:construct_hl}; we are left to bound the hub size.
-For a reverse hub we use that $\Bb_{2^i}(t^-) = \{\pp{s,x}: \exists P\in \Pst, c(P)=x, \ell(P)\leq 2^i\}
-\subseteq \Bb_{2^i}(t)\times \{0,1,\ldots,B\}$.
-Thus, $\Bb_{2^i}(t^-)\cap C_i^B\leq (B+1)h_c$.
-For forward hubs, the size follows from observing that $ \card{C_i^B\cap \Bf_{2^i}(\pp{v,b})}\leq (b+1)h_c$.
-\end{proof}
+%\begin{proof}
+%Create $C_i^B$ as in \cref{eq:hitset}.
+%Define $L(\pp{v,b})^+ \defeq \bigcup_{i=1}^{\log D} C_i^B\cap \Bf_{2^i}(\pp{v,b})$ and $L(u^-)^-  \defeq \bigcup_{i=1}^{\log D} C_i^B\cap \Bb_{2^i}(u^-)$.
+%The cover property is proved similarly as in \cref{theo:construct_hl}; we are left to bound the hub size.
+%For a reverse hub we use that $\Bb_{2^i}(t^-) = \{\pp{s,x}: \exists P\in \Pst, c(P)=x, \ell(P)\leq 2^i\}
+%\subseteq \Bb_{2^i}(t)\times \{0,1,\ldots,B\}$.
+%Thus, $\Bb_{2^i}(t^-)\cap C_i^B\leq (B+1)h_c$.
+%For forward hubs, the size follows from observing that $ \card{C_i^B\cap \Bf_{2^i}(\pp{v,b})}\leq (b+1)h_c$.
+%\end{proof}

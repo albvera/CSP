@@ -87,19 +87,19 @@
 \label{ssec:basic}
 \input{sec_basic.tex}
 
-\subsection{Hitting sets and the highway dimension}
+\paragraph{Hitting sets and the highway dimension:}
 \label{ssec:hddef}
 \input{sec_hddef.tex}
 
-\subsection{Shortest-Paths via Hub Labels}
+\paragraph{Shortest-Paths via Hub Labels:}
 \label{ssec:hldef}
 \input{sec_hl_correctness.tex}
 
-\section{Scalable CSP Algorithms:\texorpdfstring{\\}{ } Theoretical Guarantees}
+\section{Scalable CSP Algorithms:\texorpdfstring{}{ } Theoretical Guarantees}
 \label{sec:chd}
 \input{sec_chd.tex}
 
-\subsection{Augmented Graph}
+\paragraph{Augmented Graph:}
 \label{ssec:aug}
 \input{sec_augmented.tex}
 
@@ -107,11 +107,11 @@
 \label{ssec:hlcsp}
 \input{sec_constrained_hl.tex}
 
-\subsubsection{Preprocessing}
-\label{sec:preproc}
-\input{sec_preproc.tex}
+%\paragraph{Preprocessing:}
+%\label{sec:preproc}
+%\input{sec_preproc.tex}
 
-\subsubsection{Using the size of the Pareto Frontier}
+\paragraph{Using the size of the Pareto Frontier:}
 \label{sec:frontier}
 \input{sec_frontier_size.tex}
 
@@ -122,11 +122,12 @@
 \subsection{Average-Case Performance Guarantees}
 \label{sec:avg_hd}
 \input{sec_avg_hd.tex}
-\subsubsection{Relaxed Witness}
+
+\paragraph{Relaxed Witness:}
 \label{sec:relaxed_witness}
 \input{sec_relaxed_witness.tex}
 
-\section{Scalable CSP Algorithms:\texorpdfstring{\\}{ } Implementations and Experiments}
+\section{Scalable CSP Algorithms:\texorpdfstring{}{ } Implementations and Experiments}
 \label{sec:numeric}
 \input{sec_numeric.tex}
 
@@ -134,29 +135,39 @@
 \label{sec:conclu}
 \input{sec_conclu.tex}
 
-\section*{Acknowledgements.}
-The authors would like to thank Moritz Kobitzsch for sharing sanitized versions of the San Francisco and Luxembourg road networks.
-
+\clearpage
 
 \appendix
-\section{Different notions of HD}
-\label{app:generalhd}
-\input{sec_diff_hd.tex}
+\section{Appendix}
 
-\section{Contraction Hierarchies}
-\input{sec_ch.tex}
+\begin{figure}[h]
+\begin{minipage}{.53\textwidth}
+\includegraphics[clip, trim=4.6cm 4.8cm 4.7cm 3cm,height=4.7cm]{TexImg/SF_hub_sizes.pdf}%
+\includegraphics[clip, trim=15.8cm 0cm 0.4cm 1cm,height=4.4cm]{TexImg/SF_hub_sizes.pdf}
+\end{minipage}%
+\begin{minipage}{.47\textwidth}
+\flushright
+\includegraphics[clip, trim=3.7cm 2.9cm 4.2cm 3cm,height=4.7cm]{TexImg/sig_colapse.pdf}
+\end{minipage}
+\caption{Heat maps for frontier queries in San Francisco augmented with $B=25$.
+On the left we see the hub size. 
+Note that the size is not homogeneous, but rather we can observe clusters and neighborhoods tend to be similar.
+On the right the significance.
+The most significant nodes have been drawn bigger.
+The top 3 most significant correspond to Geary Blvd \& Gough St, Franklin St \& O'Farrel St and Market St \& Polk St.
+}
+\label{fig:heat_maps}
+\end{figure}
 
-\section{CHD vs. HD: Extensions}
-\label{app:extn}
-\input{sec_extensions.tex}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.3]{TexImg/map_LU_sig.png}
+\caption{Heat map of significance for frontier queries in Luxembourg City augmented with $B=25$.
+Notice how the highly significant nodes are in main road crossings.}
+\label{fig:map_LU} 
+\end{figure}
 
-
-\section{Additional Proofs}
-\label{sec:proofs}
-\input{sec_proofs.tex}
-
-
-
+\clearpage
 \bibliography{biblio}
 
 \end{document}

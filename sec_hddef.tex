@@ -1,6 +1,6 @@
 We now define some additional network primitives, which we need to parametrize the performance of our CSP algorithms. 
 In particular, we use the \emph{highway dimension}, introduced by \citep{highway2013,highway2010} to parametrize shortest-path computations in undirected graphs. 
-A few of our results are generalizations of those in \citep{highway2013}; the technical challenges of these extensions may not be clear to a non-expert reader, thus we differ all discussions on the matter to \cref{app:generalhd}. 
+A few of our results are generalizations of those in \citep{highway2013}; the technical challenges of these extensions may not be clear to a non-expert reader, thus we differ all discussions on the matter to an appendix in our full version. 
 Very broadly speaking, \cite{highway2013} deals only with undirected graphs and shortest paths, whereas our approach covers directed graphs and general sets of paths.
 
 We define a \emph{path system} $\calQ$ as any collection of paths.
@@ -12,12 +12,8 @@ In particular, even if the hitting set is large, the extent to which a path syst
 
 \begin{definition}[Locally-Sparse Hitting Sets]\label[definition]{def:lshs}
 Given a path system $\calQ$ and $r>0$, an $(h,r)$ locally-sparse hitting set (or $(h,r)$-LSHS) is a set $C\subseteq V$ with two properties: 
-\begin{enumerate}[nosep]
-\item Hitting: $C$ is a hitting set for $\calQ_r$.
-\item Local sparsity: for every $v\in V$, $\abs*{B_{2r}(v)\cap C}\leq h$.
-\end{enumerate}
+(1) Hitting: $C$ is a hitting set for $\calQ_r$ and (2) Local sparsity: for every $v\in V$, $\abs*{B_{2r}(v)\cap C}\leq h$.
 \end{definition}
-
 
 As we discuss in \cref{ssec:hldef}, the existence of $(h,r)$-LSHS immediately enables the compression of path system $\calQ$ via the construction of \emph{hub labels}. 
 However, the existence of LSHS does not guarantee the ability to efficiently compute these objects. 
@@ -39,5 +35,5 @@ However, if $G$ has $HD \leq h$, then this guarantees the existence of a $(h,r)$
 If the path system $\calQ$ has HD $h$, then, $\forall\,r>0$, there exists an $(h,r)$-LSHS.
 \end{proposition}
 
-More importantly, note that the result is about existence and does not touch on computability.
-As we discuss in Section~\ref{sec:preproc}, if $G$ has $HD \leq h$, then this permits efficient computation of LSHS.
+%More importantly, note that the result is about existence and does not touch on computability.
+%As we discuss in Section~\ref{sec:preproc}, if $G$ has $HD \leq h$, then this permits efficient computation of LSHS.

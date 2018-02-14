@@ -25,19 +25,19 @@ $\frac{1}{n}\sum_{v\in V} \abs{\Lb(v)} \leq h'\log D$,
 where $h'=\Or(\Delta h\log (hn\Delta))$.
 \end{theorem}
 Note that since query time depends linearly on the hub size, the above result implies both storage and performance bounds.
-\begin{proof}
-We only go over the preprocessing, since the construction is the same as in \cref{theo:construct_hl} and the bound for the size easily follows. 
-The objective is to obtain a set $C_i$ which is an average $(h',2^i)$-LSHS.
-This turns out to be a minimum cost hitting set problem.
-Indeed, we want to solve
-\[
-\min_{C\subseteq V} \sum_{v\in V}\abs{B_{2r}(v)\cap C}  \quad \text{ s.t. } \quad C \text{ hits } \PS_r.
-\]
-This follows from a symmetry argument, assigning to each node $u$ the cost $c(u)=\abs{\crl{v\in V: u\in B_{2r}(v)}}$.
-On the other hand, given a minimum cost hitting set problem with optimum value $\tau$, if the set system has VC-dimension $d$, the algorithm in \cite{vc_dim_hitting} finds a solution, in polynomial time, with cost at most $\Or(d\tau\log(d\tau))$.
-
-By assumption, the minimum of the problem is at most $hn$.
-Now we perform a mapping, where the ground set is changed to $E$ and paths are sequences of edges instead of nodes.
-This system still has VC-dimension 2, and now the minimum is at most $h\Delta n$.
-We apply the algorithm in \cite{vc_dim_hitting} and obtain a solution $C_i$ with cost at most $\Or(h\Delta n\log(h\Delta n))$; this gives the promised average $(h',r)$-LSHS.
-\end{proof}
+%\begin{proof}
+%We only go over the preprocessing, since the construction is the same as in \cref{theo:construct_hl} and the bound for the size easily follows. 
+%The objective is to obtain a set $C_i$ which is an average $(h',2^i)$-LSHS.
+%This turns out to be a minimum cost hitting set problem.
+%Indeed, we want to solve
+%$
+%\min\crl{\sum_{v\in V}\abs{B_{2r}(v)\cap C}: C\subseteq V, C \text{ hits } \PS_r}.
+%$
+%This follows from a symmetry argument, assigning to each node $u$ the cost $c(u)=\abs{\crl{v\in V: u\in B_{2r}(v)}}$.
+%On the other hand, given a minimum cost hitting set problem with optimum value $\tau$, if the set system has VC-dimension $d$, the algorithm in \cite{vc_dim_hitting} finds a solution, in polynomial time, with cost at most $\Or(d\tau\log(d\tau))$.
+%
+%By assumption, the minimum of the problem is at most $hn$.
+%Now we perform a mapping, where the ground set is changed to $E$ and paths are sequences of edges instead of nodes.
+%This system still has VC-dimension 2, and now the minimum is at most $h\Delta n$.
+%We apply the algorithm in \cite{vc_dim_hitting} and obtain a solution $C_i$ with cost at most $\Or(h\Delta n\log(h\Delta n))$; this gives the promised average $(h',r)$-LSHS.
+%\end{proof}

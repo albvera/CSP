@@ -3,12 +3,12 @@ We achieve this as follows: Each node in $G^B$ is of the form $\pp{v,b}$, which 
 A node is connected to neighbors (according to $E$) as long as the remaining budget of that transition is non-negative.
 Finally, we create $n$ sink nodes, denoted $v^-$, and connect node $\pp{v,b}$ to $v^-$ with length $1/(b+1)$.
 An illustration of the construction is presented in Figure~\ref{fig:augmented}.
-The following definition formalizes this. 
+%The following definition formalizes this. 
 
-\begin{definition}[Augmented Graph]
-Given $(G,\ell,c)$ and $B\in\N$, the augmented version $G^B$ has vertex set $V^B \defeq\crl*{\pp{v,b}: v\in V, b=0,1,\ldots,B}\cup\crl*{v^-:v\in V}$, the edge set $E^B$ is $\crl*{\pp{v,b}\pp{w,x} : vw\in E, x=b-c_{vw}, x\geq 0}\cup\crl*{\pp{v,b}v^-: v\in V, 0\leq b\leq B}$.
-The length function in $G^B$ is $\ell(\pp{v,b},v^-) \defeq \frac{1}{b+1}$ and $\ell(\pp{v,b},\pp{w,x}) \defeq \ell(vv')$.
-\end{definition}
+%\begin{definition}[Augmented Graph]
+%Given $(G,\ell,c)$ and $B\in\N$, the augmented version $G^B$ has vertex set $V^B \defeq\crl*{\pp{v,b}: v\in V, b=0,1,\ldots,B}\cup\crl*{v^-:v\in V}$, the edge set $E^B$ is $\crl*{\pp{v,b}\pp{w,x} : vw\in E, x=b-c_{vw}, x\geq 0}\cup\crl*{\pp{v,b}v^-: v\in V, 0\leq b\leq B}$.
+%The length function in $G^B$ is $\ell(\pp{v,b},v^-) \defeq \frac{1}{b+1}$ and $\ell(\pp{v,b},\pp{w,x}) \defeq \ell(vv')$.
+%\end{definition}
 
 \begin{figure}
 \input{TexImg/augmented.tex}
@@ -29,22 +29,22 @@ We call this mapping the \emph{projection} of a path.
 \begin{proposition}\label{prop:shorteffic}
 A shortest path from source $\pp{s,b}$ to sink node~$t^-$ projects to an efficient path in $G$ solving $\dist(s,t|b)$. 
 \end{proposition}
-\begin{proof}
-Let $P$ be the shortest path from $\pp{s,b}$ to $t^-$, and $\bar P$ its projection.
-To reach $t^-$, $P$ must pass through some $\pp{t,b'}$, $b'\geq 0$.
-By construction, $P$ consumes $b-b'$ units of resource, hence it is feasible; moreover, $\bar P$ is the shortest among $(s,t)$-paths with cost $b-b'$.
-Now assume, by way of contradiction, that $\bar P$ is not efficient.
-As $\bar P$ is the shortest using $b-b'$ units of resource, there exists $P'$ such that $\ell(\bar P')\leq \ell(\bar P)$ and $c(\bar P')< c(\bar P)$.
-It must be that $P'$ passes through $\pp{t,b''}$, with $b''>b'$.
-We argue that, in this case, $P$ would not be a shortest path to $t^-$.
-Indeed, 
-\[
-\ell(P')=\ell(\bar P')+\frac{1}{1+b''}
-\leq \ell(\bar P) +\frac{1}{1+b''}
-< \ell(\bar P) +\frac{1}{1+b'},
-\]
-where the last expression is exactly $\ell(P)$.
-\end{proof}
+%\begin{proof}
+%Let $P$ be the shortest path from $\pp{s,b}$ to $t^-$, and $\bar P$ its projection.
+%To reach $t^-$, $P$ must pass through some $\pp{t,b'}$, $b'\geq 0$.
+%By construction, $P$ consumes $b-b'$ units of resource, hence it is feasible; moreover, $\bar P$ is the shortest among $(s,t)$-paths with cost $b-b'$.
+%Now assume, by way of contradiction, that $\bar P$ is not efficient.
+%As $\bar P$ is the shortest using $b-b'$ units of resource, there exists $P'$ such that $\ell(\bar P')\leq \ell(\bar P)$ and $c(\bar P')< c(\bar P)$.
+%It must be that $P'$ passes through $\pp{t,b''}$, with $b''>b'$.
+%We argue that, in this case, $P$ would not be a shortest path to $t^-$.
+%Indeed, 
+%\[
+%\ell(P')=\ell(\bar P')+\frac{1}{1+b''}
+%\leq \ell(\bar P) +\frac{1}{1+b''}
+%< \ell(\bar P) +\frac{1}{1+b'},
+%\]
+%where the last expression is exactly $\ell(P)$.
+%\end{proof}
 
 
 Latter we give a construction that depends on LSHS for the system $\PE$, we call such object an efficient path hitting set (EPHS).
@@ -58,38 +58,38 @@ Note that this does not follow from \cref{prop:lshsaug}, since the HD is a stron
 \begin{proposition}\label[proposition]{prop:lshsaug}
 Given a  $(\hc,r)$-EPHS for the path system $\PE$, in polynomial time we can construct a $(\hc B,r)$-LSHS for $\PB$.
 \end{proposition}
-\begin{proof}
-Given $C$, an $(\hc,r)$-EPHS for $\PE$, define
-\begin{equation}\label{eq:hitset}
-C^B\defeq \{\pp{v,b}: v\in C, v \text{ hits }\bar P\in\PB_r, c(\bar P)=b\leq B \}.
-\end{equation}
-We prove that $C^B$ hits $\PB_r$ and is locally sparse
-By Proposition~\ref{prop:shorteffic}, we know that shortest paths are efficient, hence $C^B$ hits all the desired paths.
-Finally, we prove local sparsity.
-Take any node $\pp{s,b}$ and observe that
-\begin{equation}\label{eq:local_sparsity}
-\Bf_{2r}(\pp{s,b}) = \{\pp{t,x}: \exists P\in\Pst, \ell(P)\leq 2r, c(P)=b-x\} 
-\subseteq \{\pp{t,x}: t\in \Bf_{2r}(s), x\leq b\} . 
-\end{equation}
-We know that $\card{\Bf_{2r}(s)\cap C}\leq \hc$, therefore $\card{\Bf_{2r}(\pp{s,b})\cap C^B}\leq\hc b\leq \hc B$.
-A similar argument shows the sparsity for the reverse ball.
-\end{proof}
+%\begin{proof}
+%Given $C$, an $(\hc,r)$-EPHS for $\PE$, define
+%\begin{equation}\label{eq:hitset}
+%C^B\defeq \{\pp{v,b}: v\in C, v \text{ hits }\bar P\in\PB_r, c(\bar P)=b\leq B \}.
+%\end{equation}
+%We prove that $C^B$ hits $\PB_r$ and is locally sparse
+%By Proposition~\ref{prop:shorteffic}, we know that shortest paths are efficient, hence $C^B$ hits all the desired paths.
+%Finally, we prove local sparsity.
+%Take any node $\pp{s,b}$ and observe that
+%\begin{equation}\label{eq:local_sparsity}
+%\Bf_{2r}(\pp{s,b}) = \{\pp{t,x}: \exists P\in\Pst, \ell(P)\leq 2r, c(P)=b-x\} 
+%\subseteq \{\pp{t,x}: t\in \Bf_{2r}(s), x\leq b\} . 
+%\end{equation}
+%We know that $\card{\Bf_{2r}(s)\cap C}\leq \hc$, therefore $\card{\Bf_{2r}(\pp{s,b})\cap C^B}\leq\hc b\leq \hc B$.
+%A similar argument shows the sparsity for the reverse ball.
+%\end{proof}
 
-The proof above shows a stronger result:
-In \cref{eq:local_sparsity} we see that the sparsity around the node $\pp{u,b}$ is $\hc b$.
-This is key for our subsequent query time guarantees.
+%The proof above shows a stronger result:
+%In \cref{eq:local_sparsity} we see that the sparsity around the node $\pp{u,b}$ is $\hc b$.
+%This is key for our subsequent query time guarantees.
 
 We can also relate the highway dimensions of the path systems $\PE$ and $\PB$. This does not follow from above, since the HD is a stronger notion than existence of locally-sparse hitting sets.
 \begin{proposition}\label[proposition]{prop:HDaugmented}
 If the HD of the system $\PE$ is $h_c$, then the HD of the system $\PB$ is $Bh_c$.
 \end{proposition}
-\begin{proof}
-Fix $r>0$ and $\pp{v,b}\in V^B$ .
-Let $H_{v,r}\subseteq V$ be the set hitting $S_r(v,\PE)$ and define $H\defeq H_{v,r}\times\{0,1,\ldots,B\}$.
-We show that $H$ hits $\Sf_r(\pp{v,b},\PB)$.
-
-Take $P\in\Sf_r(\pp{v,b},\PB)$.
-Since $\dist(\pp{v,b},P)\leq 2r$, it holds $\dist(v,\bar P)\leq 2r$, therefore $\bar P\in \Sf_r(v,\PE)$.
-Finally, $H_{v,r}$ hits $\bar P$, thus $H$ hits $P$.
-A similar argument shows that $H$ hits $\Sb_r(\pp{v,b},\PB)$.
-\end{proof}
+%\begin{proof}
+%Fix $r>0$ and $\pp{v,b}\in V^B$ .
+%Let $H_{v,r}\subseteq V$ be the set hitting $S_r(v,\PE)$ and define $H\defeq H_{v,r}\times\{0,1,\ldots,B\}$.
+%We show that $H$ hits $\Sf_r(\pp{v,b},\PB)$.
+%
+%Take $P\in\Sf_r(\pp{v,b},\PB)$.
+%Since $\dist(\pp{v,b},P)\leq 2r$, it holds $\dist(v,\bar P)\leq 2r$, therefore $\bar P\in \Sf_r(v,\PE)$.
+%Finally, $H_{v,r}$ hits $\bar P$, thus $H$ hits $P$.
+%A similar argument shows that $H$ hits $\Sb_r(\pp{v,b},\PB)$.
+%\end{proof}

@@ -1,7 +1,6 @@
-Our theoretical results in the preceding sections suggest that using hub labels for CSP queries should perform well in road networks, as these are known to have low highway dimension, and potentially also satisfy the (average) partial witness property. The theoretical constructions for hub labels, however, are not directly suitable for large networks, and need significant modifications. We now describe how our techniques can be adapted to give practical hub label constructions, and discuss experimental results for two real world networks using these methods. 
-\subsection{Practical CSP Algorithms} 
-\label{ssec:practical}
+Our theoretical results suggest that using hub labels for CSP queries should perform well in road networks, as these are known to have low highway dimension, and potentially also satisfy the (average) partial witness property. The theoretical constructions for hub labels, however, are not directly suitable for large networks, and need significant modifications. We now describe how our techniques can be adapted to give practical hub label constructions, and discuss experimental results for two real world networks using these methods. 
 
+\paragraph{Practical CSP Algorithms:}\label{ssec:practical}
 We start by defining a more scalable construction of $G^B$.
 The augmented graph $G^B$ defined in \cref{ssec:aug} is not a minimal representation as it may contain a lot of redundant information.
 For example, the same efficient path $uv$ can be repeated many times in the form $\pp{u,1}\pp{v,0}$, $\pp{u,2}\pp{v,1}$ and so on.
@@ -10,53 +9,68 @@ By encoding this information more efficiently, we get considerable improvements 
 We construct our \emph{pruned} augmented graph $\Gp^B$ as follows:
 As before, nodes are pairs $\pp{v,b}$, but now we add an edge $\pp{v,b}\pp{v',b'}$ only if it is essential for some efficient path, i.e., removing said edge impacts correctness.
 If we let $\Pst^E$ be the set of all efficient paths from $s$ to $t$, we take every $P\in \Pst^E$ with cost $b\leq B$ and trace it in the augmented graph such that it terminates at $\pp{t,0}$.
-
-\begin{definition}\label[definition]{def:pruned_aug_graph}
-The pruned augmented graph is defined by $\Gp^B=(\Vp^B,\Ep^B)$, where
-\begin{align*}
-\Vp^B &:=\crl{\pp{v,b}: v\in V, b=0,1,\ldots,B},\\
-\Ep^B &:=\crl{\pp{v,b}\pp{u,x} : \exists s,t\in V, P\in\PE_{s,t}, c(P)\leq B, vu\in P, b=c(P[v,t]), x=c(P[u,t]) }.
-\end{align*}
-In $\Gp^B$ all the lengths are preserved.
-\end{definition}
+%
+%\begin{definition}\label[definition]{def:pruned_aug_graph}
+%The pruned augmented graph is defined by $\Gp^B=(\Vp^B,\Ep^B)$, where
+%\begin{align*}
+%\Vp^B &:=\crl{\pp{v,b}: v\in V, b=0,1,\ldots,B},\\
+%\Ep^B &:=\crl{\pp{v,b}\pp{u,x} : \exists s,t\in V, P\in\PE_{s,t}, c(P)\leq B, vu\in P, b=c(P[v,t]), x=c(P[u,t]) }.
+%\end{align*}
+%In $\Gp^B$ all the lengths are preserved.
+%\end{definition}
 Note that in $\Gp^B$ there are no sink nodes, hence it has at least $n$ nodes and $nB$ arcs fewer compared to $G^B$.
 In the worst case, those $nB$ arcs are the only gain by doing this process.
 Nevertheless, in our experiments $\Gp^B$ is up to 60\% smaller than $G^B$.
-Observe that, by running Dijkstra in $G^B$, $\Gp^B$ can be computed in time $\Or(n^2B\log(nB))$.
+%Observe that, by running Dijkstra in $G^B$, $\Gp^B$ can be computed in time $\Or(n^2B\log(nB))$.
 
-\subsubsection{HD of the pruned augmented graph}
+%\subsubsection{HD of the pruned augmented graph}
+%
+%A shortest path in $\Gp$ does not necessarily project to an efficient path, even if the path ends in a node of the form $\pp{t,0}$.
+%In contrast, if $P$ projects to an efficient path, then necessarily $P$ is shortest. 
+%To bound the HD, the correct system to study is
+%\[
+%\tilde\PB:=\crl{P: P\text{ ends in a node }\pp{t,0}, \bar P\in \PE, c(\bar P)\leq B }.
+%\]
+%The following result shows how the HD of this system relates to that of $\PE$.
+%We omit the proof since it is identical as the one in Proposition~\ref{prop:HDaugmented}.
+%\begin{proposition}
+%Given CHD $h_c$, the HD of $\tilde\PB$ is $Bh_c$.
+%\end{proposition}
 
-A shortest path in $\Gp$ does not necessarily project to an efficient path, even if the path ends in a node of the form $\pp{t,0}$.
-In contrast, if $P$ projects to an efficient path, then necessarily $P$ is shortest. 
-To bound the HD, the correct system to study is
-\[
-\tilde\PB:=\crl{P: P\text{ ends in a node }\pp{t,0}, \bar P\in \PE, c(\bar P)\leq B }.
-\]
-The following result shows how the HD of this system relates to that of $\PE$.
-We omit the proof since it is identical as the one in Proposition~\ref{prop:HDaugmented}.
-\begin{proposition}
-Given CHD $h_c$, the HD of $\tilde\PB$ is $Bh_c$.
-\end{proposition}
-
-\subsubsection{Types fof queries}
-
+\paragraph{Types of queries:}
 We test our algorithms with two different tasks.
 Recall that our preprocessing is done for some fixed maximum budget $B$.
 The first task we consider is a \emph{frontier query}, wherein given $s$ and $t$, we return the lengths of all efficient paths with costs $b=0,1,\ldots,B$.
 The second we call a \emph{specific query}, we return $\dist(s,t|b)$ for given $s,t,b$ (i.e., a single efficient path).
 
-Note that the pruned augmented graph $\Gp^B$ is designed for frontier queries.
-To see this, fix the terminal $\pp{t,0}$.
-As we ask for the shortest path from $\pp{s,B},\pp{s,B-1},\ldots,\pp{s,0}$ we are guaranteed to recover the entire frontier.
-On the other hand, it may be that the shortest path between $\pp{s,b}$ and $\pp{t,0}$ does not correspond to $\dist(s,t|b)$.
-This occurs when $b$ is not a tight budget and the efficient path requires less.
+%Note that the pruned augmented graph $\Gp^B$ is designed for frontier queries.
+%To see this, fix the terminal $\pp{t,0}$.
+%As we ask for the shortest path from $\pp{s,B},\pp{s,B-1},\ldots,\pp{s,0}$ we are guaranteed to recover the entire frontier.
+%On the other hand, it may be that the shortest path between $\pp{s,b}$ and $\pp{t,0}$ does not correspond to $\dist(s,t|b)$.
+%This occurs when $b$ is not a tight budget and the efficient path requires less.
+%
+%To answer specific queries, we modify $\Gp^B$ by adding extra edges.
+%For every $v\in V(G)$ and $b=1,2,\ldots,B$, we include the edge $\pp{v,b}\pp{v,b-1}$ with length $0$.
+%A simple argument shows that with the added edges, the shortest path between $\pp{s,b}$ and $\pp{t,0}$ has length $\dist(s,t|b)$.
 
-To answer specific queries, we modify $\Gp^B$ by adding extra edges.
-For every $v\in V(G)$ and $b=1,2,\ldots,B$, we include the edge $\pp{v,b}\pp{v,b-1}$ with length $0$.
-A simple argument shows that with the added edges, the shortest path between $\pp{s,b}$ and $\pp{t,0}$ has length $\dist(s,t|b)$.
+\begin{figure}
+\resizebox{\columnwidth}{!}{%
+\begin{minipage}{0.5\columnwidth}
+\centering
+\input{TexImg/plot_clusters_sf.tex}
+\end{minipage}%
+\begin{minipage}{0.5\columnwidth}
+\centering
+\input{TexImg/plot_clusters_lu.tex}
+\end{minipage}
+}
+\caption{Performance of clustering for San Francisco (left) and Luxembourg (right). 
+In the $y$-axis the quantities are normalized by the best greedy cover, i.e., using $k=n$.
+Note that, while the number of short-cuts is an indicator of performance, it is not perfectly correlated with the hub size.}
+\label{fig:clusters}
+\end{figure}
 
-\subsubsection{HL construction via Contraction Hierarchies}
-
+\paragraph{HL construction via Contraction Hierarchies:}
 We use some techniques described in \cite{hubimplem} combined with an approach tailored for augmented graphs.
 The CH algorithm takes as input any ranking (i.e., permutation) of the nodes, and proceeds by removing nodes from the lowest rank first.
 Whenever a node is removed, we add new edges, called shortcuts, if needed to preserve the shortest paths.
@@ -67,10 +81,10 @@ These are valid hubs, since the highest rank node in a path is guaranteed to be 
 
 The choice of the ranking function is crucial.
 For our experiments, we ranked nodes in $G$ by running a greedy approximate SP cover, selecting the highest rank node as the one covering most uncovered paths in $\PS$ and continuing greedily. 
-Specifically, start with a cover $C=\varnothing$ and compute the set of all shortest paths $\PS$.
-Take a node $v\notin C$ hitting most paths in $\PS$, then remove all those paths from $\PS$, add $v$ to $C$ and iterate.
-The rank is defined as $n$ for the first node added to $C$, $n-1$ for the second and so on.
-To implement the SP cover we follow the algorithm in \cite{hubimplem}.
+%Specifically, start with a cover $C=\varnothing$ and compute the set of all shortest paths $\PS$.
+%Take a node $v\notin C$ hitting most paths in $\PS$, then remove all those paths from $\PS$, add $v$ to $C$ and iterate.
+%The rank is defined as $n$ for the first node added to $C$, $n-1$ for the second and so on.
+%To implement the SP cover we follow the algorithm in \cite{hubimplem}.
 A practical hurdle in such an approach is that to compute a shortest path cover, a direct approach requires storing all the shortest paths in memory, which, in most mapping applications, is infeasible.
 %There are two ways around this issue.
 %We can compute the cover by rocessing one shortest path tree at a time, this translates to $\Omega(n^3\log n)$ running time, but $\Or(n)$ memory.
@@ -81,19 +95,19 @@ We stress that this is just an easy way to get a ranking; more sophisticated heu
 Using another contraction scheme may expedite our algorithms and reduce the hub size.
 
 
-Depending on the size of our instance, and the specific queries, we work with either the augmented graph $G^B$ or the pruned augmented graph $\Gp^B$.
-Even though $\Gp^B$ takes time to compute, it can speed up the overall process and yield considerably better hubs. 
-Given a ranking for nodes in $G$, we contract $\Gp^B$ as follows.
-Say that $V$ is ordered according to the ranking, so node~$1$ is the least important and $n$ the most important.
-In $\Gp^B$, we first contract the nodes $\pp{1,b}$ for $b=B,\ldots,0$, then the nodes $\pp{2,b}$ and so on till the nodes $\pp{n,b}$ are the last to contract. 
-Finally, when contracting a node $v$, if $u$ is a predecessor and $w$ a successor of $v$, we add the short-cut $uw$ only if, by removing $v$, the distance from $u$ to $w$ is altered, and the new shortest path from $u$ to $w$ is efficient.
-We can go even further; the short-cut $uw$ is unnecessary if the shortest path is not efficient, even if the distance changes.
-
-To obtain better hubs we prune the results obtained by CH searches.
-If $w$ is in the forward search of $v$ with distance $d$, it might be that $\dist(v,w)<d$, this occurs because the search goes only to higher rank nodes and the discovered path is missing some node.
-When $\dist(v,w)<d$, we can safely remove $w$ from the hub of $v$, since the highest ranked node in a shortest path will have the correct distance.
-For frontier queries, we can also prune away a node $w$ if the $(v,w)$-path has a surplus of budget.
-The entire process can be summarized in the following steps.
+%Depending on the size of our instance, and the specific queries, we work with either the augmented graph $G^B$ or the pruned augmented graph $\Gp^B$.
+%Even though $\Gp^B$ takes time to compute, it can speed up the overall process and yield considerably better hubs. 
+%Given a ranking for nodes in $G$, we contract $\Gp^B$ as follows.
+%Say that $V$ is ordered according to the ranking, so node~$1$ is the least important and $n$ the most important.
+%In $\Gp^B$, we first contract the nodes $\pp{1,b}$ for $b=B,\ldots,0$, then the nodes $\pp{2,b}$ and so on till the nodes $\pp{n,b}$ are the last to contract. 
+%Finally, when contracting a node $v$, if $u$ is a predecessor and $w$ a successor of $v$, we add the short-cut $uw$ only if, by removing $v$, the distance from $u$ to $w$ is altered, and the new shortest path from $u$ to $w$ is efficient.
+%We can go even further; the short-cut $uw$ is unnecessary if the shortest path is not efficient, even if the distance changes.
+%
+%To obtain better hubs we prune the results obtained by CH searches.
+%If $w$ is in the forward search of $v$ with distance $d$, it might be that $\dist(v,w)<d$, this occurs because the search goes only to higher rank nodes and the discovered path is missing some node.
+%When $\dist(v,w)<d$, we can safely remove $w$ from the hub of $v$, since the highest ranked node in a shortest path will have the correct distance.
+%For frontier queries, we can also prune away a node $w$ if the $(v,w)$-path has a surplus of budget.
+%The entire process can be summarized in the following steps.
 
 \begin{table*}
 
@@ -140,34 +154,19 @@ The entire process can be summarized in the following steps.
 \end{table*}
 
 
-\begin{enumerate}[nosep]
-\item Compute the shortest paths in $G$ and use a greedy approach to obtain a cover $C$
-\item Compute the pruned augmented graph $\Gp^B$
-\item Contract $\Gp^B$ using the rank induced by $C$
-\item Create hubs $\Lf(v),\Lb(v)$ using CH
-\item Prune the hubs by running HL queries between $v$ and nodes in $\Lf(v)$. 
-Run a similar process for $\Lb(v)$.
-\end{enumerate}
-Recall that, for some instances, we skip step 2 and contract $G^B$ instead.
-Note that in the last step we bootstrap HL to improve it.
-This works because the fact that some nodes have incorrect distance labels does not impact the correctness of a HL query; a node minimizing the distance is returned and such node must have a correct label.
+%\begin{enumerate}[nosep]
+%\item Compute the shortest paths in $G$ and use a greedy approach to obtain a cover $C$
+%\item Compute the pruned augmented graph $\Gp^B$
+%\item Contract $\Gp^B$ using the rank induced by $C$
+%\item Create hubs $\Lf(v),\Lb(v)$ using CH
+%\item Prune the hubs by running HL queries between $v$ and nodes in $\Lf(v)$. 
+%Run a similar process for $\Lb(v)$.
+%\end{enumerate}
+%Recall that, for some instances, we skip step 2 and contract $G^B$ instead.
+%Note that in the last step we bootstrap HL to improve it.
+%This works because the fact that some nodes have incorrect distance labels does not impact the correctness of a HL query; a node minimizing the distance is returned and such node must have a correct label.
 
-\begin{figure}
-\resizebox{\columnwidth}{!}{%
-\begin{minipage}{0.5\columnwidth}
-\centering
-\input{TexImg/plot_clusters_sf.tex}
-\end{minipage}%
-\begin{minipage}{0.5\columnwidth}
-\centering
-\input{TexImg/plot_clusters_lu.tex}
-\end{minipage}
-}
-\caption{Performance of clustering for San Francisco (left) and Luxembourg (right). 
-In the $y$-axis the quantities are normalized by the best greedy cover, i.e., using $k=n$.
-Note that, while the number of short-cuts is an indicator of performance, it is not perfectly correlated with the hub size.}
-\label{fig:clusters}
-\end{figure}
+
 
 
 \subsection{Experiments} \label{sec:exp}
@@ -211,9 +210,7 @@ Size of reverse hubs (c) and significance (d) for frontier queries in San Franci
 \label{fig:SF_bwd_size}
 \end{figure}
 
-\subsubsection{Query-time performance}
-
-
+\paragraph{Query-time performance:}
 Table~\ref{tab:performance_results} presents the CSP computation times for different maximum budgets $B$. 
 For frontier queries, labelled as `f', the query times are measured as the average of 1000 random $s,t$.
 For specific queries, labelled as `s', the times are measured as 1000 random triplets $s,t,b$.
@@ -232,8 +229,7 @@ In contrast, for specific queries we add extra edges $\pp{s,b}\pp{s,b-1}$, hence
 In the contraction step, we want to remove a node without altering the shortest path, a process that requires many reachability tests.
 
 
-\subsubsection{Hub sizes and node significance}
-
+\paragraph{Hub sizes and node significance:}
 We focus the analysis on two meaningful quantities.
 The first is hub size, which is well captured by  $\card{\Lb(\pp{t,0})}$ for $t\in V$.
 Indeed, for frontier queries the reverse hub is bounding the space requirements; for specific queries the same is true up to a constant factor.
@@ -242,24 +238,7 @@ Intuitively, a node is highly significant if belongs to many efficient paths.
 Figure~\ref{fig:SF_bwd_size} shows a histogram of these metrics. 
 
 	
-\begin{figure}
-\begin{minipage}[t]{.53\textwidth}
-\includegraphics[clip, trim=4.6cm 4.8cm 4.7cm 3cm,height=4.7cm]{TexImg/SF_hub_sizes.pdf}%
-\includegraphics[clip, trim=15.8cm 0cm 0.4cm 1cm,height=4.4cm]{TexImg/SF_hub_sizes.pdf}
-\end{minipage}%
-\begin{minipage}[t]{.47\textwidth}
-\flushright
-\includegraphics[clip, trim=3.7cm 2.9cm 4.2cm 3cm,height=4.7cm]{TexImg/sig_colapse.pdf}
-\end{minipage}
-\caption{Heat maps for frontier queries in San Francisco augmented with $B=25$.
-On the left we see the hub size. 
-Note that the size is not homogeneous, but rather we can observe clusters and neighborhoods tend to be similar.
-On the right the significance.
-The most significant nodes have been drawn bigger.
-The top 3 most significant correspond to Geary Blvd \& Gough St, Franklin St \& O'Farrel St and Market St \& Polk St.
-}
-\label{fig:heat_maps}
-\end{figure}
+
 
 \cref{fig:heat_maps} presents the spatial relationships between the hub size and significance in the San Francisco network. 
 \cref{fig:map_LU} shows the spatial distribution of significance in the Luxembourg network.
@@ -267,10 +246,3 @@ We observe that highly significant nodes tend to have small hub size.
 The intuition is simple, if most hubs contain $s$, then is easier for $s$ to satisfy the cover property with a small hub.
 Note also that the hub size resembles an harmonic function; nodes are mostly similar to their neighbors.
 
-\begin{figure}
-\centering
-\includegraphics[scale=0.3]{TexImg/map_LU_sig.png}
-\caption{Heat map of significance for frontier queries in Luxembourg City augmented with $B=25$.
-Notice how the highly significant nodes are in main road crossings.}
-\label{fig:map_LU} 
-\end{figure}
