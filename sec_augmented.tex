@@ -12,7 +12,7 @@ An illustration of the construction is presented in Figure~\ref{fig:augmented}.
 
 \begin{figure}
 \input{TexImg/augmented.tex}
-\caption{Example of a graph augmentation: The original graph $G$ has all paths of unit length, and costs as labeled on the edges. In the augmented graph $G^B$, the labels represent the edge lengths (unlabeled edges have length 1). Note the additional edges from $(w,b)$ to the sink node $w^-$ (and similarly for $u$ and $v$). 
+\caption{Example of a graph augmentation: The original graph $G$ has all paths of unit length, and costs as labelled on the edges. In the augmented graph $G^B$, the labels represent the edge lengths (unlabelled edges have length 1). Note the additional edges from $(w,b)$ to the sink node $w^-$ (and similarly for $u$ and $v$). 
 }
 \label{fig:augmented}
 \end{figure}
@@ -24,11 +24,9 @@ We call this mapping the \emph{projection} of a path.
 %If $P$ is of the form $\pp{v_1,b_1}\ldots\pp{v_k,b_k}$, then the projection of $P$, denoted $\bar P$, is the path $\bar P\defeq v_1v_2\ldots v_k$.
 %Analogously, if $P$ is of the form $\pp{v_1,b_1}\ldots\pp{v_k,b_k}v_{k}^-$, then $\bar P\defeq v_1\ldots v_{k}$. 
 %\end{definition}
+Since in our construction we penalise paths that overuse budgets, we can prove that
+a shortest path from source $\pp{s,b}$ to sink node~$t^-$ projects to an efficient path in $G$ solving $\dist(s,t|b)$. 
 
-
-\begin{proposition}\label{prop:shorteffic}
-A shortest path from source $\pp{s,b}$ to sink node~$t^-$ projects to an efficient path in $G$ solving $\dist(s,t|b)$. 
-\end{proposition}
 %\begin{proof}
 %Let $P$ be the shortest path from $\pp{s,b}$ to $t^-$, and $\bar P$ its projection.
 %To reach $t^-$, $P$ must pass through some $\pp{t,b'}$, $b'\geq 0$.
