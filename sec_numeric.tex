@@ -1,14 +1,18 @@
-Our theoretical results suggest that using hub labels for CSP queries should perform well in road networks, as these are known to have low highway dimension, and potentially also satisfy the (average) partial witness property. The theoretical constructions for hub labels, however, are not directly suitable for large networks, and need significant modifications. We now describe how our techniques can be adapted to give practical hub label constructions, and discuss experimental results for two real world networks using these methods. 
+Our theoretical results suggest that using hub labels for CSP queries should perform well in road networks, as these are known to have low highway dimension, and potentially also satisfy the (average) partial witness property. The theoretical constructions for hub labels, however, are not directly suitable for large networks, and need significant modifications.
+% We now describe how our techniques can be adapted to give practical hub label constructions, and discuss experimental results for two real world networks using these methods. 
+Broadly speaking, instead of the augmented graph we use a \emph{pruned} version $\Gp^B$, which is a minimal representation.
+Next, we use approximation algorithms based un clustering to obtain shortest path covers and create the hub labels.
+The details of our practical algorithms can be found in our full version.
 
-\paragraph{Practical CSP Algorithms:}\label{ssec:practical}
-We start by defining a more scalable construction of $G^B$.
-The augmented graph $G^B$ defined in \cref{ssec:aug} is not a minimal representation as it may contain a lot of redundant information.
-For example, the same efficient path $uv$ can be repeated many times in the form $\pp{u,1}\pp{v,0}$, $\pp{u,2}\pp{v,1}$ and so on.
-By encoding this information more efficiently, we get considerable improvements both in query time and in data storage.
-
-We construct our \emph{pruned} augmented graph $\Gp^B$ as follows:
-As before, nodes are pairs $\pp{v,b}$, but now we add an edge $\pp{v,b}\pp{v',b'}$ only if it is essential for some efficient path, i.e., removing said edge impacts correctness.
-If we let $\Pst^E$ be the set of all efficient paths from $s$ to $t$, we take every $P\in \Pst^E$ with cost $b\leq B$ and trace it in the augmented graph such that it terminates at $\pp{t,0}$.
+%\paragraph{Practical CSP Algorithms:}\label{ssec:practical}
+%We start by defining a more scalable construction of $G^B$.
+%The augmented graph $G^B$ defined in \cref{ssec:aug} is not a minimal representation as it may contain a lot of redundant information.
+%For example, the same efficient path $uv$ can be repeated many times in the form $\pp{u,1}\pp{v,0}$, $\pp{u,2}\pp{v,1}$ and so on.
+%By encoding this information more efficiently, we get considerable improvements both in query time and in data storage.
+%
+%We construct our \emph{pruned} augmented graph $\Gp^B$ as follows:
+%As before, nodes are pairs $\pp{v,b}$, but now we add an edge $\pp{v,b}\pp{v',b'}$ only if it is essential for some efficient path, i.e., removing said edge impacts correctness.
+%If we let $\Pst^E$ be the set of all efficient paths from $s$ to $t$, we take every $P\in \Pst^E$ with cost $b\leq B$ and trace it in the augmented graph such that it terminates at $\pp{t,0}$.
 %
 %\begin{definition}\label[definition]{def:pruned_aug_graph}
 %The pruned augmented graph is defined by $\Gp^B=(\Vp^B,\Ep^B)$, where
@@ -18,9 +22,9 @@ If we let $\Pst^E$ be the set of all efficient paths from $s$ to $t$, we take ev
 %\end{align*}
 %In $\Gp^B$ all the lengths are preserved.
 %\end{definition}
-Note that in $\Gp^B$ there are no sink nodes, hence it has at least $n$ nodes and $nB$ arcs fewer compared to $G^B$.
-In the worst case, those $nB$ arcs are the only gain by doing this process.
-Nevertheless, in our experiments $\Gp^B$ is up to 60\% smaller than $G^B$.
+%Note that in $\Gp^B$ there are no sink nodes, hence it has at least $n$ nodes and $nB$ arcs fewer compared to $G^B$.
+%In the worst case, those $nB$ arcs are the only gain by doing this process.
+%Nevertheless, in our experiments $\Gp^B$ is up to 60\% smaller than $G^B$.
 %Observe that, by running Dijkstra in $G^B$, $\Gp^B$ can be computed in time $\Or(n^2B\log(nB))$.
 
 %\subsubsection{HD of the pruned augmented graph}
@@ -53,46 +57,46 @@ The second we call a \emph{specific query}, we return $\dist(s,t|b)$ for given $
 %For every $v\in V(G)$ and $b=1,2,\ldots,B$, we include the edge $\pp{v,b}\pp{v,b-1}$ with length $0$.
 %A simple argument shows that with the added edges, the shortest path between $\pp{s,b}$ and $\pp{t,0}$ has length $\dist(s,t|b)$.
 
-\begin{figure}
-\resizebox{\columnwidth}{!}{%
-\begin{minipage}{0.5\columnwidth}
-\centering
-\input{TexImg/plot_clusters_sf.tex}
-\end{minipage}%
-\begin{minipage}{0.5\columnwidth}
-\centering
-\input{TexImg/plot_clusters_lu.tex}
-\end{minipage}
-}
-\caption{Performance of clustering for San Francisco (left) and Luxembourg (right). 
-In the $y$-axis the quantities are normalized by the best greedy cover, i.e., using $k=n$.
-Note that, while the number of short-cuts is an indicator of performance, it is not perfectly correlated with the hub size.}
-\label{fig:clusters}
-\end{figure}
+%\begin{figure}
+%\resizebox{\columnwidth}{!}{%
+%\begin{minipage}{0.5\columnwidth}
+%\centering
+%\input{TexImg/plot_clusters_sf.tex}
+%\end{minipage}%
+%\begin{minipage}{0.5\columnwidth}
+%\centering
+%\input{TexImg/plot_clusters_lu.tex}
+%\end{minipage}
+%}
+%\caption{Performance of clustering for San Francisco (left) and Luxembourg (right). 
+%In the $y$-axis the quantities are normalized by the best greedy cover, i.e., using $k=n$.
+%Note that, while the number of short-cuts is an indicator of performance, it is not perfectly correlated with the hub size.}
+%\label{fig:clusters}
+%\end{figure}
 
-\paragraph{HL construction via Contraction Hierarchies:}
-We use some techniques described in \cite{hubimplem} combined with an approach tailored for augmented graphs.
-The CH algorithm takes as input any ranking (i.e., permutation) of the nodes, and proceeds by removing nodes from the lowest rank first.
-Whenever a node is removed, we add new edges, called shortcuts, if needed to preserve the shortest paths.
-Once we have a graph with shortcuts, a CH search is a special variant of Dijkstra where only higher rank nodes are explored, i.e., we never take an edge $uv$ if rank$(u)>\text{rank}(v)$. 
-The main idea in our construction is to choose an appropriate ranking, and then define the forward hubs of $v$ as the nodes visited during a contraction-based forward search starting at $v$.
-The reverse hubs are defined analogously.
-These are valid hubs, since the highest rank node in a path is guaranteed to be in both hubs.
-
-The choice of the ranking function is crucial.
-For our experiments, we ranked nodes in $G$ by running a greedy approximate SP cover, selecting the highest rank node as the one covering most uncovered paths in $\PS$ and continuing greedily. 
-%Specifically, start with a cover $C=\varnothing$ and compute the set of all shortest paths $\PS$.
-%Take a node $v\notin C$ hitting most paths in $\PS$, then remove all those paths from $\PS$, add $v$ to $C$ and iterate.
-%The rank is defined as $n$ for the first node added to $C$, $n-1$ for the second and so on.
-%To implement the SP cover we follow the algorithm in \cite{hubimplem}.
-A practical hurdle in such an approach is that to compute a shortest path cover, a direct approach requires storing all the shortest paths in memory, which, in most mapping applications, is infeasible.
-%There are two ways around this issue.
-%We can compute the cover by rocessing one shortest path tree at a time, this translates to $\Omega(n^3\log n)$ running time, but $\Or(n)$ memory.
-To circumvent this, we approximate the shortest-path cover by computing only $k<<n$ shortest-path trees and covering these greedily.
-We use an off-the-shelf clustering method to obtain $k$ cluster centers, from which we compute the shortest paths. 
-As shown in Figure~\ref{fig:clusters}, the clustering approach provides a very good approximation of the hubs with even a small $k$.
-We stress that this is just an easy way to get a ranking; more sophisticated heuristics that decide on-line the next node to contract usually work well in practice \cite{goldberg_survey,rice_csp}.
-Using another contraction scheme may expedite our algorithms and reduce the hub size.
+%\paragraph{HL construction via Contraction Hierarchies:}
+%We use some techniques described in \cite{hubimplem} combined with an approach tailored for augmented graphs.
+%The CH algorithm takes as input any ranking (i.e., permutation) of the nodes, and proceeds by removing nodes from the lowest rank first.
+%Whenever a node is removed, we add new edges, called shortcuts, if needed to preserve the shortest paths.
+%Once we have a graph with shortcuts, a CH search is a special variant of Dijkstra where only higher rank nodes are explored, i.e., we never take an edge $uv$ if rank$(u)>\text{rank}(v)$. 
+%The main idea in our construction is to choose an appropriate ranking, and then define the forward hubs of $v$ as the nodes visited during a contraction-based forward search starting at $v$.
+%The reverse hubs are defined analogously.
+%These are valid hubs, since the highest rank node in a path is guaranteed to be in both hubs.
+%
+%The choice of the ranking function is crucial.
+%For our experiments, we ranked nodes in $G$ by running a greedy approximate SP cover, selecting the highest rank node as the one covering most uncovered paths in $\PS$ and continuing greedily. 
+%%Specifically, start with a cover $C=\varnothing$ and compute the set of all shortest paths $\PS$.
+%%Take a node $v\notin C$ hitting most paths in $\PS$, then remove all those paths from $\PS$, add $v$ to $C$ and iterate.
+%%The rank is defined as $n$ for the first node added to $C$, $n-1$ for the second and so on.
+%%To implement the SP cover we follow the algorithm in \cite{hubimplem}.
+%A practical hurdle in such an approach is that to compute a shortest path cover, a direct approach requires storing all the shortest paths in memory, which, in most mapping applications, is infeasible.
+%%There are two ways around this issue.
+%%We can compute the cover by rocessing one shortest path tree at a time, this translates to $\Omega(n^3\log n)$ running time, but $\Or(n)$ memory.
+%To circumvent this, we approximate the shortest-path cover by computing only $k<<n$ shortest-path trees and covering these greedily.
+%We use an off-the-shelf clustering method to obtain $k$ cluster centers, from which we compute the shortest paths. 
+%As shown in Figure~\ref{fig:clusters}, the clustering approach provides a very good approximation of the hubs with even a small $k$.
+%We stress that this is just an easy way to get a ranking; more sophisticated heuristics that decide on-line the next node to contract usually work well in practice \cite{goldberg_survey,rice_csp}.
+%Using another contraction scheme may expedite our algorithms and reduce the hub size.
 
 
 %Depending on the size of our instance, and the specific queries, we work with either the augmented graph $G^B$ or the pruned augmented graph $\Gp^B$.
@@ -223,10 +227,10 @@ The preprocessing time does not include the cover computation, since this is a f
 Note that preprocessing frontier queries in Luxembourg is faster, despite the network being bigger, this can be explained by the structural properties.
 For example, in Luxembourg there are more highways and fast roads.
 Observe that the \emph{average hub size decreases} in San Francisco, this is because in this instance we use $\Gp$, which prunes away most of the nodes, thus many nodes $\pp{v,b}$ are isolated and have empty hubs.
-The longer preprocessing time for frontier queries can be explained as follows.
-There are many cases when two nodes are not reachable, to detect this requires Dijkstra to explore the entire graph.
-In contrast, for specific queries we add extra edges $\pp{s,b}\pp{s,b-1}$, hence a reachability test ends, in average, earlier.
-In the contraction step, we want to remove a node without altering the shortest path, a process that requires many reachability tests.
+%The longer preprocessing time for frontier queries can be explained as follows.
+%There are many cases when two nodes are not reachable, to detect this requires Dijkstra to explore the entire graph.
+%In contrast, for specific queries we add extra edges $\pp{s,b}\pp{s,b-1}$, hence a reachability test ends, in average, earlier.
+%In the contraction step, we want to remove a node without altering the shortest path, a process that requires many reachability tests.
 
 
 \paragraph{Hub sizes and node significance:}
