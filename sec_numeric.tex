@@ -38,7 +38,7 @@ We omit the proof since it is identical as the one in Proposition~\ref{prop:HDau
 Given CHD $h_c$, the HD of $\tilde\PB$ is $Bh_c$.
 \end{proposition}
 
-\subsubsection{Types fof queries}
+\subsubsection{Types of queries}
 
 We test our algorithms with two different tasks.
 Recall that our preprocessing is done for some fixed maximum budget $B$.
@@ -72,8 +72,6 @@ Take a node $v\notin C$ hitting most paths in $\PS$, then remove all those paths
 The rank is defined as $n$ for the first node added to $C$, $n-1$ for the second and so on.
 To implement the SP cover we follow the algorithm in \cite{hubimplem}.
 A practical hurdle in such an approach is that to compute a shortest path cover, a direct approach requires storing all the shortest paths in memory, which, in most mapping applications, is infeasible.
-%There are two ways around this issue.
-%We can compute the cover by rocessing one shortest path tree at a time, this translates to $\Omega(n^3\log n)$ running time, but $\Or(n)$ memory.
 To circumvent this, we approximate the shortest-path cover by computing only $k<<n$ shortest-path trees and covering these greedily.
 We use an off-the-shelf clustering method to obtain $k$ cluster centers, from which we compute the shortest paths. 
 As shown in Figure~\ref{fig:clusters}, the clustering approach provides a very good approximation of the hubs with even a small $k$.

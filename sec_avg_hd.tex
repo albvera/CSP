@@ -1,8 +1,3 @@
-The partial-witness property and \cref{theo:witness_doubling} provide a nice link between the CHD and HD, essentially showing that scaling CSP queries is of similar complexity to scaling SP queries as long as any efficient path contains large shortest-path segments. 
-As an example, consider a \emph{multimodal mapping service} which gives transit routes combining walking, bus and subway, while ensuring at most $k$ transfers. 
-For $k=3$, each route has at most $4$ segments, which gives use the partial witness property with $\beta = 2$. 
-Now if each individual network has small HD, then the CHD is also small.
-
 Converting the partial-witness condition to a more interpretable condition is difficult in general, as the structure of $\PS$ and $\PE$ may be complex. 
 One way to get such a condition, however, is by considering \emph{average-case} performance metrics.
 For this, we relax the definition of HD in two ways: $(i)$ we require LSHS to be locally sparse ``on average'' over all nodes, and
@@ -26,18 +21,18 @@ where $h'=\Or(\Delta h\log (hn\Delta))$.
 \end{theorem}
 Note that since query time depends linearly on the hub size, the above result implies both storage and performance bounds.
 \begin{proof}
-We only go over the preprocessing, since the construction is the same as in \cref{theo:construct_hl} and the bound for the size easily follows. 
+We only show how to compute average LSHS, since the construction of HL is the same as in \cref{theo:construct_hl} and the bound for the size easily follows. 
 The objective is to obtain a set $C_i$ which is an average $(h',2^i)$-LSHS.
-This turns out to be a minimum cost hitting set problem.
+This turns out to be a minimum-cost hitting set problem.
 Indeed, we want to solve
 \[
-\min_{C\subseteq V} \sum_{v\in V}\abs{B_{2r}(v)\cap C}  \quad \text{ s.t. } \quad C \text{ hits } \PS_r.
+C_i = \arg\!\min\crl*{\sum_{v\in V}\abs{B_{2^{i+1}}(v)\cap C}: C\subseteq V, C \text{ hits } \PS_{2^i}}.
 \]
-This follows from a symmetry argument, assigning to each node $u$ the cost $c(u)=\abs{\crl{v\in V: u\in B_{2r}(v)}}$.
+This follows from a symmetry argument, assigning to each node $u$ the cost $c(u)=\abs{\crl{v\in V: u\in B_{2^{i+1}}(v)}}$.
 On the other hand, given a minimum cost hitting set problem with optimum value $\tau$, if the set system has VC-dimension $d$, the algorithm in \cite{vc_dim_hitting} finds a solution, in polynomial time, with cost at most $\Or(d\tau\log(d\tau))$.
 
 By assumption, the minimum of the problem is at most $hn$.
-Now we perform a mapping, where the ground set is changed to $E$ and paths are sequences of edges instead of nodes.
-This system still has VC-dimension 2, and now the minimum is at most $h\Delta n$.
-We apply the algorithm in \cite{vc_dim_hitting} and obtain a solution $C_i$ with cost at most $\Or(h\Delta n\log(h\Delta n))$; this gives the promised average $(h',r)$-LSHS.
+Now we perform a mapping from paths to sets, where the ground set is $E$ and paths are sequences of edges.
+This system has VC-dimension 2, and now the minimum is at most $h\Delta n$.
+We apply the algorithm in \cite{vc_dim_hitting} and obtain a solution $C_i$ with cost at most $\Or(h\Delta n\log(h\Delta n))$; this gives the promised average $(h',2^i)$-LSHS.
 \end{proof}

@@ -25,7 +25,7 @@ Thus, Chebyshev's inequality gives us that $\Pr(\sum_eT_e>\E[\sum_eT_e]+\delta)\
 $\min_{ P\in\Pst}\sum_{i\in P}\mu_i \, \mbox{s.t.}\, \sum_{i\in P}\sigma^2_i\leq \delta^2p$, which is now a CSP problem. 
 Note that though we relax the condition $\Pr(\ell(P)>\E[\ell(P)]+\delta)\leq p$, our solution always respects this constraint -- this is often more critical for practical applications, e.g., for ETA estimates accuracy is more important than optimality.
 
-Another problem that can be modeled as a CSP is that of finding \emph{reliable shortest paths}.
+Another problem that can be modelled as a CSP is that of finding \emph{reliable shortest paths}.
 Consider the case where each edge has a probability $q_e$ of triggering a bad event, with resulting penalty $p$ (for example, slowdowns due to accidents).
 In this case, we want to minimize the travel time as well as the expected penalty.
 Assuming independence, we have the following natural problem:
@@ -34,26 +34,22 @@ This model is considered in \cite{fareevasion} for routing with fare evasion, wh
 
 
 \subsection{Our Contributions}
-We consider the problem of computing constrained shortest paths on large networks, with bounded budgets and integer edge-costs. For a fixed source, destination and budget, the CSP query admits a natural dynamic-programming algorithm; our focus however is on developing data-structures that support arbitrary source-destination-budget queries. In particular, our work addresses the following questions:
-\vspace{-0.1cm}
-\begin{center}
-\emph{How can we use preprocessing and network augmentation to speed up CSP computation, while providing preprocessing, storage and query time guarantees for our algorithms?}
-\end{center}
-\vspace{-0.1cm}
-
-For the SP problem, there were several known heuristics which worked well in practice~\cite{dimacs09}, but had no performance guarantees.
-These were unified by Abraham et al.~\cite{highway2013, highway2010} via the \emph{Highway Dimension} (HD), a graph structural metric, which they showed could parametrize the preprocessing, storage and query time of these heuristics.
+We consider the problem of developing oracles that support fast CSP queries in large networks. 
+In particular, given a network with integer edge-costs, and a budget upper bound, we want to preprocess the network to create a data-structure that supports arbitrary source-destination-budget queries; moreover, we want formal guarantees on the preprocessing time, storage and query time.
+ In the context of the SP problem, the seminal work of Abraham et al.~\cite{highway2013, highway2010} demonstrated that the preprocessing, storage and query times of several widely-used heuristics~\cite{dimacs09} could be parametrized using a graph structural metric called the \emph{Highway Dimension} (HD).
 Our work adopts a similar program for the CSP; in particular, our contributions are summarized as follows:
 
 \paragraph{Theoretical contributions}: 
-Analogous to the role of the Highway Dimension for the set of shortest paths, we define the \emph{constrained highway dimension} (CHD) for the set of {\em efficient paths} (i.e., minimal solutions to the CSP; cf. Defn.~\ref{def:effpath}). We show how the CHD can be used to parametrize the performance of CSP algorithms via a reduction from CSP to an SP problem on a directed \emph{augmented graph} that jointly encodes edge costs and lengths (\cref{theo:HLeff}). One hurdle however is that the CHD can be much bigger than the HD in general; our main theoretical contribution is in showing that the \emph{HD and CHD an be related under an additional partial witness condition} (\cref{def:partial_witness}). 
+Analogous to the role of the Highway Dimension for the set of shortest paths, we define the \emph{constrained highway dimension} (CHD) for the set of {\em efficient paths} (i.e., minimal solutions to the CSP; cf. Defn.~\ref{def:effpath}). 
+We show how the CHD can be used to parametrize the performance of CSP algorithms via a reduction from CSP to an SP problem on a directed \emph{augmented graph}.
+One hurdle however is that the CHD can be much bigger than the HD in general; our main theoretical contribution is in showing that the \emph{HD and CHD an be related under an additional partial witness condition} (\cref{def:partial_witness}). 
 This justifies our proposed CSP algorithms, as it shows they are efficient in settings where SP computation is scalable. Moreover, we show that under \emph{average performance metrics} (as opposed to HD which is a worst-case notion), we can obtain an explicit condition for small gaps between the average HD and CHD, which can be interpreted in terms of having few physical overpasses in road networks.
 
 \paragraph{Practical contributions}: 
-Although our theoretical results justify our algorithms for CSP, they are impractical for real networks. 
-To this end, we show how to adapt our ideas to develop practical data-structures for CSP queries based on {\em hub labels}~\cite{cohen_definition_hl}. 
+We use our theoretical results to develop new practical data-structures for CSP queries, based on {\em hub labels}~\cite{cohen_definition_hl}. 
 We evaluate our algorithm on datasets with detailed travel-time information for San Francisco and Luxembourg.
-In experiments, our algorithms support query times which are orders of magnitude faster than existing (non-preprocessing) techniques, have small storage requirements, and good preprocessing times even on a single machine. 
+In experiments, our algorithms exhibit query times four orders of magnitude faster than existing (non-preprocessing) techniques, have small storage requirements, and good preprocessing times even on a single machine. 
+ 
 
 \paragraph{Paper outline}:
 In \cref{sec:prelim}, we introduce the SP and CSP problems, and extend the notion of the HD (as defined in \cite{highway2013}) to directed graphs and general path systems; this allows us to define an analogous notion of a \emph{constrained highway dimension} (CHD) for constrained shortest paths in \cref{sec:chd}. 

@@ -40,7 +40,8 @@ Let $(G,\ell,c)$ be a network with HD $h$.
 If the bounded growth is satisfied, we can obtain, in polynomial time, hub labels for CSP queries that guarantee average query-time $\Or((b+1)\alpha h'\log D)$ and total storage $\Or(nB\cdot B\alpha h'\log D)$, where $h'=\Or(\Delta h\log(hn\Delta))$.
 \end{theorem}
 
-We henceforth refer to the average HD of $\PE$ as average CHD; since the average HD is enough to obtain good preprocessing algorithms (cf. \cref{theo:preproc_avg}), an average CHD should intuitively suffice.
+We henceforth refer to the average HD of $\PE$ as average CHD.
+Since the average HD is enough to obtain good preprocessing algorithms (cf. \cref{theo:preproc_avg}), an average CHD should intuitively suffice.
 However, to prove \cref{theo:overpasses}, we need to show that it is possible to obtain small average CHD under even less restrictive assumptions than the partial-witness.
 To do this, we first allow for an additional \emph{supplementary witness set} $D$ such that \emph{every efficient path is either witnessed by a shortest-path or hit by $D$}.
 This corresponds to the intuition that a few bad efficient paths should not completely ruin the algorithm. 
