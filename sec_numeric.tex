@@ -184,22 +184,22 @@ This is a measure of risk, since edges with high variance are prone to cause a d
 \begin{figure}
 \begin{minipage}[t]{.28\textwidth}
 \centering
-\includegraphics[clip, trim=0.2cm 0.3cm 0.4cm 0.2cm,scale=0.225]{TexImg/SF_query_dij_B25.pdf}
+\includegraphics[clip, trim=0.2cm 0.3cm 0.4cm 0.2cm,scale=0.225]{TexImg/SF_query_dij_B25.pdf}\\
 (a)
 \end{minipage}%
 \begin{minipage}[t]{.24\textwidth}
 \centering
-\includegraphics[clip, trim=1.65cm 0.3cm 0.2cm 0.2cm,scale=0.225]{TexImg/SF_query_hl_B25.pdf}
+\includegraphics[clip, trim=1.65cm 0.3cm 0.2cm 0.2cm,scale=0.225]{TexImg/SF_query_hl_B25.pdf}\\
 (b)
 \end{minipage}%
 \begin{minipage}[t]{.24\textwidth}
 \centering
-\includegraphics[clip, trim = 1.3cm 0.3cm 0cm 0cm,scale=0.225]{TexImg/SF_bwd_hub_size.pdf}
+\includegraphics[clip, trim = 1.3cm 0.3cm 0cm 0cm,scale=0.225]{TexImg/SF_bwd_hub_size.pdf}\\
 (c)
 \end{minipage}%
 \begin{minipage}[t]{.24\textwidth}
 \centering
-\includegraphics[clip, trim = 1.3cm 0.3cm 0cm 0cm,scale=0.225]{TexImg/significance.pdf}
+\includegraphics[clip, trim = 1.3cm 0.3cm 0cm 0cm,scale=0.225]{TexImg/significance.pdf}\\
 (d)
 \end{minipage}
 \caption{ Histogram frontier queries for Dijkstra (a) and HL (b). Times are 1000 random pairs in San Francisco augmented with $B=25$.
@@ -223,7 +223,8 @@ The preprocessing time does not include the cover computation, since this is a f
 
 Note that preprocessing frontier queries in Luxembourg is faster, despite the network being bigger, this can be explained by the structural properties.
 For example, in Luxembourg there are more highways and fast roads.
-Observe that the \emph{average hub size decreases} in San Francisco, this is because in this instance we use $\Gp$, which prunes away most of the nodes, thus many nodes $\pp{v,b}$ are isolated and have empty hubs.
+
+Observe that the \emph{average hub size decreases} in San Francisco for frontier queries, this is because in this instance we use $\Gp$, which prunes away most of the nodes, thus many nodes $\pp{v,b}$ are isolated and have empty hubs.
 The longer preprocessing time for frontier queries can be explained as follows.
 There are many cases when two nodes are not reachable, to detect this requires Dijkstra to explore the entire graph.
 In contrast, for specific queries we add extra edges $\pp{s,b}\pp{s,b-1}$, hence a reachability test ends, in average, earlier.

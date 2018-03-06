@@ -6,7 +6,7 @@ An illustration of the construction is presented in Figure~\ref{fig:augmented}.
 The following definition formalizes this. 
 
 \begin{definition}[Augmented Graph]
-Given $(G,\ell,c)$ and $B\in\N$, the augmented version $G^B$ has vertex set $V^B \defeq\crl*{\pp{v,b}: v\in V, b=0,1,\ldots,B}\cup\crl*{v^-:v\in V}$, the edge set $E^B$ is $\crl*{\pp{v,b}\pp{w,x} : vw\in E, x=b-c_{vw}, x\geq 0}\cup\crl*{\pp{v,b}v^-: v\in V, 0\leq b\leq B}$.
+Given $(G,\ell,c)$ and $B\in\N$, the augmented version $G^B$ has vertex set $V^B \defeq\crl*{\pp{v,b}: v\in V, b=0,1,\ldots,B}\cup\crl*{v^-:v\in V}$, the edge set $E^B$ is\\ $\crl*{\pp{v,b}\pp{w,x} : vw\in E, x=b-c_{vw}, x\geq 0}\cup\crl*{\pp{v,b}v^-: v\in V, 0\leq b\leq B}$.
 The length function in $G^B$ is $\ell(\pp{v,b},v^-) \defeq \frac{1}{b+1}$ and $\ell(\pp{v,b},\pp{w,x}) \defeq \ell(vv')$.
 \end{definition}
 

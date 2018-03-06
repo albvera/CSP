@@ -55,8 +55,8 @@
 \usepackage[numbers]{natbib} 	%\citet{jon90} -> Jones et al. [21], \citep{jon90} -> [21]
 %--------------Document configuration ends--------------
 
-%Import commands specific for SOTA
-\usepackage{commandscsp,adjustbox}
+%Import commands specific for csp
+\usepackage{commandscsp}
 
 \renewcommand{\paragraph}[1]{\smallskip\noindent\textbf{#1}}
 
@@ -65,11 +65,6 @@
 \usepackage[capitalize]{cleveref}
 \theoremstyle{plain}
 \newtheorem{proposition}[theorem]{Proposition}
-\newenvironment{proofof}[1]{%
-  \begin{proof}[{\sc Proof of #1}]%
-}{%
-  \end{proof}%
-}
 
 \begin{document}
 

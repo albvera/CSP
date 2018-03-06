@@ -1,4 +1,4 @@
-We consider a directed graph $G=(V,E)$, where each edge $e\in E$ has an associated \emph{length} $\ell(e)\in\N_+$, and \emph{cost} $c(e)\in\N_+\crl{0}$.
+We consider a directed graph $G=(V,E)$, where each edge $e\in E$ has an associated \emph{length} $\ell(e)\in\N_+$, and \emph{cost} $c(e)\in\N_+\cup\crl{0}$.
 For each node $v$, we denote its degree $\Delta(v)$ as the sum of the in-degree and out-degree, and define the \emph{maximum degree} $\Delta \defeq \max_v\Delta(v)$.
 For any source-terminal pair $s,t\in V$, we denote by $\Pst$ the set of all simple $(s,t)$-paths (without loops or cycles). 
 Throughout this work, we only consider simple paths, which we refer to as paths for brevity.
@@ -14,8 +14,7 @@ Finally, we define $D\defeq\max_{P\in\PS}\ell(P)$ to be the diameter of $G$.
 Our goal is to develop a data-structure to answer \emph{Constrained Shortest-Path} (CSP) queries: 
 Given a source-terminal pair $s,t$ and a budget $b$, we want to return a path $P$ solving
 \[
-\min_{P \in \Pst}  \, \ell(P) \,
-\text{ s.t. } \,  c(P) \leq b.
+\min\crl{\ell(P):c(P) \leq b, P \in \Pst }.
 \]
 We define $\dist(s,t|b)$ to be the minimum of this problem.
 If there is no feasible solution, we define $\dist(s,t|b)=\infty$.

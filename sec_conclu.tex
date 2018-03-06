@@ -1,8 +1,4 @@
-We have shown that, for networks where we can compute shortest paths efficiently, we can also solve for constrained shortest paths in comparable time.
-For this end, we introduced a network primitive, the Constrained Highway Dimension, and parametrize the storage and running time of our algorithms with it.
-Furthermore, we proved that under practical assumptions this primitive is closely related to the Highway Dimension, which is known to parametrize shortest-path algorithms.
-We also showed that under even weaker assumptions we can derive algorithms with the same guarantees in average.
-
-On the practical side, we validated our findings by studying real-world networks.
-Algorithms based on our ideas perform four orders of magnitude better than standard techniques.
-Since we did not implement other state-of-the-art procedures, we believe that our results are promising for real-world applications.
+We introduced a new network primitive, the Constrained Highway Dimension, and used it to parametrize the storage and running time of data structures that support fast CSP queries.
+We derived conditions under which the performance of our algorithms are competitive versus the corresponding SP algorithms, both in the worst-case and average-case settings.
+On the practical side, we validated our findings by developing algorithms that performed four orders of magnitude better on real-world networks, compared to standard techniques.
+Our work is a first step in bridging the gap between SP and CSP algorithms, but we believe our findings are promising for real-world applications.
