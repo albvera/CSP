@@ -17,46 +17,52 @@ There are networks with HD $1$ where the CHD, and also the sparsity of an EPHS, 
 Consider the directed graph $G$ defined in Figure~\ref{fig:big_chd}.
 It is easy to see that $H_{v,r}=\crl{s}$ is a shortest-path hitting set for every $r>0$ and $v\in V(G)$; hence the HD is $1$.
 On the other hand, suppose the costs are such that $c(u_iv_i)=0$ for every $i$, while all other costs are set to $1$.
-Note that the $1$-significant efficent paths intersecting the ball $B_s(2)$ are $u_iv_i$, which are all disjoint.
+Note that the $1$-significant efficient paths intersecting the ball $B_s(2)$ are $u_iv_i$, which are all disjoint.
 Therefore, the hitting set $H_{s,1}$ must contain at least $n$ elements. Moreover, the same argument shows that the sparsity of the best LSHS for $\PS$ is $1$, whereas the sparsity of \emph{any} EPHS is also lower bounded by $n$.
 \end{proof}
 
 \begin{remark}
 One criticism of the graph in \cref{fig:big_chd} is that it has a maximum degree of $n$.
-However, the result continues to hold even for bounded degree graphs.
-In \cref{app:generalhd}, where we discuss alternative notions of HD, we give a more involved example with bounded degrees that exhibits the same separation between LSHS and EPHS for even stronger notions of HD.
+However, the result holds even for bounded degree graphs.
+In \cref{app:generalhd}, where we discuss alternative notions of HD, we give a more involved example with bounded degrees that exhibits the same separation between LSHS and EPHS.
 \end{remark}
 
 Intuitively, the separation between HD and CHD (or more particularly, the hub labels for computing SPs and CSPs) occurs due to the fact that, for arbitrary graphs and cost functions, the shortest and efficient paths may be completely unrelated. 
 For real-world networks, however, this appears unlikely.
 In particular, intuition suggests that efficient paths largely comprise of segments which are in fact shortest-paths in their own right. 
 This notion can be formalized via the following definition of a \emph{partial witness} 
-\begin{definition}[Partial Witness]
+\begin{definition}[Partial Witness]\label[definition]{def:partial_witness}
 Let $\beta\geq 0$.
 We say that a path system $\calQ$ is $\beta$-witnessed by the path system $\calQ'$ if, for every $Q\in\calQ$, $\exists Q'\in\calQ'$ such that $Q'\subseteq Q$ and $\ell(Q')\geq 2^{-\beta}\ell(Q)$.
 \end{definition}
+
+The partial-witness property and \cref{theo:witness_doubling} provide a nice link between the CHD and HD, essentially showing that scaling CSP queries is of similar complexity to scaling SP queries as long as any efficient path contains large shortest-path segments. 
+As an example, consider a \emph{multimodal mapping service} which gives transit routes combining walking, bus and subway, while ensuring at most $k$ transfers. 
+For $k=3$, each route has at most $4$ segments, which gives use the partial witness property with $\beta = 2$. 
+Now if each individual network has small HD, then the CHD is also small (cf. \cref{prop:union_sets}).
+
 We can now ask if the hub labels for computing SPs and CSPs can be related in settings where the shortest-path system $\PS$ is a partial witness for the efficient path system $\PE$.
 At an intuitive level, the partial witness property says that efficient and shortest paths are not completely different, i.e., if $Q$ is efficient, a fraction $2^{-\beta}$ of $Q$ is a shortest path.
 As a consequence, a node hitting numerous paths in $\PS$, should also hit many paths in $\PE$.
-Note also that asking for the witness property to hold for all lengths is too extreme, as this essentially requires that all single-hop paths with 0 costs are shortest paths.
+Note that asking for the witness property to hold for all lengths is too extreme, as this essentially requires that all single-hop paths with 0 costs are shortest paths.
 Thus, we want this property only for `long-enough' paths. 
 
 We now show that if, for some $\beta$, the network indeed has the partial witness property for paths longer than some $r_\beta$, then we can relate the HL sizes for the two problems in terms of $\beta$ and the doubling dimension $\alpha$. 
 Note that the doubling dimension depends on $G$ and $\ell$; the partial witness property depends on the interplay between $G$, $c$ and $\ell$.
 Observe also that, if $\alpha$ is a constant, then the requirement in \cref{theo:witness_doubling} is for paths longer than $r_\beta\sim h\alpha^{\beta-2}$.
 \begin{theorem}\label{theo:witness_doubling}
-Assume that $G$ is $\alpha$-doubling and $\PE_r$ is $\beta$-witnessed by $\PS$ for every $r\geq r_\beta$, where $r_\beta=2^{\log_\alpha(\alpha^{\beta-2} h)}$. 
+Assume $G$ is $\alpha$-doubling and $\PE_r$ is $\beta$-witnessed by $\PS$ for every $r\geq r_\beta$, where $r_\beta=2^{\log_\alpha(\alpha^{\beta-2} h)}$. 
 Then, for any $r>0$, given an $(h,r)$-LSHS, we can construct, in polynomial time, an $(\alpha^{\beta} h,r)$-EPHS for $(G,\ell,c)$. 
 \end{theorem}
 
 \begin{proof}
 For any $r$, we need to construct a hitting set $C^E$ for $\PE_r$.
 Assume first $r\geq r_\beta$.
-Take $C$ as the hitting set for $\PS_{2^{-\beta}r}$, which is guaranteed to be sparse with respect to balls of radius $2^{-\beta+1}r$.
+Let $C$ be the hitting set for $\PS_{2^{-\beta}r}$ which is guaranteed to be sparse with respect to balls of radius $2^{-\beta+1}r$.
 Define the desired set by
-\[
+$
 C^E\defeq\{v\in C: v \text{ is in some $r$-efficient path} \}.
-\]
+$
 
 Since $\PS$ is a $2^{-\beta}$-witness for $\PE_r$, $C^E$ is indeed a hitting set for $\PE_r$.
 We are only left to prove the sparsity.
@@ -74,23 +80,6 @@ Clearly $C$ hits all the paths and the local sparsity is at most the size of the
 Using our assumption on $r_\beta$, a simple computation shows that $\card{B_{2r}(v)}\leq \alpha^{\log_2r_\beta+2}\leq h\alpha^\beta$. 
 \end{proof}
 \begin{remark}
-The existence of a $\beta$-witness is not enough to bound the CHD. Nevertheless, as we discuss in Section~\ref{ssec:hldef}, the existence of $(h,r)$-LSHS already allows the construction of HL. Moreover, the above argument does indeed give a bound for a weaker definition of the highway dimension~\cite{highway2010}.
+The existence of a $\beta$-witness is not enough to bound the CHD. 
+Nevertheless, as we discussed in \cref{ssec:hldef}, the existence of $(h,r)$-LSHS already allows the construction of HL. Moreover, the above argument does indeed give a bound for a weaker definition of the highway dimension~\cite{highway2010}.
 \end{remark}
-\begin{remark}
-In order to make it more transparent, we state the above result in terms of $\alpha$ and $h$. 
-However, these quantities are somewhat related; it can be shown that $\alpha\leq 2h\Delta+1$ (cf.~\cite{skeleton}).
-\end{remark}
-
-%We finish by observing that the $\beta$-witness property can be relaxed further if we assume something about neighborhoods' growth rate.
-%We used a crude bound and took the entire ball $B_{2r}(u)$ as a hitting set, whereas the boundary $\partial B_{2r}(u)$ almost suffices.
-%For example, a grid satisfies  $\card{B_r(u)}=\Theta(r^2)$ and $\card{\partial B_r(u)}=\Theta(r)$, so the next results allows to take $r_\beta^2$ instead of $r_\beta$.
-%
-%\begin{corollary}
-%Let $f$ be a non-decreasing function such that, for every $u\in V$ and $r\geq 0$, $\partial\card{B_r(u)}\leq f(r)$.
-%Then, assuming only that $\PE_r$ is $\beta$-witnessed for $r\geq \frac{1}{2}f^{-1}(\frac{\alpha^\beta h}{1+\alpha^2})$, we can get the same guarantee as in Theorem~\ref{theo:witness_doubling}.
-%\end{corollary}
-%\begin{proof}
-%Denote $r_\beta=\frac{1}{2}f^{-1}(\frac{\alpha^\beta h}{1+\alpha^2})$ and let $r\leq r_\beta$.
-%First we claim that, for every $v$, we can construct a hitting set $H_{v,r}$ for $S_r(\PS)$ of size at most $f(2r)+\alpha^2f(r/2)$.
-%Indeed, 
-%\end{proof}

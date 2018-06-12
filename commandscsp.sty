@@ -2,8 +2,7 @@
 %necessary packages
 \usepackage{dsfont,amssymb,amsfonts,enumitem}
 \usepackage{graphicx,xcolor,tikz}
-\usepackage{caption}
-\usepackage{subcaption}
+\usepackage{adjustbox}
 	
 %pgfplots configuration
 \usepackage{pgfplots}
@@ -64,3 +63,10 @@
 \newcommand{\hc}{h_c}									%chd
 \newcommand{\Lm}{L_{\mathrm{max}}}
 \DeclareMathOperator{\St}{St}							%stretch 
+\newcommand{\Ec}{E_c}									%edges with cost
+
+\newenvironment{proofof}[1]{%
+  \begin{proof}[\textsc{Proof of #1. }]%
+}{%
+  \end{proof}%
+}

@@ -26,21 +26,23 @@ For $(G,\ell)$, given a multi-scale LSHS collection $\crl*{C_i:i=0,\ldots,\log D
 \end{proposition}
 \begin{proof}
 For each node $v$, we define the hub label $L(v)$ as
-\[
+
+\begin{equation*}
 \Lf(v)\defeq  \bigcup_{i=0}^{\log D}C_i\cap \Bf_{2^i}(v) \quad\text{ and }\quad
 \Lb(v)\defeq \bigcup_{i=0}^{\log D}C_i\cap \Bb_{2^i}(v).
-\]
+\end{equation*}
+
 Since each $C_i$ is an $(h,2^{i-1})$-LSHS which we intersect with balls of radius $2\cdot 2^{i-1}$, every set in the union contributes at most $h$ elements and the maximum size is as claimed.
 
 To prove the cover property, we note that, if $t$ is not reachable from $s$, by definition $\Lf(s)\cap\Lb(t)=\varnothing$.
 This is because the elements in $\Lf(s)$ are reachable from $s$ and the elements in $\Lb(t)$ reach $t$.
 On the other hand, when $P(s,t)$ exists, let $i$ be such that $2^{i-1}<\ell(P(s,t))\leq 2^i$.
-Now any point in the path belongs to both $\Bf_{2^i}(s)$ and $\Bb_{2^i}(t)$, and hence $C_i\cap P(s,t)$  (which is not empty since $C_i$ hits all SP of length $\geq 2^{i-1}$) is then in both hubs, which shows the result.
+Finally, any point in the path belongs to both $\Bf_{2^i}(s)$ and $\Bb_{2^i}(t)$, and hence $C_i\cap P(s,t)$ is in both hubs (which is not empty since $C_i$ hits all SP of length $\geq 2^{i-1}$).
 \end{proof}
 
 
 Finally, we need to compute the desired multi-scale LSHS in polynomial time.
-As we mentioned before, a greedy algorithm returns a $\Or(h\log n)$ approximation to any $(h,r)$-LSHS, however, if the HD $\leq h$, this can be improved to obtain a $\Or(h\Delta\log(h\Delta))$ approximation.
-This argument, which extends Corollary 7.3 in \cite{highway2013}, is presented in Section~\ref{sec:preproc}.
-A more subtle point is that the resulting algorithm, even though admitting a polynomial time guarantee, is impractical for large networks.
-In Section~\ref{sec:numeric}, we discuss heuristics that work better in practice.
+In \cref{sec:preproc} we show that, if the HD is $h$, in polynomial time we can obtain sparsity $h'=\Or(h\Delta\log(h\Delta))$.
+In other words, the HL have size $h'(1+\log D)$ instead of $h(1+\log D)$ if we are not given the multi-scale LSHS and have to compute them in polynomial time.
+A more subtle point is that the resulting algorithm, even though polynomial, is impractical for large networks.
+In \cref{sec:numeric}, we discuss heuristics that work better in practice.

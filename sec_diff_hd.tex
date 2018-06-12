@@ -1,8 +1,17 @@
-% !TEX root = main_vldb.tex
-The definition of HD that we use is tailored for HL note, however, that it is the ones used in \cite{highway2013}. 
-We now discuss how our results extend to the stronger definition.
+The original definition of HD was given by \cite{highway2010}, but this is not the one we extend, but rather we work from the definition of~\cite{highway2013}.
+The latter is the same as our notion except that $(i)$ we consider a less restrictive definition of path neighborhoods, that is appropriate for our needs, and $(ii)$ we generalize the notion to directed graphs and general path systems.
+For $\PS$, a consequence of considering less-restrictive path-neighborhoods is that the highway dimension returned by our definition is smaller than that of \cite{highway2013}.
+In particular, unlike \cite{highway2013}, the HD of $G$ as per our definition is not an upper bound to the maximum degree $\Delta$ or the doubling dimension $\alpha$.
 
-The stronger version defines a path $P$ to be $r$-significant if, by adding at most one hop at each end, we get a shortest path $P'$ longer than $r$.
+With respect to our average HD in \cref{sec:avg_hd}, we note the following.
+\begin{remark}
+The algorithm in \cref{theo:preproc_avg} makes one call to the VC-dimension solver for each $C_i$.
+On the other hand, the algorithm in \cite{highway2013} calls up to $n$ times the solver for each $C_i$.
+Finally, there is an extra $\log n$ factor in the approximation guarantee, but now the value of $h$ can be much smaller.
+\end{remark}
+
+We now discuss how our results extend to the definition in \cite{highway2013}, which we refer to as strong-HD.
+The strong-HD defines a path $P$ to be $r$-significant if, by adding at most one hop at each end, we get a shortest path $P'$ longer than $r$.
 The path $P'$ is called an $r$-witness for $P$.
 Intuitively, a path is significant if it represents a long path.
 Observe that, if $P\in\PS$ is such that $\ell(P)>r$, then $P$ is $r$-significant by definition.
@@ -13,11 +22,11 @@ The path $P\in\PS$ belongs to $\Sf_r(v)$ if, $P$ has some $r$-witness $P'$ such 
 The reverse neighborhood $\Sb_r(v)$ is defined analogously.
 With this modified versions of $r$-significant and neighborhood, the notions of LSHS and HD are the same as our previous definitions.
 
-Under this stronger notion, we have  $\Delta\leq h$ and $\alpha\leq h+1$.
+Under the strong-HD, we have  $\Delta\leq h$ and $\alpha\leq h+1$.
 Additionally, this definition allows proving results for CH.
-Finally, we show that under the stronger definition, CHD and HD can still be off by a factor of $n$.
+Finally, we show that even for the strong-HD, CHD and HD can still be off by a factor of $n$.
 
-\begin{proposition}\label{prop:treelike}
+\begin{proposition}\label[proposition]{prop:treelike}
 For any $h$, we can construct a family of networks such that the sparsity of LSHS is $h$ and that of EPHS is arbitrarily worse than $h$.
 \end{proposition}
 \begin{proof}

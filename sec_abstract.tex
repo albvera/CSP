@@ -1,8 +1,8 @@
-We study the problem of computing constrained shortest paths (CSP) at scale, motivated by the needs of modern transportation platforms for robust travel-time estimates.
-Preprocessing techniques and network augmentation have led to dramatic improvements in the speed and scalability of shortest path (SP) computations.
-Our work makes two fundamental contributions in this line:\\
-1. We propose a preprocessing and network augmentation technique for scalable CSP queries, which builds on the \emph{hub labels} approach for shortest path (SP) computation.
-We show that the performance of our algorithms can be parametrized in terms of a new network primitive, the \emph{constrained highway dimension}, which plays an analogous role to that of the highway dimension for SP queries.
-%We adapt existing preprocessing techniques for fast SP queries (in particular, hub labels) to handle CSP queries; we also extend the \emph{highway-dimension}, a measure of graph structure that enables SP speedup techniques, to an analogous \emph{constrained highway dimension} for CSP queries.
-Finally, we show how the the two notions can be related, thereby providing theoretical understanding of networks which enable fast CSP queries.\\
-2. We develop practical algorithms for fast CSP queries, which augment our theoretical algorithm with additional network clustering and ranking heuristics which allow our preprocessing techniques to scale to large networks. We evaluate our algorithm on real-world network datasets with detailed travel-time distributions, and show that our algorithms are orders of magnitude faster compared to existing techniques, and also have small per-node storage requirements, and good preprocessing times, even on a single machine.
+Motivated by the needs of modern transportation service platforms, we study the problem of computing constrained shortest paths (CSP) at scale via preprocessing techniques.
+Our work makes two contributions in this regard:\\
+1. We propose a scalable algorithm for CSP queries, and show how its performance can be parametrized in terms of a new network primitive, the \emph{constrained highway dimension}. 
+This development extends recent work which established the \emph{highway dimension} as the appropriate primitive for characterizing the performance of existing shortest-path (SP) algorithms. 
+Our main theoretical contribution is deriving conditions relating the two notions, thereby providing a characterization of networks where CSP and SP queries are of comparable hardness.\\
+2. We develop practical algorithms for scalable CSP computation, augmenting our theory with additional network clustering heuristics. 
+We evaluate these algorithms on real-world datasets to validate our theoretical findings. 
+Our techniques are orders of magnitude faster than existing approaches, while requiring only limited additional storage and preprocessing.
