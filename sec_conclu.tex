@@ -1,4 +1,8 @@
 We introduced a new network primitive, the Constrained Highway Dimension, and used it to parametrize the storage and running time of data structures that support fast CSP queries.
-We derived conditions under which the performance of our algorithms are competitive versus the corresponding SP algorithms, both in the worst-case and average-case settings.
+Our aim was to study when efficient SP computation yields a similar performance for the harder CSP problem.
+We derived conditions under which this holds and we can compare the HD and CHD.
+For the worst-case setting, the conditions are given by the partial-witness and for average-case by the milder bounded growth. 
+Both conditions have intuitive interpretations in terms of the physical structure of the network. 
+
 On the practical side, we validated our findings by developing algorithms that performed four orders of magnitude better on real-world networks, compared to standard techniques.
-Our work is a first step in bridging the gap between SP and CSP algorithms, but we believe our findings are promising for real-world applications.
+Our work is a first step in bridging the gap between SP and CSP algorithms and we believe our findings are promising for real-world applications.
