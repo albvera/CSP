@@ -56,10 +56,11 @@ This occurs when $b$ is not a tight budget and the efficient path requires less.
 To answer specific queries, we modify $\Gp^B$ by adding extra edges.
 For every $v\in V(G)$ and $b=1,2,\ldots,B$, we include the edge $\pp{v,b}\pp{v,b-1}$ with length $0$.
 A simple argument shows that with the added edges, the shortest path between $\pp{s,b}$ and $\pp{t,0}$ has length $\dist(s,t|b)$.
+Note that adding these extra edges does not return the original augmented graph $G^B$, but rather it is still a compressed version.
 
 \subsubsection{HL construction via Contraction Hierarchies}
 
-We use some techniques described in \cite{hubimplem} combined with an approach tailored for augmented graphs.
+We use some techniques described in \citep{hubimplem} combined with an approach tailored for augmented graphs.
 The CH algorithm takes as input any ranking (i.e., permutation) of the nodes, and proceeds by removing nodes from the lowest rank first.
 Whenever a node is removed, we add new edges, called shortcuts, if needed to preserve the shortest paths.
 Once we have a graph with shortcuts, a CH search is a special variant of Dijkstra where only higher rank nodes are explored, i.e., we never take an edge $uv$ if rank$(u)>\text{rank}(v)$. 
@@ -72,12 +73,12 @@ For our experiments, we ranked nodes in $G$ by running a greedy approximate SP c
 Specifically, start with a cover $C=\varnothing$ and compute the set of all shortest paths $\PS$.
 Take a node $v\notin C$ hitting most paths in $\PS$, then remove all those paths from $\PS$, add $v$ to $C$ and iterate.
 The rank is defined as $n$ for the first node added to $C$, $n-1$ for the second and so on.
-To implement the SP cover we follow the algorithm in \cite{hubimplem}.
+To implement the SP cover we follow the algorithm in \citep{hubimplem}.
 A practical hurdle in such an approach is that to compute a shortest path cover, a direct approach requires storing all the shortest paths in memory, which, in most mapping applications, is infeasible.
 To circumvent this, we approximate the shortest-path cover by computing only $k<<n$ shortest-path trees and covering these greedily.
 We use an off-the-shelf clustering method to obtain $k$ cluster centers, from which we compute the shortest paths. 
 As shown in Figure~\ref{fig:clusters}, the clustering approach provides a very good approximation of the hubs with even a small $k$.
-We stress that this is just an easy way to get a ranking; more sophisticated heuristics that decide on-line the next node to contract usually work well in practice \cite{goldberg_survey,rice_csp}.
+We stress that this is just an easy way to get a ranking; more sophisticated heuristics that decide on-line the next node to contract usually work well in practice \citep{goldberg_survey,rice_csp}.
 Using another contraction scheme may expedite our algorithms and reduce the hub size.
 
 
@@ -145,7 +146,7 @@ The entire process can be summarized in the following steps.
 \item Compute the pruned augmented graph $\Gp^B$
 \item Contract $\Gp^B$ using the rank induced by $C$
 \item Create hubs $\Lf(v),\Lb(v)$ using CH
-\item Prune the hubs by running HL queries between $v$ and nodes in $\Lf(v)$. 
+\item Prune the hubs using HL queries from $v$ to nodes in $\Lf(v)$. 
 Run a similar process for $\Lb(v)$.
 \end{enumerate}
 Recall that, for some instances, we skip step 2 and contract $G^B$ instead.
@@ -177,10 +178,10 @@ We use the library Networkx for the graph representation and Dijkstra's algorith
 Although all the steps can be parallelized, we did not implement this.
 The code is available at \url{github.com/albvera/HHL_CSP}.
 
-We evaluated the performance of our algorithms with real-world test networks: downtown San Francisco with 2139 nodes and 5697 edges for which real-world travel-time data was available as a Gaussian mixture model \cite{sf_data}, and Luxembourg City with 4026 nodes and 9282 edges for which travel-time distributions were synthesized from speed limits \cite{niknami2016tractable}, as real-world data was unavailable.
+We evaluated the performance of our algorithms with real-world test networks: downtown San Francisco with 2139 nodes and 5697 edges for which real-world travel-time data was available as a Gaussian mixture model \citep{sf_data}, and Luxembourg City with 4026 nodes and 9282 edges for which travel-time distributions were synthesized from speed limits \citpe{niknami2016tractable}, as real-world data was unavailable.
  
 In our experiments, we use the mean travel times for our length function and the following cost structure; the top 10\% of edges with the highest variance are assigned cost 1 and the rest cost 0.
-This is a measure of risk, since edges with high variance are prone to cause a delay in the travel time.
+This is a measure of risk, since edges with high variance are prone to cause delays.
 
 
 \begin{figure}

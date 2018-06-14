@@ -12,14 +12,14 @@ The system $\calQ$ has average HD $h$ if, for every $r>0$, there exists an avera
 \end{definition}
 
 From the definition is clear that average HD is a strictly weaker property than HD; in particular, as we discuss before, the existence of LSHS does not guarantee their efficient computation.
-Nevertheless, the above definition turns out to suffice to parametrize the average behavior of HL:
+Nevertheless, the above definition turns out to suffice to parametrize the average behavior of HL, as we show next.
+Note that, since query time depends linearly on the hub size, the next result implies both storage and performance bounds.
 \begin{theorem}\label{theo:preproc_avg}
 If $\PS$ has average HD $h$, then we can obtain, in polynomial time, HL with average size 
 $\frac{1}{n}\sum_{v\in V} \abs{\Lf(v)} \leq h'\log D$ and 
 $\frac{1}{n}\sum_{v\in V} \abs{\Lb(v)} \leq h'\log D$,
 where $h'=\Or(\Delta h\log (hn\Delta))$.
 \end{theorem}
-Note that since query time depends linearly on the hub size, the above result implies both storage and performance bounds.
 \begin{proof}
 We only show how to compute average LSHS, since the construction of HL is the same as in \cref{theo:construct_hl} and the bound for the size easily follows. 
 The objective is to obtain a set $C_i$ which is an average $(h',2^i)$-LSHS.
@@ -29,10 +29,10 @@ Indeed, we want to solve
 C_i = \arg\!\min\crl*{\sum_{v\in V}\abs{B_{2^{i+1}}(v)\cap C}: C\subseteq V, C \text{ hits } \PS_{2^i}}.
 \]
 This follows from a symmetry argument, assigning to each node $u$ the cost $c(u)=\abs{\crl{v\in V: u\in B_{2^{i+1}}(v)}}$.
-On the other hand, given a minimum cost hitting set problem with optimum value $\tau$, if the set system has VC-dimension $d$, the algorithm in \cite{vc_dim_hitting} finds a solution, in polynomial time, with cost at most $\Or(d\tau\log(d\tau))$.
+On the other hand, given a minimum cost hitting set problem with optimum value $\tau$, if the set system has VC-dimension $d$, the algorithm in \citep{vc_dim_hitting} finds a solution, in polynomial time, with cost at most $\Or(d\tau\log(d\tau))$.
 
 By assumption, the minimum of the problem is at most $hn$.
 Now we perform a mapping from paths to sets, where the ground set is $E$ and paths are sequences of edges.
 This system has VC-dimension 2, and now the minimum is at most $h\Delta n$.
-We apply the algorithm in \cite{vc_dim_hitting} and obtain a solution $C_i$ with cost at most $\Or(h\Delta n\log(h\Delta n))$; this gives the promised average $(h',2^i)$-LSHS.
+We apply the algorithm in \citep{vc_dim_hitting} to obtain a solution $C_i$ with cost at most $nh'$; this is the promised average $(h',2^i)$-LSHS.
 \end{proof}

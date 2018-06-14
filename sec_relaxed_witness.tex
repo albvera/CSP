@@ -1,14 +1,14 @@
 We describe a realistic setting where we can obtain small, in average, HL for the CSP.
-
-First, we assume that individual edges are shortest paths, which is clearly true in road networks, and add an additional constraint wherein we insist our efficient paths have bounded \emph{stretch} compared to the shortest path; note that this is natural in applications as users do not want to be presented solutions which are far away from the optimum, even if it saves them budget.
+First, we assume that individual edges are shortest paths, which is clearly true in road networks.
+Second, we add an additional constraint wherein we insist our efficient paths have bounded \emph{stretch} compared to the shortest path; note that this is natural in applications as users do not want to be presented solutions which are far away from the optimum, even if it saves them budget.
 Formally, we define:
 
 \begin{definition}[Stretch]
-	An algorithm for CSP has stretch $\St\geq 1$ if, $\forall s,t\in V$ and $b\leq B$, outputs $\dist(s,t|b)$ whenever $\dist(s,t|b)\leq \St\dist(s,t)$ and outputs ``infeasible'' when $\dist(s,t|b)>\St\dist(s,t)$.
+	An algorithm for CSP has stretch $\St\geq 1$ if, $\forall s,t\in V$ and $b\leq B$, outputs $\dist(s,t|b)$ whenever $\dist(s,t|b)\leq \St\dist(s,t)$ and outputs ``infeasible'' otherwise.
 \end{definition}
 We henceforth input $\St$ as an extra constraint given by the application. 
 Next, let $\Ec\defeq\crl{e\in E:c_e>0}$ denote the set of `costly' edges.
-We define the following notion of an \emph{overpass}:
+We define the following notion of an \emph{overpass}.
 
 \begin{definition}[Overpass]
 For $r>0$, the edge $e=(u,v)$ is an $r$-overpass if:\\
@@ -16,8 +16,10 @@ $(1)$ $e$ belongs to a path $Q\in\PE_{2r}\setminus\PS$\\
 $(2)$ both $u$ and $v$ are endpoints of paths in $\PS_{r(2/\St-1)}$ and\\ 
 $(3)$ $\min(\dist(e,\Ec),\dist(\Ec,e))\leq 3r/2$
 \end{definition} 
-Essentially, overpasses are edges connecting long shortest-paths in a costly zone; \cref{fig:overpass} shows an example. In case costs are contiguous (for example, tolls on highways or traffic jams), then the definition corresponds to the intuitive notion of an overpass.
+Essentially, overpasses are edges connecting long shortest-paths in a costly zone; \cref{fig:overpass} shows an example. 
+In the case costs are contiguous (for example, tolls on highways or traffic jams), then the definition corresponds to the intuitive notion of an overpass.
 Our main requirement is the following \emph{bounded growth} condition, controlling the number of $r$-overpasses for every scale $r>0$.
+Recall that $\alpha$ is the doubling dimension and $\beta\geq 0$ is an underlying constant parameter.
 
 \begin{figure}[!b]
 	\centering
@@ -32,12 +34,12 @@ $(G,c,\ell)$ satisfies the bounded growth condition if, $\forall r>0$, $\abs{\cr
 \end{definition}
 
 Observe that $\phi$ is a slowly decreasing function of $r$ and, even when $r=D$, we allow for overpasses.
-Now, with these conditions, we get our main result of this section:
-
+Now, with these conditions, we get our main result of this section.
+We stress that the bounded growth condition is much weaker than the partial-witness, which was already an intuitive notion; we elaborate on this next.
 
 \begin{theorem}\label{theo:overpasses}
 Let $(G,\ell,c)$ be a network with HD $h$.
-If the bounded growth is satisfied, we can obtain, in polynomial time, hub labels for CSP queries that guarantee average query-time $\Or((b+1)\alpha h'\log D)$ and total storage $\Or(nB\cdot B\alpha h'\log D)$, where $h'=\Or(\Delta h\log(hn\Delta))$.
+If the bounded growth is satisfied with $\beta=1$, we can obtain, in polynomial time, hub labels for CSP queries that guarantee average query-time $\Or((b+1)\alpha h'\log D)$ and total storage $\Or(nB\cdot B\alpha h'\log D)$, where $h'=\Or(\Delta h\log(hn\Delta))$.
 \end{theorem}
 
 We henceforth refer to the average HD of $\PE$ as average CHD.
@@ -45,13 +47,14 @@ Since the average HD is enough to obtain good preprocessing algorithms (cf. \cre
 However, to prove \cref{theo:overpasses}, we need to show that it is possible to obtain small average CHD under even less restrictive assumptions than the partial-witness.
 To do this, we first allow for an additional \emph{supplementary witness set} $D$ such that \emph{every efficient path is either witnessed by a shortest-path or hit by $D$}.
 This corresponds to the intuition that a few bad efficient paths should not completely ruin the algorithm. 
+The reader may want to recall the meaning of $\beta$-witnessing a path in \cref{def:partial_witness}.
 
 \begin{definition}[Weak Partial Witness]
 Given $\beta\geq 0$, we say a path system  $\calQ$ is weakly $\beta$-witnessed by the path system $\calQ'$ if, for every $r>0$, $\exists D_r\subseteq V$ such that, $\forall Q\in \calQ_r$ either (1) $Q$ is $\beta$-witnessed by $\calQ'$ or (2) $Q$ is hit by $D_r$.
-Additionally we require $\abs{D_r}\leq \phi(r)$.
+Additionally, we require $\abs{D_r}\leq \phi(r)$.
 \end{definition} 
 
-Intuitively, the supplementary witness set $D_r$ takes care of all the corner cases where $\calQ$ and $\calQ'$ differ too much.
+Intuitively, the supplementary witness set $D_r$ covers all the corner cases where $\calQ$ and $\calQ'$ differ too much.
 We now show that our requirement on $\abs{D_r}$ guarantees a bound on the average HD.
 
 \begin{proposition}\label[proposition]{prop:lay_witness}
@@ -73,9 +76,10 @@ In the last inequality we used that, by doubling dimension, balls of radius $r$ 
 Since $\abs{D_r}\leq \phi(r)$, the result follows.
 \end{proof}
 
-This now allows us to link $\PE$ and $\PS$ as follows:
+The last result states that a weakly-witnessed path system inherits a good average HD.
+Next, we almost finish the proof of \cref{theo:overpasses} by stating that $\PS$ weakly-witnesses $\PE$, thus $\PE$ has an average HD comparable to that of $\PS$.
 \begin{proposition}\label[proposition]{prop:1witness}
-Under the bounded growth condition, $\PS$ is a weak $1$-witness for $\PE$.
+Under the bounded growth condition with $\beta=1$, $\PS$ is a weak $1$-witness for $\PE$.
 \end{proposition}
 \begin{proof}
 We first need some additional notation:
