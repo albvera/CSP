@@ -1,17 +1,20 @@
 We now define some additional network primitives, which we need to parametrize the performance of our CSP algorithms. 
 In particular, we use the \emph{highway dimension}, introduced by \citep{highway2013,highway2010} to parametrize shortest-path computations in undirected graphs. 
 A few of our results are generalizations of those in \citep{highway2013}; the technical challenges of these extensions may not be clear to a non-expert reader, thus we differ all discussions on the matter to \cref{app:generalhd}. 
-Very broadly speaking, \cite{highway2013} deals only with undirected graphs and shortest paths, whereas our approach covers directed graphs and general sets of paths.
+Very broadly speaking, \citep{highway2013} deals only with undirected graphs and shortest paths, whereas our approach covers directed graphs and general sets of paths.
 
 We define a \emph{path system} $\calQ$ as any collection of paths.
 We say that a set $C\subseteq V$ \emph{hits} any given path $Q$ if some node in $Q$ belongs to $C$. Moreover, we say that $C$ is a \emph{hitting set for a path system} $\calQ$ if it hits every $Q\in\calQ$. 
 For any $r>0$, we say a path $Q$ is $r$-significant if $\ell(Q)>r$. 
 For a given path system $\calQ$, we denote $\calQ_r$ as the set of all $r$-significant paths in $\calQ$.
-Hitting sets are useful for compressing path systems. 
-In particular, even if the hitting set is large, the extent to which a path system can be compressed depends on the \emph{local sparsity} of hitting sets with respect to \emph{significant paths} of $\calQ$.
 
-\begin{definition}[Locally-Sparse Hitting Sets]\label[definition]{def:lshs}
-Given a path system $\calQ$ and $r>0$, an $(h,r)$ locally-sparse hitting set (or $(h,r)$-LSHS) is a set $C\subseteq V$ with two properties: 
+Hitting sets are useful for compressing path systems. 
+In particular, the extent to which a path system can be compressed depends on the \emph{local sparsity}.
+Intuitively, a set of nodes is locally sparse if they do not cluster.
+The following crucial definition makes this precise.
+
+\begin{definition}[Locally Sparse Hitting Sets]\label[definition]{def:lshs}
+Given a path system $\calQ$ and $h,r>0$, an $(h,r)$ locally-sparse hitting set (or $(h,r)$-LSHS for short) is a set $C\subseteq V$ with two properties: 
 \begin{enumerate}[nosep]
 \item Hitting: $C$ is a hitting set for $\calQ_r$.
 \item Local sparsity: for every $v\in V$, $\abs*{B_{2r}(v)\cap C}\leq h$.
@@ -32,12 +35,14 @@ Essentially, the HD re-orders the sequence of qualifiers in the definition of $(
 	A path system $\calQ$ has HD $h$ if, $\forall r>0,v\in V$, there exists a set $H_{v,r}\subseteq V$ such that $\card{H_{v,r}}\leq h$ and $H_{v,r}$ is a hitting set for $S_r(v,\calQ)$.
 \end{definition}
 
-As shorthand, we refer to the HD of $(G,\ell)$ as that of $\PS$. 
-Note that $HD\leq h$ is a more stringent requirement than the existence of an $(h,r)$-LSHS $C$, since $C\cap B_{2r}(v)$ need not hit all the paths in $S_r(v,\calQ)$. 
-However, if $G$ has $HD \leq h$, then this guarantees the existence of a $(h,r)$-LSHS according to the following result, which can be proven by adapting the proof from \cite[Theorem 4.2]{highway2013} to our general case.
+As shorthand, we refer to the HD of $(G,\ell)$ as that of $\PS$, i.e., when the path system is not specified, it is assumed to be $\PS$.
+The phrase ``the HD is at most $h$" is written as $\hd\leq h$. 
+
+Note that $\hd\leq h$ is a more stringent requirement than the existence of an $(h,r)$-LSHS $C$, since $C\cap B_{2r}(v)$ need not hit all the paths in $S_r(v,\calQ)$. 
+However, if $\hd \leq h$, then this guarantees the existence of a $(h,r)$-LSHS according to the following result, which can be proven by adapting the proof from \cite[Theorem 4.2]{highway2013} to our general case.
 \begin{proposition}\label{prop:equiv}
 If the path system $\calQ$ has HD $h$, then, $\forall\,r>0$, there exists an $(h,r)$-LSHS.
 \end{proposition}
 
 More importantly, note that the result is about existence and does not touch on computability.
-As we discuss in Section~\ref{sec:preproc}, if $G$ has $HD \leq h$, then this permits efficient computation of LSHS.
+As we discuss in Section~\ref{sec:preproc}, if $\hd \leq h$, then this permits efficient computation of LSHS.
