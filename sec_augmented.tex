@@ -47,11 +47,11 @@ where the last expression is exactly $\ell(P)$.
 \end{proof}
 
 
-Latter we give a construction that depends on LSHS for the system $\PE$, we call such object an efficient path hitting set (EPHS).
+Later we give a construction that depends on LSHS for the system $\PE$, we call this object an efficient path hitting set (EPHS).
 The next result allows us to relate EPHS of the original graph to LSHS in the augmented graph.
 Note that in $G^B$ we are interested only in shortest paths ending in sink nodes (since these map to efficient paths). 
 Let $\PB$ be the path system comprising all shortest paths in $G^B$ ending in a sink node.
-A hitting set for $\PE$ can be used to obtain a hitting set for $\PB$, but, since the augmented graph has more information, the sparsity increases.
+A hitting set for $\PE$ (in $G$) can be used to obtain a hitting set for $\PB$ (in $G^B$), but, since the augmented graph has more information, the sparsity increases.
  
 \begin{proposition}\label[proposition]{prop:lshsaug}
 Given a  $(\hc,r)$-EPHS for the path system $\PE$, in polynomial time we can construct a $(\hc B,r)$-LSHS for $\PB$.
@@ -61,7 +61,7 @@ Given $C$, an $(\hc,r)$-EPHS for $\PE$, define
 \begin{equation}\label{eq:hitset}
 C^B\defeq \{\pp{v,b}: v\in C, v \text{ hits }\bar P\in\PB_r, c(\bar P)=b\leq B \}.
 \end{equation}
-We prove that $C^B$ hits $\PB_r$ and is locally sparse
+We prove that $C^B$ hits $\PB_r$ and is locally sparse. 
 By Proposition~\ref{prop:shorteffic}, we know that shortest paths are efficient, hence $C^B$ hits all the desired paths.
 Finally, we prove local sparsity.
 Take any node $\pp{s,b}$ and observe that

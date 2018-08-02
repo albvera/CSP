@@ -85,7 +85,7 @@ Consider $Q\in\PE$ with endpoints $s,t$ and set $\ell(Q)=2r$.
 We will show how to obtain a vertex for the supplementary witness set in case $Q$ is not witnessed and then we bound the size of the set.
 Assume that $Q\neq P(s,t)$, otherwise the path is trivially witnessed.
 Let $(u,v)\in Q$ be such that $\ell(Q[s,v]),\ell(Q[u,t])\geq r$. 
-If either $Q[s,v]$ or $Q[u,t]$ is a shortest path or $\ell_{uv}\geq r$, then $Q$ is witnessed. Thus, we henceforth assume that all of the above conditions fail.
+If either $Q[s,v]$ or $Q[u,t]$ \SA{The directed edge is $(u,v)$, but the discussion here talks about $(s,v)$ and $(u,t)$. There is a mismatch in the notation. This carries over in the next paragraph. } is a shortest path or $\ell_{uv}\geq r$, then $Q$ is witnessed. Thus, we henceforth assume that all of the above conditions fail.
 
 We claim that $uv$ is a $r$-overpass (in fact, this is the exact scenario depicted in \cref{fig:overpass}).
 Condition 1 is clearly satisfied. 
