@@ -22,6 +22,7 @@
 \DeclarePairedDelimiter{\prn}{(}{)}
 
 %to leave notes
+\newcommand{\SA}[1]{({\color{blue}[Samitha] #1})}
 \newcommand{\anote}[1]{{\color{red}Alberto: #1}}		
 \newcommand{\sbnote}[1]{{\color{blue}Sid: #1}}			
 \newcommand{\sbedit}[1]{{\color{blue} #1}}				
@@ -64,6 +65,9 @@
 \newcommand{\Lm}{L_{\mathrm{max}}}
 \DeclareMathOperator{\St}{St}							%stretch 
 \newcommand{\Ec}{E_c}									%edges with cost
+
+\renewcommand{\paragraph}[1]{\noindent \textbf{#1}}
+
 
 \newenvironment{proofof}[1]{%
   \begin{proof}[\textsc{Proof of #1. }]%

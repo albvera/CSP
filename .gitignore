@@ -12,3 +12,6 @@ build
 *.fls
 *.~*
 *.vtc
+*.gz
+main_informs.pdf
+main.pdf
