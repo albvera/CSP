@@ -18,7 +18,10 @@ Consider the directed graph $G$ defined in Figure~\ref{fig:big_chd}.
 It is easy to see that $H_{v,r}=\crl{s}$ is a shortest-path hitting set for every $r>0$ and $v\in V(G)$; hence the HD is $1$.
 On the other hand, suppose the costs are such that $c(u_iv_i)=0$ for every $i$, while all other costs are set to $1$.
 Note that the $1$-significant efficient paths intersecting the ball $B_s(2)$ are $u_iv_i$, which are all disjoint.
-Therefore, the hitting set $H_{s,1}$ must contain at least $n$ elements. Moreover, the same argument shows that the sparsity of the best LSHS for $\PS$ is $1$, whereas the sparsity of \emph{any} EPHS is also lower bounded by $n$. \SA{It seems strange to be comparing the best LSHS to any EPHS.} 
+Therefore, the hitting set $H_{s,1}$ must contain at least $n$ elements. 
+This concludes the separation between HD and CHD.
+Finally, the same argument shows that there is LSHS for $\PS$ with sparsity $1$, whereas the sparsity of \emph{any} EPHS is also lower bounded by $n$.
+Thus the sparsities of LSHS and EPHS are also separated. 
 \end{proof}
 
 \begin{remark}
@@ -51,8 +54,8 @@ We now show that if, for some $\beta$, the network indeed has the partial witnes
 Note that the doubling dimension depends on $G$ and $\ell$; the partial witness property depends on the interplay between $G$, $c$ and $\ell$.
 Observe also that, if $\alpha$ is a constant, then the requirement in \cref{theo:witness_doubling} is for paths longer than $r_\beta\sim h\alpha^{\beta-2}$.
 \begin{theorem}\label{theo:witness_doubling}
-Assume $G$ is $\alpha$-doubling and $\PE_r$ is $\beta$-witnessed by $\PS$ for every $r\geq r_\beta$, where $r_\beta=2^{\log_\alpha(\alpha^{\beta-2} h)}$. 
-Then, for any $r>0$, given an $(h,r)$-LSHS, we can construct, in polynomial time, an $(\alpha^{\beta} h,r)$-EPHS for $(G,\ell,c)$. \SA{Would be nice to be consistent with $\alpha^{\beta}h$ vs $h\alpha^{\beta}$. The latter is used most of the time. } 
+Assume $G$ is $\alpha$-doubling and $\PE_r$ is $\beta$-witnessed by $\PS$ for every $r\geq r_\beta$, where $r_\beta=2^{\log_\alpha(h\alpha^{\beta-2})}$. 
+Then, for any $r>0$, given an $(h,r)$-LSHS, we can construct, in polynomial time, an $(h\alpha^{\beta},r)$-EPHS for $(G,\ell,c)$.
 \end{theorem}
 
 \begin{proof}

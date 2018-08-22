@@ -8,7 +8,7 @@ Note that any path $P$ with more than one node has length at least $1$ (since we
 For $s,t\in V$, the distance from $s$ to $t$, denoted $\dist(s,t)$, is the smallest length among all paths $P\in\Pst$.
 For a node $v$ and a path $P$, we abuse notation to denote $\dist(v,P)$ as the minimum distance from $v$ to any node $w\in P$; the distance $\dist(P,v)$ from $P$ to $v$ is defined analogously.
 Note that  $\dist(P,v)$ and  $\dist(v,P)$ need not be the same as the graph is directed.
-We denote the shortest $(s,t)$-path (if it exists) \SA{Do any of the results require the graph to be strongly connected?} as $P(s,t)$, and denote the set of all shortest paths in $G$ as $\PS$.
+We denote the shortest $(s,t)$-path (if it exists) \SA{Do any of the results require the graph to be strongly connected?} \anote{No. Should we mention that?} as $P(s,t)$, and denote the set of all shortest paths in $G$ as $\PS$.
 Finally, we define $D\defeq\max_{P\in\PS}\ell(P)$ to be the diameter of $G$.
 
 Our goal is to develop a data-structure to answer \emph{Constrained Shortest-Path} (CSP) queries efficiently: 
@@ -24,7 +24,8 @@ To limit these solutions to those with minimal cost, we require that the path al
 \label[definition]{def:effpath}
 A path $P\in \Pst$ is called \emph{efficient} if there is no other path $P'\in \Pst$ such that $\ell(P')\leq \ell(P)$ and $c(P')\leq c(P)$ with at least one inequality strict.
 \end{definition}
-We denote the set of all efficient paths as $\PE$, and define the \emph{Pareto frontier} \SA{of efficient paths?} 	from $s$ to $t$ as $\Pst\cap\PE$.
+We denote the set of all efficient paths as $\PE$.
+Efficient $(s,t)$-paths form what is known as the \emph{Pareto frontier}, $\Pst\cap\PE$.
 Observe that every subpath of an efficient path is also efficient (if not, we could improve the path by replacing the subpath).
 For $r>0$ and $v\in V$, we define the \emph{forward and reverse balls of radius $r$} by $\Bf_r(v)\defeq\{u\in V: \dist(v,u)\leq r\}$ and $\Bb_r(v)\defeq\{u\in V: \dist(u,v)\leq r\}$, and also define $B_r(v)\defeq\Bf_r(v)\cup\Bb_r(v)$.
 Finally, a graph $G$ is said to have a \emph{doubling dimension} $\alpha$ if, for any node $v$ and any $r>0$, the ball $B_{2r}(v)$ can be covered by at most $\alpha$ balls of radius $r$.

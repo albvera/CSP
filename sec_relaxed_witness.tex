@@ -6,7 +6,7 @@ Formally, we define:
 \begin{definition}[Stretch]
 	An algorithm for CSP has stretch $\St\geq 1$ if, $\forall s,t\in V$ and $b\leq B$, outputs $\dist(s,t|b)$ whenever $\dist(s,t|b)\leq \St\dist(s,t)$ and outputs ``infeasible'' when $\dist(s,t|b)>\St\dist(s,t)$.
 \end{definition}
-We henceforth input $\St$ as an extra constraint given by the application. 
+We henceforth treat $\St$ as an extra constraint given by the application. 
 Next, let $\Ec\defeq\crl{e\in E:c_e>0}$ denote the set of `costly' edges.
 We define the following notion of an \emph{overpass}:
 
@@ -37,7 +37,7 @@ Now, with these conditions, we get our main result of this section:
 
 \begin{theorem}\label{theo:overpasses}
 Let $(G,\ell,c)$ be a network with HD $h$.
-If the bounded growth is satisfied, we can obtain, in polynomial time, hub labels for CSP queries that guarantee average query-time $\Or((b+1)\alpha h'\log D)$ and total storage $\Or(nB\cdot B\alpha h'\log D)$, where $h'=\Or(\Delta h\log(hn\Delta))$.
+If the bounded growth is satisfied, we can obtain, in polynomial time, hub labels for CSP queries that guarantee average query-time $\Or((b+1)h'\alpha \log D)$ and total storage $\Or(nB\cdot Bh'\alpha \log D)$, where $h'=\Or(\Delta h\log(hn\Delta))$.
 \end{theorem}
 
 We henceforth refer to the average HD of $\PE$ as average CHD.
@@ -56,7 +56,7 @@ We now show that our requirement on $\abs{D_r}$ guarantees a bound on the averag
 
 \begin{proposition}\label[proposition]{prop:lay_witness}
 Assume that $G$ is $\alpha$-doubling and let $\calQ'$ be weakly $\beta$-witnessed by $\calQ$.
-If the HD of $\calQ$ is $h$, then the average HD of $\calQ'$ is $h'\leq 2\alpha^{\beta}h$
+If the HD of $\calQ$ is $h$, then the average HD of $\calQ'$ is $h'\leq 2h\alpha^{\beta}$
 \end{proposition}
 \begin{proof}
 Let $r>0$, and $C$ be an $(h,2^{-\beta}r)$-LSHS for $\calQ$.
@@ -65,8 +65,8 @@ Clearly is a hitting set for $\calQ'_r$ and we can compute
 \begin{align*}
 h'&\leq \frac{1}{n}\sum_{v\in V} \abs{B_{2r}(v)\cap (C\cup D_r)}\\
 &\leq \frac{1}{n}\prn*{\sum_{v\in V} \abs{B_{2r}(v)\cap C}+\sum_{v\in V} \abs{B_{2r}(v)\cap D_r}}\\
-&\leq \frac{1}{n}\prn*{\sum_{v\in V} \alpha^\beta h+\sum_{v\in D_r} \abs{B_{2r}(v)}}
-\leq \alpha^\beta h + \frac{\abs{D_r}\alpha^{\log_2r+2}}{n}.
+&\leq \frac{1}{n}\prn*{\sum_{v\in V} h\alpha^\beta+\sum_{v\in D_r} \abs{B_{2r}(v)}}
+\leq h\alpha^\beta + \frac{\abs{D_r}\alpha^{\log_2r+2}}{n}.
 \end{align*}
 In the third inequality we used that $C$ is sparse with respect to balls of radius $2^{-\beta+1}r$ and that $\sum_{v\in V} \abs{B_{2r}(v)\cap D_r}=\sum_{v\in D_r} \abs{B_{2r}(v)}$ by symmetry of the bi-directional balls.
 In the last inequality we used that, by doubling dimension, balls of radius $r$ have at most $\alpha^{\log_2r+1}$ elements.
@@ -84,8 +84,8 @@ For a path $Q$ and two vertices $u,v\in Q$ we denote $Q[u,v]\subseteq Q$ as the 
 Consider $Q\in\PE$ with endpoints $s,t$ and set $\ell(Q)=2r$.
 We will show how to obtain a vertex for the supplementary witness set in case $Q$ is not witnessed and then we bound the size of the set.
 Assume that $Q\neq P(s,t)$, otherwise the path is trivially witnessed.
-Let $(u,v)\in Q$ be such that $\ell(Q[s,v]),\ell(Q[u,t])\geq r$. 
-If either $Q[s,v]$ or $Q[u,t]$ \SA{The directed edge is $(u,v)$, but the discussion here talks about $(s,v)$ and $(u,t)$. There is a mismatch in the notation. This carries over in the next paragraph. } is a shortest path or $\ell_{uv}\geq r$, then $Q$ is witnessed. Thus, we henceforth assume that all of the above conditions fail.
+Let $(u,v)\in Q$ be such that $\ell(Q[s,v]),\ell(Q[u,t])\geq r$ (see \cref{fig:overpass}). 
+If either $Q[s,v]$ or $Q[u,t]$ is a shortest path or $\ell_{uv}\geq r$, then $Q$ is witnessed. Thus, we henceforth assume that all of the above conditions fail.
 
 We claim that $uv$ is a $r$-overpass (in fact, this is the exact scenario depicted in \cref{fig:overpass}).
 Condition 1 is clearly satisfied. 
@@ -93,8 +93,8 @@ Condition 2 also holds because both $Q[s,v]$ or $Q[u,t]$ have stretch at most $\
 To see this, note that both $P(s,v)|Q[v,t]$ and $Q[s,u]|P(u,t)$ are no shorter than $P(s,t)$ and $\St\ell(P(s,t))\geq \ell(Q)$, hence
 $\frac{2r}{\St}\leq \ell(P(s,t)) \leq  \ell(P(s,v)) + \ell(Q[v,t])$ and $\frac{2r}{\St} \leq \ell(P(s,t)) \leq  \ell(Q[s,u]) + \ell(P(u,t))$.
 Since each path $Q[s,u],Q[v,t]$ has length less than $r$, it follows that both $P(s,v),P(u,t)$ have length strictly greater than $\frac{2-\St}{\St}r$. % and condition 1 follows. 
-Finally, to show condition 3, we have $\ell(Q[s,v])+\ell(Q[u,t])=r+\ell_{uv}$ and since $\ell_{uv}<r/2$, one of $Q[s,v]$ or $Q[u,t]$ has length at most $3r/4$.
-Since neither of these paths is shortest, it must be that both $P(s,v),P(u,t)$ have costly edges and thus one of $u,v$ is closer than $3r/4$ to $E_1$ and the condition is satisfied.
+Finally, to show condition 3, we have $\ell(Q[s,v])+\ell(Q[u,t])=2r+\ell_{uv}$ and since $\ell_{uv}<r$, one of $Q[s,v]$ or $Q[u,t]$ has length at most $3r/2$.
+Since neither of these paths is shortest, it must be that both $P(s,v),P(u,t)$ have costly edges and thus one of $u,v$ is closer than $3r/2$ to $E_1$ and the condition is satisfied.
 
 For every path of length $2r$, we can thus either exhibit a witness or show that it contains an overpass and add use the tail of the edge as a supplementary witness.
 For a fixed $r>0$, we need to add at most $\phi(r)$ nodes to $D_r$ to cover all the efficient paths. 
@@ -109,8 +109,8 @@ If the average HD of $\PE$ is $h_c$, then we can construct, in polynomial time, 
 \end{proposition}
 
 \begin{proofof}{\cref{theo:overpasses}}
-We argue that the average CHD is $h_c\leq 2\alpha h$.
+We argue that the average CHD is $h_c\leq 2h\alpha $.
 By \cref{prop:1witness}, $\PE$ is weakly $1$-witnessed by $\PS$.
-It follows by \cref{prop:lay_witness} that the average CHD is at most $2\alpha h$ as needed.
+It follows by \cref{prop:lay_witness} that the average CHD is at most $2h\alpha$ as needed.
 Applying \cref{prop:avg_chd} yields the result.
 \end{proofof}
