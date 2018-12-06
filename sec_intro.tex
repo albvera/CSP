@@ -20,12 +20,12 @@ Modern SP engines like Google Maps do not make full use of available traffic inf
 In particular, they do not incorporate uncertainties in travel times, leading to inaccurate estimates in settings with high traffic variability.
 This can be addressed by computing shortest paths based on \emph{probabilistic} travel-time estimates:
 if $\Pst$ denotes the set of $(s,t)$-paths and $\ell$ the (possibly random) length of an edge or path, given $s,t$ and parameters $p,\delta$, we want to find an $P\in\Pst$ minimizing $\E[\ell(P)]$, subject to $\Pr(\ell(P)>\E[\ell(P)]+\delta)\leq p$.
-Computing this exactly for general distributions is expensive due to the need for computing convolutions of distributions \SA{There is also no polynomial time algorithm for doing this even if you had a black box for solving the convolutions.}. 
-However, if we condition on state variables (e.g. weather and traffic in key neighborhoods),  we can approximate the distributions with uncorrelated travel-times across different road segments~\citep{woodard2017predicting}. 
+Computing this exactly for general distributions is expensive due to the need for computing convolutions of distributions -- indeed, there is no known polynomial time algorithm for doing this even with black-box access to convolution solvers~\cite{nikolova_gaussian}. 
+However, conditioning on public state variables (e.g. weather and traffic in key neighborhoods),  we can approximate the distributions with uncorrelated travel-times across different road segments~\citep{woodard2017predicting}. 
 Thus, Chebyshev's inequality gives us that $\Pr(\sum_e\ell_e>\E[\sum_e\ell_e]+\delta)\leq \sum_e\Var(\ell_e)/\delta^2$. 
 Using this, we can reformulate the stochastic path optimization problem as 
-$\min_{ P\in\Pst}\sum_{i\in P}\mu_i \, \mbox{s.t.}\, \sum_{i\in P}\sigma^2_i\leq \delta^2p$, which is now a CSP problem. 
-Note that, though we relax the condition $\Pr(\ell(P)>\E[\ell(P)]+\delta)\leq p$, our solution always respects this constraint -- this is often critical for practical applications, e.g., accuracy of ETA is more important than optimality.
+$\min_{ P\in\Pst}\sum_{i\in P}\mu_i \, \mbox{s.t.}\, \sum_{i\in P}\sigma^2_i\leq \delta^2p$, which is now a CSP problem (see also \cite{nikolova_gaussian} for a similar approach for Gaussian travel times). 
+Note that, though we relax the condition $\Pr(\ell(P)>\E[\ell(P)]+\delta)\leq p$, our solution always respects this constraint -- this is often critical for practical applications, e.g., for Lyft/Uber, accuracy of ETA estimates is more important than choosing the optimal route.
 
 Another problem that can be modelled as a CSP is that of finding \emph{reliable shortest paths}.
 Consider the case where each edge has a probability $q_e$ of triggering a bad event, with resulting penalty $p$ (for example, slowdowns due to accidents).

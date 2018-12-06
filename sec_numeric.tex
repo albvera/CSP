@@ -188,13 +188,13 @@ This is a measure of risk, since edges with high variance are prone to cause a d
 
 
 Table~\ref{tab:performance_results} presents the CSP computation times for different maximum budgets $B$. 
-For frontier queries, labelled as `f', the query times are measured as the average of 1000 random $s,t$.
-For specific queries, labelled as `s', the times are measured as 1000 random triplets $s,t,b$.
+For frontier queries, labeled as `f', the query times are measured as the average of 1000 random $s,t$.
+For specific queries, labeled as `s', the times are measured as 1000 random triplets $s,t,b$.
 The column for $B=0$ represents the original graph (without augmentation). 
 As can be seen in the experimental results, our method finds the constrained shortest path solution on average four orders of magnitude faster than running Dijkstra's algorithm on the augmented graph. 
 Preprocessing for frontier queries results in a more compact set of hub labels, since a node $\pp{s,b}$ needs to store information for paths with budget exactly equal to $b$ (in case the path is efficient, otherwise it is not stored).
 On the other hand, for specific queries, $\pp{s,b}$ needs to store information for all budgets up to $b$.
-The preprocessing time does not include the cover computation, since this is a flat cost of at most the time to preprocess the instance $B=0$.
+The preprocessing time does not include the cover computation, since this is a flat cost of at most the time to pre-process the instance $B=0$.
 
 Note that preprocessing frontier queries in Luxembourg is faster, despite the network being bigger, this can be explained by the structural properties.
 For example, in Luxembourg there are more highways and fast roads.
@@ -247,12 +247,15 @@ Figure~\ref{fig:SF_bwd_size} shows a histogram of these metrics.
 
 \begin{figure}[h]
 \begin{minipage}[t]{.53\textwidth}
+\centering
 \includegraphics[clip, trim=4.6cm 4.8cm 4.7cm 3cm,height=4.7cm]{TexImg/SF_hub_sizes.pdf}%
-\includegraphics[clip, trim=15.8cm 0cm 0.4cm 1cm,height=4.4cm]{TexImg/SF_hub_sizes.pdf}
+\includegraphics[clip, trim=15.8cm 0cm 0.4cm 1cm,height=4.4cm]{TexImg/SF_hub_sizes.pdf}\\
+(a) Heatmap of hub-sizes for SF
 \end{minipage}%
 \begin{minipage}[t]{.47\textwidth}
-\flushright
-\includegraphics[clip, trim=3.7cm 2.9cm 4.2cm 3cm,height=4.7cm]{TexImg/sig_colapse.pdf}
+\centering
+\includegraphics[clip, trim=3.7cm 2.9cm 4.2cm 3cm,height=4.7cm]{TexImg/sig_colapse.pdf}\\
+(b) Heatmap of significance for SF
 \end{minipage}
 \caption{Heat maps for frontier queries in San Francisco augmented with $B=25$.
 On the left we see the hub size. 
