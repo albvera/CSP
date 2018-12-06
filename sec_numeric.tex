@@ -132,8 +132,7 @@ This works because the fact that some nodes have incorrect distance labels does 
 All our experiments were performed on a 64-bit desktop computer with a 3.40GHz Intel Core i7-6700 processor and 16GB RAM running Ubuntu 16.04.
 Our code is written in Python 2.7.
 We use the library Networkx for the graph representation and Dijkstra's algorithm.
-Although all the steps can be parallelized, we did not implement this.
-The code is available at \url{github.com/albvera/HHL_CSP}.
+Although all the steps can be parallelized, we did not implement this. Our complete code is publicly available at \url{github.com/albvera/HHL_CSP}.
 
 We evaluated the performance of our algorithms with real-world test networks: downtown San Francisco with 2139 nodes and 5697 edges for which real-world travel-time data was available as a Gaussian mixture model \cite{sf_data}, and Luxembourg City with 4026 nodes and 9282 edges for which travel-time distributions were synthesized from speed limits \cite{niknami2016tractable}, as real-world data was unavailable.
  
@@ -281,4 +280,3 @@ Notice how the highly significant nodes are in main road crossings.}
 We observe that highly significant nodes tend to have small hub size.
 The intuition is simple, if most hubs contain $s$, then is easier for $s$ to satisfy the cover property with a small hub.
 Note also that the hub size resembles an harmonic function; nodes are mostly similar to their neighbors.
-\SA{The numerics section is pretty short, but I guess this is okay for an OR submission.}
