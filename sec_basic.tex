@@ -8,7 +8,7 @@ Note that any path $P$ with more than one node has length at least $1$ (since we
 For $s,t\in V$, the distance from $s$ to $t$, denoted $\dist(s,t)$, is the smallest length among all paths $P\in\Pst$.
 For a node $v$ and a path $P$, we abuse notation to denote $\dist(v,P)$ as the minimum distance from $v$ to any node $w\in P$; the distance $\dist(P,v)$ from $P$ to $v$ is defined analogously.
 Note that  $\dist(P,v)$ and  $\dist(v,P)$ need not be the same as the graph is directed.
-We denote the shortest $(s,t)$-path (if it exists) \SA{Do any of the results require the graph to be strongly connected?} \anote{No. Should we mention that?} as $P(s,t)$, and denote the set of all shortest paths in $G$ as $\PS$.
+We denote the shortest $(s,t)$-path (if it exists) as $P(s,t)$, and denote the set of all shortest paths in $G$ as $\PS$.
 Finally, we define $D\defeq\max_{P\in\PS}\ell(P)$ to be the diameter of $G$.
 
 Our goal is to develop a data-structure to answer \emph{Constrained Shortest-Path} (CSP) queries efficiently: 
