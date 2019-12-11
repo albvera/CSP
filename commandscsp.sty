@@ -74,3 +74,46 @@
 }{%
   \end{proof}%
 }
+
+%Environment for problem definition
+\usepackage{tabularx, environ}
+\makeatletter
+% https://tex.stackexchange.com/a/199244/26355
+\newcolumntype{\expand}{}
+\long\@namedef{NC@rewrite@\string\expand}{\expandafter\NC@find}
+
+\NewEnviron{problemdef}[2][]{%
+  \def\problem@arg{#1}%
+  \def\problem@framed{framed}%
+  \def\problem@lined{lined}%
+  \def\problem@doublelined{doublelined}%
+  \ifx\problem@arg\@empty%
+    \def\problem@hline{}%
+  \else%
+    \ifx\problem@arg\problem@doublelined%
+      \def\problem@hline{\hline\hline}%
+    \else%
+      \def\problem@hline{\hline}%
+    \fi%
+  \fi%
+  \ifx\problem@arg\problem@framed%
+    \def\problem@tablelayout{|>{\bfseries}lX|c}%
+    \def\problem@title{\multicolumn{2}{|l|}{%
+        \raisebox{-\fboxsep}{\textsc{\Large #2}}%
+      }}%
+  \else
+    \def\problem@tablelayout{>{\bfseries}lXc}%
+    \def\problem@title{\multicolumn{2}{l}{%
+        \raisebox{-\fboxsep}{\textsc{\Large #2}}%
+      }}%
+  \fi%
+  \bigskip\par\noindent%
+  \renewcommand{\arraystretch}{1.2}%
+  \begin{tabularx}{\textwidth}{\expand\problem@tablelayout}%
+    \problem@hline%
+    \problem@title\\[2\fboxsep]%
+    \BODY\\\problem@hline%
+  \end{tabularx}%
+  \medskip\par%
+}
+\makeatother

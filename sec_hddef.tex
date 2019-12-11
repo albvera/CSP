@@ -1,13 +1,25 @@
-We now define some additional network primitives, which we need to parametrize the performance of our CSP algorithms. 
-In particular, we use the \emph{highway dimension}, introduced by \citep{highway2013,highway2010} to parametrize shortest-path computations in undirected graphs. 
-A few of our results are generalizations of those in \citep{highway2013}; the technical challenges of these extensions may not be clear to a non-expert reader, thus we differ all discussions on the matter to \cref{app:generalhd}. 
-Very broadly speaking, \cite{highway2013} deals only with undirected graphs and shortest paths, whereas our approach covers directed graphs and general sets of paths.
+We give a generalization of the notion of \emph{highway dimension}, introduced by \citep{highway2013,highway2010} to parametrize shortest-path computations in undirected graphs. 
+The technical challenges of these extensions may not be clear to a non-expert reader, thus we differ all discussions on the matter to \cref{app:generalhd}. 
+Very broadly speaking, \citep{highway2013} deals only with undirected graphs and shortest paths, whereas our approach covers directed graphs and general sets of paths.
+In particular, if we restrict the set of paths accordingly, we recover the original notion.
+
+To motivate general sets of paths, note that the CSP problem may have multiple solutions as there could be several paths with the same length and cost lower than $b$.
+To limit these solutions to those with minimal cost, we require that the path also be \emph{efficient}. 
+\begin{definition}[Efficient Path]
+\label[definition]{def:effpath}
+A path $P\in \Pst$ is called \emph{efficient} if there is no other path $P'\in \Pst$ such that $\ell(P')\leq \ell(P)$ and $c(P')\leq c(P)$ with at least one inequality strict.
+We denote the set of all efficient paths as $\PE$.
+\end{definition}
 
 We define a \emph{path system} $\calQ$ as any collection of paths.
+Our goal is to define the HD of any path system, then in \cref{ssec:hldef} show how to answer queries parametrized it.
+We will use mainly two path systems, $\PS$ (all shortest paths) and $\PE$ (efficient paths), but note that our notion is general and encompasses other restrictions such as label constraints.
+
+ 
 We say that a set $C\subseteq V$ \emph{hits} any given path $Q$ if some node in $Q$ belongs to $C$. Moreover, we say that $C$ is a \emph{hitting set for a path system} $\calQ$ if it hits every $Q\in\calQ$. 
 For any $r>0$, we say a path $Q$ is $r$-significant if $\ell(Q)>r$. 
 For a given path system $\calQ$, we denote $\calQ_r$ as the set of all $r$-significant paths in $\calQ$.
-Hitting sets are useful for compressing path systems. 
+Hitting sets are useful for compressing path systems, i.e., to bound the size of the data structure. 
 In particular, even if the hitting set is large, the extent to which a path system can be compressed depends on the \emph{local sparsity} of hitting sets with respect to \emph{significant paths} of $\calQ$.
 
 \begin{definition}[Locally-Sparse Hitting Sets]\label[definition]{def:lshs}
