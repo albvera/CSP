@@ -26,6 +26,8 @@
 \usepackage{commandscsp}
 \usepackage[capitalize]{cleveref}
 
+\newcommand{\respedit}[1]{\color{blue} #1 \color{black}}
+
 \renewenvironment{proof}[1][\textsc{Proof.}]{#1 }{\hfill $\Box$} 
 
 % Natbib setup for author-year style
@@ -108,8 +110,7 @@
 
 \section{Preliminaries and Overview of Results}
 \label{sec:prelim}
-\label{ssec:basic}
-\input{sec_basic.tex}
+\respedit{\input{sec_basic.tex}}
 
 \subsection{Preliminaries: Hitting Sets and the Highway Dimension}
 \label{ssec:hddef}

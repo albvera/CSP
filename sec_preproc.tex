@@ -1,11 +1,11 @@
 Computing hitting sets is difficult in general, but it becomes tractable when the underlying set has small VC-dimension \cite{vc_dim_hitting}.
-The critical observation in \cite{highway2013} is that the set system of \emph{unique} shortest paths has a VC-dimension of $2$.
-Directed or non-shortest paths break the arguments in \cite{highway2013}, so we need a different formulation of the set system.
+The critical observation in \cite{hd_journal} is that the set system of \emph{unique} shortest paths has a VC-dimension of $2$.
+Directed or non-shortest paths break the arguments in \cite{hd_journal}, so we need a different formulation of the set system.
 We recall the concept of VC-dimension.
 A set system $(X,\calX)$ is a ground set $X$ together with a family $\calX\subseteq 2^X$.
 A set $Y\in \calX$ is shattered if $\{Z\cap Y:Z\in\calX\}=2^Y$.
 If $d$ is the smallest integer such that no $Y\in\calX$ with $\card{Y}=d+1$ can be shattered, then this number $d$ is the VC-dimension of $(X,\calX)$.
-The critical observation in \cite{highway2013} is that the set system of \emph{unique} shortest paths has a VC-dimension of $2$, but their argument does not hold in directed graphs or general path systems.
+The critical observation in \cite{hd_journal} is that the set system of \emph{unique} shortest paths has a VC-dimension of $2$, but their argument does not hold in directed graphs or general path systems.
 
 Let $\calQ$ be any path system.
 We can obtain a set system with small VC-dimension by considering the ground set as $E$ (instead of the usual choice of $V$), and mapping a path $Q=e_1e_2\ldots e_k$ to $\pi(Q)=\crl{e_1,e_2,\ldots,e_k}$.
@@ -18,5 +18,5 @@ Finally, polynomial-time preprocessing now follows from combining \cref{prop:vc_
 The desired result is stated in \cref{prop:poly_lshs}, we defer the proof to Appendix~\ref{sec:proofs}.
 
 \begin{proposition}\label[proposition]{prop:poly_lshs}
-If a path system $\calQ$ has HD $h$, then, for any $r>0$, we can obtain in polynomial time a $(h',r)$-LSHS, where $h'=\Or(h\Delta\log(h\Delta))$.	
+If a path system $\calQ$ has HD $h$, then, for any $r>0$, we can obtain in polynomial time a $(h',r)$-LSHS, where $h'=\Or(h\Delta\log(h\Delta))$ and $\Delta$ is the maximum degree.	
 \end{proposition}

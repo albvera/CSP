@@ -11,8 +11,14 @@ $\frac{1}{n}\sum_{v\in V} \abs{B_{2r}(v)\cap C} \leq h$.
 The system $\calQ$ has average HD $h$ if, for every $r>0$, there exists an average $(h,r)$-LSHS.
 \end{definition}
 
-From the definition is clear that average HD is a strictly weaker property than HD; in particular, as we discuss before, the existence of LSHS does not guarantee their efficient computation.
-Nevertheless, the above definition turns out to suffice to parametrize the average behavior of HL:
+\respedit{
+Recall that all we need to construct HL is the ability to find LSHS, hence our definition is transparent in the sense that we ask only for the existence of LSHS.
+We note that \citep{vc_shortest} also introduces a notion of average HD, but they use a more restrictive notion.
+Indeed, their stronger condition implies both (i) existence and (ii) ability to find LSHS.
+Therefore, we need to prove that existence is enough to find these sets (approximately) in polynomial time, we do this in \cref{theo:preproc_avg}.
+Finally, we remark that this weaker notion of average HD allows us to get stronger results (because it is easier to satisfy and verify), hence we believe it can be useful in other problems too.
+}
+
 \begin{theorem}\label{theo:preproc_avg}
 If $\PS$ has average HD $h$, then we can obtain, in polynomial time, HL with average size 
 $\frac{1}{n}\sum_{v\in V} \abs{\Lf(v)} \leq h'\log D$ and 

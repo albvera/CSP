@@ -151,7 +151,7 @@ This model is considered in \citep{fareevasion} for routing with fare evasion, w
 We consider the problem of developing oracles that support fast CSP queries in large networks. 
 Specifically, given integer edge-costs and edge-lengths, and a budget upper bound, we want to use preprocessing to create a data-structure supporting arbitrary source-destination-budget queries; moreover, we want formal guarantees on the performance: preprocessing, storage and query time.
 
-In the case of SP algorithms, the seminal work of Abraham et al.~\citep{highway2013, highway2010} demonstrated that the preprocessing, storage and query times of several widely-used heuristics could be parametrized using a graph structural metric called the \emph{Highway Dimension} (HD).
+In the case of SP algorithms, the seminal work of Abraham et al.~\citep{hd_journal, highway2010} demonstrated that the preprocessing, storage and query times of several widely-used heuristics could be parametrized using a graph structural metric called the \emph{Highway Dimension} (HD).
 Our work extends these notions for the CSP; our contributions are summarized as follows:
 
 \paragraph{Theoretical contributions}: 
@@ -169,7 +169,7 @@ In experiments, our algorithms exhibit query-times $10^4$ faster than existing (
  
 
 \paragraph{Paper outline}:
-In \cref{sec:prelim}, we introduce the SP and CSP problems, and extend the notion of the HD (as defined in \citep{highway2013}) to directed graphs and general path systems; this allows us to define an analogous notion of a \emph{constrained highway dimension} (CHD) for constrained shortest paths in \cref{sec:chd}. 
+In \cref{sec:prelim}, we introduce the SP and CSP problems, and extend the notion of the HD (as defined in \citep{hd_journal}) to directed graphs and general path systems; this allows us to define an analogous notion of a \emph{constrained highway dimension} (CHD) for constrained shortest paths in \cref{sec:chd}. 
 We then show that the two can be related under an additional \emph{partial witness condition} (\cref{ssec:hdvschd}). 
 In \cref{sec:avg_hd}, we study average-case performance, and show how a small average CHD can be related to physical overpasses in road networks. 
 Finally, in \cref{sec:numeric}, we present our practical hub-label construction and our experiments on SF and Luxembourg data.
@@ -181,9 +181,9 @@ CSP problems have an extensive literature, surveyed in~\citep{csp_survey}.
 More recently, there has been significant interest in stochastic SP problems, including the related stochastic on-time arrival (SOTA) problem~\citep{fan2005arriving}; recent works have proposed both optimal and approximate policies~\citep{sabran2014precomputation,nikolova_discretization}. 
 Existing approaches for these problems, however, are limited in their use of preprocessing and augmentation techniques, and consequently do not support the latencies required for mapping applications.
 
-As we mention before, our work is inspired by the recent developments in shortest path algorithms~\citep{highway2013,hubimplem,highway2010,dimacs09,geisberger_ch_definition,skeleton}; refer~\citep{goldberg_survey} for an excellent survey of these developments. 
+As we mention before, our work is inspired by the recent developments in shortest path algorithms~\citep{hd_journal,hubimplem,highway2010,dimacs09,geisberger_ch_definition,skeleton}; refer~\citep{goldberg_survey} for an excellent survey of these developments. 
 The pre-processing technique we use for speeding up CSP computations is hub labels (HL), first introduced for SP computations in~\citep{cohen_definition_hl}. 
-More recently, HL was proved to have the best query-time bounds for SP computation in low HD graphs~\citep{highway2013,highway2010} (this was experimentally confirmed in~\citep{hubimplem}, \cite[Figure 7]{goldberg_survey}).  
+More recently, HL was proved to have the best query-time bounds for SP computation in low HD graphs~\citep{hd_journal,highway2010} (this was experimentally confirmed in~\citep{hubimplem}, \cite[Figure 7]{goldberg_survey}).  
 Finally, the HD-based bounds for hub labels was shown to be tight in~\citep{babenko_hl_complexity,white_complexity_hd}, and it was also shown that finding optimal hub labels is NP hard.
 
 Finally, a related class of problems to CSP is that of SP under label constraints~\citep{language_csp}, where the aim is to find shortest paths that avoided certain labels (e.g. toll roads, ferries, etc.). 
@@ -225,14 +225,14 @@ We denote the set of all efficient paths as $\PE$.
 Efficient $(s,t)$-paths form what is known as the \emph{Pareto frontier}, $\Pst\cap\PE$.
 Observe that every subpath of an efficient path is also efficient (if not, we could improve the path by replacing the subpath).
 For $r>0$ and $v\in V$, we define the \emph{forward and reverse balls of radius $r$} by $\Bf_r(v)\defeq\{u\in V: \dist(v,u)\leq r\}$ and $\Bb_r(v)\defeq\{u\in V: \dist(u,v)\leq r\}$, and also define $B_r(v)\defeq\Bf_r(v)\cup\Bb_r(v)$.
-Finally, a graph $G$ is said to have a \emph{doubling dimension} $\alpha$ if, for any node $v$ and any $r>0$, the ball $B_{2r}(v)$ can be covered by at most $\alpha$ balls of radius $r$.
+Finally, a graph $G$ is said to have a \emph{doubling constant} $\alpha$ if, for any node $v$ and any $r>0$, the ball $B_{2r}(v)$ can be covered by at most $\alpha$ balls of radius $r$.
 
 \subsection{Hitting sets and the highway dimension}
 \label{ssec:hddef}
 We now define some additional network primitives, which we need to parametrize the performance of our CSP algorithms. 
-In particular, we use the \emph{highway dimension}, introduced by \citep{highway2013,highway2010} to parametrize shortest-path computations in undirected graphs. 
-A few of our results are generalizations of those in \citep{highway2013}; the technical challenges of these extensions may not be clear to a non-expert reader, thus we differ all discussions on the matter to \cref{app:generalhd}. 
-Very broadly speaking, \cite{highway2013} deals only with undirected graphs and shortest paths, whereas our approach covers directed graphs and general sets of paths.
+In particular, we use the \emph{highway dimension}, introduced by \citep{hd_journal,highway2010} to parametrize shortest-path computations in undirected graphs. 
+A few of our results are generalizations of those in \citep{hd_journal}; the technical challenges of these extensions may not be clear to a non-expert reader, thus we differ all discussions on the matter to \cref{app:generalhd}. 
+Very broadly speaking, \cite{hd_journal} deals only with undirected graphs and shortest paths, whereas our approach covers directed graphs and general sets of paths.
 
 We define a \emph{path system} $\calQ$ as any collection of paths.
 We say that a set $C\subseteq V$ \emph{hits} any given path $Q$ if some node in $Q$ belongs to $C$. Moreover, we say that $C$ is a \emph{hitting set for a path system} $\calQ$ if it hits every $Q\in\calQ$. 
@@ -265,7 +265,7 @@ Essentially, the HD re-orders the sequence of qualifiers in the definition of $(
 
 As shorthand, we refer to the HD of $(G,\ell)$ as that of $\PS$. 
 Note that $HD\leq h$ is a more stringent requirement than the existence of an $(h,r)$-LSHS $C$, since $C\cap B_{2r}(v)$ need not hit all the paths in $S_r(v,\calQ)$. 
-However, if $G$ has $HD \leq h$, then this guarantees the existence of a $(h,r)$-LSHS according to the following result, which can be proven by adapting the proof from \cite[Theorem 4.2]{highway2013} to our general case.
+However, if $G$ has $HD \leq h$, then this guarantees the existence of a $(h,r)$-LSHS according to the following result, which can be proven by adapting the proof from \cite[Theorem 4.2]{hd_journal} to our general case.
 \begin{proposition}\label{prop:equiv}
 If the path system $\calQ$ has HD $h$, then, $\forall\,r>0$, there exists an $(h,r)$-LSHS.
 \end{proposition}
@@ -296,7 +296,7 @@ Although hub labels always exist (in particular, we can always choose $\Lf(s)$ t
 To construct hub labels with guarantees on preprocessing time and $\Lm$, we need the additional notion of a \emph{multi-scale LSHS}. 
 We assume that graph $(G,\ell)$ admits a collection of sets $\crl*{C_i: i=1,\ldots,\log D}$, such that each $C_i$ is an $(h,2^{i-1})$-LSHS.
 Given such a collection, we can now obtain small HL.
-We outline this construction for directed graphs, closely following the construction in \cite[Theorem 5.1]{highway2013} for the undirected case.
+We outline this construction for directed graphs, closely following the construction in \cite[Theorem 5.1]{hd_journal} for the undirected case.
 \begin{proposition}
 \label[proposition]{theo:construct_hl}
 For $(G,\ell)$, given a multi-scale LSHS collection $\crl*{C_i:i=0,\ldots,\log D}$, where each $C_i$ is an $(h,2^{i-1})$-LSHS, we can construct hub labels of size at most $h(1+\log D)$.
@@ -470,13 +470,13 @@ For forward hubs, the size follows from observing that $ \card{C_i^B\cap \Bf_{2^
 \subsubsection{Preprocessing}
 \label{sec:preproc}
 Computing hitting sets is difficult in general, but it becomes tractable when the underlying set has small VC-dimension \cite{vc_dim_hitting}.
-The critical observation in \cite{highway2013} is that the set system of \emph{unique} shortest paths has a VC-dimension of $2$.
-Directed or non-shortest paths break the arguments in \cite{highway2013}, so we need a different formulation of the set system.
+The critical observation in \cite{hd_journal} is that the set system of \emph{unique} shortest paths has a VC-dimension of $2$.
+Directed or non-shortest paths break the arguments in \cite{hd_journal}, so we need a different formulation of the set system.
 We recall the concept of VC-dimension.
 A set system $(X,\calX)$ is a ground set $X$ together with a family $\calX\subseteq 2^X$.
 A set $Y\in \calX$ is shattered if $\{Z\cap Y:Z\in\calX\}=2^Y$.
 If $d$ is the smallest integer such that no $Y\in\calX$ with $\card{Y}=d+1$ can be shattered, then this number $d$ is the VC-dimension of $(X,\calX)$.
-The critical observation in \cite{highway2013} is that the set system of \emph{unique} shortest paths has a VC-dimension of $2$, but their argument does not hold in directed graphs or general path systems.
+The critical observation in \cite{hd_journal} is that the set system of \emph{unique} shortest paths has a VC-dimension of $2$, but their argument does not hold in directed graphs or general path systems.
 
 Let $\calQ$ be any path system.
 We can obtain a set system with small VC-dimension by considering the ground set as $E$ (instead of the usual choice of $V$), and mapping a path $Q=e_1e_2\ldots e_k$ to $\pi(Q)=\crl{e_1,e_2,\ldots,e_k}$.
@@ -562,8 +562,8 @@ As a consequence, a node hitting numerous paths in $\PS$, should also hit many p
 Note that asking for the witness property to hold for all lengths is too extreme, as this essentially requires that all single-hop paths with 0 costs are shortest paths.
 Thus, we want this property only for `long-enough' paths. 
 
-We now show that if, for some $\beta$, the network indeed has the partial witness property for paths longer than some $r_\beta$, then we can relate the HL sizes for the two problems in terms of $\beta$ and the doubling dimension $\alpha$. 
-Note that the doubling dimension depends on $G$ and $\ell$; the partial witness property depends on the interplay between $G$, $c$ and $\ell$.
+We now show that if, for some $\beta$, the network indeed has the partial witness property for paths longer than some $r_\beta$, then we can relate the HL sizes for the two problems in terms of $\beta$ and the doubling constant $\alpha$. 
+Note that the doubling constant depends on $G$ and $\ell$; the partial witness property depends on the interplay between $G$, $c$ and $\ell$.
 Observe also that, if $\alpha$ is a constant, then the requirement in \cref{theo:witness_doubling} is for paths longer than $r_\beta\sim h\alpha^{\beta-2}$.
 \begin{theorem}\label{theo:witness_doubling}
 Assume $G$ is $\alpha$-doubling and $\PE_r$ is $\beta$-witnessed by $\PS$ for every $r\geq r_\beta$, where $r_\beta=2^{\log_\alpha(h\alpha^{\beta-2})}$. 
@@ -581,7 +581,7 @@ $
 
 Since $\PS$ is a $2^{-\beta}$-witness for $\PE_r$, $C^E$ is indeed a hitting set for $\PE_r$.
 We are only left to prove the sparsity.
-Take some $u\in V$, by doubling dimension we can cover $\Bf_{2r}(u)$ by at most $\alpha^\beta$ balls of radius $2^{-\beta+1}r$.
+Take some $u\in V$, by doubling constant we can cover $\Bf_{2r}(u)$ by at most $\alpha^\beta$ balls of radius $2^{-\beta+1}r$.
 Each of these balls contains at most $h$ elements of $C$, therefore the sparsity is as claimed.
 The argument for reverse balls is identical.
 
@@ -713,7 +713,7 @@ h'&\leq \frac{1}{n}\sum_{v\in V} \abs{B_{2r}(v)\cap (C\cup D_r)}\\
 \leq h\alpha^\beta + \frac{\abs{D_r}\alpha^{\log_2r+2}}{n}.
 \end{align*}
 In the third inequality we used that $C$ is sparse with respect to balls of radius $2^{-\beta+1}r$ and that $\sum_{v\in V} \abs{B_{2r}(v)\cap D_r}=\sum_{v\in D_r} \abs{B_{2r}(v)}$ by symmetry of the bi-directional balls.
-In the last inequality we used that, by doubling dimension, balls of radius $r$ have at most $\alpha^{\log_2r+1}$ elements.
+In the last inequality we used that, by doubling constant, balls of radius $r$ have at most $\alpha^{\log_2r+1}$ elements.
 Since $\abs{D_r}\leq \phi(r)$, the result follows.
 \end{proof}
 
@@ -1061,19 +1061,19 @@ Our work is a first step in bridging the gap between SP and CSP algorithms and w
 \begin{APPENDICES}
 \section{Different notions of HD}
 \label[appendix]{app:generalhd}
-The original definition of HD was given by \citep{highway2010}. This is not the one we extend, but rather we work from the definition of~\citep{highway2013}.
+The original definition of HD was given by \citep{highway2010}. This is not the one we extend, but rather we work from the definition of~\citep{hd_journal}.
 The latter is the same as our notion except that $(i)$ we consider a less restrictive definition of path neighborhoods, that is appropriate for our needs, and $(ii)$ we generalize the notion to directed graphs and general path systems.
-For $\PS$, a consequence of considering less-restrictive path-neighborhoods is that the highway dimension returned by our definition is smaller than that of \citep{highway2013}.
-In particular, unlike \citep{highway2013}, the HD of $G$ as per our definition is not an upper bound to the maximum degree $\Delta$ or the doubling dimension $\alpha$.
+For $\PS$, a consequence of considering less-restrictive path-neighborhoods is that the highway dimension returned by our definition is smaller than that of \citep{hd_journal}.
+In particular, unlike \citep{hd_journal}, the HD of $G$ as per our definition is not an upper bound to the maximum degree $\Delta$ or the doubling constant $\alpha$.
 
 With respect to our average HD in \cref{sec:avg_hd}, we note the following.
 \begin{remark}
 The algorithm in \cref{theo:preproc_avg} makes one call to the VC-dimension solver for each $C_i$.
-On the other hand, the algorithm in \citep{highway2013} calls up to $n$ times the solver for each $C_i$.
+On the other hand, the algorithm in \citep{hd_journal} calls up to $n$ times the solver for each $C_i$.
 Finally, there is an extra $\log n$ factor in the approximation guarantee, but now the value of $h$ can be much smaller.
 \end{remark}
 
-We now discuss how our results extend to the definition in \citep{highway2013}, which we refer to as strong-HD.
+We now discuss how our results extend to the definition in \citep{hd_journal}, which we refer to as strong-HD.
 The strong-HD defines a path $P$ to be $r$-significant if, by adding at most one hop at each end, we get a shortest path $P'$ longer than $r$.
 The path $P'$ is called an $r$-witness for $P$.
 Intuitively, a path is significant if it represents a long path.
@@ -1230,7 +1230,7 @@ We now relax the assumption that a system witnesses another.
 It could be that the efficient paths are sometimes witnessed by free paths and sometimes by shortest paths.
 
 \begin{theorem}
-Assume that $G$ has doubling dimension $\alpha$ and $\calQ,\calQ'$ are systems with HD $h,h'$ respectively. 
+Assume that $G$ has doubling constant $\alpha$ and $\calQ,\calQ'$ are systems with HD $h,h'$ respectively. 
 Moreover, suppose $\PE$ does not alternate between $\calQ$ and $\calQ'$, that is, for some $\beta,\beta'>0$, each path $P\in\PE$ is either $\beta$-witnessed by some $Q\in\calQ$ or $\beta'$-witnessed by $Q'\in\calQ'$. Then $G$ admits  $(\alpha^{\beta}h+\alpha^{\beta'}h',r)$-EPHS.
 \end{theorem}
 
@@ -1322,7 +1322,7 @@ In particular, if $\PS$ is a $\beta$-witness for $\tilde \PE$, then $\tilde h\le
 
 
 \begin{proofof}{\cref{prop:poly_lshs}}
-We extend some arguments from \cite[Theorem 8.2]{highway2013}.
+We extend some arguments from \cite[Theorem 8.2]{hd_journal}.
 Denote $S_r(v):=\Sf_r(v,\calQ)\cup\Sb_r(v,\calQ)$. 
 Observe that, for fixed $v\in V$, the set system $(E,\{\pi(Q):Q \in S_r(v)\})$ admits a hitting set of size $h\Delta$.
 Indeed, we know that exists $H_{v,r}\subseteq V$, $\card{H_{v,r}}\leq h$, hitting every path in $\Sf_r(v,\calQ)$ and in $\Sb_r(v,\calQ)$.
@@ -1382,7 +1382,7 @@ The authors gratefully acknowledge funding from the US Army Research Laboratory 
 \providecommand{\urlprefix}{URL }
 
 \bibitem[{Abraham et~al.(2013)Abraham, Delling, Fiat, Goldberg,
-  \protect\BIBand{} Werneck}]{highway2013}
+  \protect\BIBand{} Werneck}]{hd_journal}
 Abraham I, Delling D, Fiat A, Goldberg AV, Werneck RF (2013) Highway dimension
   and provably efficient shortest path algorithms. \emph{Microsoft Research,
   USA, Tech. Rep} 9.

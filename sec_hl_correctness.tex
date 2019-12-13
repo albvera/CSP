@@ -3,10 +3,10 @@ These are general techniques which always guarantee correct SP computation, but 
 We now explain the construction for HL; for the construction and results of CH refer to Appendix~\ref{sec:ch}.
 
 The basic HL technique for SP computations is as follows:
-Every node $v$ is associated with a hub label $L(v) = \crl*{\Lf(v),\Lb(v)}$, comprising of a set of forward hubs $\Lf(v)$ and reverse hubs $\Lb(v)$.
+Every node $v$ is associated with a hub label $L(v) = \crl*{\Lf(v),\Lb(v)}$, comprising of a set of forward hubs $\Lf(v)\subseteq V$ and reverse hubs $\Lb(v)\subseteq V$.
 We also store $\dist(v,w) \,\forall\, w\in\Lf(v)$ and $\dist(u,v)\,\forall\,u\in\Lb(v)$.
-The hub labels are said to satisfy the \emph{cover property} if, for any $s\neq t\in V$, $\Lf(s)\cap\Lb(t)$ contains at least one node in $P(s,t)$.
-In the case that $t$ is not reachable from $s$, it must be that $\Lf(s)\cap\Lb(t)=\varnothing$.
+\respedit{Hub Labels must satisfy the \emph{cover property} defined as follows: for any $s\neq t\in V$, $\Lf(s)\cap\Lb(t)$ contains at least one node in $P(s,t)$.
+In the case that $t$ is not reachable from $s$, it must be that $\Lf(s)\cap\Lb(t)=\varnothing$.}
 
 With the aid of the cover property, we can obtain $\dist(s,t)$ by searching for the minimum value of $\dist(s,w)+\dist(w,t)$ over all nodes $w\in\Lf(s)\cap\Lb(t)$.
 If the hubs are sorted by ID, this can be done in time $\Or(\card{\Lf(s)}+\card{\Lb(t)})$ via a single sweep.
@@ -19,7 +19,7 @@ Although hub labels always exist (in particular, we can always choose $\Lf(s)$ t
 To construct hub labels with guarantees on preprocessing time and $\Lm$, we need the additional notion of a \emph{multi-scale LSHS}. 
 We assume that graph $(G,\ell)$ admits a collection of sets $\crl*{C_i: i=1,\ldots,\log D}$, such that each $C_i$ is an $(h,2^{i-1})$-LSHS.
 Given such a collection, we can now obtain small HL.
-We outline this construction for directed graphs, closely following the construction in \cite[Theorem 5.1]{highway2013} for the undirected case.
+We outline this construction for directed graphs, closely following the construction in \cite[Theorem 5.1]{hd_journal} for the undirected case.
 \begin{proposition}
 \label[proposition]{theo:construct_hl}
 For $(G,\ell)$, given a multi-scale LSHS collection $\crl*{C_i:i=0,\ldots,\log D}$, where each $C_i$ is an $(h,2^{i-1})$-LSHS, we can construct hub labels of size at most $h(1+\log D)$.
@@ -36,7 +36,8 @@ Since each $C_i$ is an $(h,2^{i-1})$-LSHS which we intersect with balls of radiu
 
 To prove the cover property, we note that, if $t$ is not reachable from $s$, by definition $\Lf(s)\cap\Lb(t)=\varnothing$.
 This is because the elements in $\Lf(s)$ are reachable from $s$ and the elements in $\Lb(t)$ reach $t$.
-On the other hand, when $P(s,t)$ exists, let $i$ be such that $2^{i-1}<\ell(P(s,t))\leq 2^i$.
+On the other hand, when $P(s,t)$ exists, \respedit{ we do a case analysis on $\ell(P)$ to prove the cover property.}
+Let $i$ be such that $2^{i-1}<\ell(P(s,t))\leq 2^i$.
 Finally, any point in the path belongs to both $\Bf_{2^i}(s)$ and $\Bb_{2^i}(t)$, and hence $C_i\cap P(s,t)$ is in both hubs (which is not empty since $C_i$ hits all SP of length $\geq 2^{i-1}$).
 \end{proof}
 

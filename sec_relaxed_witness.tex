@@ -1,10 +1,12 @@
 We describe a realistic setting where we can obtain small, in average, HL for the CSP.
 
-First, we assume that individual edges are shortest paths, which is clearly true in road networks, and add an additional constraint wherein we insist our efficient paths have bounded \emph{stretch} compared to the shortest path; note that this is natural in applications as users do not want to be presented solutions which are far away from the optimum, even if it saves them budget.
+First, we assume that individual edges are shortest paths.
+\respedit{This assumption is mainly for exposition purposes and can be further relaxed using the same analysis.}
+Second, we add an additional constraint wherein we insist our efficient paths have bounded \emph{stretch} compared to the shortest path; note that this is natural in applications as users do not want to be presented solutions which are far away from the optimum, even if it saves them budget.
 Formally, we define:
 
 \begin{definition}[Stretch]
-	An algorithm for CSP has stretch $\St\geq 1$ if, $\forall s,t\in V$ and $b\leq B$, outputs $\dist(s,t|b)$ whenever $\dist(s,t|b)\leq \St\dist(s,t)$ and outputs ``infeasible'' when $\dist(s,t|b)>\St\dist(s,t)$.
+	An algorithm for CSP has stretch $\St\geq 1$ if, $\forall s,t\in V$ and $b\leq B$, it outputs $\dist(s,t|b)$ whenever $\dist(s,t|b)\leq \St\cdot\dist(s,t)$ and outputs ``infeasible'' when $\dist(s,t|b)>\St\cdot\dist(s,t)$.
 \end{definition}
 We henceforth treat $\St$ as an extra constraint given by the application. 
 Next, let $\Ec\defeq\crl{e\in E:c_e>0}$ denote the set of `costly' edges.
@@ -36,7 +38,7 @@ Now, with these conditions, we get our main result of this section:
 
 
 \begin{theorem}\label{theo:overpasses}
-Let $(G,\ell,c)$ be a network with HD $h$.
+Let $(G,\ell,c)$ be a network with HD $h$ and doubling constant $\alpha$.
 If the bounded growth is satisfied, we can obtain, in polynomial time, hub labels for CSP queries that guarantee average query-time $\Or((b+1)h'\alpha \log D)$ and total storage $\Or(nB\cdot Bh'\alpha \log D)$, where $h'=\Or(\Delta h\log(hn\Delta))$.
 \end{theorem}
 
@@ -61,7 +63,7 @@ If the HD of $\calQ$ is $h$, then the average HD of $\calQ'$ is $h'\leq 2h\alpha
 \begin{proof}
 Let $r>0$, and $C$ be an $(h,2^{-\beta}r)$-LSHS for $\calQ$.
 We show that $C\cup D_r$ is an average $(h,r)$-LSHS for $\calQ'$.
-Clearly is a hitting set for $\calQ'_r$ and we can compute
+Clearly it is a hitting set for $\calQ'_r$ and we can compute
 \begin{align*}
 h'&\leq \frac{1}{n}\sum_{v\in V} \abs{B_{2r}(v)\cap (C\cup D_r)}\\
 &\leq \frac{1}{n}\prn*{\sum_{v\in V} \abs{B_{2r}(v)\cap C}+\sum_{v\in V} \abs{B_{2r}(v)\cap D_r}}\\
@@ -69,7 +71,7 @@ h'&\leq \frac{1}{n}\sum_{v\in V} \abs{B_{2r}(v)\cap (C\cup D_r)}\\
 \leq h\alpha^\beta + \frac{\abs{D_r}\alpha^{\log_2r+2}}{n}.
 \end{align*}
 In the third inequality we used that $C$ is sparse with respect to balls of radius $2^{-\beta+1}r$ and that $\sum_{v\in V} \abs{B_{2r}(v)\cap D_r}=\sum_{v\in D_r} \abs{B_{2r}(v)}$ by symmetry of the bi-directional balls.
-In the last inequality we used that, by doubling dimension, balls of radius $r$ have at most $\alpha^{\log_2r+1}$ elements.
+In the last inequality we used that, by doubling constant, balls of radius $r$ have at most $\alpha^{\log_2r+1}$ elements.
 Since $\abs{D_r}\leq \phi(r)$, the result follows.
 \end{proof}
 

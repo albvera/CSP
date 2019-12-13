@@ -93,7 +93,8 @@ Using another contraction scheme may expedite our algorithms and reduce the hub 
 \end{minipage}
 }
 \caption{Performance of clustering for San Francisco (left) and Luxembourg (right). 
-In the $y$-axis the quantities are normalized by the best greedy cover, i.e., using $k=n$.
+\respedit{In the $y$-axis the quantities are normalized by the cover using all the shortest paths ($k=n$ clusters).
+For example, the curve for average hub size, say $y_1(k)$, represents that using $k$ clusters the average hub is $y_1(k)$ times bigger than the hubs using all the shortest paths; in the plot we see that, with a few clusters, the size at most doubles and it can be improved by augmenting $k$.}
 Note that, while the number of short-cuts is an indicator of performance, it is not perfectly correlated with the hub size.}
 \label{fig:clusters}
 \end{figure}
@@ -239,7 +240,7 @@ We focus the analysis on two meaningful quantities.
 The first is hub size, which is well captured by  $\card{\Lb(\pp{t,0})}$ for $t\in V$.
 Indeed, for frontier queries the reverse hub is bounding the space requirements; for specific queries the same is true up to a constant factor.
 For the second quantity, we define the significance of $s\in V$ as the number of hubs containing $s$, i.e., $\sum_t\sum_b\In{\pp{s,b}\in \Lb(\pp{t,0})}$.
-Intuitively, a node is highly significant if belongs to many efficient paths.
+Intuitively, a node is highly significant if it belongs to many efficient paths.
 Figure~\ref{fig:SF_bwd_size} shows a histogram of these metrics. 
 
 

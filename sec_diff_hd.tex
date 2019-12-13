@@ -1,16 +1,32 @@
-The original definition of HD was given by \citep{highway2010}. This is not the one we extend, but rather we work from the definition of~\citep{highway2013}.
-The latter is the same as our notion except that $(i)$ we consider a less restrictive definition of path neighborhoods, that is appropriate for our needs, and $(ii)$ we generalize the notion to directed graphs and general path systems.
-For $\PS$, a consequence of considering less-restrictive path-neighborhoods is that the highway dimension returned by our definition is smaller than that of \citep{highway2013}.
-In particular, unlike \citep{highway2013}, the HD of $G$ as per our definition is not an upper bound to the maximum degree $\Delta$ or the doubling dimension $\alpha$.
+\respedit{We give below the main notions of HD.
+We note that they are all similar and they are interlinked in terms of their properties, see \citep[Section 9]{epsilon_embedding} for several results on this.
+We limit the discussion here to highlight the main differences.
+\begin{itemize}
+\item \citep{hd_journal}: this is the closest to our definition, but we weaken it (make it easier to satisfy).
+The difference is that they make the notion of $r$-significant stronger by also calling $r$-significant paths $P$ whose length is $\ell(P)<r$, but can be extended by adding at most one node at each end of $P$ to obtain a path $P'$ with $\ell(P')$.
+
+\item \citep{vc_shortest}: it is also very similar, but technically different in that we define path neighbourhoods $S_r(v)$ as sets of paths (while they use the union of nodes belonging to those paths), hence in our definition there are fewer elements to hit.
+On the other hand, they consider paths of lengths between $r$ and $2r$, while we consider paths longer than $r$.
+We could also add the restriction of length at most $2r$ without changing any of the results, but at the cost of making the definition even more involved.
+
+\item \citep{highway2010}: it is slightly weaker, in that they look at paths are $r$-significant and contained in a larger ball (of radii $4r$) vs the notion of $r$-significant and within distance $2r$ of a node.
+Specifically, for each $v$, they ask for hitting sets of paths $P\subseteq B_{4r}(v)$ such that $\ell(P)>r$.
+\end{itemize}
+  
+ 
+For $\PS$, a consequence of considering less-restrictive path-neighborhoods is that the highway dimension returned by our definition is smaller than that of \citep{hd_journal}.
+In particular, unlike \citep{hd_journal}, the HD of $G$ as per our definition is not an upper bound to the maximum degree $\Delta$ or the doubling constant $\alpha$.
+The notion of \citep{highway2010} does not bound the doubling constant.}
+
 
 With respect to our average HD in \cref{sec:avg_hd}, we note the following.
 \begin{remark}
 The algorithm in \cref{theo:preproc_avg} makes one call to the VC-dimension solver for each $C_i$.
-On the other hand, the algorithm in \citep{highway2013} calls up to $n$ times the solver for each $C_i$.
+On the other hand, the algorithm in \citep{hd_journal} calls up to $n$ times the solver for each $C_i$.
 Finally, there is an extra $\log n$ factor in the approximation guarantee, but now the value of $h$ can be much smaller.
 \end{remark}
 
-We now discuss how our results extend to the definition in \citep{highway2013}, which we refer to as strong-HD.
+We now discuss how our results extend to the definition in \citep{hd_journal}, which we refer to as strong-HD.
 The strong-HD defines a path $P$ to be $r$-significant if, by adding at most one hop at each end, we get a shortest path $P'$ longer than $r$.
 The path $P'$ is called an $r$-witness for $P$.
 Intuitively, a path is significant if it represents a long path.

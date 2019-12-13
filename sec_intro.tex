@@ -39,14 +39,14 @@ This model is considered in \citep{fareevasion} for routing with fare evasion, w
 We consider the problem of developing oracles that support fast CSP queries in large networks. 
 Specifically, given integer edge-costs and edge-lengths, and a budget upper bound, we want to use preprocessing to create a data-structure supporting arbitrary source-destination-budget queries; moreover, we want formal guarantees on the performance: preprocessing, storage and query time.
 
-In the case of SP algorithms, the seminal work of Abraham et al.~\citep{highway2013, highway2010} demonstrated that the preprocessing, storage and query times of several widely-used heuristics could be parametrized using a graph structural metric called the \emph{Highway Dimension} (HD).
+In the case of SP algorithms, the seminal work of Abraham et al.~\citep{hd_journal, highway2010} demonstrated that the preprocessing, storage and query times of several widely-used heuristics could be parametrized using a graph structural metric called the \emph{Highway Dimension} (HD).
 Our work extends these notions for the CSP; our contributions are summarized as follows:
 
 \paragraph{Theoretical contributions}: 
 We define the \emph{constrained highway dimension} (CHD) for the set of {\em efficient paths} (i.e., minimal solutions to the CSP; cf. \cref{def:effpath}). 
 We show how the CHD can be used to parametrize the performance of CSP algorithms.
 One hurdle, however, is that the CHD can be much bigger than the HD in general.
-Our main theoretical contribution is in showing that the \emph{HD and CHD an be related under an additional partial witness condition} (\cref{def:partial_witness}); therefore, in settings where SP computation is scalable, we can also solve the harder problem of CSP. 
+Our main theoretical contribution is in showing that the \emph{HD and CHD can be related under an additional partial witness condition} (\cref{def:partial_witness}); therefore, in settings where SP computation is scalable, we can also solve the harder problem of CSP. 
 Our next contribution is to show that, under \emph{average performance metrics}, we can obtain even weaker conditions to relate the \emph{average CHD and HD}, thus certifying the performance of our algorithms.
 The conditions can be interpreted in terms of having few physical overpasses in road networks.
 
@@ -57,7 +57,7 @@ In experiments, our algorithms exhibit query-times $10^4$ faster than existing (
  
 
 \paragraph{Paper outline}:
-In \cref{sec:prelim}, we introduce the SP and CSP problems, and extend the notion of the HD (as defined in \citep{highway2013}) to directed graphs and general path systems; this allows us to define an analogous notion of a \emph{constrained highway dimension} (CHD) for constrained shortest paths in \cref{sec:chd}. 
+In \cref{sec:prelim}, we introduce the SP and CSP problems, and extend the notion of the HD (as defined in \citep{hd_journal}) to directed graphs and general path systems; this allows us to define an analogous notion of a \emph{constrained highway dimension} (CHD) for constrained shortest paths in \cref{sec:chd}. 
 We then show that the two can be related under an additional \emph{partial witness condition} (\cref{ssec:hdvschd}). 
 In \cref{sec:avg_hd}, we study average-case performance, and show how a small average CHD can be related to physical overpasses in road networks. 
 Finally, in \cref{sec:numeric}, we present our practical hub-label construction and our experiments on SF and Luxembourg data.
@@ -69,13 +69,26 @@ CSP problems have an extensive literature, surveyed in~\citep{csp_survey}.
 More recently, there has been significant interest in stochastic SP problems, including the related stochastic on-time arrival (SOTA) problem~\citep{fan2005arriving}; recent works have proposed both optimal and approximate policies~\citep{sabran2014precomputation,nikolova_discretization}. 
 Existing approaches for these problems, however, are limited in their use of preprocessing and augmentation techniques, and consequently do not support the latencies required for mapping applications.
 
-As we mention before, our work is inspired by the recent developments in shortest path algorithms~\citep{highway2013,hubimplem,highway2010,dimacs09,geisberger_ch_definition,skeleton}; refer~\citep{goldberg_survey} for an excellent survey of these developments. 
+As we mention before, our work is inspired by the recent developments in shortest path algorithms~\citep{hd_journal,hubimplem,highway2010,dimacs09,geisberger_ch_definition,skeleton}; refer~\citep{goldberg_survey} for an excellent survey of these developments. 
 The pre-processing technique we use for speeding up CSP computations is hub labels (HL), first introduced for SP computations in~\citep{cohen_definition_hl}. 
-More recently, HL was proved to have the best query-time bounds for SP computation in low HD graphs~\citep{highway2013,highway2010} (this was experimentally confirmed in~\citep{hubimplem}, \cite[Figure 7]{goldberg_survey}).  
+More recently, HL was proved to have the best query-time bounds for SP computation in low HD graphs~\citep{hd_journal,highway2010} (this was experimentally confirmed in~\citep{hubimplem}, \cite[Figure 7]{goldberg_survey}).  
+\respedit{The notion of HD has been widely applied and therefore there are several variants (definitions) of this concept, we refer to Appendix \ref{app:generalhd} and also \citep[Section 9]{epsilon_embedding} for a more detailed discussion.}
 Finally, the HD-based bounds for hub labels was shown to be tight in~\citep{babenko_hl_complexity,white_complexity_hd}, and it was also shown that finding optimal hub labels is NP hard.
 
-Finally, a related class of problems to CSP is that of SP under label constraints~\citep{language_csp}, where the aim is to find shortest paths that avoided certain labels (e.g. toll roads, ferries, etc.). 
+A related class of problems to CSP is that of SP under label constraints~\citep{language_csp}, where the aim is to find shortest paths that avoided certain labels (e.g. toll roads, ferries, etc.). 
 In this setting, there is work on using preprocessing to improve query-times~\citep{rice_csp}.
 These problems are essentially concatenations of parallel SP problems, involving only local constraints. 
 In contrast, the CSP involves global constraints on paths.
 Our results do in fact shed light on why preprocessing works well for label-constrained SP queries.
+
+\respedit{
+Finally, we note that the notion of Highway Dimension has been successfully applied to parameterize the complexity of other NP hard problems.
+Graphs with bounded HD admit a probabilistic embedding into graphs with bounded treewidth \citep{epsilon_embedding}, this implies that several NP hard problems have quasi-polynomial approximation schemes in the context of transportation networks.
+Subsequently, \citep{ptas_routing} introduced new ideas to get an embedding that allows for polynomial time approximation schemes (as opposed to quasi-polynomial) for several problems when the HD is bounded.
+Let us consider an important problem, the $k$-center problem, arising in logistics and other domains. 
+The $k$-center problem requires to find $k$ center vertices such that the distance of every node to the closest center is minimized.
+This problem is known to be hard, but it surprisingly remains hard even if we parameterize the complexity jointly by $k$, the HD, and the treewitdh \citep{parameterized_k_center}.
+On the other hand, despite its parameterized hardness, there are approximation algorithms when $k$ and the HD are combined \citep{approx_k_center}.
+Two fundamental problems are TSP (travelling salesman) and STP (Steiner tree).
+\citep{travelling_hd} gives improved results for TSP and STP when the HD is $1$, obtaining a FPTAS and, on the negative side, they also show a hardness result when the HD is $6$ or larger.
+}

@@ -23,15 +23,15 @@ The goal is to find $\mathcal{S}$ in polynomial time with small storage and fast
 
 \medskip
 \paragraph{Our Results.}
-We identify a parameter $\hc$, called the Constrained Highway Dimension (CHD), which generalizes the concept introduced in \citep{highway2010}, and obtain the results below.
+We identify a parameter $\hc$, called the Constrained Highway Dimension (CHD), which generalizes the concept introduced in \citep{hd_journal}, and obtain the results below.
 In each case, the data structure can be computed in polynomial time.
 $D$ represents the diameter of the graph.
 \begin{enumerate}
 \item We give a data structure of size $\tilde O(nB\cdot B\hc\log D)$ and query time $\tilde O(b\hc\log D)$ for any $(s,t,b)$, see \cref{theo:HLeff,thm:markedhubs}.
 We relate $\hc$ to the HD in \cref{theo:witness_doubling}.
-\item We introduce the notion of \emph{Average Highway Dimension}, which is strictly weaker than HD, and show that we can obtain a data structure with the same space requirement, but the query time is in average over $(s,t)$, see \cref{theo:preproc_avg}.
-\item We give a condition, interpreted as having few overpasses, such that the query time is  $\tilde O(bh\alpha\log D)$, average over $(s,t)$, with space requirement $\tilde O(n B\cdot Bh\alpha\log D)$, where $h$ is the HD and $\alpha$ the doubling dimension, see \cref{theo:overpasses}.
-It is crucial that we use the aforementioned average HD.
+\item We introduce the notion of \emph{Average CHD}, which is strictly weaker than CHD, and show that we can obtain a data structure with the same space requirement, but the query time is in average over $(s,t)$, see \cref{theo:preproc_avg}.
+\item We give a condition, interpreted as having few overpasses, such that the query time is  $\tilde O(bh\alpha\log D)$, average over $(s,t)$, with space requirement $\tilde O(n B\cdot Bh\alpha\log D)$, where $h$ is the HD and $\alpha$ the doubling constant, see \cref{theo:overpasses}.
+It is crucial that we use the aforementioned average CHD.
 We observe that, for road networks, it is conjectured that $h=\text{polylog}(n)$ and $\alpha=O(1)$, hence our result explains the good empirical performance of our algorithm, see \cref{sec:numeric}.
 \end{enumerate}
 
@@ -53,4 +53,4 @@ We define $D\defeq\max_{P\in\PS}\ell(P)$ to be the diameter of $G$.
 
 
 For $r>0$ and $v\in V$, we define the \emph{forward and reverse balls of radius $r$} by $\Bf_r(v)\defeq\{u\in V: \dist(v,u)\leq r\}$ and $\Bb_r(v)\defeq\{u\in V: \dist(u,v)\leq r\}$, and also define $B_r(v)\defeq\Bf_r(v)\cup\Bb_r(v)$.
-Finally, a graph $G$ is said to have a \emph{doubling dimension} $\alpha$ if, for any node $v$ and any $r>0$, the ball $B_{2r}(v)$ can be covered by at most $\alpha$ balls of radius $r$.
+Finally, a graph $G$ is said to have a \emph{doubling constant} $\alpha$ if, for any node $v$ and any $r>0$, the ball $B_{2r}(v)$ can be covered by at most $\alpha$ balls of radius $r$.
