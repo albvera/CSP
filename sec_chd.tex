@@ -2,8 +2,8 @@ We develop a data-structure that supports fast queries for \emph{efficient paths
 Specifically, given a graph $G=(V,E)$ and a maximum budget $B$, we construct a data-structure such that, for any $s,t\in V$ and $b\leq B$, we return the length of the shortest $(s,t)$-path with cost at most $b$, denoted $\dist(s,t|b)$.
 The actual path can easily be recovered as discussed in \cref{ssec:hldef}, hence we focus on querying $\dist(s,t|b)$ only.
 
-In Section \ref{ssec:hldef} we discussed that, if a graph $G$ has HD $h$, we can simultaneously bound the preprocessing time, storage requirements and query time for constructing hub labels as functions of $h$.
-This suggests that for the construction of provably efficient hub labels for the CSP problem, we need an analogous property for the set of \emph{efficient paths}.
+In Section \ref{ssec:hldef} we discussed that, if a graph $G$ has HD $h$, we can simultaneously bound,  as functions of $h$, the preprocessing time, storage requirements, and query time for hub labels.
+This suggests that, for the construction of provably efficient hub labels for the CSP problem, we need an analogous property for the set of \emph{efficient paths}.
 \begin{definition}[Constrained Highway Dimension] The constrained highway dimension (CHD) of $(G,\ell,c)$, denoted $h_c$, is the HD of the efficient-path system $\PE$.
 \end{definition}
 Note that, since every shortest path is efficient, $h_c\geq h$.

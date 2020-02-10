@@ -19,7 +19,7 @@
 	\label{alg:forwardhub}
 	\begin{algorithmic}[1]
 		\Require Node $s\in V$, efficient paths $\PE_{s,t}\,\forall\,t$, EPHS $\crl*{C_i}$.
-		\Ensure Forward hubs $Lf(\pp{s,b})$ for $b=0,\ldots,B$ and a marked node $v_P$ for every path.
+		\Ensure Forward hubs $\Lf(\pp{s,b})$ for $b=0,\ldots,B$ and a marked node $v_P$ for every path.
 		\State Order each $\PE_{s,t}$ by increasing cost and remove paths consuming more than $B$.
 		\For{$t\in V\setminus s$}
 		\For{$P\in\Pst^E$}
@@ -56,7 +56,7 @@
 
 
 \begin{proofof}{\cref{prop:poly_lshs}}
-We extend some arguments from \cite[Theorem 8.2]{hd_journal}.
+We extend some arguments from \citep[Theorem 8.2]{hd_journal}.
 Denote $S_r(v):=\Sf_r(v,\calQ)\cup\Sb_r(v,\calQ)$. 
 Observe that, for fixed $v\in V$, the set system $(E,\{\pi(Q):Q \in S_r(v)\})$ admits a hitting set of size $h\Delta$.
 Indeed, we know that exists $H_{v,r}\subseteq V$, $\card{H_{v,r}}\leq h$, hitting every path in $\Sf_r(v,\calQ)$ and in $\Sb_r(v,\calQ)$.

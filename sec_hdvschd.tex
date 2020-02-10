@@ -1,7 +1,7 @@
 The previous sections show that we can construct hub labels for solving CSP whose preprocessing time, storage and query time can all be parameterized in terms of the constrained highway dimension $h_c$. 
 This, however, still does not give a sense of how much worse the hub labels for the CSP problem can be in comparison with those for finding shortest paths. 
 We now try to understand this question.
-Comparing the size of the \emph{optimal} hub labels for SP and CSP is infeasible as even finding the optimal hub labels for SP is NP-hard~\cite{babenko_hl_complexity}. 
+Comparing the size of the \emph{optimal} hub labels for SP and CSP is infeasible as even finding the optimal hub labels for SP is NP-hard~\citep{babenko_hl_complexity}. 
 However, since we can parametrize the complexity of HL construction for SP in terms of the HD, a natural question is whether graphs with small HD also have a small CHD. 
 Note that the answer to this depends on both the graph and the costs.
 We now show that the CHD and, moreover, the sparsity of any EPHS, can be \emph{arbitrarily worse} than the HD. 
@@ -32,7 +32,7 @@ In \cref{app:generalhd}, where we discuss alternative notions of HD, we give a m
 \respedit{Another criticism is that the edge $u_iv_i$ is not the shortest $(u_i,v_i)$-path, but this is for exposition only and the same holds with the following modification: add a node $w_i$ between $u_i$ and $v_i$, then set $\ell(u_iw_i)=2$, $\ell(w_iv_i)=1$, and $c(u_iw_i)=c(w_iv_i)=0$.}
 \end{remark}
 
-Intuitively, the separation between HD and CHD (or more particularly, the hub labels for computing SPs and CSPs) occurs due to the fact that, for arbitrary graphs and cost functions, the shortest and efficient paths may be completely unrelated. 
+Intuitively, the separation between HD and CHD occurs due to the fact that, for arbitrary graphs and cost functions, the shortest and efficient paths may be completely unrelated. 
 For real-world networks, however, this appears unlikely.
 In particular, intuition suggests that efficient paths largely comprise of segments which are in fact shortest-paths in their own right. 
 This notion can be formalized via the following definition of a \emph{partial witness} 
@@ -89,9 +89,9 @@ Indeed, using the doubling property $\log_2r+1$ times, we can cover $B_r(v)$ wit
 Since the minimum edge length is $1$, all of these balls must be singletons and the claim follows.
 Now we can take $C=V$ as the EPHS.
 Clearly $C$ hits all the paths and the local sparsity is at most the size of the ball.
-Using our assumption on $r_\beta$, a simple computation shows that $\card{B_{2r}(v)}\leq \alpha^{\log_2r_\beta+2}\leq h\alpha^\beta$. 
+Using our assumption on $r_\beta$, we verify that $\card{B_{2r}(v)}\leq \alpha^{\log_2r_\beta+2}\leq h\alpha^\beta$. 
 \end{proof}
 \begin{remark}
 The existence of a $\beta$-witness is not enough to bound the CHD. 
-Nevertheless, as we discussed in \cref{ssec:hldef}, the existence of $(h,r)$-LSHS already allows the construction of HL. Moreover, the above argument does indeed give a bound for a weaker definition of the highway dimension~\cite{highway2010}.
+Nevertheless, as we discussed in \cref{ssec:hldef}, the existence of $(h,r)$-LSHS already allows the construction of HL. Moreover, the above argument does indeed give a bound for a weaker definition of the highway dimension~\citep{highway2010}.
 \end{remark}

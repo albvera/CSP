@@ -3,7 +3,7 @@ A subtle difference is that we are only interested in paths ending in a sink nod
 Each node $\pp{v,b}$ has a forward hub label $\Lf(\pp{v,b})\subseteq V^B$, and \emph{only sink nodes} $u^-$ have a reverse hub $\Lb(u^-)\subseteq V^B$.
 The cover property must be satisfied for every $\pp{s,b}$ and $t^-$.
 Finally, if we want to reconstruct the path, we can proceed similarly as in ~\cref{ssec:hldef}; we can augment the hub labels with the next-hop node, and compute the entire path recursively.
-Putting things together, we can construct hub labels for answering CSP queries, such that their preprocessing time and storage is parameterized by the CHD $h_c$.
+Putting things together, we can construct hub labels for answering CSP queries, with preprocessing time and storage parameterized by the CHD $h_c$.
 
 \subsubsection{Query Time and Data Requirements}
 

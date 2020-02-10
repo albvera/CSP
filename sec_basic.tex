@@ -6,7 +6,8 @@ Our goal is to develop a data structure to answer \emph{Constrained Shortest-Pat
 \begin{problemdef}[framed]{Constrained Shortest-Path Queries}
 	Input: & Graph $G=(V,E)$, costs $c$, lengths $\ell$, and maximum budget $B$.\\
 	Preprocessing Task:& Create a data structure $\mathcal{S}$. \\
-	Real Time Task:& For any source-terminal pair $s,t\in V$ and budget $b\leq B$, use $\mathcal{S}$ to return a path solving $\min\crl{\ell(P):c(P) \leq b, P \text{ is an } (s,t)\text{-path}}$.\\
+	Real Time Task:& For any source-terminal pair $s,t\in V$ and budget $b\leq B$, use $\mathcal{S}$ to return a path solving $\min\crl{\ell(P):c(P) \leq b, P \text{ is an } (s,t)\text{-path}}$.
+	The triplet $(s,t,b)$ defines a \emph{query} and it is arbitrarily specified by the user. \\
   	Performance Metrics: &  Size of $\mathcal{S}$, preprocessing time (to compute $\mathcal{S}$), and query time (to return a path given $s,t,b$). 
 \end{problemdef}
 
@@ -29,9 +30,8 @@ $D$ represents the diameter of the graph.
 \begin{enumerate}
 \item We give a data structure of size $\tilde O(nB\cdot B\hc\log D)$ and query time $\tilde O(b\hc\log D)$ for any $(s,t,b)$, see \cref{theo:HLeff,thm:markedhubs}.
 We relate $\hc$ to the HD in \cref{theo:witness_doubling}.
-\item We introduce the notion of \emph{Average CHD}, which is strictly weaker than CHD, and show that we can obtain a data structure with the same space requirement, but the query time is in average over $(s,t)$, see \cref{theo:preproc_avg}.
-\item We give a condition, interpreted as having few overpasses, such that the query time is  $\tilde O(bh\alpha\log D)$, average over $(s,t)$, with space requirement $\tilde O(n B\cdot Bh\alpha\log D)$, where $h$ is the HD and $\alpha$ the doubling constant, see \cref{theo:overpasses}.
-It is crucial that we use the aforementioned average CHD.
+\item We introduce the notion of \emph{Average CHD}, which is strictly weaker than CHD, and show that we can obtain a data structure with the same guarantees, but the query time is in average over $(s,t)$, see \cref{theo:preproc_avg}.
+\item Building on the average CHD, we give a condition, interpreted as having few overpasses, such that the query time is  $\tilde O(bh\alpha\log D)$, average over $(s,t)$, with space requirement $\tilde O(n B\cdot Bh\alpha\log D)$, where $h$ is the HD and $\alpha$ the doubling constant, see \cref{theo:overpasses}.
 We observe that, for road networks, it is conjectured that $h=\text{polylog}(n)$ and $\alpha=O(1)$, hence our result explains the good empirical performance of our algorithm, see \cref{sec:numeric}.
 \end{enumerate}
 
